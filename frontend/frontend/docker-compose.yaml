@@ -1,0 +1,51 @@
+# !note this is the one patrick provided.
+# !not sure if and how you need to add this in.... 
+
+
+# version: "3.9"
+
+
+# volumes:
+#     caddy_data:
+#     caddy_config:
+#     frontend_data:d
+
+# networks:
+#     default:
+#         name: auctor_network
+
+# services:
+#     frontend-builder:
+#         build:
+#             context: frontend
+#             dockerfile: frontend-builder.Dockerfile
+#         volumes:
+#             - frontend_data:/frontend/dist
+
+#     backend-service:
+#         container_name: problemfactory
+#         build:
+#             context: backend
+#             dockerfile: backend.Dockerfile
+#         expose:
+#             - 9015
+#         environment:
+#             - SCRIPT_NAME=/api
+
+#     webserver-service:
+#         container_name: caddy
+#         image: caddy:2.6.4-alpine
+#         restart: unless-stopped
+#         ports:
+#             - 80:80
+#             - 443:443
+#         volumes:
+#             - ./Caddyfile:/etc/caddy/Caddyfile
+#             - frontend_data:/srv
+#             - caddy_data:/data
+#             - caddy_config:/config
+#         depends_on:
+#             frontend-builder:
+#                 condition: service_completed_successfully
+#             backend-service:
+#                 condition: service_started
