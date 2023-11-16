@@ -1,25 +1,50 @@
-
 services:
   frontend:
     # build: ./frontend/frontend
     build: 
-      # context: frontend
       context: ./frontend
-      # dockerfile: Dockerfile
-    image: node:21
-    command: npm install && npm run dev
+      dockerfile: Dockerfile
     ports:
-        - 127.0.0.1:3000:3000
+        - 3000:3000
     working_dir: /app
     volumes:
       - ./:/app
   api: 
-    build: ./frontend/api
-    image: python:3.12
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     ports: 
         - "8080:80"
     environment:
       DB_URL: 
+    # will need to connect this to the db 
+  # db: 
+  # will want to map a db but you have not created one yet
+
+
+# services:
+#   frontend:
+#     # build: ./frontend/frontend
+#     build: 
+#       # context: frontend
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     # image: node:21
+#     # command: npm install && npm run dev
+#     ports:
+#         - 3000:3000
+#     working_dir: /app
+#     volumes:
+#       - ./:/app
+#   api: 
+#     build: 
+#       context: ./api 
+#       dockerfile: Dockerfile
+#     # image: python:3.12
+#     ports: 
+#         - "8080:80"
+#     environment:
+#       DB_URL: 
     # will need to connect this to the db 
   # db: 
   # will want to map a db but you have not created one yet

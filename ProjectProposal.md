@@ -13,7 +13,6 @@ Messaging/ applications: Have the ability for teams and players to message each 
 ### Other possible features could include:
 Search by location:  Have a player be able to search by location or miles? 
 
-
 ## Additional Information and Features:
 1.	What tech stack will you use for your final project? 
     1.	React and Node for the front end. 
