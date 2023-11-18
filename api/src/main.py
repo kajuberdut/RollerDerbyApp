@@ -205,20 +205,23 @@ def query_bout(event_id:uuid.UUID) -> Bout:
 
 # send json to end point and then it will automatically return json data
 
-@api_app.post("/") 
-def add_event(event: event) -> dict[str, Event]: 
+@api_app.post("/events/bout") 
+def add_bout(bout: Bout) -> dict[str, Bout]: 
     
-    if item.id in items:
-        HTTPException(status_code=400, detail=f"Item with {item.id} already exists")    
+    if bout.event_id in events:
+        HTTPException(status_code=400, detail=f"Bout with {bout.event_id} already exists")    
     
-    # this adds items   
-    # print("items[item.id]", items[item.id])
-    # print(items)
-    # raise KeyError("items:", items)
-    # raise ValueError("items", items)
-    items[item.id] = item
-    # item[item.id] = item
-    return {"added": item}
+    events[bout.event_id] = bout
+    return {"added": bout}
+
+@api_app.post("/events/mixer") 
+def add_bout(mixer: Mixer) -> dict[str, Mixer]: 
+    
+    if mixer.event_id in events:
+        HTTPException(status_code=400, detail=f"Mixer with {mixer.event_id} already exists")    
+    
+    events[mixer.event_id] = mixer
+    return {"added": mixer}
 
 # *note here you may need to change the level because you have level as a string
 
