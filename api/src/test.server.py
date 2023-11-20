@@ -88,3 +88,31 @@ print(getEvents)
 print(getEvents.text)
 print(getEvents.status_code)
 
+print("***Add a user:***")
+
+addUser = requests.post(
+    "http://127.0.0.1:8000/users/", 
+    json = {
+        "user_id": str(uuid.uuid4()), 
+        "derby_name": "Hellacious Wheels", 
+        "email": "HellaciousWheels@gmail.com",
+        "about": "B level derby player residing in Kennewick, WA",
+        "location": "Kennewick, WA", 
+        "level": "B",
+        "facebook_name": "Helena Weals", 
+        "played_rulesets": ["Banked Track"],
+        "associated_leagues": ["Northern Exposure Roller Derby"]
+        
+    })
+
+print(addUser)
+print(addUser.text)
+print(addUser.status_code)
+
+print("***Getting all users:***")
+
+getUsers = requests.get("http://127.0.0.1:8000/users/")
+
+print(getUsers)
+print(getUsers.text)
+print(getUsers.status_code)

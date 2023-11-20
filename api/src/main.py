@@ -160,6 +160,7 @@ async def query_bout():
     current_bout = fake_bout()
     return current_bout
 
+
 # * this will return all events for /events/ but will also return if searching by any of the below date, theme, level, ruleset, co_ed
 # * http://127.0.0.1:8000/events/?level=A
 
@@ -260,3 +261,12 @@ def query_user_by_parameters(
         "query": {"derby_name": derby_name, "location": location, "level": level, "facebook_name": facebook_name, "selection": selection, 
         }
     }
+    
+@api_app.post("/users/") 
+def add_user(user: User) -> dict[str, User]: 
+    
+    if user.user_id in users:
+        HTTPException(status_code=400, detail=f"User with {user.user_id} already exists")    
+    
+    users[user.user_id] = user
+    return {"added": user}
