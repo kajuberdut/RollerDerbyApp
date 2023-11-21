@@ -16,13 +16,13 @@ import uuid
 # logger.error('This is an error message.')
 
 
-print("***Getting a user:***")
+# print("***Getting a user:***")
 
-getUser = requests.get("http://127.0.0.1:8000/users/me")
+# getUser = requests.get("http://127.0.0.1:8000/users/me")
 
-print(getUser)
-print(getUser.text)
-print(getUser.status_code)
+# print(getUser)
+# print(getUser.text)
+# print(getUser.status_code)
 
 
 print("***Getting a bout:***")
@@ -93,7 +93,8 @@ print("***Add a user:***")
 addUser = requests.post(
     "http://127.0.0.1:8000/users/", 
     json = {
-        "user_id": str(uuid.uuid4()), 
+        # "user_id": str(uuid.uuid4()), 
+        "user_id": "631f0f26-9b10-44ca-b67e-d6b657aca9a8",
         "derby_name": "Hellacious Wheels", 
         "email": "HellaciousWheels@gmail.com",
         "about": "B level derby player residing in Kennewick, WA",
@@ -108,6 +109,23 @@ addUser = requests.post(
 print(addUser)
 print(addUser.text)
 print(addUser.status_code)
+
+print("***Getting all users:***")
+
+getUsers = requests.get("http://127.0.0.1:8000/users/")
+
+print(getUsers)
+print(getUsers.text)
+print(getUsers.status_code)
+
+print("***Changing a user:***")
+# ! note this is getting a 500 error because of selection 
+
+changeUser = requests.put("http://127.0.0.1:8000/users/631f0f26-9b10-44ca-b67e-d6b657aca9a8?level=C")
+
+print(changeUser)
+print(changeUser.text)
+print(changeUser.status_code)
 
 print("***Getting all users:***")
 

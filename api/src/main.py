@@ -160,6 +160,7 @@ async def query_bout():
     current_bout = fake_bout()
     return current_bout
 
+# Event Routes 
 
 # * this will return all events for /events/ but will also return if searching by any of the below date, theme, level, ruleset, co_ed
 # * http://127.0.0.1:8000/events/?level=A
@@ -224,6 +225,8 @@ def add_bout(mixer: Mixer) -> dict[str, Mixer]:
     events[mixer.event_id] = mixer
     return {"added": mixer}
 
+#  User routes 
+
 # *note here you may need to change the level because you have level as a string
 
 @api_app.get("/users/")
@@ -270,3 +273,51 @@ def add_user(user: User) -> dict[str, User]:
     
     users[user.user_id] = user
     return {"added": user}
+
+
+Selection = dict[str, Union[str, int, float, uuid.UUID, List[str], Optional[Any]]]
+
+
+@api_app.put("/users/{user_id}")
+def update_user(
+    user_id: uuid.UUID, 
+    derby_name: Optional[str] = None,
+    email: Optional[str] = None, 
+    about: Optional[str] = None, 
+    location: Optional[str] = None, 
+    level: Optional[str] = None, 
+    facebook_name: Optional[str] = None, 
+    played_rulesets: Optional[List[str]] = [], 
+    associated_leagues: Optional[List[str]] = [],
+    ) -> dict[str, Selection]:
+    
+    print("update is being called")
+    
+    # HTTPException (f"{name: name}, {count: count}, {price: price}")
+
+    if user_id not in users: 
+        HTTPException(status_code=404, detail=f"User with {user_id} not found")
+    if all(info is None for  info in (derby_name, email, about, location, level, facebook_name, played_rulesets, associated_leagues)):
+        raise HTTPException(status_code=400, detail="No parameters provided for update.")
+    
+    user = users[user_id]
+    if derby_name is not None: 
+        user.derby_name = derby_name
+    if email is not None: 
+        user.email = email
+    if about is not None: 
+        user.about = about
+    if location is not None: 
+        user.location = location
+    if level is not None: 
+        user.level = level
+    if facebook_name is not None: 
+        user.facebook_name = facebook_name
+    if played_rulesets is not None: 
+        user.played_rulesets = played_rulesets
+    if associated_leagues is not None: 
+        user.associated_leagues = associated_leagues
+ 
+        
+    
+    return {"updated": {"user": user} }   

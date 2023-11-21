@@ -118,3 +118,25 @@ React-Roller
 
 Messaging Web Sockets 
 
+### Routes for Api: 
+
+-  Users: 
+    -  get all users 
+    -  get a user by id 
+    -  get user by location 
+    -  get user by level
+    -  get user by facebook_name 
+    -  post new user 
+
+-  Events 
+    -  get all events
+    -  get an event by id 
+    -  get event by date
+    -  get event by theme 
+    -  get event by level
+    -  get event by ruleset 
+    -  get event by co_ed
+    -  post new bout
+    -  post new mixer 
+
+
