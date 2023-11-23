@@ -25,68 +25,68 @@ import uuid
 # print(getUser.status_code)
 
 
-print("***Getting a bout:***")
+# print("***Getting a bout:***")
 
-getBout = requests.get("http://127.0.0.1:8000/bouts/fake_bout")
+# getBout = requests.get("http://127.0.0.1:8000/bouts/fake_bout")
 
-print(getBout)
-print(getBout.text)
-print(getBout.status_code)
-
-
-print("***Adding a bout:***")
+# print(getBout)
+# print(getBout.text)
+# print(getBout.status_code)
 
 
-postBout =  requests.post(
-    "http://127.0.0.1:8000/events/bout", 
-    json={
-        "event_id": str(uuid.uuid4()), 
-        "address": "Las Vegas NV",
-        "time": time(17, 15).strftime("%H:%M"), 
-        "date": date(2024, 7, 11).isoformat(), 
-        "theme": "Rollercon Party", 
-        "level": "AA", 
-        "jersey_colors": "teal and orange",
-        "ruleset": "WFTDA",
-        "co_ed": True,
-        "opposing_team": "random"
-        }
-    )
-
-print(postBout)
-print(postBout.text)
-print(postBout.status_code)
-
-print("***Adding a mixer:***")
+# print("***Adding a bout:***")
 
 
-postMixer =  requests.post(
-    "http://127.0.0.1:8000/events/mixer", 
-    json={
-        "event_id": str(uuid.uuid4()), 
-        "address": "455 Main St, Kansas City, MO",
-        "time": time(17, 15).strftime("%H:%M"), 
-        "date": date(2024, 7, 11).isoformat(), 
-        "theme": "Balloons and Daggers", 
-        "level": "B/C", 
-        "jersey_colors": "pink and purple",
-        "ruleset": "USARS",
-        "co_ed": True,
-        "signup_link": "https://www.signupHere.com/"
-        }
-    )
+# postBout =  requests.post(
+#     "http://127.0.0.1:8000/events/bout", 
+#     json={
+#         "event_id": str(uuid.uuid4()), 
+#         "address": "Las Vegas NV",
+#         "time": time(17, 15).strftime("%H:%M"), 
+#         "date": date(2024, 7, 11).isoformat(), 
+#         "theme": "Rollercon Party", 
+#         "level": "AA", 
+#         "jersey_colors": "teal and orange",
+#         "ruleset": "WFTDA",
+#         "co_ed": True,
+#         "opposing_team": "random"
+#         }
+#     )
 
-print(postMixer)
-print(postMixer.text)
-print(postMixer.status_code)
+# print(postBout)
+# print(postBout.text)
+# print(postBout.status_code)
 
-print("***Getting all Events:***")
+# print("***Adding a mixer:***")
 
-getEvents = requests.get("http://127.0.0.1:8000/events/")
 
-print(getEvents)
-print(getEvents.text)
-print(getEvents.status_code)
+# postMixer =  requests.post(
+#     "http://127.0.0.1:8000/events/mixer", 
+#     json={
+#         "event_id": str(uuid.uuid4()), 
+#         "address": "455 Main St, Kansas City, MO",
+#         "time": time(17, 15).strftime("%H:%M"), 
+#         "date": date(2024, 7, 11).isoformat(), 
+#         "theme": "Balloons and Daggers", 
+#         "level": "B/C", 
+#         "jersey_colors": "pink and purple",
+#         "ruleset": "USARS",
+#         "co_ed": True,
+#         "signup_link": "https://www.signupHere.com/"
+#         }
+#     )
+
+# print(postMixer)
+# print(postMixer.text)
+# print(postMixer.status_code)
+
+# print("***Getting all Events:***")
+
+# getEvents = requests.get("http://127.0.0.1:8000/events/")
+
+# print(getEvents)
+# print(getEvents.text)
+# print(getEvents.status_code)
 
 print("***Add a user:***")
 
@@ -110,16 +110,15 @@ print(addUser)
 print(addUser.text)
 print(addUser.status_code)
 
-print("***Getting all users:***")
+# print("***Getting all users:***")
 
-getUsers = requests.get("http://127.0.0.1:8000/users/")
+# getUsers = requests.get("http://127.0.0.1:8000/users/")
 
-print(getUsers)
-print(getUsers.text)
-print(getUsers.status_code)
+# print(getUsers)
+# print(getUsers.text)
+# print(getUsers.status_code)
 
 print("***Changing a user:***")
-# ! note this is getting a 500 error because of selection 
 
 changeUser = requests.put("http://127.0.0.1:8000/users/631f0f26-9b10-44ca-b67e-d6b657aca9a8?level=C")
 
@@ -134,3 +133,11 @@ getUsers = requests.get("http://127.0.0.1:8000/users/")
 print(getUsers)
 print(getUsers.text)
 print(getUsers.status_code)
+
+# print("***Getting a specific user:***")
+
+# getUsers = requests.get("http://127.0.0.1:8000/users/?derby_name=Cleo")
+
+# print(getUsers)
+# print(getUsers.text)
+# print(getUsers.status_code)

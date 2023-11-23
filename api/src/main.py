@@ -1,9 +1,9 @@
 from enum import Enum 
-from typing import Union, Optional, Any, Annotated, List
+from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from datetime import date, time 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel,  validator, HttpUrl
+from pydantic import BaseModel,  validator, field_validator, HttpUrl
 import uuid 
 
 api_app = FastAPI()
@@ -19,18 +19,33 @@ class CommonEventClass(BaseModel):
     ruleset: str
     co_ed: bool
 
-    
-    @validator('ruleset', pre=True)
+    @field_validator('ruleset', mode="before")
+    @classmethod
     def ruleset_must_be_valid(cls, value):
         if value not in ['WFTDA',  'USARS', 'Banked Track', 'Short Track']:
             raise ValueError('Invalid ruleset')
         return value
     
-    @validator('level', pre=True)
+    # @validator('ruleset', pre=True)
+    # def ruleset_must_be_valid(cls, value):
+    #     if value not in ['WFTDA',  'USARS', 'Banked Track', 'Short Track']:
+    #         raise ValueError('Invalid ruleset')
+    #     return value
+    
+    @field_validator('level', mode="before")
+    @classmethod
     def level_must_be_valid(cls, value):
         if value not in ['AA',  'AA/A', 'A', 'A/B', 'B', 'B/C', 'C', 'All Levels']:
             raise ValueError('Invalid level')
         return value
+    
+    # @validator('level', pre=True)
+    # def level_must_be_valid(cls, value):
+    #     if value not in ['AA',  'AA/A', 'A', 'A/B', 'B', 'B/C', 'C', 'All Levels']:
+    #         raise ValueError('Invalid level')
+    #     return value
+    
+    
 
 class Bout(CommonEventClass):
     opposing_team: str
@@ -38,7 +53,7 @@ class Bout(CommonEventClass):
 class Mixer(CommonEventClass):
     signup_link: HttpUrl
 
-rulesets = ["WFTDA", "USARS", "Banked Track", "Flat Track"]
+RulesetsType: TypeAlias  = Literal["WFTDA", "USARS", "Banked Track", "Flat Track"]
 
 class User(BaseModel):
     user_id: uuid.UUID
@@ -48,15 +63,23 @@ class User(BaseModel):
     location: str
     level: str
     facebook_name: str
-    played_rulesets: List[str]
+    played_rulesets: List[RulesetsType]
     associated_leagues: List[str]
     
-    # @validator('played_rulesets', pre=True)
-    @validator('played_rulesets', each_item=True)
-    def ruleset_must_be_valid(cls, ruleset):
+    # ! note will have to come back to this as check_fields=False I think is wrong???? 
+    # ! have not found a substitute for each_item=True 
+    @field_validator("played_rulsets", check_fields=False)
+    def ruleset_must_be_valid(cls, ruleset: List[str]) -> List[str]:
         if ruleset not in rulesets:
             raise ValueError(f"Invalid ruleset: {ruleset}")
         return ruleset
+    
+    # @validator('played_rulesets', pre=True)
+    # @validator('played_rulesets', each_item=True)
+    # def ruleset_must_be_valid(cls, ruleset):
+    #     if ruleset not in rulesets:
+    #         raise ValueError(f"Invalid ruleset: {ruleset}")
+    #     return ruleset
     
     
 def fake_user():
