@@ -23,19 +23,22 @@ class Address(BaseModel):
     state_code: str
     zip_code: str
     
+    # may need to type code this 
     @field_validator('state_code')
-    def validate_us_states(cls, v):
-        if v.upper() not in states_list:
+    def validate_us_states(cls, value):
+    # def validate_us_states(cls, value: str) -> str:
+        if value.upper() not in states_list:
             raise ValueError("Invalid State Code")
-        return v
+        return value
       
     @field_validator('zip_code')
-    def validate_zip_codes(cls, v):
+    def validate_zip_codes(cls, value):
+    # def validate_zip_codes(cls, value: str) -> str:
         regexp = r"^\d{5}(?:-\d{4})?$"
-        match =  bool(re.match(regexp, v))
+        match =  bool(re.match(regexp, value))
         if not match:
             raise ValueError("Invalid Zip Code")
-        return v
+        return value
     
 class Location(BaseModel):
     city: str
@@ -112,6 +115,13 @@ class User(BaseModel):
         if ruleset not in rulesets:
             raise ValueError(f"Invalid ruleset: {ruleset}")
         return ruleset
+    
+    @field_validator('level')
+    @classmethod
+    def level_must_be_valid(cls, value: str) -> str:
+        if value not in ['AA', 'A', 'B', 'C']:
+            raise ValueError('Invalid level')
+        return value
     
     # @validator('played_rulesets', pre=True)
     # @validator('played_rulesets', each_item=True)
@@ -209,12 +219,10 @@ users = {
          email="CleoSplatya@example.com", 
          about="Skilled skater who has played in the USARS Nationals", 
          location={ 
-                    # "street_address": "505 Main St.",
                     "city": "Gallup",
                     "state_code": "NM"
-                    # "zip_code": "87301"
                     },
-         level="A level skater",
+         level="A",
          facebook_name="Cleo Thompson",
          played_rulesets=["WFTDA", "USARS"],
          associated_leagues=["Cheyenne Roller Derby", "Wydaho", "Colorado", "USARS Nationals Team"]
@@ -229,7 +237,7 @@ users = {
                     "city": "Santa Paula",
                     "state_code": "CA"
                     }, 
-         level="C level skater",
+         level="C",
          facebook_name="Sherry Clear",
          played_rulesets=["WFTDA"],
          associated_leagues=["California Wreckers"]
