@@ -5,12 +5,51 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel,  validator, field_validator, HttpUrl
 import uuid 
+import re
 
 api_app = FastAPI()
 
+# AddressType: TypeAlias = Literal[]
+
+states_list = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
+               'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
+               'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
+               'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
+               'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+
+class Address(BaseModel):
+    street_address: str
+    city: str
+    state_code: str
+    zip_code: str
+    
+    @field_validator('state_code')
+    def validate_us_states(cls, v):
+        if v.upper() not in states_list:
+            raise ValueError("Invalid State Code")
+        return v
+      
+    @field_validator('zip_code')
+    def validate_zip_codes(cls, v):
+        regexp = r"^\d{5}(?:-\d{4})?$"
+        match =  bool(re.match(regexp, v))
+        if not match:
+            raise ValueError("Invalid Zip Code")
+        return v
+    
+class Location(BaseModel):
+    city: str
+    state_code: str
+    
+    @field_validator('state_code')
+    def validate_us_states(cls, v):
+        if v.upper() not in states_list:
+            raise ValueError("Invalid State Code")
+        return v    
+
 class CommonEventClass(BaseModel):
     event_id: uuid.UUID
-    address: str
+    address: Address
     time: time
     date: date
     theme: str
@@ -60,7 +99,7 @@ class User(BaseModel):
     derby_name: str
     email: str
     about: str
-    location: str
+    location: Location
     level: str
     facebook_name: str
     played_rulesets: List[RulesetsType]
@@ -80,7 +119,7 @@ class User(BaseModel):
     #     if ruleset not in rulesets:
     #         raise ValueError(f"Invalid ruleset: {ruleset}")
     #     return ruleset
-    
+
     
 def fake_user():
       return User(
@@ -88,7 +127,8 @@ def fake_user():
          derby_name="Cleo Splatya", 
          email="CleoSplatya@example.com", 
          about="Skilled skater who has played in the USARS Nationals", 
-         location="Gallup NM", 
+        #  location="Gallup NM", 
+         location=["505 Main St.","Gallup", "NM", "87301"], 
          level="A level skater",
          facebook_name="Cleo Thompson",
          played_rulesets=["WFTDA", "USARS"],
@@ -112,7 +152,12 @@ def fake_bout():
     
 events = { 
     0:Bout(event_id=uuid.uuid1(),
-        address="123 Main St, Cheyenne, WY 82001",
+        address={
+                "street_address": "123 Main St",
+                "city": "Cheyenne",
+                "state_code": "WY",
+                "zip_code": "82001"
+                },
         time=time(15, 30),
         date= date(2023, 11, 17),
         theme="Neon Roller Derby",
@@ -123,7 +168,12 @@ events = {
         opposing_team="Rough Riders"),
     
      1:Bout(event_id=uuid.uuid1(),
-        address="123 Main St, Bozeman, MT 82001",
+        address={
+                "street_address": "123 Main St",
+                "city": "Bozeman",
+                "state_code": "MT",
+                "zip_code": "59715"
+                },
         time=time(17, 30),
         date= date(2023, 12, 19),
         theme="Christmas Comes",
@@ -134,7 +184,12 @@ events = {
         opposing_team="Hellzzz Belzzz"),
      
     2:Mixer(event_id=uuid.uuid1(),
-        address="123 Main St, Denver, CO 82001",
+        address={
+                "street_address": "123 Main St",
+                "city": "Denver",
+                "state_code": "CO",
+                "zip_code": "80014"
+                },
         time=time(19, 30),
         date= date(2023, 12, 2),
         theme="SlaayBells vs. Paindeer",
@@ -153,7 +208,12 @@ users = {
          derby_name="Cleo Splatya", 
          email="CleoSplatya@example.com", 
          about="Skilled skater who has played in the USARS Nationals", 
-         location="Gallup NM", 
+         location={ 
+                    # "street_address": "505 Main St.",
+                    "city": "Gallup",
+                    "state_code": "NM"
+                    # "zip_code": "87301"
+                    },
          level="A level skater",
          facebook_name="Cleo Thompson",
          played_rulesets=["WFTDA", "USARS"],
@@ -165,7 +225,10 @@ users = {
          derby_name="Wicked Bitch of the West", 
          email="WickedBitchOfTheWest@example.com", 
          about="Just learning and traveling as I do so!", 
-         location="Santa Paula CA", 
+         location={
+                    "city": "Santa Paula",
+                    "state_code": "CA"
+                    }, 
          level="C level skater",
          facebook_name="Sherry Clear",
          played_rulesets=["WFTDA"],
