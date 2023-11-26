@@ -230,7 +230,7 @@ def query_bout(event_id:uuid.UUID) -> Bout:
 
 # send json to end point and then it will automatically return json data
 
-@api_app.post("/events/bout") 
+@api_app.post("/events/bouts") 
 def add_bout(bout: Bout) -> dict[str, Bout]: 
     
     if bout.event_id in events:
@@ -239,7 +239,7 @@ def add_bout(bout: Bout) -> dict[str, Bout]:
     events[bout.event_id] = bout
     return {"added": bout}
 
-@api_app.post("/events/mixer") 
+@api_app.post("/events/mixers") 
 def add_bout(mixer: Mixer) -> dict[str, Mixer]: 
     
     if mixer.event_id in events:
@@ -248,7 +248,100 @@ def add_bout(mixer: Mixer) -> dict[str, Mixer]:
     events[mixer.event_id] = mixer
     return {"added": mixer}
 
-#  User routes 
+Selection = dict[str, Union[str, int, float, uuid.UUID, List[str], Optional[Any]]]
+
+
+@api_app.put("/events/bouts/{event_id}")
+def updateBout(
+    event_id: uuid.UUID, 
+    address: Optional[str] = None,
+    time: Optional[time] = None, 
+    date: Optional[date] = None, 
+    theme: Optional[str] = None, 
+    level: Optional[str] = None, 
+    jersey_colors: Optional[str] = None, 
+    ruleset: Optional[str] = None,
+    co_ed: Optional[bool] = None, 
+    opposing_team: Optional[str] = None,
+    ) -> dict[str, Selection]:
+
+
+    if event_id not in events: 
+        HTTPException(status_code=404, detail=f"Event with {event_id} not found")
+    if all(info is None for  info in (address, time, date, theme, level, jersey_colors, co_ed, ruleset, opposing_team)):
+        raise HTTPException(status_code=400, detail="No parameters provided for update.")
+    
+    event = events[event_id]
+    if address is not None: 
+        event.address = address
+    if time is not None: 
+        event.time = time
+    if date is not None: 
+        event.date = date
+    if theme is not None: 
+        event.theme = theme
+    if level is not None: 
+        event.level = level
+    if jersey_colors is not None: 
+        event.jersey_colors = jersey_colors
+    if ruleset is not None: 
+        event.ruleset = ruleset
+    if co_ed is not None: 
+        event.co_ed = co_ed
+    if opposing_team is not None: 
+        event.opposing_team = opposing_team
+ 
+        
+    
+    return {"updated": {"bout": event} }   
+
+
+@api_app.put("/events/mixers/{event_id}")
+def updateMixer(
+    event_id: uuid.UUID, 
+    address: Optional[str] = None,
+    time: Optional[time] = None, 
+    date: Optional[date] = None, 
+    theme: Optional[str] = None, 
+    level: Optional[str] = None, 
+    jersey_colors: Optional[str] = None, 
+    ruleset: Optional[str] = None,
+    co_ed: Optional[bool] = None, 
+    signup_link: Optional[HttpUrl] = None,
+    ) -> dict[str, Selection]:
+
+
+    if event_id not in events: 
+        HTTPException(status_code=404, detail=f"Event with {event_id} not found")
+    if all(info is None for  info in (address, time, date, theme, level, jersey_colors, ruleset, co_ed, signup_link)):
+        raise HTTPException(status_code=400, detail="No parameters provided for update.")
+    
+    event = events[event_id]
+    if address is not None: 
+        event.address = address
+    if time is not None: 
+        event.time = time
+    if date is not None: 
+        event.date = date
+    if theme is not None: 
+        event.theme = theme
+    if level is not None: 
+        event.level = level
+    if jersey_colors is not None: 
+        event.jersey_colors = jersey_colors
+    if ruleset is not None: 
+        event.ruleset = ruleset
+    if co_ed is not None: 
+        event.co_ed = co_ed
+    if signup_link is not None: 
+        event.signup_link = signup_link
+ 
+        
+    
+    return {"updated": {"mixer": event} }   
+
+
+#  **** User routes *** 
 
 # *note here you may need to change the level because you have level as a string
 
@@ -298,8 +391,6 @@ def add_user(user: User) -> dict[str, User]:
     return {"added": user}
 
 
-Selection = dict[str, Union[str, int, float, uuid.UUID, List[str], Optional[Any]]]
-
 
 @api_app.put("/users/{user_id}")
 def update_user(
@@ -313,10 +404,7 @@ def update_user(
     played_rulesets: Optional[List[str]] = [], 
     associated_leagues: Optional[List[str]] = [],
     ) -> dict[str, Selection]:
-    
-    print("update is being called")
-    
-    # HTTPException (f"{name: name}, {count: count}, {price: price}")
+
 
     if user_id not in users: 
         HTTPException(status_code=404, detail=f"User with {user_id} not found")
