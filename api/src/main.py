@@ -9,8 +9,6 @@ import re
 
 api_app = FastAPI()
 
-# AddressType: TypeAlias = Literal[]
-
 states_list = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
                'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
                'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
@@ -100,6 +98,7 @@ RulesetsType: TypeAlias  = Literal["WFTDA", "USARS", "Banked Track", "Flat Track
 class User(BaseModel):
     user_id: uuid.UUID
     derby_name: str
+    password: str
     email: str
     about: str
     location: Location
@@ -136,6 +135,7 @@ def fake_user():
          user_id=uuid.uuid1(),
          derby_name="Cleo Splatya", 
          email="CleoSplatya@example.com", 
+         password="test1", 
          about="Skilled skater who has played in the USARS Nationals", 
         #  location="Gallup NM", 
          location=["505 Main St.","Gallup", "NM", "87301"], 
@@ -216,6 +216,7 @@ users = {
     0:User(
          user_id=uuid.uuid1(),
          derby_name="Cleo Splatya", 
+         password=:"test2",
          email="CleoSplatya@example.com", 
          about="Skilled skater who has played in the USARS Nationals", 
          location={ 
@@ -231,6 +232,7 @@ users = {
     1:User(
          user_id=uuid.uuid1(),
          derby_name="Wicked Bitch of the West", 
+         password=:"test3",
          email="WickedBitchOfTheWest@example.com", 
          about="Just learning and traveling as I do so!", 
          location={
@@ -443,10 +445,6 @@ def query_user_by_parameters(
     if not selection:
         raise HTTPException(status_code=404, detail="No users found")
 
-    # return {
-    #     "query": {"derby_name": derby_name, "location": location, "level": level, "facebook_name": facebook_name, "played_rulesets": played_rulesets, "associated_leagues": associated_leagues, "selection": selection, 
-    #     }
-    
     return {
         "query": {"derby_name": derby_name, "location": location, "level": level, "facebook_name": facebook_name, "selection": selection, 
         }
@@ -467,6 +465,7 @@ def add_user(user: User) -> dict[str, User]:
 def update_user(
     user_id: uuid.UUID, 
     derby_name: Optional[str] = None,
+    password: Optional[str] = None,
     email: Optional[str] = None, 
     about: Optional[str] = None, 
     location: Optional[str] = None, 
@@ -487,6 +486,8 @@ def update_user(
         user.derby_name = derby_name
     if email is not None: 
         user.email = email
+    if passowrd is not None: 
+        user.password = password 
     if about is not None: 
         user.about = about
     if location is not None: 
@@ -495,10 +496,11 @@ def update_user(
         user.level = level
     if facebook_name is not None: 
         user.facebook_name = facebook_name
-    if played_rulesets is not None: 
-        user.played_rulesets = played_rulesets
-    if associated_leagues is not None: 
-        user.associated_leagues = associated_leagues
+    # *note I have to handle lists like this
+    if played_rulesets:
+        user.played_rulesets.extend(played_rulesets)
+    if associated_leagues:
+        user.associated_leagues.extend(associated_leagues)
  
         
     

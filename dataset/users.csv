@@ -1,0 +1,6 @@
+user_id,derby_name,password,email,about,location,level,facebook_name,played_rulesets,associated_leagues
+1,Roller Derby Girl,password123,rollerderbygirl@email.com,I love roller derby! It's a great way to get exercise and meet new people.,Austin TX,B,RollerDerbyGirl,Banked Track, Roller Derby,Texas Roller Derby League
+2,Derby Dude,password456,derbydude@email.com,I'm a new roller derby skater, but I'm hooked!,New York NY,C,DerbyDude,Banked Track, Roller Derby,Gotham Girls Roller Derby
+3,Derby Mama,password789,derbymama@email.com,I'm a roller derby mom and I'm proud of my daughter!,Los Angeles CA,B,DerbyMama,Banked Track, Roller Derby,Los Angeles Derby Dolls
+4,Derby Dad,password101112,derbydad@email.com,I'm a roller derby dad and I'm a big fan of the sport!,Seattle WA,B,DerbyDad,Banked Track, Roller Derby Seattle Derby Demons
+5,Derby Ref,password131415,derbyref@email.com,I'm a roller derby referee, and I love making sure the game is played fair.,Portland OR,A,DerbyRef,Banked Track, Rose City Rollers
