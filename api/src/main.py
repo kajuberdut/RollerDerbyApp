@@ -2,12 +2,28 @@ from enum import Enum
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from datetime import date, time 
 from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel,  validator, field_validator, HttpUrl
+from . import crud, models, schemas
+from .database import SessionLocal, engine
 import uuid 
 import re
 
+models.Base.metadata.create_all(bind=engine)
+
 api_app = FastAPI()
+
+# this is comunciation with out database.py file
+# ensures database is always closed after a request
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 
 states_list = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
                'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
@@ -449,16 +465,24 @@ def query_user_by_parameters(
         "query": {"derby_name": derby_name, "location": location, "level": level, "facebook_name": facebook_name, "selection": selection, 
         }
     }
-    
-@api_app.post("/users/") 
-def add_user(user: User) -> dict[str, User]: 
-    
-    if user.user_id in users:
-        HTTPException(status_code=400, detail=f"User with {user.user_id} already exists")    
-    
-    users[user.user_id] = user
-    return {"added": user}
 
+
+# * old post add user before schemas database and models and crud.py
+# @api_app.post("/users/") 
+# def add_user(user: User) -> dict[str, User]: 
+    
+#     if user.user_id in users:
+#         HTTPException(status_code=400, detail=f"User with {user.user_id} already exists")    
+    
+#     users[user.user_id] = user
+#     return {"added": user}
+
+@app.post("/users/", response_model=schemas.User)
+def add_user(user: schemas.UserAdd, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return crud.add_user(db=db, user=user)
 
 
 @api_app.put("/users/{user_id}")
