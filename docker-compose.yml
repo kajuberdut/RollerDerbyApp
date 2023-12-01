@@ -12,6 +12,7 @@ services:
   api: 
     build:
       context: ./api
+      # context is where the dockerfile is located
       dockerfile: Dockerfile
     ports: 
         - "8080:80"
@@ -19,8 +20,7 @@ services:
       # DB_URL: "postgresql://db:5432/roller_derby_db"
       # DB_URL: "postgresql+psycopg2://db:5432/roller_derby_db"
       # db url is interacting with python code only not the database directly 
-      # DB_URL: "postgresql+psycopg2://postgres:${POSTGRES_PASSWORD}@db:5432/roller_derby_db"
-      DB_URL: "absolutely:wrong"
+      DB_URL: "postgresql+psycopg2://postgres:${POSTGRES_PASSWORD}@db:5432/roller_derby_db"
 
     depends_on:
       db:

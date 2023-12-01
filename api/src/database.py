@@ -3,23 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from os import environ 
 
-raise ValueError("better error now")
-
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
-
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:example@localhost/roller_derby_db" 
-
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:example@5432/roller_derby_db"
-
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:example@localhost5432/roller_derby_db"
-
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:example@localhost:5432/roller_derby_db"
 
 DATABASE_URL = environ.get("DB_URL")
-print("DATABASE_URL:", DATABASE_URL)
 
 # This should be the line that connects my database just not sure what the actual URL Should be???? 
-
 engine = create_engine(DATABASE_URL, echo=True)
 
 # Create a metadata instance -- ptr example

@@ -1,7 +1,5 @@
 FROM python:3.12
 
-RUN "DEEPER DOCKERFILE "
-
 # Update the package list, install postgresql-client, and clean up
 RUN apt-get update && \
     apt-get install -y postgresql-client && \
@@ -22,4 +20,4 @@ COPY ./ /app/
 # # Command to run the script
 # CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "80"]
 
-CMD python /src/database.py; tail -f /dev/null
+CMD python /app/src/database.py; tail -f /dev/null
