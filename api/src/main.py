@@ -10,7 +10,14 @@ from .database import SessionLocal, engine
 import uuid 
 import re
 
-models.Base.metadata.create_all(bind=engine)
+# * note: normally you'd want to use migrations and manage them????
+# * this was the suggestion on youtube
+# models.Base.metadata.create_all(bind=engine)
+
+def create_tables():
+	print("create_tables")
+	models.Base.metadata.create_all(bind=engine)
+ 	# Base.metadata.create_all(bind=engine)
 
 api_app = FastAPI()
 
@@ -232,7 +239,7 @@ users = {
     0:User(
          user_id=uuid.uuid1(),
          derby_name="Cleo Splatya", 
-         password=:"test2",
+         password="test2",
          email="CleoSplatya@example.com", 
          about="Skilled skater who has played in the USARS Nationals", 
          location={ 
