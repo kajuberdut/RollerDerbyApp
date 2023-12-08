@@ -1,34 +1,114 @@
-from enum import Enum 
+
+# ! test for sqlalchemy follow along
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+# from enum import Enum 
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from datetime import date, time 
-from fastapi import FastAPI, HTTPException, Depends
-from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordBearer
+# from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel,  validator, field_validator, HttpUrl
-from . import crud, models, schemas
-from .database import SessionLocal, engine
+# from . import crud, models, schemas
+# from .database import SessionLocal, engine
 import uuid 
 import re
 
-# * note: normally you'd want to use migrations and manage them????
-# * this was the suggestion on youtube
-# models.Base.metadata.create_all(bind=engine)
+from . import crud, models, schemas
+# import crud
+# import models
+# import schemas
 
-def create_tables():
-	print("create_tables")
-	models.Base.metadata.create_all(bind=engine)
- 	# Base.metadata.create_all(bind=engine)
+# from crud import crud
+# from models import models 
+# from schemas import schemas
+from .database import SessionLocal, engine
+# from database import SessionLocal, engine
+print("engine in main.py:", engine)
+
+print("main.py is running")
+
+
+models.Base.metadata.create_all(bind=engine)
 
 api_app = FastAPI()
 
-# this is comunciation with out database.py file
-# ensures database is always closed after a request
+
+
+# Dependency
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+
+# @api_app.post("/users/", response_model=schemas.User)
+# def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+#     db_user = crud.get_user_by_email(db, email=user.email)
+#     if db_user:
+#         raise HTTPException(status_code=400, detail="Email already registered")
+#     return crud.create_user(db=db, user=user)
+
+
+# @api_app.get("/users/", response_model=list[schemas.User])
+# def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#     users = crud.get_users(db, skip=skip, limit=limit)
+#     return users
+
+
+# @api_app.get("/users/{user_id}", response_model=schemas.User)
+# def read_user(user_id: int, db: Session = Depends(get_db)):
+#     db_user = crud.get_user(db, user_id=user_id)
+#     if db_user is None:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return db_user
+
+
+# @api_app.post("/users/{user_id}/items/", response_model=schemas.Item)
+# def create_item_for_user(
+#     user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
+# ):
+#     return crud.create_user_item(db=db, item=item, user_id=user_id)
+
+
+# @api_app.get("/items/", response_model=list[schemas.Item])
+# def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#     items = crud.get_items(db, skip=skip, limit=limit)
+#     return items
+
+
+# from enum import Enum 
+# from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
+# from datetime import date, time 
+# from fastapi import FastAPI, HTTPException, Depends
+# from sqlalchemy.orm import Session
+# from fastapi.security import OAuth2PasswordBearer
+# from pydantic import BaseModel,  validator, field_validator, HttpUrl
+# from . import crud, models, schemas
+# from .database import SessionLocal, engine
+# import uuid 
+# import re
+
+# # * note: normally you'd want to use migrations and manage them????
+# # * this was the suggestion on youtube
+# models.Base.metadata.create_all(bind=engine)
+
+# # def create_tables():
+# # 	print("create_tables")
+# # 	models.Base.metadata.create_all(bind=engine)
+#  	# Base.metadata.create_all(bind=engine)
+
+# api_app = FastAPI()
+
+# # this is comunciation with out database.py file
+# # ensures database is always closed after a request
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
 
 
 
@@ -130,8 +210,8 @@ class User(BaseModel):
     played_rulesets: List[RulesetsType]
     associated_leagues: List[str]
     
-    # ! note will have to come back to this as check_fields=False I think is wrong???? 
-    # ! have not found a substitute for each_item=True 
+#     # ! note will have to come back to this as check_fields=False I think is wrong???? 
+#     # ! have not found a substitute for each_item=True 
     @field_validator("played_rulsets", check_fields=False)
     def ruleset_must_be_valid(cls, ruleset: List[str]) -> List[str]:
         if ruleset not in rulesets:
@@ -153,136 +233,136 @@ class User(BaseModel):
     #     return ruleset
 
     
-def fake_user():
-      return User(
-         user_id=uuid.uuid1(),
-         derby_name="Cleo Splatya", 
-         email="CleoSplatya@example.com", 
-         password="test1", 
-         about="Skilled skater who has played in the USARS Nationals", 
-        #  location="Gallup NM", 
-         location=["505 Main St.","Gallup", "NM", "87301"], 
-         level="A level skater",
-         facebook_name="Cleo Thompson",
-         played_rulesets=["WFTDA", "USARS"],
-         associated_leagues=["Cheyenne Roller Derby", "Wydaho", "Colorado", "USARS Nationals Team"]
-    )
+# def fake_user():
+#       return User(
+#          user_id=uuid.uuid1(),
+#          derby_name="Cleo Splatya", 
+#          email="CleoSplatya@example.com", 
+#          password="test1", 
+#          about="Skilled skater who has played in the USARS Nationals", 
+#         #  location="Gallup NM", 
+#          location=["505 Main St.","Gallup", "NM", "87301"], 
+#          level="A level skater",
+#          facebook_name="Cleo Thompson",
+#          played_rulesets=["WFTDA", "USARS"],
+#          associated_leagues=["Cheyenne Roller Derby", "Wydaho", "Colorado", "USARS Nationals Team"]
+#     )
       
-def fake_bout():
+# def fake_bout():
 
-    return Bout(
-        event_id=uuid.uuid1(),
-        address="123 Main St, Cheyenne, WY 82001",
-        time=time(15, 30),
-        date= date(2023, 11, 17),
-        theme="Neon Roller Derby",
-        level="AA",
-        jersey_colors="Aqua and Black",
-        ruleset="WFTDA",
-        co_ed=False,
-        opposing_team="Rough Riders"
-    )
+#     return Bout(
+#         event_id=uuid.uuid1(),
+#         address="123 Main St, Cheyenne, WY 82001",
+#         time=time(15, 30),
+#         date= date(2023, 11, 17),
+#         theme="Neon Roller Derby",
+#         level="AA",
+#         jersey_colors="Aqua and Black",
+#         ruleset="WFTDA",
+#         co_ed=False,
+#         opposing_team="Rough Riders"
+#     )
     
-events = { 
-    0:Bout(event_id=uuid.uuid1(),
-        address={
-                "street_address": "123 Main St",
-                "city": "Cheyenne",
-                "state_code": "WY",
-                "zip_code": "82001"
-                },
-        time=time(15, 30),
-        date= date(2023, 11, 17),
-        theme="Neon Roller Derby",
-        level="AA",
-        jersey_colors="Aqua and Black",
-        ruleset="WFTDA",
-        co_ed=False,
-        opposing_team="Rough Riders"),
+# events = { 
+#     0:Bout(event_id=uuid.uuid1(),
+#         address={
+#                 "street_address": "123 Main St",
+#                 "city": "Cheyenne",
+#                 "state_code": "WY",
+#                 "zip_code": "82001"
+#                 },
+#         time=time(15, 30),
+#         date= date(2023, 11, 17),
+#         theme="Neon Roller Derby",
+#         level="AA",
+#         jersey_colors="Aqua and Black",
+#         ruleset="WFTDA",
+#         co_ed=False,
+#         opposing_team="Rough Riders"),
     
-     1:Bout(event_id=uuid.uuid1(),
-        address={
-                "street_address": "123 Main St",
-                "city": "Bozeman",
-                "state_code": "MT",
-                "zip_code": "59715"
-                },
-        time=time(17, 30),
-        date= date(2023, 12, 19),
-        theme="Christmas Comes",
-        level="A",
-        jersey_colors="Purple and Black",
-        ruleset="WFTDA",
-        co_ed=False,
-        opposing_team="Hellzzz Belzzz"),
+#      1:Bout(event_id=uuid.uuid1(),
+#         address={
+#                 "street_address": "123 Main St",
+#                 "city": "Bozeman",
+#                 "state_code": "MT",
+#                 "zip_code": "59715"
+#                 },
+#         time=time(17, 30),
+#         date= date(2023, 12, 19),
+#         theme="Christmas Comes",
+#         level="A",
+#         jersey_colors="Purple and Black",
+#         ruleset="WFTDA",
+#         co_ed=False,
+#         opposing_team="Hellzzz Belzzz"),
      
-    2:Mixer(event_id=uuid.uuid1(),
-        address={
-                "street_address": "123 Main St",
-                "city": "Denver",
-                "state_code": "CO",
-                "zip_code": "80014"
-                },
-        time=time(19, 30),
-        date= date(2023, 12, 2),
-        theme="SlaayBells vs. Paindeer",
-        level="A/B",
-        jersey_colors="White and Black",
-        ruleset="WFTDA",
-        co_ed=False,
-        signup_link="https://www.google.com/maps")
+#     2:Mixer(event_id=uuid.uuid1(),
+#         address={
+#                 "street_address": "123 Main St",
+#                 "city": "Denver",
+#                 "state_code": "CO",
+#                 "zip_code": "80014"
+#                 },
+#         time=time(19, 30),
+#         date= date(2023, 12, 2),
+#         theme="SlaayBells vs. Paindeer",
+#         level="A/B",
+#         jersey_colors="White and Black",
+#         ruleset="WFTDA",
+#         co_ed=False,
+#         signup_link="https://www.google.com/maps")
     
     
-}
+# }
 
-users = {
-    0:User(
-         user_id=uuid.uuid1(),
-         derby_name="Cleo Splatya", 
-         password="test2",
-         email="CleoSplatya@example.com", 
-         about="Skilled skater who has played in the USARS Nationals", 
-         location={ 
-                    "city": "Gallup",
-                    "state_code": "NM"
-                    },
-         level="A",
-         facebook_name="Cleo Thompson",
-         played_rulesets=["WFTDA", "USARS"],
-         associated_leagues=["Cheyenne Roller Derby", "Wydaho", "Colorado", "USARS Nationals Team"]
-    ),
+# users = {
+#     0:User(
+#          user_id=uuid.uuid1(),
+#          derby_name="Cleo Splatya", 
+#          password="test2",
+#          email="CleoSplatya@example.com", 
+#          about="Skilled skater who has played in the USARS Nationals", 
+#          location={ 
+#                     "city": "Gallup",
+#                     "state_code": "NM"
+#                     },
+#          level="A",
+#          facebook_name="Cleo Thompson",
+#          played_rulesets=["WFTDA", "USARS"],
+#          associated_leagues=["Cheyenne Roller Derby", "Wydaho", "Colorado", "USARS Nationals Team"]
+#     ),
     
-    1:User(
-         user_id=uuid.uuid1(),
-         derby_name="Wicked Bitch of the West", 
-         password=:"test3",
-         email="WickedBitchOfTheWest@example.com", 
-         about="Just learning and traveling as I do so!", 
-         location={
-                    "city": "Santa Paula",
-                    "state_code": "CA"
-                    }, 
-         level="C",
-         facebook_name="Sherry Clear",
-         played_rulesets=["WFTDA"],
-         associated_leagues=["California Wreckers"]
-    )
-}
+#     1:User(
+#          user_id=uuid.uuid1(),
+#          derby_name="Wicked Bitch of the West", 
+#          password=:"test3",
+#          email="WickedBitchOfTheWest@example.com", 
+#          about="Just learning and traveling as I do so!", 
+#          location={
+#                     "city": "Santa Paula",
+#                     "state_code": "CA"
+#                     }, 
+#          level="C",
+#          facebook_name="Sherry Clear",
+#          played_rulesets=["WFTDA"],
+#          associated_leagues=["California Wreckers"]
+#     )
+# }
 
-@api_app.get("/users/me")
-async def query_user():
-    current_user = fake_user()
-    return current_user
+# @api_app.get("/users/me")
+# async def query_user():
+#     current_user = fake_user()
+#     return current_user
 
-@api_app.get("/bouts/fake_bout")
-async def query_bout():
-    current_bout = fake_bout()
-    return current_bout
+# @api_app.get("/bouts/fake_bout")
+# async def query_bout():
+#     current_bout = fake_bout()
+#     return current_bout
 
-# Event Routes 
+# # Event Routes 
 
-# * this will return all events for /events/ but will also return if searching by any of the below date, theme, level, ruleset, co_ed
-# * http://127.0.0.1:8000/events/?level=A
+# # * this will return all events for /events/ but will also return if searching by any of the below date, theme, level, ruleset, co_ed
+# # * http://127.0.0.1:8000/events/?level=A
 
 @api_app.get("/events/")
 def query_event_by_parameters(
@@ -437,7 +517,7 @@ def updateMixer(
     return {"updated": {"mixer": event} }   
 
 
-#  **** User routes *** 
+# #  **** User routes *** 
 
 # *note here you may need to change the level because you have level as a string
 
@@ -474,7 +554,7 @@ def query_user_by_parameters(
     }
 
 
-# * old post add user before schemas database and models and crud.py
+# # * old post add user before schemas database and models and crud.py
 # @api_app.post("/users/") 
 # def add_user(user: User) -> dict[str, User]: 
     
@@ -484,7 +564,7 @@ def query_user_by_parameters(
 #     users[user.user_id] = user
 #     return {"added": user}
 
-@app.post("/users/", response_model=schemas.User)
+@api_app.post("/users/", response_model=schemas.User)
 def add_user(user: schemas.UserAdd, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -492,47 +572,47 @@ def add_user(user: schemas.UserAdd, db: Session = Depends(get_db)):
     return crud.add_user(db=db, user=user)
 
 
-@api_app.put("/users/{user_id}")
-def update_user(
-    user_id: uuid.UUID, 
-    derby_name: Optional[str] = None,
-    password: Optional[str] = None,
-    email: Optional[str] = None, 
-    about: Optional[str] = None, 
-    location: Optional[str] = None, 
-    level: Optional[str] = None, 
-    facebook_name: Optional[str] = None, 
-    played_rulesets: Optional[List[str]] = [], 
-    associated_leagues: Optional[List[str]] = [],
-    ) -> dict[str, Selection]:
+# @api_app.put("/users/{user_id}")
+# def update_user(
+#     user_id: uuid.UUID, 
+#     derby_name: Optional[str] = None,
+#     password: Optional[str] = None,
+#     email: Optional[str] = None, 
+#     about: Optional[str] = None, 
+#     location: Optional[str] = None, 
+#     level: Optional[str] = None, 
+#     facebook_name: Optional[str] = None, 
+#     played_rulesets: Optional[List[str]] = [], 
+#     associated_leagues: Optional[List[str]] = [],
+#     ) -> dict[str, Selection]:
 
 
-    if user_id not in users: 
-        HTTPException(status_code=404, detail=f"User with {user_id} not found")
-    if all(info is None for  info in (derby_name, email, about, location, level, facebook_name, played_rulesets, associated_leagues)):
-        raise HTTPException(status_code=400, detail="No parameters provided for update.")
+#     if user_id not in users: 
+#         HTTPException(status_code=404, detail=f"User with {user_id} not found")
+#     if all(info is None for  info in (derby_name, email, about, location, level, facebook_name, played_rulesets, associated_leagues)):
+#         raise HTTPException(status_code=400, detail="No parameters provided for update.")
     
-    user = users[user_id]
-    if derby_name is not None: 
-        user.derby_name = derby_name
-    if email is not None: 
-        user.email = email
-    if passowrd is not None: 
-        user.password = password 
-    if about is not None: 
-        user.about = about
-    if location is not None: 
-        user.location = location
-    if level is not None: 
-        user.level = level
-    if facebook_name is not None: 
-        user.facebook_name = facebook_name
-    # *note I have to handle lists like this
-    if played_rulesets:
-        user.played_rulesets.extend(played_rulesets)
-    if associated_leagues:
-        user.associated_leagues.extend(associated_leagues)
+#     user = users[user_id]
+#     if derby_name is not None: 
+#         user.derby_name = derby_name
+#     if email is not None: 
+#         user.email = email
+#     if password is not None: 
+#         user.password = password 
+#     if about is not None: 
+#         user.about = about
+#     if location is not None: 
+#         user.location = location
+#     if level is not None: 
+#         user.level = level
+#     if facebook_name is not None: 
+#         user.facebook_name = facebook_name
+#     # *note I have to handle lists like this
+#     if played_rulesets:
+#         user.played_rulesets.extend(played_rulesets)
+#     if associated_leagues:
+#         user.associated_leagues.extend(associated_leagues)
  
         
     
-    return {"updated": {"user": user} }   
+#     return {"updated": {"user": user} }   
