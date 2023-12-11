@@ -1,7 +1,8 @@
-.ProfileForm {
-    justify-content: center;
-    margin: auto;
-    margin-top: 6em;
-    width: 50em;
+.SetupProfileForm {
+    /* justify-content: center; */
+    /* margin: auto;
+    margin-top: 6em; */
+    width: 50%;
+    margin-top: 7%;
+    margin-left: 10%; 
 }
-

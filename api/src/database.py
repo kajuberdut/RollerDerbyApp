@@ -21,14 +21,14 @@ from os import environ
 
 # engine = create_engine(DATABASE_URL, echo=False)
 
-# engine = create_engine('postgresql://postgres:changedpass@db:5432/roller_derby_db')
+engine = create_engine('postgresql://postgres:changedpass@db:5432/roller_derby_db')
 # this seems like its the correct database because of not getting errors. 
 # I am going to try and run in it in localhost not in docker but leave database running in docker 
 # This one the last error I get inside the logs for api is You have made it through the database file 
 # It doesnt print anything else as far as errors go  
 
 # *correct engine below for starting it outside fo docker 
-engine = create_engine('postgresql://postgres:changedpass@localhost:5432/roller_derby_db')
+# engine = create_engine('postgresql://postgres:changedpass@localhost:5432/roller_derby_db')
 # this does not seem to be working starting it up from inside of docke which makes sense because we have localhost in there 
 # note that this worked outside of docker.... 
 # crud.py is running
@@ -58,8 +58,10 @@ Base = declarative_base()
 
 print("Base", Base)
 
-Base.metadata.create_all(bind=engine)
-# User.metadata.create_all(bind=engine)
+# create all tables 
+def create_all_tables():
+    Base.metadata.create_all(bind=engine)
+
 
 print("You have made it through the database file")
 

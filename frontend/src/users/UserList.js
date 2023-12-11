@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
-import CardComponent from "../multiUse/cardComponent/CardComponent";
+// import CardComponent from "../multiUse/cardComponent/CardComponent";
 // import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
 
@@ -48,11 +48,12 @@ function UserList() {
     const renderCards = () => {
       return (
         <div className="JobList">
-            <ul>
+            {/* <ul>
                 {users.map(user => (
                   <CardComponent user={user} key={"User-" + user.id} />
                 ))}
-            </ul>
+            </ul> */}
+            <h1>This is rendinering cards</h1>
           </div>
         );
     }
@@ -61,7 +62,7 @@ function UserList() {
 
     return (
       <div className="UserList">
-        <SearchBar getUsers={getUsers}/>
+        {/* <SearchBar getUsers={getUsers}/> */}
         {renderCards()}
       </div>
     );

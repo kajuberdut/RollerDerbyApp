@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import JoblyApi from "../Api";
+import FastApi from "../Api";
 import { useParams} from "react-router-dom";
-import CardComponent from "../repeated/cardComponents/CardComponent";
-import Loading from "../repeated/loading/Loading";
+// import CardComponent from "../multiUse/cardComponent/CardComponent";
+import Loading from "../multiUse/loading/Loading";
 
 /**  
  * User detail form
@@ -56,14 +56,14 @@ function UserDetail() {
     // ! will need to rework this
 
     return (
-      <div className="CompanyDetail">
-        { company && <h3>{company.name}</h3> } 
-        { company && <h4>{company.description}</h4>}
-        {renderCards()}
+      <div className="UserDetails">
+        {/* { company && <h3>{company.name}</h3> } 
+        { company && <h4>{company.description}</h4>} */}
+        {/* {renderCards()} */}
       </div>
     );
   
 
 }
 
-export default CompanyDetail
+export default UserDetail

@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
+import FastApi from "../Api"
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 // import UserContext from "../../repeated/UserContext";
+import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
 import {
     Card,
@@ -30,8 +32,9 @@ const SignupForm = ({signup, update}) => {
 //   const { user, setUser } = useContext(UserContext);
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
-//   const [ invalid, setInvalid ] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState([]);
+  const [ invalid, setInvalid ] = useState(false);
+  const [errorMessage, setErrorMessage] = useState([]);
+const navigate = useNavigate();
 
 //   let INITIAL_STATE; 
 
@@ -48,8 +51,10 @@ const SignupForm = ({signup, update}) => {
 //     INITIAL_STATE = { username: "", firstName: "", lastName: "", email: "" };
 //   }
 
+ let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+
   /** Sets formData in initial state */
-//   const [formData, setFormData] = useState(INITIAL_STATE);
+  const [formData, setFormData] = useState(INITIAL_STATE);
   
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
@@ -105,33 +110,49 @@ const SignupForm = ({signup, update}) => {
 
 //   };
 
+  const handleSubmit = async evt => {
+    evt.preventDefault();   
+    setFormData(INITIAL_STATE);
+    console.log("formData:", formData)
+    let result = await FastApi.signup(formData);
+
+    if(result.success) {
+      navigate('/home')
+
+    } else {
+      let message = result.errors[0]
+      setErrorMessage(message)
+      setInvalid(true)
+    }
+  }
+
 
   /** Update local state with current state of input element */
 
-//   const handleChange = evt => {
-//     console.log('handleChange is running')
-//     const { name, value }= evt.target;
+  const handleChange = evt => {
+    console.log('handleChange is running')
+    const { name, value }= evt.target;
 
-//     setFormData(fData => ({
-//       ...fData,
-//       [name]: value,
-//     }));
+    setFormData(fData => ({
+      ...fData,
+      [name]: value,
+    }));
 
-//   };
+  };
 
   /** render form */
 
   return (
-    <section className="col-md-4 ProfileForm">
+    <section className="col-md-4 SignupForm">
         <Card>
-            <CardTitle className="ProfileForm-CardTitle">
+            <CardTitle className="SignupForm-CardTitle">
             {/* { !user && ( <h1>Create a Profile</h1> )}
             { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Create a profile</h1>
             </CardTitle>
             <CardBody>
-                <Form>
-                {/* <Form onSubmit={handleSubmit}> */}
+                {/* <Form> */}
+                <Form onSubmit={handleSubmit}>
                     <FormGroup>
                         <Label htmlFor="derbyName" sm={10}>Derby Name: </Label>
                         {/* { user && ( */}
@@ -150,8 +171,8 @@ const SignupForm = ({signup, update}) => {
                         <Input
                             id="derbyName"
                             name="derbyName"
-                            // defaultValue={formData.derbyName}
-                            // onChange={handleChange}
+                            defaultValue={formData.derbyName}
+                            onChange={handleChange}
                             placeholder="Derby Name"
                             required
                             // invalid={invalid}
@@ -164,8 +185,8 @@ const SignupForm = ({signup, update}) => {
                             type="email"
                             id="email"
                             name="email"
-                            // value={formData.email}
-                            // onChange={handleChange}
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="Email"
                             required
                             // valid={valid}
@@ -178,10 +199,10 @@ const SignupForm = ({signup, update}) => {
                             type="password"
                             name="password"
                             // className="form-control"
-                            // value={formData.password}
-                            // onChange={handleChange}
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="Password"
-                            id="passwordInput"
+                            id="password"
   
                             // invalid={invalid}
                         />

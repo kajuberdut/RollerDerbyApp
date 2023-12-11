@@ -11,12 +11,6 @@ import {
     Label, 
     Input,
     Button,
-    Col,
-    FormFeedback,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
   } from "reactstrap";
   import PropTypes from 'prop-types';
 
@@ -28,125 +22,133 @@ const SetupProfileForm = ({signup, update}) => {
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
-//   const { user, setUser } = useContext(UserContext);
+  // const { user, setUser } = useContext(UserContext);
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
 //   const [errorMessage, setErrorMessage] = useState([]);
 const [dropdownOpen, setDropdownOpen] = useState(false);
 
-//   let INITIAL_STATE; 
+let user = "SockHer Blue"  
 
- 
-  /** If user, set initial state and the then set the formdata as initial state. 
-   * Sets info for user so that info can be updated. 
-   * Gives value to InitialState
+  /** 
+   * Sets Initial State of Form
   */
 
-//   if(user) {
-//     INITIAL_STATE = { username: user.username, firstName: user.firstName, lastName: user.lastName, email: user.email };
 
-//   } else {
-//     INITIAL_STATE = { username: "", firstName: "", lastName: "", email: "" };
-//   }
+
+let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", email: "",  facebookName: "", about: "", primNum: "", secNum: "", level: "", primIns: "", primInsNum: "", secIns: "", secInsNum: "", assocLeagues: ""};
 
   /** Sets formData in initial state */
-//   const [formData, setFormData] = useState(INITIAL_STATE);
+  const [formData, setFormData] = useState(INITIAL_STATE);
   
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
-//   const handleSubmit = async evt => {
-//     evt.preventDefault();   
-//     setFormData(INITIAL_STATE);
+  const handleSubmit = async evt => {
+    evt.preventDefault();   
+    setFormData(INITIAL_STATE);
 
-     /** If user update profile*/
-
-    // if(user) {
-    //   const username = user.username;
-    //   const email = formData.email; 
-    //   const firstName = formData.firstName
-    //   const lastName = formData.lastName
+     /** Update profile*/
+      const derbyName = user.derbyName;
+      const email = formData.email; 
+      const firstName = formData.firstName;
+      const lastName = formData.lastName;
+      const facebookName = formData.facebookName;
+      const about = formData.about;
+      const primNum = user.primNum;
+      const secNum = user.secNum; 
+      const level = user.level;
+      const primIns = user.primIns;
+      const primInsNum = user.primInsNum;
+      const secIns = user.secIns;
+      const secInsNum = secInsNum; 
+      const assocLeagues = user.assocLeagues;
     
-    //   delete formData.username;
-    //   delete formData.email; 
+      // delete formData.username;
+      // delete formData.email; 
+      // *Not sure what the above are doing? 
 
-    //   update(formData, username);
+      update(formData, derbyName);
 
-    //   let profileData = {
-    //     email: email, 
-    //     username: username,
-    //     isAdmin: user.isAdmin,
-    //     firstName: firstName,
-    //     lastName: lastName,
-    //     applications: user.applications
-    //   }
-    //     console.log("profileData:", profileData)
-    //     setUser(profileData)
-    //     console.log("USER!!!!!:", user)
-    //     setFormData(profileData);
+      let profileData = {
+        derbyName: derbyName,
+        firstName: firstName, 
+        lastName: lastName, 
+        email: email, 
+        facebookName: facebookName,
+        about: about, 
+        primNum: primNum, 
+        secNum: secNum, 
+        level: level, 
+        primIns: primIns, 
+        primInsNum: primInsNum,
+        secIns: secIns, 
+        secInsNum: secInsNum, 
+        assocLeagues: assocLeagues
+      }
+        console.log("profileData:", profileData)
+        // setUser(profileData)
+        console.log("USER!!!!!:", user)
+        setFormData(profileData);
     //     // todo: this is working but you need to relook at it as I think you made it more complicated than needed. 
 
     //   setValid(true)
    
-    // }
-
-    /** If no user create profile or return error message*/
-
-//     if(!user) {
-//       let result = await signup(formData);
-
-//       if(result.success) {
-//         history.push("/")
-
-//       } else {
-//         let message = result.errors[0]
-//         setErrorMessage(message)
-//         setInvalid(true)
-//       }
-//     }
-
-//   };
-
+   }
 
   /** Update local state with current state of input element */
 
-//   const handleChange = evt => {
-//     console.log('handleChange is running')
-//     const { name, value }= evt.target;
+  const handleChange = evt => {
+    console.log('handleChange is running')
+    const { name, value }= evt.target;
 
-//     setFormData(fData => ({
-//       ...fData,
-//       [name]: value,
-//     }));
+    setFormData(fData => ({
+      ...fData,
+      [name]: value,
+    }));
 
-//   };
+  };
 
   /** toggle dropdown */
 
-const toggle = () => setDropdownOpen((prevState) => !prevState);
+// const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   /** render form */
 
   return (
-    <section className="col-md-4 ProfileForm">
+    <section className="col-md-4 SetupProfileForm">
         <Card>
-            <CardTitle className="ProfileForm-CardTitle">
+            <CardTitle className="SetupProfileForm-CardTitle">
             {/* { !user && ( <h1>Create a Profile</h1> )}
             { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Additional Information</h1>
             </CardTitle>
             <CardBody>
-                <Form>
-                {/* <Form onSubmit={handleSubmit}> */}
+                {/* <Form> */}
+                <Form onSubmit={handleSubmit}>
                     <FormGroup>
+
+                    <Label htmlFor="derbyName">First Name: </Label>
+                       <Input
+                           type="derbyName"
+                           id="derbyName"
+                           name="derbyName"
+                           value={formData.derbyName}
+                           onChange={handleChange}
+                           placeholder="Derby Name"
+                           required
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
                         <Label htmlFor="firstName">First Name: </Label>
                        
                         <Input
                             type="firstName"
                             id="firstName"
                             name="firstName"
-                            // value={formData.firstName}
-                            // onChange={handleChange}
+                            value={formData.firstName}
+                            onChange={handleChange}
                             placeholder="First Name"
                             required
                             // valid={valid}
@@ -159,8 +161,8 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="lastName"
                             id="lastName"
                             name="lastName"
-                            // value={formData.lastName}
-                            // onChange={handleChange}
+                            value={formData.lastName}
+                            onChange={handleChange}
                             placeholder="Last Name"
                             required
                             // valid={valid}
@@ -172,8 +174,8 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="facebookName"
                             name="facebookName"
                             className="form-control"
-                            // value={formData.facebookName}
-                            // onChange={handleChange}
+                            value={formData.facebookName}
+                            onChange={handleChange}
                             placeholder="Facebook Name"
                             id="facebookName"
   
@@ -188,34 +190,34 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="textarea"
                             name="about"
                             className="form-control"
-                            // value={formData.about}
-                            // onChange={handleChange}
+                            value={formData.about}
+                            onChange={handleChange}
                             placeholder="Write your story..."
                             id="about"
   
                             // invalid={invalid}
                         />
 
-                        <Label htmlFor="primaryNumber">Primary Number: </Label>
+                        <Label htmlFor="primNum">Primary Number: </Label>
                         <Input
-                            type="primaryNumber"
-                            name="primaryNumber"
+                            type="number"
+                            name="primNum"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
+                            value={formData.primNum}
+                            onChange={handleChange}
                             placeholder="Primary Number"
                             id="primaryNumber"
   
                             // invalid={invalid}
                         />
 
-                        <Label htmlFor="primaryNumber">Primary Number: </Label>
+                        <Label htmlFor="secNum">Secondary Number: </Label>
                         <Input
                             type="number"
-                            name="secondaryNumber"
+                            name="secNum"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
+                            value={formData.secNum}
+                            onChange={handleChange}
                             placeholder="Secondary Number"
                             id="secondaryNumber"
   
@@ -223,15 +225,15 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             // note will have to restrict this to numbers only
                         />
 
-                        <Label htmlFor="secondaryNumber">Secondary Number: </Label>
+                        <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
                         <Input
-                            type="number"
-                            name="secondaryNumber"
+                            type="text"
+                            name="secInsNum"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
-                            placeholder="Secondary Number"
-                            id="secondaryNumber"
+                            value={formData.secInsNum}
+                            onChange={handleChange}
+                            placeholder="Secondary Insurance Number"
+                            id="secInsNum"
   
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
@@ -243,8 +245,8 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="select"
                             name="level"
                             className="form-control"
-                            // value={formData.level}
-                            // onChange={handleChange}
+                            value={formData.level}
+                            onChange={handleChange}
                             placeholder="level"
                             id="level"
   
@@ -265,15 +267,15 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             {/* </Col> */}
                             </Input>
 
-                        <Label htmlFor="insurancePrimary">Insurance Primary: </Label>
+                        <Label htmlFor="primIns">Primary Insurance: </Label>
                         <Input
                             type="select"
-                            name="insurancePrimary"
+                            name="primIns"
                             className="form-control"
-                            // value={formData.level}
-                            // onChange={handleChange}
-                            placeholder="insurancePrimary"
-                            id="unsurancePrimary"
+                            value={formData.primIns}
+                            onChange={handleChange}
+                            placeholder="Primary Insurance"
+                            id="primaryInsurance"
   
                             // invalid={invalid}
                             >
@@ -294,8 +296,8 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="text"
                             name="primInsNum"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
+                            value={formData.primInsNum}
+                            onChange={handleChange}
                             placeholder="Primary Insurance Number"
                             id="primInsNum"
   
@@ -303,15 +305,15 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             // note will have to restrict this to numbers only
                         />
 
-                        <Label htmlFor="insuranceSecondary">Insurance Secondary: </Label>
+                        <Label htmlFor="secIns">Secondary Insurance: </Label>
                         <Input
                             type="select"
-                            name="insuranceSecondary"
+                            name="secIns"
                             className="form-control"
-                            // value={formData.level}
-                            // onChange={handleChange}
-                            placeholder="insuranceSecondary"
-                            id="unsuranceSecondary"
+                            value={formData.secIns}
+                            onChange={handleChange}
+                            placeholder="Secondary Insurance"
+                            id="secondaryInsurance"
   
                             // invalid={invalid}
                             >
@@ -331,8 +333,8 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="text"
                             name="secInsNum"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
+                            value={formData.secInsNum}
+                            onChange={handleChange}
                             placeholder="Secondary Insurance Number"
                             id="secInsNum"
   
@@ -345,10 +347,10 @@ const toggle = () => setDropdownOpen((prevState) => !prevState);
                             type="text"
                             name="assocLeagues"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
+                            value={formData.assocLeagues}
+                            onChange={handleChange}
                             placeholder="Associated Leagues"
-                            id="ssocLeagues"
+                            id="assocLeagues"
   
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
