@@ -20,6 +20,7 @@ body {
   height: 100vh;
   /* background-position: left 130% top 50%;  */
   background-position: right top; 
+  background-attachment: fixed;
 
   /* background-size: cover; */
   /* background-origin: padding-box;

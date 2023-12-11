@@ -2,7 +2,9 @@
 import { Link, NavLink } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./NavBar.css";
+import Star from "./Star"
 // import UserContext from "../repeated/UserContext";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { 
   Navbar, 
   NavbarBrand,
@@ -28,7 +30,13 @@ function NavBar({logout}) {
       <Navbar expand="md">
         {/* <NavLink exact to="/" className="navbar-brand">Yodlr
         </NavLink> */}
-        <NavbarBrand href="/">React-Conteact</NavbarBrand>
+        {/* <Star href="/"></Star>
+        <NavbarBrand href="/">React-Conteact</NavbarBrand> */}
+      <div style={{ display: 'flex' }}>
+        <Star />
+        <NavbarBrand href="/">React-Contact</NavbarBrand>
+      </div>
+
         <Nav className="ml-auto" navbar>
             <NavItem className="Navbar Signup">
                 <NavLink to="/signup">Signup</NavLink>

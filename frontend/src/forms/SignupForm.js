@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import FastApi from "../Api"
+import FastApi from "../Api";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 // import UserContext from "../../repeated/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +51,8 @@ const navigate = useNavigate();
 //     INITIAL_STATE = { username: "", firstName: "", lastName: "", email: "" };
 //   }
 
- let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+//  let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -117,13 +118,15 @@ const navigate = useNavigate();
     let result = await FastApi.signup(formData);
 
     // if(result.success) {
-    //   navigate('/home')
+    if(result) {
+      navigate('/home')
 
-    // } else {
-    //   let message = result.errors[0]
-    //   setErrorMessage(message)
-    //   setInvalid(true)
-    // }
+    } else {
+      // let message = result.errors[0]
+      let message = result
+      setErrorMessage(message)
+      setInvalid(true)
+    }
   }
 
 

@@ -28,10 +28,14 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
   
     return filtered_query.all()
 
-def create_user(derby_name: str, email: str, password: str, db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserCreate):
+# def create_user(derby_name: str, email: str, password: str, db: Session, user: schemas.UserCreate):
+    print("create user in crud.py is working")
+    print("user in crud.py:", user)
     password = user.password + "notreallyhashed"
+    
     # db_user = models.User(user_id="32e397b9-f703-4215-b68a-911466131b79",derby_name="Wicked Bitch of the West", email="this@mail.com", hashed_password=password)
-    db_user = models.User(user_id=uuid.uuid4(), derby_name=derby_name, email=email,password=password)
+    db_user = models.User(user_id=str(uuid.uuid4()), derby_name=user.derby_name, email=user.email, hashed_password=password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

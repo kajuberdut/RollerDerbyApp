@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
+import FastApi from "../Api";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 // import UserContext from "../../repeated/UserContext";
+import { useNavigate } from "react-router-dom";
 import "./SetupProfileForm.css"
 import {
     Card,
@@ -28,6 +30,9 @@ const SetupProfileForm = ({signup, update}) => {
 //   const [ invalid, setInvalid ] = useState(false);
 //   const [errorMessage, setErrorMessage] = useState([]);
 const [dropdownOpen, setDropdownOpen] = useState(false);
+// const [file, setFile] = useState<File | undefined>();
+// const [preview, setPreview] = useState<string | undefined>();
+const navigate = useNavigate();
 
 let user = "SockHer Blue"  
 
@@ -46,54 +51,68 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
+    console.log("FormData in SetupProfileForm.js", formData)
     setFormData(INITIAL_STATE);
-
+   
+      // this will be if(user) then preset the form to being filled with what is already in their profile. 
      /** Update profile*/
-      const derbyName = user.derbyName;
-      const email = formData.email; 
-      const firstName = formData.firstName;
-      const lastName = formData.lastName;
-      const facebookName = formData.facebookName;
-      const about = formData.about;
-      const primNum = user.primNum;
-      const secNum = user.secNum; 
-      const level = user.level;
-      const primIns = user.primIns;
-      const primInsNum = user.primInsNum;
-      const secIns = user.secIns;
-      const secInsNum = secInsNum; 
-      const assocLeagues = user.assocLeagues;
+      // const derbyName = user.derbyName;
+      // const image = user.image;
+      // const email = formData.email; 
+      // const firstName = formData.firstName;
+      // const lastName = formData.lastName;
+      // const facebookName = formData.facebookName;
+      // const about = formData.about;
+      // const primNum = user.primNum;
+      // const secNum = user.secNum; 
+      // const level = user.level;
+      // const primIns = user.primIns;
+      // const primInsNum = user.primInsNum;
+      // const secIns = user.secIns;
+      // const secInsNum = user.secInsNum; 
+      // const assocLeagues = user.assocLeagues;
     
       // delete formData.username;
       // delete formData.email; 
       // *Not sure what the above are doing? 
 
-      update(formData, derbyName);
+      // update(formData, derbyName);
+      // let result = await FastApi.update(formData);
 
-      let profileData = {
-        derbyName: derbyName,
-        firstName: firstName, 
-        lastName: lastName, 
-        email: email, 
-        facebookName: facebookName,
-        about: about, 
-        primNum: primNum, 
-        secNum: secNum, 
-        level: level, 
-        primIns: primIns, 
-        primInsNum: primInsNum,
-        secIns: secIns, 
-        secInsNum: secInsNum, 
-        assocLeagues: assocLeagues
-      }
-        console.log("profileData:", profileData)
-        // setUser(profileData)
-        console.log("USER!!!!!:", user)
-        setFormData(profileData);
+      // let profileData = {
+      //   derbyName: derbyName,
+      //   image: image, 
+      //   firstName: firstName, 
+      //   lastName: lastName, 
+      //   email: email, 
+      //   facebookName: facebookName,
+      //   about: about, 
+      //   primNum: primNum, 
+      //   secNum: secNum, 
+      //   level: level, 
+      //   primIns: primIns, 
+      //   primInsNum: primInsNum,
+      //   secIns: secIns, 
+      //   secInsNum: secInsNum, 
+      //   assocLeagues: assocLeagues
+      // }
+      //   console.log("profileData:", profileData)
+      //   // setUser(profileData)
+      //   console.log("USER!!!!!:", user)
+      //   setFormData(profileData);
     //     // todo: this is working but you need to relook at it as I think you made it more complicated than needed. 
+    let result = await FastApi.update(formData);
 
     //   setValid(true)
-   
+    if(result) {
+      navigate('/home')
+
+    } else {
+      // let message = result.errors[0]
+      let message = result
+      // setErrorMessage(message)
+      // setInvalid(true)
+    }
    }
 
   /** Update local state with current state of input element */
@@ -106,7 +125,7 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
       ...fData,
       [name]: value,
     }));
-
+    console.log("formData:", formData)
   };
 
   /** toggle dropdown */
@@ -128,9 +147,9 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
 
-                    <Label htmlFor="derbyName">First Name: </Label>
+                    <Label htmlFor="derbyName">Derby Name: </Label>
                        <Input
-                           type="derbyName"
+                           type="text"
                            id="derbyName"
                            name="derbyName"
                            value={formData.derbyName}
@@ -141,16 +160,27 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
                            // invalid={invalid}
                        />
 
+                    <Label htmlFor="image">Profile Image: </Label>
+                      <Input
+                          type="file"
+                          id="image"
+                          name="image"
+                          value={formData.image}
+                          onChange={handleChange}
+                          accept="image/png image/jpg"
+                          // valid={valid}
+                          // invalid={invalid}
+                      />
+
                         <Label htmlFor="firstName">First Name: </Label>
                        
                         <Input
-                            type="firstName"
+                            type="text"
                             id="firstName"
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
                             placeholder="First Name"
-                            required
                             // valid={valid}
                             // invalid={invalid}
                         />
@@ -158,20 +188,19 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
            
                         <Label htmlFor="lastName">Last Name: </Label>
                         <Input
-                            type="lastName"
+                            type="text"
                             id="lastName"
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Last Name"
-                            required
                             // valid={valid}
                             // invalid={invalid}
                         />
 
                         <Label htmlFor="facebookName">Facebook Name: </Label>
                         <Input
-                            type="facebookName"
+                            type="text"
                             name="facebookName"
                             className="form-control"
                             value={formData.facebookName}
@@ -225,7 +254,7 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
                             // note will have to restrict this to numbers only
                         />
 
-                        <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
+                        {/* <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
                         <Input
                             type="text"
                             name="secInsNum"
@@ -237,7 +266,7 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
   
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
-                        />
+                        /> */}
 
       
                         <Label htmlFor="level">Skill Level: </Label>

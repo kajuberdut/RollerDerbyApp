@@ -1,9 +1,9 @@
-.Home {
-    justify-content: center;
-    margin: auto;
-    margin-top: 35em;
-}
 
+.Home {
+    width: 50%;
+    margin-top: 7%;
+    margin-left: 10%; 
+}
 
 .Home-Link {
     padding: 5px;

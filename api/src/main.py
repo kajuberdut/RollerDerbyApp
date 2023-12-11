@@ -3,7 +3,7 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-# from incase.middleware import JSONCaseTranslatorMiddleware
+from incase.middleware import JSONCaseTranslatorMiddleware
 
 # from enum import Enum 
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
@@ -36,7 +36,7 @@ models.Base.metadata.create_all(bind=engine)
 
 api_app = FastAPI()
 
-# api_app.add_middleware(JSONCaseTranslatorMiddleware)
+api_app.add_middleware(JSONCaseTranslatorMiddleware)
 
 origins = [
     "http://localhost/3000",

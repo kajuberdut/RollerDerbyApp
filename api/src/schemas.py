@@ -52,7 +52,7 @@ class Location(BaseModel):
             raise ValueError("Invalid State Code")
         return v   
     
-class Rulesets(BaseModel): 
+class Ruleset(BaseModel): 
     rulesets_id: int 
     WFTDA: bool
     USARS: bool
@@ -146,8 +146,10 @@ class Mixer(EventModel):
 
 # what is needed for every user Mode l
 class UserBase(BaseModel): 
+    # user_id: str
     derby_name: str
     email: str
+    
 
 # class User(BaseModel):
 #     user_id: uuid.UUID
@@ -171,6 +173,7 @@ class UpdateUser(UserBase):
     # derby_name: str
     # password: str
     # email: str
+    # image: ??? 
     first_name: str
     last_name: str
     facebook_name: str
@@ -181,7 +184,7 @@ class UpdateUser(UserBase):
     # insurance: list[Insurance]
     location: Location
     associated_leagues: list[str]
-    played_rulesets: list[Rulesets]
+    played_rulesets: list[Ruleset]
     
 
     

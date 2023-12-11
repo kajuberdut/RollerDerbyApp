@@ -62,8 +62,13 @@ class FastApi {
   /** Post user by data*/
 
     static async signup(data) {
-        console.log("data in Api.js:", data)
-        let res = await this.request('users', data, "post");
+        // data.headers = {}
+        // data.headers["content-type"] = "application/json"
+        console.log("!!!!data in Api.js:", data)
+        let testData = {derby_name: "socker", email: "blue@gmail.com", password: "password"}
+        testData.headers = {}
+        testData.headers["content-type"] = "application/json"
+        let res = await this.request('users', testData, "post");
         return res;
     }
 
