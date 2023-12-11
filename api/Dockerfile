@@ -19,12 +19,13 @@ COPY ./ /app/
 
 # # Command to run the script
 # CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"]
 
 # ! This was the correct path confirmed by my conversation with patrick on messenger
 # CMD python /app/src/database.py; tail -f /dev/null
 
 # *try this cause I dont know what else to do DID NOT WORK this one the api container fails to start 
-CMD python ./src/database.py; tail -f /dev/null
+# CMD python ./src/database.py; tail -f /dev/null
 
 # ? This one the containers all are starting
 # CMD python /src/database.py; tail -f /dev/null

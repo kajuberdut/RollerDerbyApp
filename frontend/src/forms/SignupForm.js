@@ -116,14 +116,14 @@ const navigate = useNavigate();
     console.log("formData:", formData)
     let result = await FastApi.signup(formData);
 
-    if(result.success) {
-      navigate('/home')
+    // if(result.success) {
+    //   navigate('/home')
 
-    } else {
-      let message = result.errors[0]
-      setErrorMessage(message)
-      setInvalid(true)
-    }
+    // } else {
+    //   let message = result.errors[0]
+    //   setErrorMessage(message)
+    //   setInvalid(true)
+    // }
   }
 
 
