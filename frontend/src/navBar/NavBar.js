@@ -48,7 +48,7 @@ function NavBar({logout}) {
                 <NavLink to="/setup">Setup</NavLink>
             </NavItem>
             <NavItem className="Navbar Logout">
-                <NavLink to="/" OnClick={logout}>Logout</NavLink>
+                <NavLink to="/" onClick={logout}>Logout</NavLink>
             </NavItem>
             <NavItem className="Navbar Logout">
                 <NavLink to="/events">Bouts</NavLink>

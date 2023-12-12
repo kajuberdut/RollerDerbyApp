@@ -28,12 +28,12 @@ return (
         </React.Fragment> */}
 
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/signup" element={<SignupForm signup={signup} />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/setup" element={<SetupProfileForm />} />
         <Route path="/user" element={<UserList />} />
         <Route path="/users/:id" element={<UserDetail />} />
-        <Route path="/update/:id" element={<SignupForm />} />
+        <Route path="/update/:derbyName" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/bouts/:id" element={<SignupForm />} />
         <Route path="/mixers/:id" element={<SignupForm />} /> 

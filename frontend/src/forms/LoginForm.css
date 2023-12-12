@@ -1,5 +1,7 @@
 .LoginForm {
     margin-top: 10%;
-    margin-left: 15%;    
-    width: 40%;
+    margin-left: 12%;    
+    width: 43%;
+    background-color: #d1d2d4;
+    /* min-width: 500px; */
 }

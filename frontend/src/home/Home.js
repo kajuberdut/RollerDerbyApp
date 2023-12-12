@@ -27,7 +27,7 @@ function Home() {
       <section className="col-md-8 Home">
         <Card>
           <CardTitle>
-                <h1>A Roller Communication Application</h1>
+                <h1>A Roller Derby Communication Application</h1>
           </CardTitle>
           <CardBody >
             <CardText></CardText>

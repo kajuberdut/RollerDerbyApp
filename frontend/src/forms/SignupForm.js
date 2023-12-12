@@ -51,8 +51,8 @@ const navigate = useNavigate();
 //     INITIAL_STATE = { username: "", firstName: "", lastName: "", email: "" };
 //   }
 
-//  let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
-let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
+ let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+// let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -115,7 +115,8 @@ let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", passwor
     evt.preventDefault();   
     setFormData(INITIAL_STATE);
     console.log("formData:", formData)
-    let result = await FastApi.signup(formData);
+    // let result = await FastApi.signup(formData);
+    let result = await signup(formData)
 
     // if(result.success) {
     if(result) {

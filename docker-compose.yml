@@ -16,8 +16,8 @@ services:
       dockerfile: Dockerfile
     ports: 
         # - "8080:80"
-        - "8000:80"
-        # - "8000:8000"
+        # - "8000:80"
+        - "8000:8000"
     environment:
       # DB_URL: "postgresql://db:5432/roller_derby_db"
       # DB_URL: "postgresql+psycopg2://db:5432/roller_derby_db"

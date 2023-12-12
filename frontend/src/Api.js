@@ -38,7 +38,10 @@ class FastApi {
         } catch (err) {
           console.error("API Error:", err);
         //   let message = err.response.data.error.message;
-        let message = err.response.message;
+        // let message = err.response.message;
+        let message = err.response.data.detail; 
+        // console.log("err in api.js!!!!", err)
+        // console.log("message in api.js!!!!", message)
           throw Array.isArray(message) ? message : [message];
         }
       }
@@ -65,10 +68,10 @@ class FastApi {
         // data.headers = {}
         // data.headers["content-type"] = "application/json"
         console.log("!!!!data in Api.js:", data)
-        let testData = {derby_name: "socker", email: "blue@gmail.com", password: "password"}
-        testData.headers = {}
-        testData.headers["content-type"] = "application/json"
-        let res = await this.request('users', testData, "post");
+        // let testData = {derby_name: "socker", email: "blue@gmail.com", password: "password"}
+        // testData.headers = {}
+        // testData.headers["content-type"] = "application/json"
+        let res = await this.request('users', data, "post");
         return res;
     }
 
@@ -81,11 +84,11 @@ class FastApi {
 
         /** Update user by data */
 
-    static async updateUser(handle, data) {
-    console.log("handle!!!:", handle)
-    let res = await this.request(`users/${handle}`, data, "put");
-    // return res;
-    return "hello"
+    static async updateUser(derbyName, data) {
+    console.log("derbyName!!!:", derbyName)
+    let res = await this.request(`users/${derbyName}`, data, "put");
+    return res;
+    // return "hello"
     }
 }
 

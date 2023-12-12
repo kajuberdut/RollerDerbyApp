@@ -8,7 +8,7 @@ from incase.middleware import JSONCaseTranslatorMiddleware
 # from enum import Enum 
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from datetime import date, time 
-# from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel,  validator, field_validator, HttpUrl
 # from . import crud, models, schemas
 # from .database import SessionLocal, engine
@@ -36,7 +36,7 @@ models.Base.metadata.create_all(bind=engine)
 
 api_app = FastAPI()
 
-api_app.add_middleware(JSONCaseTranslatorMiddleware)
+# api_app.add_middleware(JSONCaseTranslatorMiddleware)
 
 origins = [
     "http://localhost/3000",
@@ -54,6 +54,7 @@ api_app.add_middleware(
     allow_headers=["*"],
 )
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 
@@ -301,6 +302,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     print("you are hitting the users/post route!!!")
     
     db_user_email = crud.get_user_by_email(db, email=user.email)
+    print("db_user_email:", db_user_email)
     if db_user_email:
         raise HTTPException(status_code=400, detail="Email already registered")
     
@@ -310,14 +312,9 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@api_app.put("/users/{user_id}", response_model=schemas.UpdateUser)
-def update_user(
-    user_id: uuid.UUID,
-    # note this sets the information that can be passed into this route. It is grabbing it from schemas. 
-    update_data: schemas.UpdateUser, 
-    db: Session = Depends(get_db)
-): 
-    user = crud.get_user_by_id(db, user_id)
+@api_app.put("/users/{derby_name}", response_model=schemas.UpdateUser)
+def update_user(derby_name: str, update_data: schemas.UpdateUser, db: Session = Depends(get_db)): 
+    user = crud.get_user_by_derby_name(db, derby_name)
 
     if not user:
         raise HTTPException(status_code=404, detail=f"User with {user_id} not found")

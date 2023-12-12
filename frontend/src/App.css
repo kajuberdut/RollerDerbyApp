@@ -8,26 +8,48 @@
 }
 
 body {
+
+  background-size: contain; 
+  background-repeat: no-repeat;
+  background-image: url("./images/skater-jam_02.svg");
+  height: 100vh;
+  background-position: right top; 
+  background-attachment: fixed;
+
+}
+
+/* body { */
   /* background-image: url("./images/skater-3-poses_01.svg"); */
   /* background-size: 500px; */
   /* background-size: cover;  */
-  background-size: contain; 
+  /* background-size: contain; 
   background-repeat: no-repeat;
-  background-color: blue;
+  background-color: blue; */
   /* cover uses the image once  */
   /* background-image: url("./images/skater-jam_02.svg"); */
-  background-image: url("./images/skater-jam_02.svg");
-  height: 100vh;
+  /* background-image: url("./images/skater-jam_02.svg");
+  height: 100vh; */
   /* background-position: left 130% top 50%;  */
-  background-position: right top; 
-  background-attachment: fixed;
+  /* background-position: right top; 
+  background-attachment: fixed; */
+
 
   /* background-size: cover; */
   /* background-origin: padding-box;
   padding: 400px; */
   /* padding a way to shrink the iamge */
   /* background-blend-mode: ; */
- }
+  /* min-width: 500px; */
+ /* } */
+
+ @media only screen and (max-width: 870px) {
+  body {
+    background-image: url("./images/group_01.svg");
+    background-position: bottom;
+
+  }
+  
+}
 
 
 /* body {

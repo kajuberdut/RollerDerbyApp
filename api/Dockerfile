@@ -19,7 +19,7 @@ COPY ./ /app/
 
 # # Command to run the script
 # CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "80"]
-CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] tail -f /dev/null
 
 # ! This was the correct path confirmed by my conversation with patrick on messenger
 # CMD python /app/src/database.py; tail -f /dev/null
