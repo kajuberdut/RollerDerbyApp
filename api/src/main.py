@@ -82,7 +82,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Derby name already registered")
     return crud.create_user(db=db, user=user)
 
-# * put /users/ 
+# * put /users/{user_id} 
 # * updates an existing user 
 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
@@ -93,10 +93,28 @@ def update_user(user: schemas.UserUpdate, user_id: int, db: Session = Depends(ge
     db_user = crud.get_user_by_id(db, user_id=user_id)    
  
     if not db_user:
-        raise HTTPException(status_code=400, detail=f"User with user id {user_id} doesnt exist.")
+        raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
     
     return crud.update_user(db=db, user=user, user_id=user_id)
 
+# * delete /users/{user_id} 
+# * deletes an existing user 
+# ! note you may have to add some security measures on this
+
+@api_app.delete("/users/{user_id}", response_model=schemas.UserDelete)
+def delete_user(user: schemas.UserDelete, user_id: int, db: Session = Depends(get_db)):
+    
+    print('user in /users/{user_id}', user)
+    
+    # ! this grabs the user_id from the parameter
+    # db_user = crud.get_user_by_id(db, user_id=user_id)
+    # ! this grabs the user_id from the passed in user object  
+    db_user = crud.get_user_by_id(db, user_id=user.user_id)      
+ 
+    if not db_user:
+        raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+    return crud.delete_user(db=db, user=user, user_id=user.user_id)
 
 
 #  **** Event routes *** 
@@ -120,7 +138,7 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * get /mixers/ 
 # * returns all mixers
 
-@api_app.get("/mixers/", response_model=list[schemas.Bout])
+@api_app.get("/mixers/", response_model=list[schemas.Mixer])
 def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     mixers = crud.get_mixers(db, skip=skip, limit=limit)
     return mixers
@@ -133,15 +151,7 @@ def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
     
     print(traceback.format_exc())
     print("you are hitting the bouts post route!!!")
-    
-    # db_user_email = crud.get_event_by_email(db, email=user.email)
-    # print("db_user_email:", db_user_email)
-    # if db_user_email:
-    #     raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # db_user_derby_name = crud.get_user_by_derby_name(db, derby_name=user.derby_name)
-    # if db_user_derby_name:
-    #     raise HTTPException(status_code=400, detail="Derby name already registered")
+   
     return crud.create_bout(db=db, bout=bout)
 
 # * post /mixers/ 
@@ -152,3 +162,70 @@ def create_mixer(mixer: schemas.Mixer, db: Session = Depends(get_db)):
     
     return crud.create_mixer(db=db, mixer=mixer)
 
+# * put /bouts/{event_id} 
+# * updates an existing user 
+
+@api_app.put("/bouts/{event_id}", response_model=schemas.BoutUpdate)
+def update_bout(bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(get_db)):
+    
+    print('user in /bouts/{event_id}', bout)
+    
+    db_bout = crud.get_bout_by_id(db, event_id=event_id)    
+ 
+    if not db_bout:
+        raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
+    
+    return crud.update_bout(db=db, bout=bout, event_id=event_id)
+
+# * put /bouts/{event_id} 
+# * updates an existing user 
+
+@api_app.put("/mixers/{event_id}", response_model=schemas.MixerUpdate)
+def update_mixer(mixer: schemas.MixerUpdate, event_id: int, db: Session = Depends(get_db)):
+    
+    print('user in /mixers/{event_id}', mixer)
+    
+    db_mixer = crud.get_mixer_by_id(db, event_id=event_id)    
+ 
+    if not db_mixer:
+        raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
+    
+    return crud.update_mixer(db=db, mixer=mixer, event_id=event_id)
+
+# * delete /bouts/{event_id} 
+# * deletes an existing bout
+# ! note you may have to add some security measures on this
+
+@api_app.delete("/bouts/{event_id}", response_model=schemas.EventDelete)
+def delete_bout(bout: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
+    
+    print('bout in /bouts/{event_id}', bout)
+    
+    # ! this grabs the user_id from the parameter
+    # db_user = crud.get_user_by_id(db, user_id=user_id)
+    # ! this grabs the user_id from the passed in user object  
+    db_bout = crud.get_bout_by_id(db, event_id=bout.event_id)      
+ 
+    if not db_bout:
+        raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
+    
+    return crud.delete_bout(db=db, bout=bout, event_id=bout.event_id)
+
+# * delete /mixers/{event_id} 
+# * deletes an existing mixer
+# ! note you may have to add some security measures on this
+
+@api_app.delete("/mixers/{event_id}", response_model=schemas.EventDelete)
+def delete_bout(mixer: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
+    
+    print('mixer in /mixers/{event_id}', mixer)
+    
+    # ! this grabs the user_id from the parameter
+    # db_user = crud.get_user_by_id(db, user_id=user_id)
+    # ! this grabs the user_id from the passed in user object  
+    db_mixer = crud.get_mixer_by_id(db, event_id=mixer.event_id)      
+ 
+    if not db_mixer:
+        raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
+    
+    return crud.delete_mixer(db=db, mixer=mixer, event_id=mixer.event_id)

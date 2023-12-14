@@ -45,13 +45,16 @@ function NavBar({logout}) {
                 <NavLink to='/profile'>{ user.derbyName }</NavLink>
                 {/* <NavLink to="/user/:{user.id}">{ user.derbyName }</NavLink> */}
             </NavItem>
-            <NavItem className="Navbar Setup">
+            <NavItem className="Navbar-Setup">
                 <NavLink to="/setup">Setup</NavLink>
             </NavItem>
-            <NavItem className="Navbar Logout">
-                <NavLink to="/events">Bouts</NavLink>
+            <NavItem className="Navbar-Bouts">
+                <NavLink to="/bouts">Bouts</NavLink>
             </NavItem>
-            <NavItem className="Navbar Logout">
+            <NavItem className="Navbar-Mixers">
+                <NavLink to="/mixers">Mixers</NavLink>
+            </NavItem>
+            <NavItem className="Navbar-Logout">
                 <NavLink to="/" onClick={logout}>Logout</NavLink>
             </NavItem>
             </> }

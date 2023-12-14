@@ -3,25 +3,25 @@ import FastApi from "../Api";
 import CardComponent from "../multiUse/cardComponent/CardComponent";
 // import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
-import "./BoutList.css";
+import "./MixerList.css";
 
 /**
  * Display bouts page
  */
 
-function BoutList({getBouts}) {
+function MixerList({getMixers}) {
 
     /** Set Bouts and is loading in state*/
 
     const [isLoading, setIsLoading] = useState(false);
-    const [bouts, setBouts] = useState([]);
+    const [mixers, setMixers] = useState([]);
 
   /** API get request for bouts */
 
-    async function getAllBouts(title) {
+    async function getAllMixers(title) {
       console.log("getAllBouts is running in BoutList.js")
-      let bouts = await getBouts();
-      console.log("bouts in BoutList.js", bouts)
+      let mixers = await getMixers();
+      console.log("mixers in MixerList.js", mixers)
     //   try{
     //     let bouts = await JoblyApi.getJobs(title);
     //     setBouts(bouts);
@@ -29,14 +29,14 @@ function BoutList({getBouts}) {
     //   console.log("signup failed", errors);
     //   return {success: false, errors};
     // }
-      setBouts(bouts);
+      setMixers(mixers);
       // setIsLoading(false); 
     }
 
    /** Reloading jobs when it changes request for jobs */
 
     useEffect(() => {
-        getAllBouts();
+        getAllMixers();
     }, []);
 
 
@@ -52,10 +52,10 @@ function BoutList({getBouts}) {
 
     const renderCards = () => {
       return (
-        <div className="BoutList-RenderCards">
+        <div className="MixerList-RenderCards">
             <ul>
-                {bouts.map(bout => (
-                  <CardComponent bout={bout} key={"Bout-" + bout.id} />
+                {mixers.map(mixer => (
+                  <CardComponent mixer={mixer} key={"Mixer-" + mixer.eventId} />
                 ))}
             </ul>
           </div>
@@ -65,7 +65,7 @@ function BoutList({getBouts}) {
   /** Render search bar and cards */
 
     return (
-      <div className="BoutList">
+      <div className="MixerList">
         {/* <SearchBar getBouts={getBouts}/> */}
         {renderCards()}
       </div>
@@ -73,4 +73,4 @@ function BoutList({getBouts}) {
 
 }
 
-export default BoutList;
+export default MixerList;

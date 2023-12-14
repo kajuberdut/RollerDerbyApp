@@ -9,6 +9,9 @@ from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.user_id == user_id).first()
 
+# def get_user_by_id_with_password(db: Session, user_id: int):
+#     return db.query(models.User).filter(models.User.user_id == user_id).first()
+
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
@@ -18,7 +21,13 @@ def get_user_by_derby_name(db: Session, derby_name: str):
 def get_users(db: Session, skip: int = 0, limit: int = 100):
 
     return db.query(models.User).offset(skip).limit(limit).all()
-    
+
+def get_bout_by_id(db: Session, event_id: int):
+    return db.query(models.Bout).filter(models.Bout.event_id == event_id).first()
+
+def get_mixer_by_id(db: Session, event_id: int):
+    return db.query(models.Mixer).filter(models.Mixer.event_id == event_id).first()
+
 
 def create_user(db: Session, user: schemas.UserCreate):
 # def create_user(derby_name: str, email: str, password: str, db: Session, user: schemas.UserCreate):
@@ -35,28 +44,9 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def update_user(db: Session, user: schemas.UserUpdate, user_id): 
     print("user in update user crud.py", user)
-    # print("db_user in update_user crud.py", db_user)
-    # db_user = db_user.model_dump()
-    # print("new db_user after model_dump()", db_user)
- 
-    # if not db_user:
-    #     raise HTTPException(status_code=400, detail="User with user id {user.user_id} doesnt exist.")
     print("you are hitting update_user in crud.py")
-    
-    # print("!!!!user['derby_name']", user['derby_name'])
-    
-    
+      
     db_user = get_user_by_id(db, user_id)
-    
-    # db_user = {
-    # "derby_name": user["derby_name"],
-    # "email": user["email"]
-    # }
-    
-    # user = {
-    # "derby_name": user["derby_name"],
-    # "email": user["email"]
-    # }
     
     user = {
     "derby_name": user.derby_name,
@@ -64,14 +54,6 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     }
     
     print("db user in update user:", db_user)
-    
-    # db_user = {
-    # "derby_name": db_user.derby_name,
-    # "email": db_user.email
-    # }
-    
-    # for field, value in user(exclude_unset=True).items():
-    #     setattr(user, field, value)
     
     for field, value in user.items():
         # setattr(user, field, value)
@@ -87,6 +69,25 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     db.commit()
     # db.refresh(user)
     return user 
+
+def delete_user(db: Session, user: schemas.UserDelete, user_id): 
+    # print("user in delete user crud.py", user)
+    # print("you are hitting delete_user in crud.py")
+      
+    # db_user = get_user_by_id_with_password(db, user_id)
+    db_user = get_user_by_id(db, user_id)
+    print("!!!!! db_user!!!!! ", db_user)
+    print("!!!!! db_user.user_id!!!!! ", db_user.user_id)
+    
+    # if db_user.password is not user.password: 
+    #     ValueError("Incorrect password provided for user deletion.")
+        
+        
+    db.delete(db_user)
+    db.commit()
+    
+    return db_user
+
     
 # *Events CRUD 
 
@@ -116,5 +117,89 @@ def create_mixer(db: Session, mixer: schemas.Mixer):
     db.add(db_mixer)
     db.commit()
     db.refresh(db_mixer)
+    
+    return db_mixer
+
+def update_bout(db: Session, bout: schemas.BoutUpdate, event_id): 
+
+    db_bout = get_bout_by_id(db, event_id)
+    
+    bout = {
+    "type": bout.type,
+    "time": bout.time,
+    "date": bout.date,
+    "theme": bout.theme, 
+    "level": bout.level,
+    "co_ed":bout.co_ed, 
+    "opposing_team": bout.opposing_team, 
+    "team": bout.team
+    }
+
+    for field, value in bout.items():
+        if value is not None: 
+            setattr(db_bout, field, value)
+            print(f"Updating field: {field} with value: {value}")
+            
+    print("db_bout UPDATED:", db_bout)
+
+    db.commit()
+
+    return bout
+
+def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id): 
+
+    db_mixer = get_mixer_by_id(db, event_id)
+    
+    mixer = {
+    "type": mixer.type,
+    "time": mixer.time,
+    "date": mixer.date,
+    "theme": mixer.theme, 
+    "level": mixer.level,
+    "co_ed": mixer.co_ed, 
+    "signup_link": mixer.signup_link
+    }
+
+    for field, value in mixer.items():
+        if value is not None: 
+            setattr(db_mixer, field, value)
+            print(f"Updating field: {field} with value: {value}")
+            
+    print("db_bout UPDATED:", db_mixer)
+
+    db.commit()
+
+    return mixer
+
+def delete_bout(db: Session, bout: schemas.EventDelete, event_id): 
+    # print("user in delete user crud.py", user)
+    # print("you are hitting delete_user in crud.py")
+      
+    # db_user = get_user_by_id_with_password(db, user_id)
+    db_bout = get_bout_by_id(db, event_id)
+    print("!!!!! db_bout!!!!! ", db_bout)
+    print("!!!!! db_bout.event_id!!!!! ", db_bout.event_id)
+    
+    # if db_user.password is not user.password: 
+    #     ValueError("Incorrect password provided for user deletion.")
+        
+        
+    db.delete(db_bout)
+    db.commit()
+    
+    return db_bout
+
+def delete_mixer(db: Session, mixer: schemas.EventDelete, event_id): 
+
+    db_mixer = get_mixer_by_id(db, event_id)
+    print("!!!!! db_mixer!!!!! ", db_mixer)
+    print("!!!!! db_mixer.event_id!!!!! ", db_mixer.event_id)
+    
+    # if db_user.password is not user.password: 
+    #     ValueError("Incorrect password provided for user deletion.")
+        
+        
+    db.delete(db_mixer)
+    db.commit()
     
     return db_mixer

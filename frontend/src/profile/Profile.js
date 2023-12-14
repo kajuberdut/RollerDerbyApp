@@ -70,13 +70,14 @@ function Profile() {
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 
             <MDBCol lg="9" xl="10">
-              <MDBCard style={{minWidth: '300px', marginTop: '50px'}}>
+              <MDBCard style={{minWidth: '300px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
 
                   <MDBCardImage src="/skater_02.svg"
-                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white'}} /> 
+                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   </div>
+
                   <div className="ms-3" style={{ marginTop: '200px'}}>
                     <MDBTypography tag="h4">{user.derbyName} #{user.primaryNumber}</MDBTypography>
                     <MDBCardText>{user.location.city}, {user.location.state}</MDBCardText>

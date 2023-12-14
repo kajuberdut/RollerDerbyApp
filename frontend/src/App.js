@@ -71,7 +71,7 @@ function App() {
       }
     }
 
-    async function update(derby_name, data) {
+    async function updateUser(derby_name, data) {
       console.log("is this the error update")
       try {
         let token = await FastApi.updateUser(derby_name, data);
@@ -79,6 +79,30 @@ function App() {
         return { success: true };
       } catch (errors) {
         console.error("update failed", errors);
+        return { success: false, errors };
+      }
+    }
+
+    async function getBouts() {
+
+      try {
+        let bouts = await FastApi.getBouts();
+        // return { success: true };
+        return bouts
+      } catch (errors) {
+        console.error("Get Bouts failed", errors);
+        return { success: false, errors };
+      }
+    }
+
+    async function getMixers() {
+
+      try {
+        let mixers = await FastApi.getMixers();
+        // return { success: true };
+        return mixers
+      } catch (errors) {
+        console.error("Get Bouts failed", errors);
         return { success: false, errors };
       }
     }
@@ -92,7 +116,7 @@ function App() {
           <NavBar />
           <main>
             {/* <Routes login={login} signup={signup} update={update} apply={apply} /> */}
-            <AllRoutes signup={signup} update={update}/>
+            <AllRoutes signup={signup} update={updateUser} getBouts={getBouts} getMixers={getMixers}/>
           </main>
         </Fragment>
         </UserContext.Provider>

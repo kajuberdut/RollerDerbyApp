@@ -49,17 +49,25 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     
+class UserDelete(BaseModel): 
+    user_id: int 
+    password: str
+    
 class UserUpdate(BaseModel): 
     derby_name: str
     email: str 
-    # class Config:
-    #     json_encoders = {
-    #         derby_name: str,
-    #         email: str
-    #     }
+# * note with this you dont have to have the user_id in the object but you could change this. 
 
-# class UserCreate(BaseModel): 
-#     user_id: Optional[int]
-#     derby_name: str
-#     email: str
-#     password: str
+class UserDelete(BaseModel):
+    user_id: int
+    password: str
+
+class BoutUpdate(EventBase):
+    opposing_team: str
+    team: str
+     
+class MixerUpdate(EventBase):
+    signup_link: str
+    
+class EventDelete(BaseModel): 
+    event_id: int 

@@ -56,8 +56,8 @@ class FastApi {
 
       /** Get one user*/
 
-      static async getUser(handle) {
-        let res = await this.request(`users/${handle}`);
+    static async getUser(userId) {
+        let res = await this.request(`users/${userId}`);
         console.log("res:", res)
         return res
     }
@@ -74,13 +74,6 @@ class FastApi {
         return res;
     }
 
-      /** Delete user */
-
-    static async deleteUser(handle) {
-        let res = await this.request(`users/${handle}`, {}, "delete");
-        return res;
-    }
-
         /** Update user by data */
 
     static async updateUser(derbyName, data) {
@@ -92,6 +85,79 @@ class FastApi {
     return res;
     // return "hello"
     }
+
+  /** Delete user */
+
+  static async deleteUser(userId) {
+  let res = await this.request(`users/${userId}`, {}, "delete");
+  return res;
+  } 
+  
+  /** Get all bouts*/
+
+  static async getBouts(handle) {
+    let res = await this.request(`bouts`);
+    console.log("res:", res)
+    return res
+  }
+
+  /** Get a specific bout*/
+
+  static async getBout(boutId) {
+    console.log("hitting the getBout in api.js")
+    let res = await this.request(`bouts/${boutId}`);
+    console.log("res:", res)
+    return res
+  }
+
+    /** Updates a specific bout*/
+
+  static async updateBout(eventId, data) {
+
+    let res = await this.request(`bouts/${eventId}`, data, "put");
+    return res;
+
+  }
+
+  /** Delete bout */
+
+  static async deleteBout(eventId) {
+  let res = await this.request(`bouts/${eventId}`, {}, "delete");
+  return res;
+  } 
+
+  /** Get all mixers*/
+
+  static async getMixers(handle) {
+    let res = await this.request(`mixers`);
+    console.log("res:", res)
+    return res
+  }
+
+  /** Get a specific mixer*/
+
+  static async getMixer(mixerId) {
+    let res = await this.request(`mixers/${mixerId}`);
+    console.log("res:", res)
+    return res
+  }
+
+  /** Updates a specific bout*/
+
+  static async updateMixer(eventId, data) {
+
+    let res = await this.request(`mixers/${eventId}`, data, "put");
+    return res;
+  }
+
+  /** Delete mixer */
+
+  static async deleteMixer(eventId) {
+    let res = await this.request(`mixers/${eventId}`, {}, "delete");
+    return res;
+  } 
+ 
+
 }
 
 export default FastApi

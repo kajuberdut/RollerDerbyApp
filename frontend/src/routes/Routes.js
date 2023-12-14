@@ -5,6 +5,8 @@ import LoginForm from "../forms/LoginForm";
 import SetupProfileForm from "../forms/SetupProfileForm";
 import UserList from "../users/UserList";
 import UserDetails from "../users/UserDetails";
+import BoutList from "../bouts/BoutList";
+import MixerList from "../mixers/MixerList";
 import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
@@ -14,7 +16,7 @@ import Profile from "../profile/Profile";
  * Display routes
  */
 
-function AllRoutes({login, signup, update, apply, id}) {
+function AllRoutes({login, signup, update, apply, id, getBouts, getMixers}) {
  
 /** Render routes */
 
@@ -37,7 +39,9 @@ return (
         <Route path="/profile" element={<Profile />} />
         <Route path="/update/:derbyName" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
+        <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
         <Route path="/bouts/:id" element={<SignupForm />} />
+        <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
         <Route path="/mixers/:id" element={<SignupForm />} /> 
         <Route path="*" element={<NotFound />} /> 
         {/* <Route exact path="/signup">
