@@ -33,20 +33,88 @@ def create_user(db: Session, user: schemas.UserCreate):
     
     return db_user
 
+def update_user(db: Session, user: schemas.UserUpdate, user_id): 
+    print("user in update user crud.py", user)
+    # print("db_user in update_user crud.py", db_user)
+    # db_user = db_user.model_dump()
+    # print("new db_user after model_dump()", db_user)
+ 
+    # if not db_user:
+    #     raise HTTPException(status_code=400, detail="User with user id {user.user_id} doesnt exist.")
+    print("you are hitting update_user in crud.py")
+    
+    # print("!!!!user['derby_name']", user['derby_name'])
+    
+    
+    db_user = get_user_by_id(db, user_id)
+    
+    # db_user = {
+    # "derby_name": user["derby_name"],
+    # "email": user["email"]
+    # }
+    
+    # user = {
+    # "derby_name": user["derby_name"],
+    # "email": user["email"]
+    # }
+    
+    user = {
+    "derby_name": user.derby_name,
+    "email": user.email
+    }
+    
+    print("db user in update user:", db_user)
+    
+    # db_user = {
+    # "derby_name": db_user.derby_name,
+    # "email": db_user.email
+    # }
+    
+    # for field, value in user(exclude_unset=True).items():
+    #     setattr(user, field, value)
+    
+    for field, value in user.items():
+        # setattr(user, field, value)
+        print("duh dudh duh duh")
+        print("field:", field)
+        print("value:", value)
+        if value is not None: 
+            setattr(db_user, field, value)
+            print(f"Updating field: {field} with value: {value}")
+            
+    print("db_user UPDATED:", db_user)
+
+    db.commit()
+    # db.refresh(user)
+    return user 
+    
 # *Events CRUD 
 
 def get_events(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.EventBase).offset(skip).limit(limit).all()
 
-    return db.query(models.Event).offset(skip).limit(limit).all()
+def get_bouts(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Bout).offset(skip).limit(limit).all()
+
+def get_mixers(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Mixer).offset(skip).limit(limit).all()
 
 def create_bout(db: Session, bout: schemas.Bout):
-# def create_user(derby_name: str, email: str, password: str, db: Session, user: schemas.UserCreate):
-    print("create bout in crud.py is working")
-    print("bout in crud.py:", bout)
-    
-    db_bout = models.Bout(type=bout.type, time=bout.time, date=bout.date, theme=bout.theme, level=bout.level, co_ed=bout.co_ed, detail=bout.detail, )
+
+    db_bout = models.Bout(type=bout.type, time=bout.time, date=bout.date, theme=bout.theme, level=bout.level, co_ed=bout.co_ed, opposing_team=bout.opposing_team, team=bout.team)
+     
     db.add(db_bout)
     db.commit()
     db.refresh(db_bout)
     
     return db_bout
+
+def create_mixer(db: Session, mixer: schemas.Mixer):
+
+    db_mixer = models.Mixer(type=mixer.type, time=mixer.time, date=mixer.date, theme=mixer.theme, level=mixer.level, co_ed=mixer.co_ed,  signup_link=mixer. signup_link)
+     
+    db.add(db_mixer)
+    db.commit()
+    db.refresh(db_mixer)
+    
+    return db_mixer

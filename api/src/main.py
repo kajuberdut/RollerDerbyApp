@@ -51,7 +51,7 @@ def get_db():
 
 
 
-# #  **** User routes *** 
+#  **** User routes *** 
 
 
 # * get /users/ 
@@ -82,11 +82,24 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Derby name already registered")
     return crud.create_user(db=db, user=user)
 
-# @api_app.post("/users/", response_model=schemas.UserBase)
-# def update_user()
+# * put /users/ 
+# * updates an existing user 
+
+@api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
+def update_user(user: schemas.UserUpdate, user_id: int, db: Session = Depends(get_db)):
+    
+    print('user in /users/{user_id}', user)
+    
+    db_user = crud.get_user_by_id(db, user_id=user_id)    
+ 
+    if not db_user:
+        raise HTTPException(status_code=400, detail=f"User with user id {user_id} doesnt exist.")
+    
+    return crud.update_user(db=db, user=user, user_id=user_id)
 
 
-# #  **** Event routes *** 
+
+#  **** Event routes *** 
 
 # * get /events/ 
 # * returns all events  
@@ -96,6 +109,24 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     events = crud.get_events(db, skip=skip, limit=limit)
     return events
 
+# * get /bouts/ 
+# * returns all bouts
+
+@api_app.get("/bouts/", response_model=list[schemas.Bout])
+def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    bouts = crud.get_bouts(db, skip=skip, limit=limit)
+    return bouts
+
+# * get /mixers/ 
+# * returns all mixers
+
+@api_app.get("/mixers/", response_model=list[schemas.Bout])
+def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    mixers = crud.get_mixers(db, skip=skip, limit=limit)
+    return mixers
+
+# * post /bouts/ 
+# * creates a new bout 
 
 @api_app.post("/bouts/", response_model=schemas.EventBase)
 def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
@@ -112,3 +143,12 @@ def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
     # if db_user_derby_name:
     #     raise HTTPException(status_code=400, detail="Derby name already registered")
     return crud.create_bout(db=db, bout=bout)
+
+# * post /mixers/ 
+# * creates a new mixer
+
+@api_app.post("/mixers/", response_model=schemas.EventBase)
+def create_mixer(mixer: schemas.Mixer, db: Session = Depends(get_db)):
+    
+    return crud.create_mixer(db=db, mixer=mixer)
+

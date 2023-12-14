@@ -67,7 +67,9 @@ class FastApi {
     static async signup(data) {
         console.log("!!!!data in Api.js:", data)
         // let testData = {derby_name: "happyJack", email: "happyJack@gmail.com", password: "password"}
-  
+        // ! note must have a user_id of 0  on your user obect to post and be sucessful 
+        
+        data["user_id"] = 0
         let res = await this.request('users', data, "post");
         return res;
     }

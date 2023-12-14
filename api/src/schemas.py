@@ -1,6 +1,6 @@
 
-from pydantic import BaseModel, HttpUrl, EmailStr, field_validator
-from datetime import date, time
+from pydantic import BaseModel, EmailStr, field_validator, Field
+from datetime import datetime, date, time
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 import re
 
@@ -10,12 +10,19 @@ print("schemas.py is running")
     
 
 class EventBase(BaseModel):
-    time: time
-    date: date
+    event_id: int = Field(default_factory=lambda: 0)
+    type: str
+    # time: datetime.time
+    # date: date
+    date: str
+    time: str
     theme: str
     level: str
-    jersey_colors: str
     co_ed: bool
+    # jersey_colors: str
+    
+    class Config:
+        from_attributes = True
     
     @field_validator('level', mode="before")
     @classmethod
@@ -25,27 +32,34 @@ class EventBase(BaseModel):
         return value
     
     
-
 class Bout(EventBase):
     opposing_team: str
     team: str
     
 
 class Mixer(EventBase):
-    signup_link: HttpUrl
+    signup_link: str
     
 
 class UserBase(BaseModel): 
-    # user_id: Optional[int]
+    user_id: int = Field(default_factory=lambda: 0)
     derby_name: str
-    email: str
-
+    email: str     
     
-# class UserCreate(UserBase):
-#     password: str
-
-class UserCreate(BaseModel): 
-    user_id: Optional[int]
-    derby_name: str
-    email: str
+class UserCreate(UserBase):
     password: str
+    
+class UserUpdate(BaseModel): 
+    derby_name: str
+    email: str 
+    # class Config:
+    #     json_encoders = {
+    #         derby_name: str,
+    #         email: str
+    #     }
+
+# class UserCreate(BaseModel): 
+#     user_id: Optional[int]
+#     derby_name: str
+#     email: str
+#     password: str

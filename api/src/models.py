@@ -16,7 +16,7 @@ class User(SQLAlchemyBase):
    
     
 
-class Event(SQLAlchemyBase):
+class EventBase(SQLAlchemyBase):
     __tablename__ = "event"
 
     event_id = Column(Integer, Identity(), primary_key=True, index=True, unique=True)
@@ -26,29 +26,35 @@ class Event(SQLAlchemyBase):
     theme = Column(String)
     level = Column(String)
     co_ed = Column(Boolean)
-    detail = relationship("EventDetail", back_populates="events")
+    jersey_colors: Column(String)
+    # detail = relationship("EventDetail", back_populates="events")
+    
+    __mapper_args__ = {
+        "polymorphic_on": "type",
+        "polymorphic_identity": "event_base",
+    }
     
     
-class EventDetail(SQLAlchemyBase):
-    __tablename__ = "event_detail"
+# class EventDetail(SQLAlchemyBase):
+#     __tablename__ = "event_detail"
 
-    event_det_id = Column(Integer, Identity(), primary_key=True)
-    event_id = Column(Integer, ForeignKey("event.event_id"), primary_key=True, index=True, unique=True)
-    # event = relationship(
-    #     "Event", back_populates="details", uselist=False, polymorphic_identity="type"
-    # )
-    events = relationship("Event", back_populates="detail")
+#     event_det_id = Column(Integer, Identity(), primary_key=True)
+#     event_id = Column(Integer, ForeignKey("event.event_id"), primary_key=True, index=True, unique=True)
+#     # event = relationship(
+#     #     "Event", back_populates="details", uselist=False, polymorphic_identity="type"
+#     # )
+#     events = relationship("Event", back_populates="detail")
     
     
-class Bout(EventDetail):
-    __mapper_args__ = {"polymorphic_identity": "Bout"}
+class Bout(EventBase):
+    __mapper_args__ = {"polymorphic_identity": "bout"}
 
     opposing_team = Column(String)
     team = Column(String)
 
 
-class Mixer(EventDetail):
-    __mapper_args__ = {"polymorphic_identity": "Mixer"}
+class Mixer(EventBase):
+    __mapper_args__ = {"polymorphic_identity": "mixer"}
 
     signup_link = Column(String)
     
