@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import FastApi from "../Api";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-// import UserContext from "../../repeated/UserContext";
+import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
 import {
@@ -29,14 +29,14 @@ const SignupForm = ({signup, update}) => {
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
-//   const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
   const [ invalid, setInvalid ] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
 const navigate = useNavigate();
 
-//   let INITIAL_STATE; 
+  let INITIAL_STATE; 
 
  
   /** If user, set initial state and the then set the formdata as initial state. 
@@ -44,14 +44,14 @@ const navigate = useNavigate();
    * Gives value to InitialState
   */
 
-//   if(user) {
-//     INITIAL_STATE = { username: user.username, firstName: user.firstName, lastName: user.lastName, email: user.email };
+  if(user) {
+    INITIAL_STATE = { derbyName: user.derbyName, email: user.email };
 
-//   } else {
-//     INITIAL_STATE = { username: "", firstName: "", lastName: "", email: "" };
-//   }
+  } else {
+    INITIAL_STATE = { derbyName: "", email: "" };
+  }
 
- let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+//  let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
 // let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
 
   /** Sets formData in initial state */
@@ -120,7 +120,7 @@ const navigate = useNavigate();
 
     // if(result.success) {
     if(result) {
-      navigate('/home')
+      navigate('/profile')
 
     } else {
       // let message = result.errors[0]

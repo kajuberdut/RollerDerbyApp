@@ -4,6 +4,7 @@
   /* justify-content: center; */
   /* background-color: orange; */
   height: 100vh;
+  /* margin-top: 150px; */
 
 }
 
@@ -12,6 +13,7 @@ body {
   background-size: contain; 
   background-repeat: no-repeat;
   background-image: url("./images/skater-jam_02.svg");
+  /* background-image: url("/skater-jam.svg"); */
   height: 100vh;
   background-position: right top; 
   background-attachment: fixed;

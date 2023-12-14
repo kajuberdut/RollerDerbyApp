@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import FastApi from "../Api";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-// import UserContext from "../../repeated/UserContext";
+import UserContext from "../multiUse/UserContext";
+
 import { useNavigate } from "react-router-dom";
 import "./SetupProfileForm.css"
 import {
@@ -24,7 +25,8 @@ const SetupProfileForm = ({signup, update}) => {
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
-  // const { user, setUser } = useContext(UserContext);
+const { user, setUser } = useContext(UserContext);
+
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
@@ -34,15 +36,17 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
 // const [preview, setPreview] = useState<string | undefined>();
 const navigate = useNavigate();
 
-let user = "SockHer Blue"  
+// let user = "SockHer Blue"  
 
   /** 
    * Sets Initial State of Form
   */
 
+if(!user) {
+  navigate('/')
+}
 
-
-let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", email: "",  facebookName: "", about: "", primNum: "", secNum: "", level: "", primIns: "", primInsNum: "", secIns: "", secInsNum: "", assocLeagues: ""};
+let INITIAL_STATE = { derbyName: user.derbyName, firstName: user.firstName, lastName: user.lastName, email: user.Email,  facebookName: user.facebookName, about: user.about, primNum: user.primNum, secNum: user.secNum, level: user.level, primIns: user.primIns, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.assocLeagues, ruleset: []};
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -56,22 +60,25 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
    
       // this will be if(user) then preset the form to being filled with what is already in their profile. 
      /** Update profile*/
-      // const derbyName = user.derbyName;
-      // const image = user.image;
-      // const email = formData.email; 
-      // const firstName = formData.firstName;
-      // const lastName = formData.lastName;
-      // const facebookName = formData.facebookName;
-      // const about = formData.about;
-      // const primNum = user.primNum;
-      // const secNum = user.secNum; 
-      // const level = user.level;
-      // const primIns = user.primIns;
-      // const primInsNum = user.primInsNum;
-      // const secIns = user.secIns;
-      // const secInsNum = user.secInsNum; 
-      // const assocLeagues = user.assocLeagues;
+    //  ! this is where you ar ein setup profile
+    //  if(user) {
+    //   const derbyName = user.derbyName;
+    //   const image = user.image;
+    //   const email = formData.email; 
+    //   const firstName = formData.firstName;
+    //   const lastName = formData.lastName;
+    //   const facebookName = formData.facebookName;
+    //   const about = formData.about;
+    //   const primNum = user.primNum;
+    //   const secNum = user.secNum; 
+    //   const level = user.level;
+    //   const primIns = user.primIns;
+    //   const primInsNum = user.primInsNum;
+    //   const secIns = user.secIns;
+    //   const secInsNum = user.secInsNum; 
+    //   const assocLeagues = user.assocLeagues;
     
+    //  }
       // delete formData.username;
       // delete formData.email; 
       // *Not sure what the above are doing? 
@@ -101,11 +108,13 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
       //   console.log("USER!!!!!:", user)
       //   setFormData(profileData);
     //     // todo: this is working but you need to relook at it as I think you made it more complicated than needed. 
-    let result = await FastApi.update(formData);
+    // let result = await FastApi.update(formData);
+    console.log("update!!!!!:", update)
+    let result = await update(formData);
 
     //   setValid(true)
     if(result) {
-      navigate('/home')
+      navigate('/profile')
 
     } else {
       // let message = result.errors[0]
@@ -125,7 +134,7 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
       ...fData,
       [name]: value,
     }));
-    console.log("formData:", formData)
+    console.log("formData in setupProfileForm:", formData)
   };
 
   /** toggle dropdown */
@@ -135,7 +144,7 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
   /** render form */
 
   return (
-    <section className="col-md-4 SetupProfileForm">
+    <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="SetupProfileForm-CardTitle">
             {/* { !user && ( <h1>Create a Profile</h1> )}
@@ -384,6 +393,36 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: "", lastName: "", em
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
                         />
+
+                        {/* <Label htmlFor="rulesets">Played Rulesets: </Label>
+                        <Input
+                            type="select"
+                            name="rulesets"
+                            className="form-control"
+                            value={formData.rulesets}
+                            onChange={handleChange}
+                            placeholder="Played Rulesets"
+                            id="rulesets"
+                            multiple
+  
+                            // invalid={invalid}
+                            // note will have to restrict this to numbers only
+                            
+                        >     
+                        <option>
+                        WFTDA
+                      </option>
+                      <option>
+                        USARS
+                      </option>
+                      <option>
+                        Banked Track 
+                      </option>
+                      <option>
+                        Short Track 
+                      </option>
+                        </Input> */}
+
 
                         {/* todod need to add this in */}
                         {/* Played Rulesets

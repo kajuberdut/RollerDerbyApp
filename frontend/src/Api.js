@@ -65,12 +65,9 @@ class FastApi {
   /** Post user by data*/
 
     static async signup(data) {
-        // data.headers = {}
-        // data.headers["content-type"] = "application/json"
         console.log("!!!!data in Api.js:", data)
-        // let testData = {derby_name: "socker", email: "blue@gmail.com", password: "password"}
-        // testData.headers = {}
-        // testData.headers["content-type"] = "application/json"
+        // let testData = {derby_name: "happyJack", email: "happyJack@gmail.com", password: "password"}
+  
         let res = await this.request('users', data, "post");
         return res;
     }
@@ -85,8 +82,11 @@ class FastApi {
         /** Update user by data */
 
     static async updateUser(derbyName, data) {
-    console.log("derbyName!!!:", derbyName)
-    let res = await this.request(`users/${derbyName}`, data, "put");
+    // console.log("data: in api.js", data)
+    // console.log("derbyName!!!:", derbyName)
+    console.log("updateUser in api.js is running which means the error is after that")
+    let testData = {user_id: "8e56618d-8092-4f35-a452-b90324f2219b", derby_name: "TESTING", email: "TESTING@gmail.com", first_name: "testFirstName", last_name: "testLastName", facebook_name: "TESTING fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primary_number: 12, secondary_number: 14, level: "B", insurance: {WFTDA: "ABCDE", USARS: "EFGHI"}, location: {city: "Denver", state: "CO"}, associated_leagues: ["TESTING Roller Derby", "TEST2 Roller Derby Leagues"], ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}}
+    let res = await this.request(`users/happyJack`, testData, "patch");
     return res;
     // return "hello"
     }

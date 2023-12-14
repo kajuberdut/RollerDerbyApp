@@ -4,9 +4,10 @@ import SignupForm from "../forms/SignupForm";
 import LoginForm from "../forms/LoginForm";
 import SetupProfileForm from "../forms/SetupProfileForm";
 import UserList from "../users/UserList";
-import UserDetail from "../users/UserDetails";
+import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
 import NotFound from "../404/404";
+import Profile from "../profile/Profile";
 
 
 /**
@@ -30,9 +31,10 @@ return (
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm signup={signup} />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/setup" element={<SetupProfileForm />} />
-        <Route path="/user" element={<UserList />} />
-        <Route path="/users/:id" element={<UserDetail />} />
+        <Route path="/setup" element={<SetupProfileForm update={update}/>} />
+        <Route path="/users" element={<UserList />} />
+        {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
+        <Route path="/profile" element={<Profile />} />
         <Route path="/update/:derbyName" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/bouts/:id" element={<SignupForm />} />

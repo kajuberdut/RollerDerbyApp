@@ -1,0 +1,9 @@
+
+/* note that this doesnt seem to be working but inline styles were working... */
+.PROFILE {
+    background-image: none;
+    width: 100%;
+    display: flex;
+    border: 30px solid blue;
+    background-color: yellow;
+}

@@ -20,10 +20,11 @@ function UserList() {
     async function getUsers(title) {
       try{
         let users = await FastApi.getUsers(title);
+        console.log("users", users)
         setUsers(users);
-      } catch (errors) {
-      console.log("signup failed", errors);
-      return {success: false, errors};
+      } catch (err) {
+      console.log("Getting users failed in userList.js", err);
+      return {success: false, err};
     }
      setIsLoading(false); 
     }
@@ -37,11 +38,11 @@ function UserList() {
 
   /** Display loading if API call is has not returned */
 
-    if (isLoading) {
-      return (
-          <Loading />
-      )
-    }
+    // if (isLoading) {
+    //   return (
+    //       <Loading />
+    //   )
+    // }
 
   /** Render the cards for jobs */
 

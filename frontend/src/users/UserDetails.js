@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import FastApi from "../Api";
 import { useParams} from "react-router-dom";
+
+// ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
 // import CardComponent from "../multiUse/cardComponent/CardComponent";
 import Loading from "../multiUse/loading/Loading";
+import UserContext from "../multiUse/UserContext";
+
 
 /**  
  * User detail form
@@ -12,14 +16,15 @@ function UserDetail() {
 
    /** Get url handle and set jobs and is loading in state*/
     // console.log("company:", company)
-    const id = useParams(); 
+    const derbyName = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser]= useState("");
+    // const { user } = useContext(UserContext);
 
     //   /** API get request for a user */
 
     async function getUser() {
-      let user = await FastApi.getUser(id);
+      let user = await FastApi.getUser(derbyName);
       setUser(user);
       setIsLoading(false);
     }
