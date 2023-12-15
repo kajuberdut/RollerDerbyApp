@@ -48,6 +48,9 @@ function NavBar({logout}) {
             <NavItem className="Navbar-Setup">
                 <NavLink to="/setup">Setup</NavLink>
             </NavItem>
+            <NavItem className="Navbar-Users">
+                <NavLink to="/users">Users</NavLink>
+            </NavItem>
             <NavItem className="Navbar-Bouts">
                 <NavLink to="/bouts">Bouts</NavLink>
             </NavItem>

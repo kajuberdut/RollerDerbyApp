@@ -56,8 +56,8 @@ class FastApi {
 
       /** Get one user*/
 
-    static async getUser(userId) {
-        let res = await this.request(`users/${userId}`);
+    static async getUser(derbyName) {
+        let res = await this.request(`users/${derbyName}`);
         console.log("res:", res)
         return res
     }

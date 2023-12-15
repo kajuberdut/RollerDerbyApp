@@ -19,7 +19,6 @@ def get_user_by_derby_name(db: Session, derby_name: str):
     return db.query(models.User).filter(models.User.derby_name == derby_name).first()
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
-
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def get_bout_by_id(db: Session, event_id: int):

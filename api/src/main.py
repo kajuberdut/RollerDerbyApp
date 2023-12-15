@@ -59,9 +59,24 @@ def get_db():
 
 @api_app.get("/users/", response_model=list[schemas.UserBase])
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
     users = crud.get_users(db, skip=skip, limit=limit)
+
     return users
 
+
+# * get /users/{derby_name} 
+# * returns one users 
+
+@api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
+def get_user(derby_name: str, db: Session = Depends(get_db)):
+    
+    user = crud.get_user_by_derby_name(db, derby_name=derby_name)
+    
+    if derby_name is None: 
+        raise HTTPException(status_code=404, detail=f"User with derby name {derby_name} not found.")
+    
+    return user
 
 # * post /users/ 
 # * creates a new user 

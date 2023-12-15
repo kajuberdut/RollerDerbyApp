@@ -67,6 +67,7 @@ function MixerList({getMixers}) {
     return (
       <div className="MixerList">
         {/* <SearchBar getBouts={getBouts}/> */}
+        <h1>Mixers</h1>
         {renderCards()}
       </div>
     );

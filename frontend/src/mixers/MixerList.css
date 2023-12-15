@@ -1,5 +1,9 @@
 .MixerList {
     margin-top: 150px;
+    /* background-color: orange; */
 
 }
 
+.MixerList h1 {
+    margin-right: 30%;
+}

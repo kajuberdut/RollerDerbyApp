@@ -67,6 +67,7 @@ function BoutList({getBouts}) {
     return (
       <div className="BoutList">
         {/* <SearchBar getBouts={getBouts}/> */}
+        <h1>Bouts</h1>
         {renderCards()}
       </div>
     );

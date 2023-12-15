@@ -83,6 +83,18 @@ function App() {
       }
     }
 
+    async function getUsers() {
+
+      try {
+        let users = await FastApi.getUsers();
+        // return { success: true };
+        return users
+      } catch (errors) {
+        console.error("Get Users failed", errors);
+        return { success: false, errors };
+      }
+    }
+
     async function getBouts() {
 
       try {
@@ -116,7 +128,7 @@ function App() {
           <NavBar />
           <main>
             {/* <Routes login={login} signup={signup} update={update} apply={apply} /> */}
-            <AllRoutes signup={signup} update={updateUser} getBouts={getBouts} getMixers={getMixers}/>
+            <AllRoutes signup={signup} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
           </main>
         </Fragment>
         </UserContext.Provider>
