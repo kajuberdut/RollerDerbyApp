@@ -21,11 +21,14 @@ class EventBase(SQLAlchemyBase):
 
     event_id = Column(Integer, Identity(), primary_key=True, index=True, unique=True)
     type = Column(String)
-    time = Column(String)
     date = Column(String)
+    time = Column(String)
+    time_zone = Column(String)
+    description = Column(String)
     theme = Column(String)
     level = Column(String)
     co_ed = Column(Boolean)
+    ruleset = Column(String)
     jersey_colors: Column(String)
     # detail = relationship("EventDetail", back_populates="events")
     

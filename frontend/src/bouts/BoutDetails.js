@@ -75,4 +75,4 @@ function BoutDetail() {
 
 }
 
-export default CompanyDetail
+export default BoutDetail

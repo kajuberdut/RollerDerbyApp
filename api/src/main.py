@@ -164,8 +164,12 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @api_app.post("/bouts/", response_model=schemas.EventBase)
 def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
     
+    
     print(traceback.format_exc())
     print("you are hitting the bouts post route!!!")
+    print("****** bout *****:", bout)
+    print("****** bout.time_zone *****:", bout.time_zone)
+    print("****** type bout.time_zone *****:", type(bout.time_zone))
    
     return crud.create_bout(db=db, bout=bout)
 

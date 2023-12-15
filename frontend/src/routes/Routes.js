@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import SignupForm from "../forms/SignupForm";
 import LoginForm from "../forms/LoginForm";
 import SetupProfileForm from "../forms/SetupProfileForm";
+import BoutForm from "../forms/BoutForm";
+import MixerForm from "../forms/MixerForm";
 import BoutList from "../bouts/BoutList";
 import MixerList from "../mixers/MixerList";
 import UserList from "../users/UserList";
@@ -10,6 +12,7 @@ import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
+
 
 
 /**
@@ -41,8 +44,10 @@ return (
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
         <Route path="/users/:derby_name" element={<UserDetails />} />
         <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
+        <Route path="/bouts/add" element={<BoutForm/>} />
         <Route path="/bouts/:id" element={<SignupForm />} />
         <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
+        <Route path="/mixers/add" element={<MixerForm/>} />
         <Route path="/mixers/:id" element={<SignupForm />} /> 
         <Route path="*" element={<NotFound />} /> 
         {/* <Route exact path="/signup">

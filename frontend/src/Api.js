@@ -110,6 +110,15 @@ class FastApi {
     return res
   }
 
+    /** Add bout*/
+
+    static async addBout(data) {
+      console.log("hitting the addBout in api.js")
+      let res = await this.request(`bouts/`, data, "post");
+      console.log("res:", res)
+      return res
+    }
+
     /** Updates a specific bout*/
 
   static async updateBout(eventId, data) {
@@ -142,7 +151,17 @@ class FastApi {
     return res
   }
 
-  /** Updates a specific bout*/
+    /** Add mixer*/
+
+    static async addMixer(data) {
+      console.log("hitting the addMixer in api.js")
+      console.log("!!!!!!!!!!!!!! data !!!!!!!!!!!!!", data)
+      let res = await this.request(`mixers/`, data, "post");
+      console.log("res:", res)
+      return res
+    }
+
+  /** Updates a specific mixer*/
 
   static async updateMixer(eventId, data) {
 

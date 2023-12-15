@@ -14,3 +14,7 @@
 .BoutList h1 {
     margin-right: 30%;
 }
+
+.Bout-Button {
+    border-radius: 4px;
+}

@@ -68,6 +68,13 @@ function BoutList({getBouts}) {
       <div className="BoutList">
         {/* <SearchBar getBouts={getBouts}/> */}
         <h1>Bouts</h1>
+        <a href="/bouts/add">
+          {/* <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
+            style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}> */}
+          <button className="Bout-Button">
+            Create Bout
+          </button>
+        </a>
         {renderCards()}
       </div>
     );

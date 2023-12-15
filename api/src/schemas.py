@@ -12,13 +12,14 @@ print("schemas.py is running")
 class EventBase(BaseModel):
     event_id: int = Field(default_factory=lambda: 0)
     type: str
-    # time: datetime.time
-    # date: date
     date: str
     time: str
+    time_zone: str
     theme: str
+    description: str
     level: str
     co_ed: bool
+    ruleset: str
     # jersey_colors: str
     
     class Config:
@@ -29,6 +30,13 @@ class EventBase(BaseModel):
     def level_must_be_valid(cls, value):
         if value not in ['AA',  'AA/A', 'A', 'A/B', 'B', 'B/C', 'C', 'All Levels']:
             raise ValueError('Invalid level')
+        return value
+    
+    @field_validator('ruleset', mode="before")
+    @classmethod
+    def ruleset_must_be_valid(cls, value):
+        if value not in ['WFTDA',  'USARS', 'Banked Track', 'Short Track']:
+            raise ValueError('Invalid ruleset')
         return value
     
     

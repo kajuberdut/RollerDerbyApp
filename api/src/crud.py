@@ -101,7 +101,7 @@ def get_mixers(db: Session, skip: int = 0, limit: int = 100):
 
 def create_bout(db: Session, bout: schemas.Bout):
 
-    db_bout = models.Bout(type=bout.type, time=bout.time, date=bout.date, theme=bout.theme, level=bout.level, co_ed=bout.co_ed, opposing_team=bout.opposing_team, team=bout.team)
+    db_bout = models.Bout(type=bout.type, date=bout.date, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team)
      
     db.add(db_bout)
     db.commit()
@@ -111,7 +111,7 @@ def create_bout(db: Session, bout: schemas.Bout):
 
 def create_mixer(db: Session, mixer: schemas.Mixer):
 
-    db_mixer = models.Mixer(type=mixer.type, time=mixer.time, date=mixer.date, theme=mixer.theme, level=mixer.level, co_ed=mixer.co_ed,  signup_link=mixer. signup_link)
+    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, signup_link=mixer. signup_link)
      
     db.add(db_mixer)
     db.commit()
@@ -125,11 +125,14 @@ def update_bout(db: Session, bout: schemas.BoutUpdate, event_id):
     
     bout = {
     "type": bout.type,
-    "time": bout.time,
     "date": bout.date,
+    "time": bout.time,
+    "time_zone": bout.time_zone, 
     "theme": bout.theme, 
+    "description": bout.description, 
     "level": bout.level,
-    "co_ed":bout.co_ed, 
+    "co_ed": bout.co_ed, 
+    "ruleset": bout.ruleset,
     "opposing_team": bout.opposing_team, 
     "team": bout.team
     }
@@ -151,11 +154,14 @@ def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id):
     
     mixer = {
     "type": mixer.type,
-    "time": mixer.time,
     "date": mixer.date,
+    "time": mixer.time,
+    "time_zone": mixer.time_zone,
     "theme": mixer.theme, 
+    "description": mixer.description,
     "level": mixer.level,
     "co_ed": mixer.co_ed, 
+    "ruleset": mixer.ruleset,
     "signup_link": mixer.signup_link
     }
 

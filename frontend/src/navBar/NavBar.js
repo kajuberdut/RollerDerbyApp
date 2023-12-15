@@ -35,7 +35,7 @@ function NavBar({logout}) {
         <NavbarBrand href="/">React-Conteact</NavbarBrand> */}
       <div style={{ display: 'flex' }}>
         <Star />
-        <NavbarBrand href="/">React-Contact</NavbarBrand>
+        <NavbarBrand href="/">React-Conteact</NavbarBrand>
       </div>
 
         <Nav className="ml-auto" navbar>
@@ -45,9 +45,9 @@ function NavBar({logout}) {
                 <NavLink to='/profile'>{ user.derbyName }</NavLink>
                 {/* <NavLink to="/user/:{user.id}">{ user.derbyName }</NavLink> */}
             </NavItem>
-            <NavItem className="Navbar-Setup">
+            {/* <NavItem className="Navbar-Setup">
                 <NavLink to="/setup">Setup</NavLink>
-            </NavItem>
+            </NavItem> */}
             <NavItem className="Navbar-Users">
                 <NavLink to="/users">Users</NavLink>
             </NavItem>
