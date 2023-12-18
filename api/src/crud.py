@@ -59,7 +59,15 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     
     user = {
     "derby_name": user.derby_name,
-    "email": user.email
+    "email": user.email,
+    "first_name": user.first_name, 
+    "last_name": user.last_name,
+    "facebook_name": user.facebook_name, 
+    "about": user.about,
+    "primary_number": user.primary_number, 
+    "secondary_number": user.secondary_number,
+    "level": user.level,
+    "associated_leagues": user.associated_leagues
     }
     
     print("db user in update user:", db_user)

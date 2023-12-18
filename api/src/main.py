@@ -66,7 +66,7 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 
 # * get /users/{derby_name} 
-# * returns one users 
+# * returns one specific user
 
 @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
 def get_user(derby_name: str, db: Session = Depends(get_db)):

@@ -37,16 +37,16 @@ class User(SQLAlchemyBase):
     __tablename__ = "user"
     # ! note other user items are already in user table 
     
-    first_name = Column(String)
-    last_name = Column(String)
-    facebook_name = Column(String)
-    about = Column(String)
-    primary_number = Column(Integer)
+    # first_name = Column(String)
+    # last_name = Column(String)
+    # facebook_name = Column(String)
+    # about = Column(String)
+    # primary_number = Column(Integer)
     secondary_number = Column(Integer)
-    level = Column(String)
+    # level = Column(String)
     insurance = relationship("UserInsurance", back_populates="user")
     location = relationship("UserLocation", back_populates="user")
-    associated_leagues = Column(String)
+    # associated_leagues = Column(String)
     ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
     # associated_leagues = relationship("UserLeagueAssociation", back_populates="user")

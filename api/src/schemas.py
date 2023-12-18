@@ -18,6 +18,17 @@ class UserBase(BaseModel):
     derby_name: str
     email: str     
     
+# class UserDetails(UserBase):
+    # primary_number: int
+    # level: str
+    
+    # @field_validator('level', mode="before")
+    # @classmethod
+    # def level_must_be_valid(cls, value):
+    #     if value not in ['AA', 'A', 'B', 'C']:
+    #         raise ValueError('Invalid level')
+    #     return value
+    
 class UserCreate(UserBase):
     password: str
     
@@ -28,6 +39,24 @@ class UserDelete(BaseModel):
 class UserUpdate(BaseModel): 
     derby_name: str
     email: str 
+    first_name: str
+    last_name: str
+    facebook_name: str
+    about: str
+    primary_number: int
+    secondary_number: int
+    level: str
+    associated_leagues: str
+    
+    
+    
+    @field_validator('level', mode="before")
+    @classmethod
+    def level_must_be_valid(cls, value):
+        if value not in ['AA', 'A', 'B', 'C']:
+            raise ValueError('Invalid level')
+        return value
+    
 # * note with this you dont have to have the user_id in the object but you could change this. 
 
 class UserDelete(BaseModel):

@@ -14,6 +14,14 @@ class User(SQLAlchemyBase):
     derby_name = Column(String, unique=True)
     hashed_password = Column(String)
     email = Column(String, unique=True, index=True)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    facebook_name = Column(String, nullable=True)
+    about = Column(String, nullable=True)
+    primary_number = Column(Integer, nullable=True)
+    secondary_number = Column(Integer, nullable=True)
+    level = Column(String, nullable=True)
+    associated_leagues = Column(String, nullable=True)
    
 # Event SQLAlchemy Models
 
