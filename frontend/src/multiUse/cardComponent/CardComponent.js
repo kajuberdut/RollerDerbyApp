@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import UserContext from "../UserContext";
+import FastApi from "../../Api";
 import "./CardComponent.css";
 import {
     Card,
@@ -28,13 +29,33 @@ import {
     let type = bout !== undefined ? "bouts" : "mixers";
     console.log("info:", info)
     // let key = bout !== undefined ? bout.eventId : mixer.eventId;
-    let key = info.eventId
+    let key = info.event_id
+    // ! note will need to change this back to eventId after you solve that problem in api 
+    console.log("***key***", key)
 
     // let id = "Card-Component-";
     // let key = id + keyInfo;
+
+
   
-    const { user } = useContext(UserContext);  
+    const { user } = useContext(UserContext); 
+    const [address, setAddress ] = useState([]); 
     
+  //   /** API get request for a specific address */ 
+
+    async function getAddress() {
+      let address = await FastApi.getAddress(info.address_id)
+      console.log("address:", address)
+      setAddress(address)
+      // setIsLoading(false)
+    }
+    
+
+    useEffect(() => {
+      getAddress();
+    }, []);
+
+
     // let timeObj = new Time(info.time)
     // let hours = timeObj.getHours()
     // console.log("hours:", hours)
@@ -75,16 +96,19 @@ import {
           <section key={"Card-Component-" + key}>
             <Card className="CardComponent"> 
               <CardBody>
-                  <NavLink exact to={`/${type}/${info.eventId}`} className="CompanyCard-Link">
+                  <NavLink exact to={`/${type}/${key}`} className="CompanyCard-Link" style={{color: '#555555', }}>
                 <CardTitle className="text-center CardComponent-Title">
                   <h3>{info.theme}</h3>
                 </CardTitle>
                   </NavLink>
                  <CardTitle> 
-                 <h4>{info.date}</h4>
-                 <h4>{info.time}</h4>
+              
+                 <h5>{address.city}, {address.state}</h5>
                  </CardTitle>
-                <CardText className="CardComponent-Text">
+                 <CardText className="CardComponent-Text">
+                 {info.date}
+                </CardText>
+                 <CardText className="CardComponent-Text">
                   {info.description}
                 </CardText>
                 {/* <CardText className="CardComponent-Text">

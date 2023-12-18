@@ -24,6 +24,16 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def get_bout_by_id(db: Session, event_id: int):
     return db.query(models.Bout).filter(models.Bout.event_id == event_id).first()
 
+def get_bout_by_address_date_time_team_opposing_team(db: Session, bout: schemas.Bout): 
+    return db.query(models.Bout).filter(models.Bout.address_id == bout.address_id, models.Bout.time == bout.time, models.Bout.date == bout.date, models.Bout.team == bout.team, models.Bout.opposing_team == bout.opposing_team).first()
+    
+
+def get_mixer_by_address_date_time_theme(db: Session, mixer: schemas.Mixer): 
+    print("**** mixer ******:", mixer)
+    found_mixer = db.query(models.Mixer).filter(models.Mixer.address_id == mixer.address_id, models.Mixer.time == mixer.time, models.Mixer.date == mixer.date, models.Mixer.theme == mixer.theme).first()
+    print("**** found mixer ***** ", found_mixer)
+    return found_mixer
+
 def get_mixer_by_id(db: Session, event_id: int):
     return db.query(models.Mixer).filter(models.Mixer.event_id == event_id).first()
 
@@ -235,5 +245,7 @@ def get_addresses(db: Session, skip: int = 0, limit: int = 100):
 def get_address(db: Session, address: schemas.Address):
     return db.query(models.Address).filter(models.Address.street_address == address.street_address, models.Address.city == address.city, models.Address.state == address.state, models.Address.zip_code == address.zip_code).first()
 
+def get_address_by_id(db: Session, address_id: int):
+    return db.query(models.Address).filter(models.Address.address_id == address_id).first()
 # def get_user_by_id(db: Session, user_id: int):
 #     return db.query(models.User).filter(models.User.user_id == user_id).first()

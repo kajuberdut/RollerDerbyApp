@@ -103,9 +103,9 @@ class FastApi {
 
   /** Get a specific bout*/
 
-  static async getBout(boutId) {
+  static async getBout(eventId) {
     console.log("hitting the getBout in api.js")
-    let res = await this.request(`bouts/${boutId}`);
+    let res = await this.request(`bouts/${eventId}`);
     console.log("res:", res)
     return res
   }
@@ -175,6 +175,15 @@ class FastApi {
     let res = await this.request(`mixers/${eventId}`, {}, "delete");
     return res;
   } 
+
+  /** Get a specific bout*/
+
+  static async getAddress(addressId) {
+    console.log("hitting the getAddress in api.js")
+    let res = await this.request(`address/${addressId}`);
+    console.log("res:", res)
+    return res
+  }
  
 
 }

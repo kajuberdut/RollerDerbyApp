@@ -150,6 +150,19 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     bouts = crud.get_bouts(db, skip=skip, limit=limit)
     return bouts
 
+# * get /bouts/{event_id} 
+# * returns one bout 
+
+@api_app.get("/bouts/{event_id}", response_model=schemas.Bout)
+def get_bout(event_id: int, db: Session = Depends(get_db)):
+    
+    bout = crud.get_bout_by_id(db, event_id=event_id)
+    
+    if event_id is None: 
+        raise HTTPException(status_code=404, detail=f"Bout with event id {event_id} not found.")
+    
+    return bout
+
 # * get /mixers/ 
 # * returns all mixers
 
@@ -158,6 +171,18 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     mixers = crud.get_mixers(db, skip=skip, limit=limit)
     return mixers
 
+# * get /mixers/{event_id} 
+# * returns one mixer 
+
+@api_app.get("/mixers/{event_id}", response_model=schemas.Mixer)
+def get_bout(event_id: int, db: Session = Depends(get_db)):
+    
+    mixer = crud.get_mixer_by_id(db, event_id=event_id)
+    
+    if event_id is None: 
+        raise HTTPException(status_code=404, detail=f"Mixer with event id {event_id} not found.")
+    
+    return mixer
 # * post /bouts/ 
 # * creates a new bout 
 # !  working post bout without address field
@@ -179,17 +204,20 @@ def create_bout(bout: schemas.Bout, address: schemas.Address, db: Session = Depe
     
     existing_address = crud.get_address(db=db, address=address)
     
-    print(traceback.format_exc())
-    print("you are hitting the bouts post route!!!")
-    print("****** bout *****:", bout)
-    print("****** bout.time_zone *****:", bout.time_zone)
-    print("****** type bout.time_zone *****:", type(bout.time_zone))
+    # print(traceback.format_exc())
+    # print("you are hitting the bouts post route!!!")
+    # print("****** bout *****:", bout)
+
     if existing_address: 
         address_id = existing_address.address_id
     else:
         address_id = crud.create_address(db=db, address=address)
     print("&&&&&&&& address_id &&&&&&&&&&")
     bout.address_id = address_id
+    existing_bout = crud.get_bout_by_address_date_time_team_opposing_team(db=db, bout=bout)
+    print("****** existing_bout *****:", existing_bout)
+    if existing_bout: 
+        raise HTTPException(status_code=409, detail=f"Bout already exists at the same address, on the same date, at the same time, and with the same teams.")
     print("bout!!!! in post bouts:", bout)
     # crud.create_bout(db=db, bout=bout)
    
@@ -217,8 +245,16 @@ def create_bout(mixer: schemas.Mixer, address: schemas.Address, db: Session = De
         address_id = existing_address.address_id
     else:
         address_id = crud.create_address(db=db, address=address)
+        
   
     mixer.address_id = address_id
+    existing_mixer = crud.get_mixer_by_address_date_time_theme(db=db, mixer=mixer)
+    print("mixer.address_id", mixer.address_id)
+    
+    print("****** existing_mixer *****:", existing_mixer)
+    if existing_mixer: 
+        raise HTTPException(status_code=409, detail=f"Mixer already exists at the same address, on the same date, at the same time, and with the same theme.")
+  
     # print("bout!!!! in post bouts:", bout)
     # crud.create_bout(db=db, bout=bout)
    
@@ -226,7 +262,7 @@ def create_bout(mixer: schemas.Mixer, address: schemas.Address, db: Session = De
 
 
 # * put /bouts/{event_id} 
-# * updates an existing user 
+# * updates an existing bout 
 
 @api_app.put("/bouts/{event_id}", response_model=schemas.BoutUpdate)
 def update_bout(bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(get_db)):
@@ -240,8 +276,8 @@ def update_bout(bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(g
     
     return crud.update_bout(db=db, bout=bout, event_id=event_id)
 
-# * put /bouts/{event_id} 
-# * updates an existing user 
+# * put /mixers/{event_id} 
+# * updates an existing mixer 
 
 @api_app.put("/mixers/{event_id}", response_model=schemas.MixerUpdate)
 def update_mixer(mixer: schemas.MixerUpdate, event_id: int, db: Session = Depends(get_db)):
@@ -309,4 +345,10 @@ def get_addresses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     
     return crud.get_addresses(db, skip=skip, limit=limit)
 
+# * get /address/{address_id} 
+# * gets one address by id
 
+@api_app.get("/address/{address_id}", response_model=schemas.Address)
+def get_address(address_id:int, db: Session = Depends(get_db)):
+    
+    return crud.get_address_by_id(db, address_id=address_id)

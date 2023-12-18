@@ -6,12 +6,15 @@ import SetupProfileForm from "../forms/SetupProfileForm";
 import BoutForm from "../forms/BoutForm";
 import MixerForm from "../forms/MixerForm";
 import BoutList from "../bouts/BoutList";
+import BoutDetails from "../bouts/BoutDetails"
 import MixerList from "../mixers/MixerList";
+import MixerDetails from "../mixers/MixerDetails"
 import UserList from "../users/UserList";
 import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
+
 
 
 
@@ -45,10 +48,10 @@ return (
         <Route path="/users/:derby_name" element={<UserDetails />} />
         <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
         <Route path="/bouts/add" element={<BoutForm/>} />
-        <Route path="/bouts/:id" element={<SignupForm />} />
+        <Route path="/bouts/:id" element={<BoutDetails />} />
         <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
         <Route path="/mixers/add" element={<MixerForm/>} />
-        <Route path="/mixers/:id" element={<SignupForm />} /> 
+        <Route path="/mixers/:id" element={<MixerDetails />} /> 
         <Route path="*" element={<NotFound />} /> 
         {/* <Route exact path="/signup">
             <SignupForm  signup={signup}/>
