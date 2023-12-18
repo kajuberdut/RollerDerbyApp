@@ -3,6 +3,7 @@ import FastApi from "../Api";
 import { useParams} from "react-router-dom";
 // import skateImg from "../public/logo512.png"
 // import defaultImg from "./images/skater_02"
+import Loading from "../multiUse/loading/Loading";
 
 
 // ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
@@ -21,7 +22,7 @@ function UserDetails() {
     // console.log("company:", company)
     const derbyName = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
-    const [derbyUser, setDerbyUser]= useState("");
+    const [derbyUser, setDerbyUser] = useState("");
     const { user } = useContext(UserContext);
     console.log("derbyName:", derbyName)
     // const params = useParams();
@@ -68,6 +69,9 @@ function UserDetails() {
         // return { success: true };
         console.log("!!!!!!!!!!!!!!!! indUser !!!!!!!!!!!!!!!!111", indUser)
         setDerbyUser(indUser); 
+        console.log("******* derbyUser.primary_number:", derbyUser.primary_number)
+        console.log("derbyUSer!!!", derbyUser)
+        setIsLoading(false)
         return indUser
       } catch (errors) {
         console.error("Get Users failed", errors);
@@ -81,8 +85,16 @@ function UserDetails() {
         getUser();
     }, []);
 
+        /** Display isLoading if API call is has not returned */
 
-    
+        if (isLoading) {
+          return (
+              <Loading />
+          )
+        }
+
+
+        console.log("******* derbyUser.primary_number:", derbyUser.primary_number)
     // ! will need to rework this
 
     return (
@@ -105,19 +117,20 @@ function UserDetails() {
                   </div>
 
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{derbyUser.derby_name} #{derbyUser.primaryNumber}</MDBTypography>
+                    <MDBTypography tag="h4">{derbyUser.derby_name} #{derbyUser.primary_number}</MDBTypography>
                     {/* <MDBCardText>{derbyUser.location.city}, {derbyUser.location.state}</MDBCardText> */}
-                    {/* <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
-                    <MDBCardText tag="h4" >{user.level}</MDBCardText>
-                    </div> */}
+                    <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
+                    {/* <MDBCardText tag="h4" >{derbyUser.level}</MDBCardText> */}
+                    </div>
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                    {/* <div>
+                    {derbyUser.level && <div>
                       <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{derbyUser.level}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
-                    </div> */}
+                    </div>
+                    }
                     {/* <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
@@ -129,21 +142,24 @@ function UserDetails() {
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">
-                  {/* <div className="mb-5">
+                { derbyUser.about && <div className="mb-5">
                     <p className="lead fw-normal mb-1">About</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.about}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{derbyUser.about}</MDBCardText>
                     </div>
-                  </div> */}
-                  {/* <div className="mb-5">
+                  </div>
+                }
+                  { derbyUser.associated_leagues && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Associated Leagues</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.associatedLeagues}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{derbyUser.associated_leagues}</MDBCardText>
                     </div>
-                  </div> */}
-                  {/* <div className="mb-5">
-                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebookName}</p>
-                  </div> */}
+                  </div>
+                  }
+                 { derbyUser.facebook_name && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">You can find me on facebook: {derbyUser.facebook_name}</p>
+                  </div>
+                    }
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>

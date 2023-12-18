@@ -36,9 +36,10 @@ class UserDelete(BaseModel):
     user_id: int 
     password: str
     
-class UserUpdate(BaseModel): 
-    derby_name: str
-    email: str 
+# class UserUpdate(BaseModel): 
+class UserUpdate(UserBase):
+    # derby_name: str
+    # email: str 
     first_name: str
     last_name: str
     facebook_name: str
@@ -47,6 +48,14 @@ class UserUpdate(BaseModel):
     secondary_number: int
     level: str
     associated_leagues: str
+    
+class UserDetailsPublic(UserBase): 
+    facebook_name: str
+    about: str
+    primary_number: int
+    level: str
+    associated_leagues: str
+
     
     
     

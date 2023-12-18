@@ -68,7 +68,9 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * get /users/{derby_name} 
 # * returns one specific user
 
-@api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
+# @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
+@api_app.get("/users/{derby_name}", response_model=schemas.UserDetailsPublic)
+# ! Note: this allows us to get user information that is publuic information not private information so private information is not being sent back and forth through the api.
 def get_user(derby_name: str, db: Session = Depends(get_db)):
     
     user = crud.get_user_by_derby_name(db, derby_name=derby_name)
