@@ -5,6 +5,7 @@ import uuid
 
 print("models.py is running")
 
+# User SQLAlchemy Models
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -14,22 +15,24 @@ class User(SQLAlchemyBase):
     hashed_password = Column(String)
     email = Column(String, unique=True, index=True)
    
-    
+# Event SQLAlchemy Models
 
 class EventBase(SQLAlchemyBase):
     __tablename__ = "event"
 
     event_id = Column(Integer, Identity(), primary_key=True, index=True, unique=True)
-    type = Column(String)
-    date = Column(String)
-    time = Column(String)
-    time_zone = Column(String)
-    description = Column(String)
-    theme = Column(String)
-    level = Column(String)
-    co_ed = Column(Boolean)
-    ruleset = Column(String)
-    jersey_colors: Column(String)
+    type = Column(String, nullable=False)
+    date = Column(String, nullable=False)
+    address_id = Column(Integer, ForeignKey("address.address_id"), nullable=False)
+    time = Column(String, nullable=False)
+    time_zone = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    theme = Column(String, nullable=False)
+    level = Column(String, nullable=False)
+    co_ed = Column(Boolean, nullable=False)
+    ruleset = Column(String, nullable=False)
+    # jersey_colors: Column(String, nullable=False)
+    # address = relationship("Address", backref="events")
     # detail = relationship("EventDetail", back_populates="events")
     
     __mapper_args__ = {
@@ -60,4 +63,17 @@ class Mixer(EventBase):
     __mapper_args__ = {"polymorphic_identity": "mixer"}
 
     signup_link = Column(String)
+    
+    
+class Address(SQLAlchemyBase):
+    __tablename__ = "address"
+
+    address_id = Column(Integer, primary_key=True)
+    # name: Column(String, nullable=True)
+    name: Column(String, nullable=False)
+    street_address = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    state = Column(String, nullable=False)
+    zip_code = Column(String, nullable=False)
+    events = relationship("EventBase", backref="address")
     

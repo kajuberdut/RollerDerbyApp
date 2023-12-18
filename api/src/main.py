@@ -160,26 +160,70 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 # * post /bouts/ 
 # * creates a new bout 
-
-@api_app.post("/bouts/", response_model=schemas.EventBase)
-def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
+# !  working post bout without address field
+# @api_app.post("/bouts/", response_model=schemas.EventBase)
+# def create_bout(bout: schemas.Bout, db: Session = Depends(get_db)):
     
+    
+#     print(traceback.format_exc())
+#     print("you are hitting the bouts post route!!!")
+#     print("****** bout *****:", bout)
+#     print("****** bout.time_zone *****:", bout.time_zone)
+#     print("****** type bout.time_zone *****:", type(bout.time_zone))
+   
+#     return crud.create_bout(db=db, bout=bout)
+
+# ! trial for posting bout information with an address
+@api_app.post("/bouts/", response_model=schemas.EventBase)
+def create_bout(bout: schemas.Bout, address: schemas.Address, db: Session = Depends(get_db)):
+    
+    existing_address = crud.get_address(db=db, address=address)
     
     print(traceback.format_exc())
     print("you are hitting the bouts post route!!!")
     print("****** bout *****:", bout)
     print("****** bout.time_zone *****:", bout.time_zone)
     print("****** type bout.time_zone *****:", type(bout.time_zone))
+    if existing_address: 
+        address_id = existing_address.address_id
+    else:
+        address_id = crud.create_address(db=db, address=address)
+    print("&&&&&&&& address_id &&&&&&&&&&")
+    bout.address_id = address_id
+    print("bout!!!! in post bouts:", bout)
+    # crud.create_bout(db=db, bout=bout)
    
     return crud.create_bout(db=db, bout=bout)
 
 # * post /mixers/ 
 # * creates a new mixer
 
-@api_app.post("/mixers/", response_model=schemas.EventBase)
-def create_mixer(mixer: schemas.Mixer, db: Session = Depends(get_db)):
+# @api_app.post("/mixers/", response_model=schemas.EventBase)
+# def create_mixer(mixer: schemas.Mixer, db: Session = Depends(get_db)):
     
+#     return crud.create_mixer(db=db, mixer=mixer)
+
+# * post /mixers/ 
+# * creates a new mixer with address 
+
+@api_app.post("/mixers/", response_model=schemas.EventBase)
+def create_bout(mixer: schemas.Mixer, address: schemas.Address, db: Session = Depends(get_db)):
+    print("****** mixer *****:", mixer)
+    existing_address = crud.get_address(db=db, address=address)
+    
+    print(traceback.format_exc())
+
+    if existing_address: 
+        address_id = existing_address.address_id
+    else:
+        address_id = crud.create_address(db=db, address=address)
+  
+    mixer.address_id = address_id
+    # print("bout!!!! in post bouts:", bout)
+    # crud.create_bout(db=db, bout=bout)
+   
     return crud.create_mixer(db=db, mixer=mixer)
+
 
 # * put /bouts/{event_id} 
 # * updates an existing user 
@@ -248,3 +292,21 @@ def delete_bout(mixer: schemas.EventDelete, event_id: int, db: Session = Depends
         raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
     
     return crud.delete_mixer(db=db, mixer=mixer, event_id=mixer.event_id)
+
+# * post /address/ 
+# * adds an address
+
+@api_app.post("/address/", response_model=schemas.Address)
+def create_address(address: schemas.Address, db: Session = Depends(get_db)):
+    
+    return crud.create_address(db=db, address=address)
+
+# * get /address/ 
+# * gets all addresses 
+
+@api_app.get("/address/", response_model=list[schemas.Address])
+def get_addresses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    return crud.get_addresses(db, skip=skip, limit=limit)
+
+

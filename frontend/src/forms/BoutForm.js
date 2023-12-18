@@ -46,20 +46,30 @@ if(!user) {
   navigate('/')
 }
 
-let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""};
+// let INITIAL_STATE = { bout: { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""}, address: {streetAddres: "", city: "", state: "", zipCode: ""}};
+
+let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""};
+
+let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
+
 
   /** Sets formData in initial state */
-  const [formData, setFormData] = useState(INITIAL_STATE);
+  const [formDataBout, setFormDataBout] = useState(INITIAL_STATE_BOUT);
+
+  const [formDataAddress, setFormDataAddress] = useState(INITIAL_STATE_ADDRESS);
   
 
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData:", formData)
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData.timeZone:", formData.timeZone)
+  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData:", formData)
+  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData.timeZone:", formData.timeZone)
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
-    console.log("FormData in SetupProfileForm.js", formData)
-    setFormData(INITIAL_STATE);
+    // console.log("FormData in SetupProfileForm.js", formData)
+    // setFormData(INITIAL_STATE);
+      setFormDataAddress(INITIAL_STATE_ADDRESS)
+      setFormDataBout(INITIAL_STATE_BOUT)
+
    
     // async function createBout() {
 
@@ -76,6 +86,16 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
     // let result = await update(formData);
 
     //   setValid(true)
+
+    console.log("formDataBout:", formDataBout)
+    console.log("formDataAddress:", formDataAddress)
+
+    formDataBout.addressId = 0; 
+    // console.log("!!!!formDataBout!!!!!:", formDataBout)
+
+    const formData = {bout: formDataBout, address: formDataAddress}
+    console.log("!!!!formData!!!!!:", formData)
+
     let result = await FastApi.addBout(formData);
     if(result) {
       navigate('/bouts')
@@ -95,12 +115,19 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
 
     const { name, value }= evt.target;
 
-    setFormData(fData => ({
+    setFormDataBout(fData => ({
       ...fData,
       [name]: value,
       
     }));
-    console.log("formData in BoutForm:", formData)
+
+    setFormDataAddress(fData => ({
+      ...fData,
+      [name]: value,
+      
+    }));
+    console.log("formDataBout in BoutForm:", formDataBout)
+    console.log("formDataAddress in BoutForm:", formDataAddress)
   };
 
   /** toggle dropdown */
@@ -127,7 +154,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                           type="date"
                           id="date"
                           name="date"
-                          value={formData.date}
+                          value={formDataBout.date}
                           onChange={handleChange}
                           // valid={valid}
                           // invalid={invalid}
@@ -139,7 +166,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                            type="time"
                            id="time"
                            name="time"
-                           value={formData.time}
+                           value={formDataBout.time}
                            onChange={handleChange}
                            placeholder="Time"
                            required
@@ -153,7 +180,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             type="select"
                             name="timeZone"
                             className="form-control"
-                            value={formData.timeZone}
+                            value={formDataBout.timeZone}
                             onChange={handleChange}
                             placeholder="Time Zone"
                             id="timeZone"
@@ -194,61 +221,77 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
               
                         </Input>
 
-                        {/* <Select
-                            name="timeZone"
-                            className="form-control"
-                            value={formData.timeZone}
-                            onChange={(selectedOption) => setFormData({ ...formData, timeZone: selectedOption.value })}
-                            id="timeZone"
-  
-                            options={[
-                              { value: "America/Denver", label: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)" },
-                              { value: "America/Denver", label: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)" },
-                              { value: "America/New_York", label: "Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)" },
-                            ]}
-                            >
-                              </Select> */}
-                              {/* <option>
-                              Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)
-                              </option>
-                              <option>
-                              Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)
-                              </option>
-                              <option>
-                              Central Time (CT): America/Chicago (Chicago, Houston, New Orleans)
-                              </option>
-                              <option>
-                              Pacific Time (PT): America/Los_Angeles (Los Angeles, San Francisco, Seattle)
-                              </option>
-                              <option>
-                              Alaska Time (AKST): America/Anchorage (Anchorage)
-                              </option>
-                              <option>
-                              Hawaii Time (HST): Pacific/Honolulu (Honolulu)
-                              </option> */}
+                        <Label htmlFor="streetAddress">Street Address: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="streetAddress"
+                           name="streetAddress"
+                           value={formDataAddress.streetAddres}
+                           onChange={handleChange}
+                           placeholder="Street Address"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
 
-              
+                    <Label htmlFor="city">City: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="city"
+                           name="city"
+                           value={formDataAddress.city}
+                           onChange={handleChange}
+                           placeholder="City"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
+                      <Label htmlFor="state">State: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="state"
+                           name="state"
+                           value={formDataAddress.state}
+                           onChange={handleChange}
+                           placeholder="State"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />        
+
+                      <Label htmlFor="zipCode">Zip Code: </Label>
+                       
+                       <Input
+                           type="number"
+                           id="zipCode"
+                           name="zipCode"
+                           value={formDataAddress.zipCode}
+                           onChange={handleChange}
+                           placeholder="Zip Code"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />      
                   
-
-                        <Label htmlFor="firstName">Theme: </Label>
+                        <Label htmlFor="theme">Theme: </Label>
                        
                         <Input
                             type="text"
                             id="theme"
                             name="theme"
-                            value={formData.theme}
+                            value={formDataBout.theme}
                             onChange={handleChange}
                             placeholder="Theme"
                             // valid={valid}
                             // invalid={invalid}
                         />
 
-                        <Label htmlFor="about">Description: </Label>
+                        <Label htmlFor="description">Description: </Label>
                         <Input
                             type="textarea"
                             name="description"
                             className="form-control"
-                            value={formData.description}
+                            value={formDataBout.description}
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
@@ -261,7 +304,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             type="select"
                             name="level"
                             className="form-control"
-                            value={formData.level}
+                            value={formDataBout.level}
                             onChange={handleChange}
                             placeholder="level"
                             id="level"
@@ -269,9 +312,9 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             // invalid={invalid}
                             >
                               <option
-                              value={"All levels"}
+                              value={"All Levels"}
                               >
-                                All levels
+                                All Levels
                               </option>
                               <option
                               value={"C"}
@@ -309,9 +352,9 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                                 AA
                               </option>
                             {/* </Col> */}
-                            </Input>
+                             </Input> 
            
-                        <Label htmlFor="level">Is the bout co-ed? </Label>
+                        <Label htmlFor="coEd">Is the bout co-ed? </Label>
                         <Input
                             type="select"
                             name="coEd"
@@ -340,7 +383,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             type="select"
                             name="ruleset"
                             className="form-control"
-                            value={formData.ruleset}
+                            value={formDataBout.ruleset}
                             onChange={handleChange}
                             placeholder="Ruleset"
                             id="ruleset"
@@ -374,7 +417,7 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             type="text"
                             name="opposingTeam"
                             className="form-control"
-                            value={formData.opposingTeam}
+                            value={formDataBout.opposingTeam}
                             onChange={handleChange}
                             placeholder="Opposing Team"
                             id="OpposingTeam"
@@ -387,88 +430,15 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
                             type="text"
                             name="team"
                             className="form-control"
-                            value={formData.team}
+                            value={formDataBout.team}
                             onChange={handleChange}
                             placeholder="team"
                             id="team"
   
                             // invalid={invalid}
-                        />
+                        /> 
 
-                        {/* <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
-                        <Input
-                            type="text"
-                            name="secInsNum"
-                            className="form-control"
-                            value={formData.secInsNum}
-                            onChange={handleChange}
-                            placeholder="Secondary Insurance Number"
-                            id="secInsNum"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        />
-
-                        <Label htmlFor="assocLeagues">Associated Leagues: </Label>
-                        <Input
-                            type="text"
-                            name="assocLeagues"
-                            className="form-control"
-                            value={formData.assocLeagues}
-                            onChange={handleChange}
-                            placeholder="Associated Leagues"
-                            id="assocLeagues"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        /> */}
-
-                        {/* <Label htmlFor="rulesets">Played Rulesets: </Label>
-                        <Input
-                            type="select"
-                            name="rulesets"
-                            className="form-control"
-                            value={formData.rulesets}
-                            onChange={handleChange}
-                            placeholder="Played Rulesets"
-                            id="rulesets"
-                            multiple
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                            
-                        >     
-                        <option>
-                        WFTDA
-                      </option>
-                      <option>
-                        USARS
-                      </option>
-                      <option>
-                        Banked Track 
-                      </option>
-                      <option>
-                        Short Track 
-                      </option>
-                        </Input> */}
-
-
-                        {/* todod need to add this in */}
-                        {/* Played Rulesets
-                        <Label htmlFor="playedRulesets">Played Rulesets: </Label>
-                        <Input
-                            type="radio"
-                            name="WFTDA"
-                            className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
-                            id="WFTDA"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        /> */}
                       
-                            
                         {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
                         <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
 

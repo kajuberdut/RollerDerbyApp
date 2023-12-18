@@ -101,7 +101,9 @@ def get_mixers(db: Session, skip: int = 0, limit: int = 100):
 
 def create_bout(db: Session, bout: schemas.Bout):
 
-    db_bout = models.Bout(type=bout.type, date=bout.date, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team)
+    # db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team, jersey_colors=bout.jersey_colors)
+    
+    db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team)
      
     db.add(db_bout)
     db.commit()
@@ -111,7 +113,7 @@ def create_bout(db: Session, bout: schemas.Bout):
 
 def create_mixer(db: Session, mixer: schemas.Mixer):
 
-    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, signup_link=mixer. signup_link)
+    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, address_id=mixer.address_id, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, signup_link=mixer. signup_link)
      
     db.add(db_mixer)
     db.commit()
@@ -126,6 +128,7 @@ def update_bout(db: Session, bout: schemas.BoutUpdate, event_id):
     bout = {
     "type": bout.type,
     "date": bout.date,
+    "address_id": bout.address_id,
     "time": bout.time,
     "time_zone": bout.time_zone, 
     "theme": bout.theme, 
@@ -133,6 +136,7 @@ def update_bout(db: Session, bout: schemas.BoutUpdate, event_id):
     "level": bout.level,
     "co_ed": bout.co_ed, 
     "ruleset": bout.ruleset,
+    "jersey_colors": bout.jersey_colors,
     "opposing_team": bout.opposing_team, 
     "team": bout.team
     }
@@ -155,6 +159,7 @@ def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id):
     mixer = {
     "type": mixer.type,
     "date": mixer.date,
+    "address_id": mixer.address_id,
     "time": mixer.time,
     "time_zone": mixer.time_zone,
     "theme": mixer.theme, 
@@ -162,6 +167,7 @@ def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id):
     "level": mixer.level,
     "co_ed": mixer.co_ed, 
     "ruleset": mixer.ruleset,
+    "jersey_colors": mixer.jersey_colors,
     "signup_link": mixer.signup_link
     }
 
@@ -208,3 +214,26 @@ def delete_mixer(db: Session, mixer: schemas.EventDelete, event_id):
     db.commit()
     
     return db_mixer
+
+
+def create_address(db: Session, address: schemas.Address):
+    print("address in create_address!!!!!:", address)
+    # print("****** address.name *******", address.name)
+    # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+    db_address = models.Address(street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+    db.add(db_address)
+    db.commit()
+    db.refresh(db_address)
+    
+    return db_address.address_id
+    # return db_address
+    
+
+def get_addresses(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Address).offset(skip).limit(limit).all()
+
+def get_address(db: Session, address: schemas.Address):
+    return db.query(models.Address).filter(models.Address.street_address == address.street_address, models.Address.city == address.city, models.Address.state == address.state, models.Address.zip_code == address.zip_code).first()
+
+# def get_user_by_id(db: Session, user_id: int):
+#     return db.query(models.User).filter(models.User.user_id == user_id).first()

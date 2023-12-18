@@ -102,7 +102,12 @@ class UserLocation(SQLAlchemyBase):
 #     league = relationship("League")
     
         # items = relationship("Item", back_populates="owner") 
-        
+      
+class Event(SQLAlchemyBase):
+    __tablename__ = "event"
+    # ! note other user items are already in Event table 
+    address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
+    jersey_colors = Column(String)
         
 class Address(SQLAlchemyBase):
     __tablename__ = "address"
@@ -113,13 +118,15 @@ class Address(SQLAlchemyBase):
     state = Column(String)
     zip_code = Column(String)
     
+class EventAddress(SQLAlchemyBase):
+    __tablename__ = "event_address"
+
+    event_id = Column(String, ForeignKey("event.event_id"), primary_key=True)
+    address_id = Column(Integer, ForeignKey("address.address_id"), primary_key=True)
+    event = relationship("Event", back_populates="address")
+    address = relationship("Adress", back_populates="event")
     
-class Event(SQLAlchemyBase):
-    __tablename__ = "event"
-    # ! note other user items are already in Event table 
-    address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
-    jersey_colors = Column(String)
-    ruleset = Column(String)
+    
 
 
 

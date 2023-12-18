@@ -83,13 +83,6 @@ class EventModel(BaseModel):
     ruleset: str
     co_ed: bool
     
-    # ! added this without classmethod
-        @field_validator('ruleset', mode="before")
-    @classmethod
-    def ruleset_must_be_valid(cls, value):
-        if value not in ['WFTDA',  'USARS', 'Banked Track', 'Short Track']:
-            raise ValueError('Invalid ruleset')
-        return value
     
     # @validator('ruleset', pre=True)
     # def ruleset_must_be_valid(cls, value):
