@@ -8,13 +8,13 @@ class Insurance(SQLAlchemyBase):
     other = Column(String)
     user = relationship("UserInsurance", back_populates="insurance")
 
-class Location(SQLAlchemyBase):
-    __tablename__ = "location"
+# class Location(SQLAlchemyBase):
+#     __tablename__ = "location"
 
-    location_id = Column(Integer, primary_key=True)
-    city = Column(String)
-    state = Column(String)    
-    user = relationship("UserLocation", back_populates="location")
+#     location_id = Column(Integer, primary_key=True)
+#     city = Column(String)
+#     state = Column(String)    
+#     user = relationship("UserLocation", back_populates="location")
     
     
 class User(SQLAlchemyBase):
@@ -27,24 +27,24 @@ class User(SQLAlchemyBase):
     
     # ! it may be more efficient to have played rulesets and maybe associated leagues in a table? Check that out later. 
     
-    class UserRuleset(SQLAlchemyBase):
-    __tablename__ = "user_ruleset"
+    # class UserRuleset(SQLAlchemyBase):
+    # __tablename__ = "user_ruleset"
 
-    user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
-    ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), primary_key=True)
-    user = relationship("User", back_populates="ruleset")
-    ruleset = relationship("Ruleset", back_populates="user")
-    # ! note that backref seems to be working better 
+    # user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
+    # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), primary_key=True)
+    # user = relationship("User", back_populates="ruleset")
+    # ruleset = relationship("Ruleset", back_populates="user")
+    # # ! note that backref seems to be working better 
     # users = relationship("Users", backref="rulesets")
     # ruleset = relationship("Rulesets")
     
-class UserPosition(SQLAlchemyBase):
-    __tablename__ = "user_position"
+# class UserPosition(SQLAlchemyBase):
+#     __tablename__ = "user_position"
 
-    user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
-    position_id = Column(Integer, ForeignKey("position.position_id"), primary_key=True)
-    user = relationship("User", back_populates="position")
-    position = relationship("Position", back_populates="user")
+#     user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
+#     position_id = Column(Integer, ForeignKey("position.position_id"), primary_key=True)
+#     user = relationship("User", back_populates="position")
+#     position = relationship("Position", back_populates="user")
     
 class UserInsurance(SQLAlchemyBase):
     __tablename__ = "user_insurance"
@@ -58,13 +58,13 @@ class UserInsurance(SQLAlchemyBase):
 
     
     
-class UserLocation(SQLAlchemyBase):
-    __tablename__ = "user_location"
+# class UserLocation(SQLAlchemyBase):
+#     __tablename__ = "user_location"
 
-    user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
-    location_id = Column(Integer, ForeignKey("location.location_id"), primary_key=True)
-    user = relationship("User", back_populates="location")
-    location = relationship("Location", back_populates="user")
+#     user_id = Column(String, ForeignKey("user.user_id"), primary_key=True)
+#     location_id = Column(Integer, ForeignKey("location.location_id"), primary_key=True)
+#     user = relationship("User", back_populates="location")
+#     location = relationship("Location", back_populates="user")
     # user = relationship("User", backref="location")
     # location = relationship("Location")
 
@@ -84,22 +84,22 @@ class Event(SQLAlchemyBase):
     address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
     jersey_colors = Column(String)
         
-class Address(SQLAlchemyBase):
-    __tablename__ = "address"
+# class Address(SQLAlchemyBase):
+#     __tablename__ = "address"
 
-    address_id = Column(Integer, primary_key=True)
-    street_address = Column(String)
-    city = Column(String)
-    state = Column(String)
-    zip_code = Column(String)
+#     address_id = Column(Integer, primary_key=True)
+#     street_address = Column(String)
+#     city = Column(String)
+#     state = Column(String)
+#     zip_code = Column(String)
     
-class EventAddress(SQLAlchemyBase):
-    __tablename__ = "event_address"
+# class EventAddress(SQLAlchemyBase):
+#     __tablename__ = "event_address"
 
-    event_id = Column(String, ForeignKey("event.event_id"), primary_key=True)
-    address_id = Column(Integer, ForeignKey("address.address_id"), primary_key=True)
-    event = relationship("Event", back_populates="address")
-    address = relationship("Adress", back_populates="event")
+#     event_id = Column(String, ForeignKey("event.event_id"), primary_key=True)
+#     address_id = Column(Integer, ForeignKey("address.address_id"), primary_key=True)
+#     event = relationship("Event", back_populates="address")
+#     address = relationship("Adress", back_populates="event")
     
     
 # class EventDetail(SQLAlchemyBase):

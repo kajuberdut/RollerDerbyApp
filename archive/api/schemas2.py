@@ -25,38 +25,38 @@ states_list = [
 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT','DE','FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ','NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 ]
 
-class Address(BaseModel):
-    street_address: str
-    city: str
-    state: str
-    zip_code: str
+# class Address(BaseModel):
+#     street_address: str
+#     city: str
+#     state: str
+#     zip_code: str
     
-    # may need to type code this 
-    @field_validator('state')
-    def validate_us_states(cls, value):
-    # def validate_us_states(cls, value: str) -> str:
-        if value.upper() not in states_list:
-            raise ValueError("Invalid State Code")
-        return value
+#     # may need to type code this 
+#     @field_validator('state')
+#     def validate_us_states(cls, value):
+#     # def validate_us_states(cls, value: str) -> str:
+#         if value.upper() not in states_list:
+#             raise ValueError("Invalid State Code")
+#         return value
       
-    @field_validator('zip_code')
-    def validate_zip_codes(cls, value):
-    # def validate_zip_codes(cls, value: str) -> str:
-        regexp = r"^\d{5}(?:-\d{4})?$"
-        match =  bool(re.match(regexp, value))
-        if not match:
-            raise ValueError("Invalid Zip Code")
-        return value
+#     @field_validator('zip_code')
+#     def validate_zip_codes(cls, value):
+#     # def validate_zip_codes(cls, value: str) -> str:
+#         regexp = r"^\d{5}(?:-\d{4})?$"
+#         match =  bool(re.match(regexp, value))
+#         if not match:
+#             raise ValueError("Invalid Zip Code")
+#         return value
     
-class Location(BaseModel):
-    city: str
-    state: str
+# class Location(BaseModel):
+#     city: str
+#     state: str
     
-    @field_validator('state')
-    def validate_us_states(cls, v):
-        if v.upper() not in states_list:
-            raise ValueError("Invalid State Code")
-        return v   
+#     @field_validator('state')
+#     def validate_us_states(cls, v):
+#         if v.upper() not in states_list:
+#             raise ValueError("Invalid State Code")
+#         return v   
     
     
     

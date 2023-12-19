@@ -46,7 +46,7 @@ if(!user) {
   navigate('/')
 }
 
-let INITIAL_STATE = { derbyName: user.derbyName, firstName: user.firstName, lastName: user.lastName, email: user.Email,  facebookName: user.facebookName, about: user.about, primNum: user.primNum, secNum: user.secNum, level: user.level, primIns: user.primIns, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.assocLeagues, ruleset: []};
+let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastName: user.lastName, email: user.Email,  facebookName: user.facebookName, about: user.about, primNum: user.primNum, secNum: user.secNum, level: user.level, primIns: user.primIns, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.assocLeagues, ruleset: []};
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -156,12 +156,12 @@ let INITIAL_STATE = { derbyName: user.derbyName, firstName: user.firstName, last
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
 
-                    <Label htmlFor="derbyName">Derby Name: </Label>
+                    <Label htmlFor="username">Derby Name: </Label>
                        <Input
                            type="text"
-                           id="derbyName"
-                           name="derbyName"
-                           value={formData.derbyName}
+                           id="username"
+                           name="username"
+                           value={formData.username}
                            onChange={handleChange}
                            placeholder="Derby Name"
                            required

@@ -45,10 +45,10 @@ const navigate = useNavigate();
   */
 
   if(user) {
-    INITIAL_STATE = { derbyName: user.derbyName, email: user.email };
+    INITIAL_STATE = { username: user.username, email: user.email };
 
   } else {
-    INITIAL_STATE = { derbyName: "", email: "" };
+    INITIAL_STATE = { username: "", email: "" };
   }
 
 //  let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
@@ -158,7 +158,7 @@ const navigate = useNavigate();
                 {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
-                        <Label htmlFor="derbyName" sm={10}>Derby Name: </Label>
+                        <Label htmlFor="username" sm={10}>Derby Name: </Label>
                         {/* { user && ( */}
                         {/* <Input
                             id="derbyName"
@@ -173,9 +173,9 @@ const navigate = useNavigate();
                    */}
                         {/* { !user && ( */}
                         <Input
-                            id="derbyName"
-                            name="derbyName"
-                            defaultValue={formData.derbyName}
+                            id="username"
+                            name="username"
+                            defaultValue={formData.username}
                             onChange={handleChange}
                             placeholder="Derby Name"
                             required

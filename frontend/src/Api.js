@@ -56,9 +56,9 @@ class FastApi {
 
       /** Get one user*/
 
-    static async getUser(derbyName) {
+    static async getUser(username) {
         console.log("you are hitting the get user route in Api.js")
-        let res = await this.request(`users/${derbyName}`);
+        let res = await this.request(`users/${username}`);
         console.log("res:", res)
         if(res.ruleset === null) {
           res.ruleset = 0; 

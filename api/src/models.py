@@ -11,7 +11,9 @@ class User(SQLAlchemyBase):
     __tablename__ = "user"
     
     user_id = Column(Integer, Identity(), primary_key=True, index=True)
-    derby_name = Column(String, unique=True)
+    # ! changing derby name to username but will have it appear as derby_name in frontend.
+    # derby_name = Column(String, unique=True)
+    username = Column(String, unique=True)
     hashed_password = Column(String)
     email = Column(String, unique=True, index=True)
     first_name = Column(String, nullable=True)

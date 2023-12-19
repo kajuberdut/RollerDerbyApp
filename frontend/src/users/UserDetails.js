@@ -20,14 +20,14 @@ function UserDetails() {
 
    /** Get url handle and set jobs and is loading in state*/
     // console.log("company:", company)
-    const derbyName = useParams(); 
+    const username = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     const [derbyUser, setDerbyUser] = useState("");
     const [rulesets, setRulesets] = useState("");
     const [positions, setPositions] = useState("");
     const [location, setLocation] = useState("");
     const { user } = useContext(UserContext);
-    console.log("derbyName:", derbyName)
+    console.log("username:", )
     // const params = useParams();
     // const derbyName = params.d;
     // console.log("user in profile.js:", user)
@@ -46,13 +46,14 @@ function UserDetails() {
 
     // let positions = pos.join(", ")
     
-    console.log("user.image in profile.js", user.image)
+    // console.log("user.image in profile.js", user.image)
+    console.log("!!! username in userDetails.js !!!!", username)
     // console.log(require('./images/skater_02.svg'))
 
     async function getUser() {
 
       try {
-        let indUser = await FastApi.getUser(derbyName.derby_name);
+        let indUser = await FastApi.getUser(username.username);
         console.log("indUser!!!!!!!!!:", indUser)
         console.log("indUser.ruleset_id:", indUser.ruleset_id)
         console.log("indUser.position_id:", indUser.position_id)
@@ -153,7 +154,7 @@ function UserDetails() {
                   </div>
 
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{derbyUser.derby_name} #{derbyUser.primary_number}</MDBTypography>
+                    <MDBTypography tag="h4">{derbyUser.username} #{derbyUser.primary_number}</MDBTypography>
                     { location.city && location.state && <div>
                     <MDBCardText>{location.city}, {location.state}</MDBCardText>
                     </div>

@@ -71,15 +71,14 @@ import {
     // }
 
      /** Render the card component */
-    //  ! note will need to update derby_name to derbyName
       
       return (
           <div key={"User-Component-" + indUser.userId}>
             <Card className="UserComponent"> 
               <CardBody>
-                  <NavLink exact to={`/users/${indUser.derby_name}`} className="UserCard-Link">
+                  <NavLink exact to={`/users/${indUser.username}`} className="UserCard-Link">
                 <CardTitle className="text-center UserComponent-Title">
-                  <h4>{indUser.derby_name}</h4>
+                  <h4>{indUser.username}</h4>
                   {/* {indUser.derby_name} */}
                 </CardTitle>
                   </NavLink>

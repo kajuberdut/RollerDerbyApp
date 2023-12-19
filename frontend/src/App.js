@@ -16,7 +16,7 @@ function App() {
 
   // const [user, setUser] = useState(null);
   // const [user, setUser] = useState();
-  const [user, setUser] = useState({derbyName: "happyJack", email: "happyJack@gmail.com", facebookName: "Happy Jack fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primaryNumber: 12, level: "B", location: {city: "Denver", state: "CO"}, associatedLeagues: "Rocky Mountain Roller Derby", ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}});
+  const [user, setUser] = useState({username: "happyJack", email: "happyJack@gmail.com", facebookName: "Happy Jack fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primaryNumber: 12, level: "B", location: {city: "Denver", state: "CO"}, associatedLeagues: "Rocky Mountain Roller Derby", ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}});
 
   // const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
   // const [isLoading, setIsLoading] = useState(true);

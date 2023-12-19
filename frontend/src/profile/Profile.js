@@ -20,7 +20,7 @@ function Profile() {
 
    /** Get url handle and set jobs and is loading in state*/
     // console.log("company:", company)
-    const derbyName = useParams(); 
+    const username = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     // const [user, setUser]= useState("");
     const { user } = useContext(UserContext);
@@ -86,7 +86,7 @@ function Profile() {
                     </button>
                   </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{user.derbyName} #{user.primaryNumber}</MDBTypography>
+                    <MDBTypography tag="h4">{user.username} #{user.primaryNumber}</MDBTypography>
                     <MDBCardText>{user.location.city}, {user.location.state}</MDBCardText>
                     {/* <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
                     <MDBCardText tag="h4" >{user.level}</MDBCardText>

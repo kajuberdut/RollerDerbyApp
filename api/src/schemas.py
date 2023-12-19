@@ -16,9 +16,23 @@ print("schemas.py is running")
 #         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT','DE','FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ','NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 #         ]
 
+#  **** Token schemas for testing Authentication *** 
+
+# class Token(BaseModel):
+#     access_token: str
+#     token_type: str
+
+
+# class TokenData(BaseModel):
+#     username: str | None = None
+#     # ! note that for authentication it seems that I must have a username field so may have to adjust that from derby_name
+
+#  **** User Pydantic Models  *** 
+
 class UserBase(BaseModel): 
     user_id: int = Field(default_factory=lambda: 0)
-    derby_name: str
+    # derby_name: str
+    username: str
     email: str     
     
 class UserCreate(UserBase):
@@ -55,8 +69,6 @@ class UserDetailsPublic(UserBase):
     facebook_name: Optional[str] = None 
     about: Optional[str] = None 
     primary_number: Optional[int] = None
-    # print("YOU ARE IN SCHEMAS.PY")
-    # print("primary_number:", primary_number)
     level: Optional[str] = None 
     ruleset_id: Optional[int] = None
     position_id: Optional[int] = None

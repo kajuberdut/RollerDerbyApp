@@ -15,9 +15,9 @@ def get_user_by_id(db: Session, user_id: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_user_by_derby_name(db: Session, derby_name: str):
-    return db.query(models.User).filter(models.User.derby_name == derby_name).first()
-
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
+  
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
@@ -44,7 +44,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     print("user in crud.py:", user)
     password = user.password + "notreallyhashed"
     
-    db_user = models.User(derby_name=user.derby_name, email=user.email, hashed_password=password)
+    db_user = models.User(username=user.username, email=user.email, hashed_password=password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -58,7 +58,8 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     db_user = get_user_by_id(db, user_id)
     
     user = {
-    "derby_name": user.derby_name,
+    # "derby_name": user.derby_name,
+    "username": user.username,
     "email": user.email,
     "first_name": user.first_name, 
     "last_name": user.last_name,

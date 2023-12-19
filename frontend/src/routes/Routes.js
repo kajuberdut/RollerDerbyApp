@@ -42,10 +42,10 @@ return (
         <Route path="/setup" element={<SetupProfileForm update={update}/>} />
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
         <Route path="/profile" element={<Profile />} />
-        <Route path="/update/:derbyName" element={<SignupForm update={update}/>} />
+        <Route path="/update/:username" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
-        <Route path="/users/:derby_name" element={<UserDetails />} />
+        <Route path="/users/:username" element={<UserDetails />} />
         <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
         <Route path="/bouts/add" element={<BoutForm/>} />
         <Route path="/bouts/:id" element={<BoutDetails />} />

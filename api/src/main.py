@@ -1,15 +1,18 @@
 
 # ! test for sqlalchemy follow along
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 # from incase.middleware import JSONCaseTranslatorMiddleware
-from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
-from datetime import date, time 
-from pydantic import BaseModel,  validator, field_validator, HttpUrl
-import uuid 
 import traceback
 from . import crud, models, schemas
+
+# ! authentication imports 
+from typing import Annotated
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
 
 from .database import SessionLocal, engine, create_all_tables
 
@@ -20,6 +23,12 @@ print("main.py is running")
 create_all_tables()
 
 models.SQLAlchemyBase.metadata.create_all(bind=engine)
+
+
+# * Auth Token
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 api_app = FastAPI()
 
@@ -50,6 +59,68 @@ def get_db():
         db.close()
 
 
+#  **** Token routes for testing Authentication *** 
+
+# def verify_password(plain_password, hashed_password):
+#     return pwd_context.verify(plain_password, hashed_password)
+
+# def get_password_hash(password):
+#     return pwd_context.hash(password)
+
+# def authenticate_user(fake_db, username: str, password: str):
+#     user = get_user(fake_db, username)
+#     if not user:
+#         return False
+#     if not verify_password(password, user.password):
+#         return False
+#     return user
+
+
+# def create_access_token(data: dict, expires_delta: timedelta | None = None):
+#     to_encode = data.copy()
+#     if expires_delta:
+#         expire = datetime.utcnow() + expires_delta
+#     else:
+#         expire = datetime.utcnow() + timedelta(minutes=15)
+#     to_encode.update({"exp": expire})
+#     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+#     return encoded_jwt
+
+# async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"},
+#     )
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         username: str = payload.get("sub")
+#         if username is None:
+#             raise credentials_exception
+#         token_data = TokenData(username=username)
+#     except JWTError:
+#         raise credentials_exception
+#     user = get_user(fake_users_db, username=token_data.username)
+#     if user is None:
+#         raise credentials_exception
+#     return user
+
+# # ! authentication testing post testing
+
+# @api_app.post("/token")
+# # async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+# def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+#     # user_dict = fake_users_db.get(form_data.username)
+#     user = crud.get_user_by_derby_name(form_data.derby_name)
+#     if not user:
+#         raise HTTPException(status_code=400, detail="Incorrect username or password")
+#     # user = UserCreate(**user_dict)
+#     # * not sure what this line is doing.... 
+#     hashed_password = fake_hash_password(form_data.password)
+#     if not hashed_password == user.hashed_password:
+#         raise HTTPException(status_code=400, detail="Incorrect username or password")
+
+#     return {"access_token": user.username, "token_type": "bearer"}
 
 #  **** User routes *** 
 
@@ -58,6 +129,8 @@ def get_db():
 # * returns all users  
 
 @api_app.get("/users/", response_model=list[schemas.UserBase])
+# def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(oauth2_scheme)):
+# ! this basically says you need authentication to hit the route Depends(oauth2_scheme) which means, all routes will need this later on.
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     users = crud.get_users(db, skip=skip, limit=limit)
@@ -69,16 +142,16 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * returns one specific user
 
 # @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
-@api_app.get("/users/{derby_name}", response_model=schemas.UserDetailsPublic)
+@api_app.get("/users/{username}", response_model=schemas.UserDetailsPublic)
 # ! Note: this allows us to get user information that is publuic information not private information so private information is not being sent back and forth through the api.
 
 # todo: this is not working when the user does not have other data that is optional in it
-def get_user(derby_name: str, db: Session = Depends(get_db)):
+def get_user(username: str, db: Session = Depends(get_db)):
     
-    user = crud.get_user_by_derby_name(db, derby_name=derby_name)
+    user = crud.get_user_by_username(db, username=username)
     
-    if derby_name is None: 
-        raise HTTPException(status_code=404, detail=f"User with derby name {derby_name} not found.")
+    if username is None: 
+        raise HTTPException(status_code=404, detail=f"User with derby name {username} not found.")
     
     return user
 
@@ -96,8 +169,8 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if db_user_email:
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    db_user_derby_name = crud.get_user_by_derby_name(db, derby_name=user.derby_name)
-    if db_user_derby_name:
+    db_user_username = crud.get_user_by_username(db, username=user.username)
+    if db_user_username:
         raise HTTPException(status_code=400, detail="Derby name already registered")
     return crud.create_user(db=db, user=user)
 
