@@ -35,7 +35,7 @@ function NavBar({logout}) {
         <NavbarBrand href="/">React-Conteact</NavbarBrand> */}
       <div style={{ display: 'flex' }}>
         <Star />
-        <NavbarBrand href="/">React-Conteact</NavbarBrand>
+        <NavbarBrand href="/">Conteact</NavbarBrand>
       </div>
 
         <Nav className="ml-auto" navbar>

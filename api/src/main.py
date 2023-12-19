@@ -105,12 +105,21 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 # * updates an existing user 
 # ! update user with rulesets 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, user_id: int, db: Session = Depends(get_db)):
+def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, user_id: int, db: Session = Depends(get_db)):
     
-    print("**** ruleset ****:", ruleset)
+    # print("**** ruleset ****:", ruleset)
+    
+    existing_position = crud.get_position(db=db, position=position)
+    
+    if existing_position: 
+        position_id = existing_position.position_id 
+    else: 
+        position_id = crud.create_position(db=db, position=position)
     
     existing_ruleset = crud.get_ruleset(db=db, ruleset=ruleset)
     print(" ##### existing_ruleset #######", existing_ruleset)
+    
+    user.position_id = position_id
     
     if existing_ruleset: 
         ruleset_id = existing_ruleset.ruleset_id 
@@ -391,9 +400,25 @@ def get_rulesets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
     return crud.get_rulesets(db, skip=skip, limit=limit)
 
 # * get /rulesets/{ruleset_id} 
-# * gets one address by id
+# * gets one ruleset by id
 
 @api_app.get("/rulesets/{ruleset_id}", response_model=schemas.Ruleset)
 def get_ruleset(ruleset_id:int, db: Session = Depends(get_db)):
     
     return crud.get_ruleset_by_id(db, ruleset_id=ruleset_id)
+
+# * get /positions/ 
+# * gets all positions 
+
+@api_app.get("/positions/", response_model=list[schemas.Position])
+def get_positions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    return crud.get_positions(db, skip=skip, limit=limit)
+    
+# * get /positions/{position_id} 
+# * gets one position by id
+
+@api_app.get("/positions/{position_id}", response_model=schemas.Position)
+def get_position(position_id:int, db: Session = Depends(get_db)):
+    
+    return crud.get_position_by_id(db, position_id=position_id)

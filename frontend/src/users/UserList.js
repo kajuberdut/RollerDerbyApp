@@ -60,13 +60,13 @@ function UserList({getUsers}) {
 
     const renderCards = () => {
       return (
-        <CardText className="UserList-RenderCards">
+        <div className="UserList-RenderCards">
             <ul>
                 {users.map(indUser => (
                   <UserComponent indUser={indUser} key={"User-" + indUser.userId} />
                 ))}
             </ul>
-          </CardText>
+          </div>
         );
     }
   

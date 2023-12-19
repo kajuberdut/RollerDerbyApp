@@ -34,8 +34,10 @@ class UserUpdate(UserBase):
     primary_number: int
     secondary_number: int
     level: str
-    associated_leagues: str
     ruleset_id: int
+    position_id: int
+    associated_leagues: str
+   
     
 # class UserDetailsPublic(UserBase): 
 #     facebook_name: Optional[str] = ""
@@ -52,8 +54,9 @@ class UserDetailsPublic(UserBase):
     print("YOU ARE IN SCHEMAS.PY")
     print("primary_number:", primary_number)
     level: Optional[str] = None 
-    associated_leagues: Optional[str] = None
     ruleset_id: Optional[int] = None
+    position_id: Optional[int] = None
+    associated_leagues: Optional[str] = None
 
 # class UserDetailsPublic(UserBase): 
 #     facebook_name: Optional[str] = Field(exclude_unset=True) 
@@ -111,7 +114,13 @@ class Ruleset(BaseModel):
     usars: bool
     banked_track: bool
     short_track: bool
-    
+
+
+class Position(BaseModel): 
+    position_id: int = Field(default_factory=lambda: 0)
+    jammer: bool
+    pivot: bool
+    blocker: bool   
     
 # Event Pydantic Models
 

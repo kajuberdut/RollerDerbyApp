@@ -67,8 +67,9 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     "primary_number": user.primary_number, 
     "secondary_number": user.secondary_number,
     "level": user.level,
-    "associated_leagues": user.associated_leagues, 
-    "ruleset_id": user.ruleset_id
+    "ruleset_id": user.ruleset_id,
+    "position_id": user.position_id,
+    "associated_leagues": user.associated_leagues
     }
     
     print("db user in update user:", db_user)
@@ -271,15 +272,44 @@ def get_ruleset(db: Session, ruleset: schemas.Ruleset):
 def get_ruleset_by_id(db: Session, ruleset_id: int):
     return db.query(models.Ruleset).filter(models.Ruleset.ruleset_id == ruleset_id).first()
 
-def create_ruleset(db: Session, wftda: bool, usars: bool, banked_track: bool, short_track:bool):
-    print("ruleset in create_ruleset!!!!!:", wftda, usars, banked_track, short_track)
+# def create_ruleset(db: Session, wftda: bool, usars: bool, banked_track: bool, short_track:bool):
+def create_ruleset(db: Session, ruleset: schemas.Ruleset):
+#     print("ruleset in create_ruleset!!!!!:", wftda, usars, banked_track, short_track)
     # print("****** address.name *******", address.name)
     # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
     # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
-    db_ruleset = models.Ruleset(wftda=wftda, usars=usars, banked_track=banked_track, short_track=short_track)
+    db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
     db.add(db_ruleset)
     db.commit()
     db.refresh(db_ruleset)
     
     return db_ruleset.ruleset_id
     # return db_address
+    
+def get_positions(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Position).offset(skip).limit(limit).all()
+
+def get_position(db: Session, position: schemas.Position):
+    
+    # test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
+    
+    # print("&&& test &&&", test)
+  
+    # return test
+    
+    return db.query(models.Position).filter(models.Position.jammer == position.jammer, models.Position.pivot == position.pivot, models.Position.blocker == position.blocker).first()
+
+def get_position_by_id(db: Session, position_id: int):
+    return db.query(models.Position).filter(models.Position.position_id == position_id).first()
+
+def create_position(db: Session, position: schemas.Position):
+    # print("****** address.name *******", address.name)
+    # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+    # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+    db_position = models.Position(jammer=position.jammer, pivot=position.pivot, blocker=position.blocker)
+    db.add(db_position)
+    db.commit()
+    db.refresh(db_position)
+    
+    return db_position.position_id
+   

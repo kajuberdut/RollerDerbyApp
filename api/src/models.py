@@ -21,10 +21,11 @@ class User(SQLAlchemyBase):
     primary_number = Column(Integer, nullable=True)
     secondary_number = Column(Integer, nullable=True)
     level = Column(String, nullable=True)
+    ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
+    position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
     # ruleset = relationship("UserRuleset", back_populates="user")
     # ruleset = relationship("Ruleset", back_populates="user")
-    ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
     
 class Ruleset(SQLAlchemyBase):
     __tablename__ = "ruleset"
@@ -35,7 +36,14 @@ class Ruleset(SQLAlchemyBase):
     banked_track = Column(Boolean)
     short_track = Column(Boolean) 
     user = relationship("User", backref="ruleset")
-    # user = relationship("User", back_populates="ruleset") 
+    
+class Position(SQLAlchemyBase):
+    __tablename__ = "position"  
+    position_id = Column(Integer, primary_key=True)
+    jammer = Column(Boolean)
+    blocker = Column(Boolean)
+    pivot = Column(Boolean)
+    user = relationship("User", backref="position")
 
 
 class EventBase(SQLAlchemyBase):

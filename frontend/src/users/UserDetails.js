@@ -52,7 +52,9 @@ function UserDetails() {
 
       try {
         let indUser = await FastApi.getUser(derbyName.derby_name);
+        console.log("indUser!!!!!!!!!:", indUser)
         console.log("indUser.ruleset_id:", indUser.ruleset_id)
+        console.log("indUser.position_id:", indUser.position_id)
         if(indUser.ruleset_id){
           let rulesets = await FastApi.getRuleset(indUser.ruleset_id)
 
@@ -72,6 +74,25 @@ function UserDetails() {
           }
           let knownRulesets = rs.join(", ")
           setRulesets(knownRulesets)
+        }
+
+        if(indUser.position_id){
+          let positions = await FastApi.getPosition(indUser.position_id)
+
+          let ps = [];
+
+          if (positions.jammer) {
+            ps.push("Jammer");
+          }
+          if (positions.pivot) {
+            ps.push("Pivot");
+          }
+          if (positions.blocker) {
+            ps.push("Blocker");
+          }
+         
+          let playedPositions = ps.join(", ")
+          setPositions(playedPositions)
         }
         // return { success: true };
         // console.log("!!!!!!!!!!!!!!!! indUser !!!!!!!!!!!!!!!!111", indUser)
@@ -139,10 +160,11 @@ function UserDetails() {
                       <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
                     </div>
                     }
-                    {/* <div>
+                    { positions && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
-                    </div> */}
+                    </div> 
+                    }
                      {rulesets &&  <div className="px-3">
                     <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
