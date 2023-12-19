@@ -105,9 +105,18 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 # * updates an existing user 
 # ! update user with rulesets 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, user_id: int, db: Session = Depends(get_db)):
+def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
     
     # print("**** ruleset ****:", ruleset)
+    
+    existing_location = crud.get_location(db=db, location=location)
+    
+    if existing_location: 
+        location_id = existing_location.location_id 
+    else: 
+        location_id = crud.create_location(db=db, location=location)
+    
+    user.location_id = location_id
     
     existing_position = crud.get_position(db=db, position=position)
     
@@ -367,6 +376,8 @@ def delete_bout(mixer: schemas.EventDelete, event_id: int, db: Session = Depends
     
     return crud.delete_mixer(db=db, mixer=mixer, event_id=mixer.event_id)
 
+#  **** address routes *** 
+
 # * post /address/ 
 # * adds an address
 
@@ -391,6 +402,8 @@ def get_address(address_id:int, db: Session = Depends(get_db)):
     
     return crud.get_address_by_id(db, address_id=address_id)
 
+#  **** ruleset routes ***
+
 # * get /rulesets/ 
 # * gets all rulesets 
 
@@ -407,6 +420,8 @@ def get_ruleset(ruleset_id:int, db: Session = Depends(get_db)):
     
     return crud.get_ruleset_by_id(db, ruleset_id=ruleset_id)
 
+#  **** position routes ***
+
 # * get /positions/ 
 # * gets all positions 
 
@@ -422,3 +437,21 @@ def get_positions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 def get_position(position_id:int, db: Session = Depends(get_db)):
     
     return crud.get_position_by_id(db, position_id=position_id)
+
+#  **** location routes ***
+
+# * get /locations/ 
+# * gets all locations 
+
+@api_app.get("/locations/", response_model=list[schemas.Location])
+def get_locations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    return crud.get_locations(db, skip=skip, limit=limit)
+    
+# * get /locations/{location_id} 
+# * gets one location by id
+
+@api_app.get("/locations/{location_id}", response_model=schemas.Location)
+def get_location(location_id:int, db: Session = Depends(get_db)):
+    
+    return crud.get_location_by_id(db, location_id=location_id)

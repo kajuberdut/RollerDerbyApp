@@ -12,6 +12,9 @@ print("schemas.py is running")
     
 # User Pydantic Models
 
+# states_list = [
+#         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT','DE','FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ','NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+#         ]
 
 class UserBase(BaseModel): 
     user_id: int = Field(default_factory=lambda: 0)
@@ -36,6 +39,7 @@ class UserUpdate(UserBase):
     level: str
     ruleset_id: int
     position_id: int
+    location_id: int
     associated_leagues: str
    
     
@@ -51,49 +55,13 @@ class UserDetailsPublic(UserBase):
     facebook_name: Optional[str] = None 
     about: Optional[str] = None 
     primary_number: Optional[int] = None
-    print("YOU ARE IN SCHEMAS.PY")
-    print("primary_number:", primary_number)
+    # print("YOU ARE IN SCHEMAS.PY")
+    # print("primary_number:", primary_number)
     level: Optional[str] = None 
     ruleset_id: Optional[int] = None
     position_id: Optional[int] = None
+    location_id: Optional[int] = None
     associated_leagues: Optional[str] = None
-
-# class UserDetailsPublic(UserBase): 
-#     facebook_name: Optional[str] = Field(exclude_unset=True) 
-#     about: Optional[str] = None 
-#     primary_number: Optional[int] = 0
-#     print("YOU ARE IN SCHEMAS.PY")
-#     print("primary_number:", primary_number)
-#     level: Optional[str] = None 
-#     associated_leagues: Optional[str] = None
-#     ruleset_id: Optional[int] = None
-    
-    # @classmethod(exclude_unset=True)
-    
-    # @field_validator('facebook_name', mode="before")
-    # @classmethod
-    # def fb_name_not_null(cls, value):
-    #     if value is None:
-            
-    #     return value
-    
-    # @field_validator('facebook_name', mode="after")
-    # def check(cls, values):
-    #     # if values['facebook_name'] is None:
-    #     #     del values['facebook_name']
-    #     for key, value in values.items():
-    #         if value[key] is None: 
-    #             del value[key]
-
-    
-    # @classmethod
-    # def from_data(cls, data):
-    #     # data = super().from_data(data)
-    #     print("data in schemas.py!!!!!!!!!!", data)
-    #     if data.get("primary_number") is None:
-    #         data["primary_number"] = 0
-    #     return data
-    
     
     @field_validator('level', mode="before")
     @classmethod
@@ -121,6 +89,23 @@ class Position(BaseModel):
     jammer: bool
     pivot: bool
     blocker: bool   
+    
+class Location(BaseModel):
+    location_id: int = Field(default_factory=lambda: 0)
+    city: str
+    state: str
+    
+    @field_validator('state')
+    def validate_us_states(cls, v):
+        states_list = [
+        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT','DE','FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ','NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+        ]
+
+        if v.upper() not in states_list:
+            raise ValueError("Invalid State Code")
+        return v   
+    
+
     
 # Event Pydantic Models
 

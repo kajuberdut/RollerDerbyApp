@@ -58,12 +58,6 @@ class Location(BaseModel):
             raise ValueError("Invalid State Code")
         return v   
     
-class Ruleset(BaseModel): 
-    rulesets_id: int 
-    WFTDA: bool
-    USARS: bool
-    banked_track: bool
-    short_track: bool
     
     
 # class Insurance(BaseModel):

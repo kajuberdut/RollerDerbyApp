@@ -25,6 +25,7 @@ function UserDetails() {
     const [derbyUser, setDerbyUser] = useState("");
     const [rulesets, setRulesets] = useState("");
     const [positions, setPositions] = useState("");
+    const [location, setLocation] = useState("");
     const { user } = useContext(UserContext);
     console.log("derbyName:", derbyName)
     // const params = useParams();
@@ -94,6 +95,12 @@ function UserDetails() {
           let playedPositions = ps.join(", ")
           setPositions(playedPositions)
         }
+
+        if(indUser.location_id){
+          let location = await FastApi.getLocation(indUser.location_id)
+          setLocation(location)
+          console.log("!!!!! location !!!!!", location)
+        }
         // return { success: true };
         // console.log("!!!!!!!!!!!!!!!! indUser !!!!!!!!!!!!!!!!111", indUser)
         setDerbyUser(indUser); 
@@ -147,10 +154,10 @@ function UserDetails() {
 
                   <div className="ms-3" style={{ marginTop: '200px'}}>
                     <MDBTypography tag="h4">{derbyUser.derby_name} #{derbyUser.primary_number}</MDBTypography>
-                    {/* <MDBCardText>{derbyUser.location.city}, {derbyUser.location.state}</MDBCardText> */}
-                    {/* <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
-                    <MDBCardText tag="h4" >{derbyUser.level}</MDBCardText>
-                    </div> */}
+                    { location.city && location.state && <div>
+                    <MDBCardText>{location.city}, {location.state}</MDBCardText>
+                    </div>
+                    }
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>

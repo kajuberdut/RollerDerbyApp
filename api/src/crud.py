@@ -69,6 +69,7 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     "level": user.level,
     "ruleset_id": user.ruleset_id,
     "position_id": user.position_id,
+    "location_id": user.location_id,
     "associated_leagues": user.associated_leagues
     }
     
@@ -233,6 +234,8 @@ def delete_mixer(db: Session, mixer: schemas.EventDelete, event_id):
     
     return db_mixer
 
+#  *** CRUD addresses ***
+
 
 def create_address(db: Session, address: schemas.Address):
     print("address in create_address!!!!!:", address)
@@ -257,6 +260,8 @@ def get_address_by_id(db: Session, address_id: int):
     return db.query(models.Address).filter(models.Address.address_id == address_id).first()
 # def get_user_by_id(db: Session, user_id: int):
 #     return db.query(models.User).filter(models.User.user_id == user_id).first()
+
+#  *** CRUD rulesets ***
 
 def get_rulesets(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Ruleset).offset(skip).limit(limit).all()
@@ -286,6 +291,8 @@ def create_ruleset(db: Session, ruleset: schemas.Ruleset):
     return db_ruleset.ruleset_id
     # return db_address
     
+#  *** CRUD positions ***
+    
 def get_positions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Position).offset(skip).limit(limit).all()
 
@@ -312,4 +319,26 @@ def create_position(db: Session, position: schemas.Position):
     db.refresh(db_position)
     
     return db_position.position_id
+
+#  *** CRUD locations ***
+
+def get_locations(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Location).offset(skip).limit(limit).all()
+
+def get_location(db: Session, location: schemas.Location):
+    print("hitting location in crud")
+    
+    return db.query(models.Location).filter(models.Location.city == location.city, models.Location.state == location.state).first()
+
+def get_location_by_id(db: Session, location_id: int):
+    return db.query(models.Location).filter(models.Location.location_id == location_id).first()
+
+def create_location(db: Session, location: schemas.Location):
+    
+    db_location = models.Location(city=location.city, state=location.state)
+    db.add(db_location)
+    db.commit()
+    db.refresh(db_location)
+    
+    return db_location.location_id
    

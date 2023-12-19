@@ -206,6 +206,14 @@ class FastApi {
     console.log("res:", res)
     return res
   }
+
+  /** Get specific positions by ID*/
+  
+  static async getLocation(locationId) {
+    let res = await this.request(`locations/${locationId}`);
+    console.log("res:", res)
+  return res
+  }
  
 
 }

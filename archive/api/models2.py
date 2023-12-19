@@ -1,11 +1,4 @@
 
-class Position(SQLAlchemyBase):
-    __tablename__ = "position"  
-    position_id = Column(Integer, primary_key=True)
-    jammer = Column(Boolean)
-    blocker = Column(Boolean)
-    pivot = Column(Boolean)
-    user = relationship("UserPosition", back_populates="position")
 
 class Insurance(SQLAlchemyBase):
     __tablename__ = "insurance"  
@@ -23,33 +16,14 @@ class Location(SQLAlchemyBase):
     state = Column(String)    
     user = relationship("UserLocation", back_populates="location")
     
-class Ruleset(SQLAlchemyBase):
-    __tablename__ = "ruleset"
-
-    ruleset_id = Column(Integer, primary_key=True)
-    WFTDA: Column(Boolean)
-    USARS: Column(Boolean)  
-    banked_track: Column(Boolean)
-    short_track: Column(Boolean) 
-    user = relationship("UserRuleset", back_populates="ruleset") 
     
 class User(SQLAlchemyBase):
     __tablename__ = "user"
     # ! note other user items are already in user table 
     
-    # first_name = Column(String)
-    # last_name = Column(String)
-    # facebook_name = Column(String)
-    # about = Column(String)
-    # primary_number = Column(Integer)
-    # secondary_number = Column(Integer)
-    # level = Column(String)
     insurance = relationship("UserInsurance", back_populates="user")
-    location = relationship("UserLocation", back_populates="user")
-    # associated_leagues = Column(String)
-    # ruleset = relationship("UserRuleset", back_populates="user")
-    position = relationship("UserPosition", back_populates="user")
-    # associated_leagues = relationship("UserLeagueAssociation", back_populates="user")
+    # location = relationship("UserLocation", back_populates="user")
+  
     
     # ! it may be more efficient to have played rulesets and maybe associated leagues in a table? Check that out later. 
     

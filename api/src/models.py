@@ -23,6 +23,7 @@ class User(SQLAlchemyBase):
     level = Column(String, nullable=True)
     ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
     position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
+    location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
     # ruleset = relationship("UserRuleset", back_populates="user")
     # ruleset = relationship("Ruleset", back_populates="user")
@@ -44,6 +45,14 @@ class Position(SQLAlchemyBase):
     blocker = Column(Boolean)
     pivot = Column(Boolean)
     user = relationship("User", backref="position")
+    
+class Location(SQLAlchemyBase):
+    __tablename__ = "location"
+
+    location_id = Column(Integer, primary_key=True)
+    city = Column(String)
+    state = Column(String)    
+    user = relationship("User", backref="location")
 
 
 class EventBase(SQLAlchemyBase):
