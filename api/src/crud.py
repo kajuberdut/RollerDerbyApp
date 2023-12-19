@@ -67,20 +67,19 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     "primary_number": user.primary_number, 
     "secondary_number": user.secondary_number,
     "level": user.level,
-    "associated_leagues": user.associated_leagues
+    "associated_leagues": user.associated_leagues, 
+    "ruleset_id": user.ruleset_id
     }
     
     print("db user in update user:", db_user)
     
     for field, value in user.items():
-        # setattr(user, field, value)
-        print("duh dudh duh duh")
         print("field:", field)
         print("value:", value)
         if value is not None: 
             setattr(db_user, field, value)
             print(f"Updating field: {field} with value: {value}")
-            
+    
     print("db_user UPDATED:", db_user)
 
     db.commit()
@@ -257,3 +256,30 @@ def get_address_by_id(db: Session, address_id: int):
     return db.query(models.Address).filter(models.Address.address_id == address_id).first()
 # def get_user_by_id(db: Session, user_id: int):
 #     return db.query(models.User).filter(models.User.user_id == user_id).first()
+
+def get_rulesets(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Ruleset).offset(skip).limit(limit).all()
+
+def get_ruleset(db: Session, ruleset: schemas.Ruleset):
+    
+    test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
+    
+    print("&&& test &&&", test)
+  
+    return test
+
+def get_ruleset_by_id(db: Session, ruleset_id: int):
+    return db.query(models.Ruleset).filter(models.Ruleset.ruleset_id == ruleset_id).first()
+
+def create_ruleset(db: Session, wftda: bool, usars: bool, banked_track: bool, short_track:bool):
+    print("ruleset in create_ruleset!!!!!:", wftda, usars, banked_track, short_track)
+    # print("****** address.name *******", address.name)
+    # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+    # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+    db_ruleset = models.Ruleset(wftda=wftda, usars=usars, banked_track=banked_track, short_track=short_track)
+    db.add(db_ruleset)
+    db.commit()
+    db.refresh(db_ruleset)
+    
+    return db_ruleset.ruleset_id
+    # return db_address

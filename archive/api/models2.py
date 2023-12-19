@@ -42,12 +42,12 @@ class User(SQLAlchemyBase):
     # facebook_name = Column(String)
     # about = Column(String)
     # primary_number = Column(Integer)
-    secondary_number = Column(Integer)
+    # secondary_number = Column(Integer)
     # level = Column(String)
     insurance = relationship("UserInsurance", back_populates="user")
     location = relationship("UserLocation", back_populates="user")
     # associated_leagues = Column(String)
-    ruleset = relationship("UserRuleset", back_populates="user")
+    # ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
     # associated_leagues = relationship("UserLeagueAssociation", back_populates="user")
     
@@ -60,6 +60,7 @@ class User(SQLAlchemyBase):
     ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), primary_key=True)
     user = relationship("User", back_populates="ruleset")
     ruleset = relationship("Ruleset", back_populates="user")
+    # ! note that backref seems to be working better 
     # users = relationship("Users", backref="rulesets")
     # ruleset = relationship("Rulesets")
     
@@ -127,6 +128,15 @@ class EventAddress(SQLAlchemyBase):
     address = relationship("Adress", back_populates="event")
     
     
+# class EventDetail(SQLAlchemyBase):
+#     __tablename__ = "event_detail"
+
+#     event_det_id = Column(Integer, Identity(), primary_key=True)
+#     event_id = Column(Integer, ForeignKey("event.event_id"), primary_key=True, index=True, unique=True)
+#     # event = relationship(
+#     #     "Event", back_populates="details", uselist=False, polymorphic_identity="type"
+#     # )
+#     events = relationship("Event", back_populates="detail")
 
 
 

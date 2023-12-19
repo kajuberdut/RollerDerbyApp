@@ -23,27 +23,13 @@ function UserDetails() {
     const derbyName = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     const [derbyUser, setDerbyUser] = useState("");
+    const [rulesets, setRulesets] = useState("");
+    const [positions, setPositions] = useState("");
     const { user } = useContext(UserContext);
     console.log("derbyName:", derbyName)
     // const params = useParams();
     // const derbyName = params.d;
     // console.log("user in profile.js:", user)
-
-    // let rs = []; 
-
-    // if (user.ruleset.WFTDA) {
-    //   rs.push("WFTDA ");
-    // }
-    // if (user.ruleset.USARS) {
-    //   rs.push("USARS ");
-    // }
-    // if (user.ruleset.bankedTrack) {
-    //   rs.push("Banked Track ")
-    // }
-    // if (user.ruleset.shortTrack) {
-    //   rs.push("Short Track ")
-    // }
-    // let rulesets = rs.join(", ")
 
     // let pos = []; 
 
@@ -66,11 +52,33 @@ function UserDetails() {
 
       try {
         let indUser = await FastApi.getUser(derbyName.derby_name);
+        console.log("indUser.ruleset_id:", indUser.ruleset_id)
+        if(indUser.ruleset_id){
+          let rulesets = await FastApi.getRuleset(indUser.ruleset_id)
+
+          let rs = [];
+
+          if (rulesets.wftda) {
+            rs.push("WFTDA");
+          }
+          if (rulesets.usars) {
+            rs.push("USARS");
+          }
+          if (rulesets.banked_track) {
+            rs.push("Banked Track");
+          }
+          if (rulesets.short_track) {
+            rs.push("Short Track");
+          }
+          let knownRulesets = rs.join(", ")
+          setRulesets(knownRulesets)
+        }
         // return { success: true };
-        console.log("!!!!!!!!!!!!!!!! indUser !!!!!!!!!!!!!!!!111", indUser)
+        // console.log("!!!!!!!!!!!!!!!! indUser !!!!!!!!!!!!!!!!111", indUser)
         setDerbyUser(indUser); 
-        console.log("******* derbyUser.primary_number:", derbyUser.primary_number)
-        console.log("derbyUSer!!!", derbyUser)
+
+        // console.log("******* derbyUser.primary_number:", derbyUser.primary_number)
+        // console.log("derbyUSer!!!", derbyUser)
         setIsLoading(false)
         return indUser
       } catch (errors) {
@@ -119,9 +127,9 @@ function UserDetails() {
                   <div className="ms-3" style={{ marginTop: '200px'}}>
                     <MDBTypography tag="h4">{derbyUser.derby_name} #{derbyUser.primary_number}</MDBTypography>
                     {/* <MDBCardText>{derbyUser.location.city}, {derbyUser.location.state}</MDBCardText> */}
-                    <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
-                    {/* <MDBCardText tag="h4" >{derbyUser.level}</MDBCardText> */}
-                    </div>
+                    {/* <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
+                    <MDBCardText tag="h4" >{derbyUser.level}</MDBCardText>
+                    </div> */}
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -135,10 +143,11 @@ function UserDetails() {
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
                     </div> */}
-                    {/* <div className="px-3">
-                      <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
+                     {rulesets &&  <div className="px-3">
+                    <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
-                    </div> */}
+                    </div>
+                    }
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">

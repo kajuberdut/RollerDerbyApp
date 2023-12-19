@@ -1,11 +1,11 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity
 from sqlalchemy.orm import relationship
 from .database import SQLAlchemyBase
-import uuid
 
 print("models.py is running")
 
 # User SQLAlchemy Models
+
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -22,8 +22,21 @@ class User(SQLAlchemyBase):
     secondary_number = Column(Integer, nullable=True)
     level = Column(String, nullable=True)
     associated_leagues = Column(String, nullable=True)
-   
-# Event SQLAlchemy Models
+    # ruleset = relationship("UserRuleset", back_populates="user")
+    # ruleset = relationship("Ruleset", back_populates="user")
+    ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
+    
+class Ruleset(SQLAlchemyBase):
+    __tablename__ = "ruleset"
+
+    ruleset_id = Column(Integer, primary_key=True)
+    wftda = Column(Boolean)
+    usars = Column(Boolean)  
+    banked_track = Column(Boolean)
+    short_track = Column(Boolean) 
+    user = relationship("User", backref="ruleset")
+    # user = relationship("User", back_populates="ruleset") 
+
 
 class EventBase(SQLAlchemyBase):
     __tablename__ = "event"
@@ -48,18 +61,7 @@ class EventBase(SQLAlchemyBase):
         "polymorphic_identity": "event_base",
     }
     
-    
-# class EventDetail(SQLAlchemyBase):
-#     __tablename__ = "event_detail"
 
-#     event_det_id = Column(Integer, Identity(), primary_key=True)
-#     event_id = Column(Integer, ForeignKey("event.event_id"), primary_key=True, index=True, unique=True)
-#     # event = relationship(
-#     #     "Event", back_populates="details", uselist=False, polymorphic_identity="type"
-#     # )
-#     events = relationship("Event", back_populates="detail")
-    
-    
 class Bout(EventBase):
     __mapper_args__ = {"polymorphic_identity": "bout"}
 

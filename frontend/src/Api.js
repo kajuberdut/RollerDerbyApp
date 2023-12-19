@@ -57,8 +57,13 @@ class FastApi {
       /** Get one user*/
 
     static async getUser(derbyName) {
+        console.log("you are hitting the get user route in Api.js")
         let res = await this.request(`users/${derbyName}`);
         console.log("res:", res)
+        if(res.ruleset === null) {
+          res.ruleset = 0; 
+          console.log("res in api.js", res)
+        }
         return res
     }
 
@@ -176,11 +181,20 @@ class FastApi {
     return res;
   } 
 
-  /** Get a specific bout*/
+  /** Get a specific address by ID*/
 
   static async getAddress(addressId) {
     console.log("hitting the getAddress in api.js")
     let res = await this.request(`address/${addressId}`);
+    console.log("res:", res)
+    return res
+  }
+
+    /** Get specific rulesets by ID*/
+
+  static async getRuleset(rulesetId) {
+    console.log("hitting the getAddress in api.js")
+    let res = await this.request(`rulesets/${rulesetId}`);
     console.log("res:", res)
     return res
   }

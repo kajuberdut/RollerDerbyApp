@@ -71,6 +71,8 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
 @api_app.get("/users/{derby_name}", response_model=schemas.UserDetailsPublic)
 # ! Note: this allows us to get user information that is publuic information not private information so private information is not being sent back and forth through the api.
+
+# todo: this is not working when the user does not have other data that is optional in it
 def get_user(derby_name: str, db: Session = Depends(get_db)):
     
     user = crud.get_user_by_derby_name(db, derby_name=derby_name)
@@ -101,18 +103,43 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 # * put /users/{user_id} 
 # * updates an existing user 
-
+# ! update user with rulesets 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(user: schemas.UserUpdate, user_id: int, db: Session = Depends(get_db)):
+def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, user_id: int, db: Session = Depends(get_db)):
     
+    print("**** ruleset ****:", ruleset)
+    
+    existing_ruleset = crud.get_ruleset(db=db, ruleset=ruleset)
+    print(" ##### existing_ruleset #######", existing_ruleset)
+    
+    if existing_ruleset: 
+        ruleset_id = existing_ruleset.ruleset_id 
+    else: 
+        ruleset_id = crud.create_ruleset(db=db, ruleset=ruleset)
+    # ruleset_id = crud.create_ruleset(db=db, wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+    user.ruleset_id = ruleset_id
     print('user in /users/{user_id}', user)
     
     db_user = crud.get_user_by_id(db, user_id=user_id)    
- 
+    
     if not db_user:
         raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
     
     return crud.update_user(db=db, user=user, user_id=user_id)
+
+# @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
+# def update_user(user: schemas.UserUpdate, user_id: int, db: Session = Depends(get_db)):
+    
+#     print('user in /users/{user_id}', user)
+    
+#     db_user = crud.get_user_by_id(db, user_id=user_id)    
+ 
+#     if not db_user:
+#         raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+#     return crud.update_user(db=db, user=user, user_id=user_id)
+
+
 
 # * delete /users/{user_id} 
 # * deletes an existing user 
@@ -354,3 +381,19 @@ def get_addresses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 def get_address(address_id:int, db: Session = Depends(get_db)):
     
     return crud.get_address_by_id(db, address_id=address_id)
+
+# * get /rulesets/ 
+# * gets all rulesets 
+
+@api_app.get("/rulesets/", response_model=list[schemas.Ruleset])
+def get_rulesets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    return crud.get_rulesets(db, skip=skip, limit=limit)
+
+# * get /rulesets/{ruleset_id} 
+# * gets one address by id
+
+@api_app.get("/rulesets/{ruleset_id}", response_model=schemas.Ruleset)
+def get_ruleset(ruleset_id:int, db: Session = Depends(get_db)):
+    
+    return crud.get_ruleset_by_id(db, ruleset_id=ruleset_id)

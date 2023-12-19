@@ -18,17 +18,6 @@ class UserBase(BaseModel):
     derby_name: str
     email: str     
     
-# class UserDetails(UserBase):
-    # primary_number: int
-    # level: str
-    
-    # @field_validator('level', mode="before")
-    # @classmethod
-    # def level_must_be_valid(cls, value):
-    #     if value not in ['AA', 'A', 'B', 'C']:
-    #         raise ValueError('Invalid level')
-    #     return value
-    
 class UserCreate(UserBase):
     password: str
     
@@ -36,10 +25,8 @@ class UserDelete(BaseModel):
     user_id: int 
     password: str
     
-# class UserUpdate(BaseModel): 
+
 class UserUpdate(UserBase):
-    # derby_name: str
-    # email: str 
     first_name: str
     last_name: str
     facebook_name: str
@@ -48,21 +35,67 @@ class UserUpdate(UserBase):
     secondary_number: int
     level: str
     associated_leagues: str
+    ruleset_id: int
     
+# class UserDetailsPublic(UserBase): 
+#     facebook_name: Optional[str] = ""
+#     about: Optional[str] = ""
+#     primary_number: Optional[int] = 0
+#     level: Optional[str] = ""
+#     associated_leagues: Optional[str] = ""
+#     ruleset_id: Optional[int] = 0
+
 class UserDetailsPublic(UserBase): 
-    facebook_name: str
-    about: str
-    primary_number: int
-    level: str
-    associated_leagues: str
+    facebook_name: Optional[str] = None 
+    about: Optional[str] = None 
+    primary_number: Optional[int] = None
+    print("YOU ARE IN SCHEMAS.PY")
+    print("primary_number:", primary_number)
+    level: Optional[str] = None 
+    associated_leagues: Optional[str] = None
+    ruleset_id: Optional[int] = None
+
+# class UserDetailsPublic(UserBase): 
+#     facebook_name: Optional[str] = Field(exclude_unset=True) 
+#     about: Optional[str] = None 
+#     primary_number: Optional[int] = 0
+#     print("YOU ARE IN SCHEMAS.PY")
+#     print("primary_number:", primary_number)
+#     level: Optional[str] = None 
+#     associated_leagues: Optional[str] = None
+#     ruleset_id: Optional[int] = None
+    
+    # @classmethod(exclude_unset=True)
+    
+    # @field_validator('facebook_name', mode="before")
+    # @classmethod
+    # def fb_name_not_null(cls, value):
+    #     if value is None:
+            
+    #     return value
+    
+    # @field_validator('facebook_name', mode="after")
+    # def check(cls, values):
+    #     # if values['facebook_name'] is None:
+    #     #     del values['facebook_name']
+    #     for key, value in values.items():
+    #         if value[key] is None: 
+    #             del value[key]
 
     
+    # @classmethod
+    # def from_data(cls, data):
+    #     # data = super().from_data(data)
+    #     print("data in schemas.py!!!!!!!!!!", data)
+    #     if data.get("primary_number") is None:
+    #         data["primary_number"] = 0
+    #     return data
     
     
     @field_validator('level', mode="before")
     @classmethod
     def level_must_be_valid(cls, value):
-        if value not in ['AA', 'A', 'B', 'C']:
+        if value not in ['AA', 'A', 'B', 'C', None]:
             raise ValueError('Invalid level')
         return value
     
@@ -71,6 +104,13 @@ class UserDetailsPublic(UserBase):
 class UserDelete(BaseModel):
     user_id: int
     password: str
+    
+class Ruleset(BaseModel): 
+    ruleset_id: int = Field(default_factory=lambda: 0)
+    wftda: bool
+    usars: bool
+    banked_track: bool
+    short_track: bool
     
     
 # Event Pydantic Models
@@ -129,7 +169,6 @@ class Address(BaseModel):
         if value.upper() not in states_list:
             raise ValueError("Invalid State Code")
         return value
-      
     
 class Bout(EventBase):
     opposing_team: str
