@@ -169,7 +169,7 @@ def get_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limi
 # ! Note: this allows us to get user information that is publuic information not private information so private information is not being sent back and forth through the api.
 
 # todo: this is not working when the user does not have other data that is optional in it
-def get_user(username: str, db: Session = Depends(get_db)):
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: Session = Depends(get_db)):
     
     user = crud.get_user_by_username(db, username=username)
     
@@ -181,9 +181,9 @@ def get_user(username: str, db: Session = Depends(get_db)):
 # * get /users/{user_id} 
 # * returns one specific user by user_id
 
-# @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
 @api_app.get("/login/{user_id}", response_model=schemas.UserBase)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+# def get_user(user_id: int, db: Session = Depends(get_db)):
     print("users/user_id is running")
     
     user = crud.get_user_by_id(db, user_id=user_id)
@@ -219,11 +219,14 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # todo you will need to create a new access token for this I believe. 
     return crud.create_user(db=db, user=user)
 
+
 # * put /users/{user_id} 
-# * updates an existing user 
-# ! update user with rulesets 
+# * updates an existing user with rulesets and location positions
+
+# ! NEED TO VERIFY THAT THE TOKEN MATCHES THE USER WE ARE TRYING TO UPDATE
+
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
     
     # print("**** ruleset ****:", ruleset)
     
@@ -279,22 +282,21 @@ def update_user(user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: sc
 
 # * delete /users/{user_id} 
 # * deletes an existing user 
-# ! note you may have to add some security measures on this
-
+# ! WILL HAVE TO VERIFY THAT THE TOKEN MATCHES THE USER THAT YOU ARE TRYING TO DELETE 
+# ! WILL ALSO NEED A FORM TO SUBMIT PASSWORD AND WILL HAVE TO CHECK THAT AGAINST THE db_user
 @api_app.delete("/users/{user_id}", response_model=schemas.UserDelete)
-def delete_user(user: schemas.UserDelete, user_id: int, db: Session = Depends(get_db)):
+def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserDelete, user_id: int, db: Session = Depends(get_db)):
+# def delete_user(user: schemas.UserDelete, user_id: int, db: Session = Depends(get_db)):
     
-    print('user in /users/{user_id}', user)
-    
-    # ! this grabs the user_id from the parameter
-    # db_user = crud.get_user_by_id(db, user_id=user_id)
-    # ! this grabs the user_id from the passed in user object  
     db_user = crud.get_user_by_id(db, user_id=user.user_id)      
+    
  
     if not db_user:
         raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
     
-    return crud.delete_user(db=db, user=user, user_id=user.user_id)
+    crud.delete_user(db=db, user=user, user_id=user.user_id)
+    return { "user_id": 0, "password": "deleted"}
+    
 
 
 #  **** Event routes *** 
@@ -303,7 +305,7 @@ def delete_user(user: schemas.UserDelete, user_id: int, db: Session = Depends(ge
 # * returns all events  
 
 @api_app.get("/events/", response_model=list[schemas.EventBase])
-def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_events(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     events = crud.get_events(db, skip=skip, limit=limit)
     return events
 
@@ -311,7 +313,7 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * returns all bouts
 
 @api_app.get("/bouts/", response_model=list[schemas.Bout])
-def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_bouts(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     bouts = crud.get_bouts(db, skip=skip, limit=limit)
     return bouts
 
@@ -319,7 +321,7 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * returns one bout 
 
 @api_app.get("/bouts/{event_id}", response_model=schemas.Bout)
-def get_bout(event_id: int, db: Session = Depends(get_db)):
+def get_bout(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: Session = Depends(get_db)):
     
     bout = crud.get_bout_by_id(db, event_id=event_id)
     
@@ -332,7 +334,7 @@ def get_bout(event_id: int, db: Session = Depends(get_db)):
 # * returns all mixers
 
 @api_app.get("/mixers/", response_model=list[schemas.Mixer])
-def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_mixers(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     mixers = crud.get_mixers(db, skip=skip, limit=limit)
     return mixers
 
@@ -340,7 +342,7 @@ def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 # * returns one mixer 
 
 @api_app.get("/mixers/{event_id}", response_model=schemas.Mixer)
-def get_bout(event_id: int, db: Session = Depends(get_db)):
+def get_mixer(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: Session = Depends(get_db)):
     
     mixer = crud.get_mixer_by_id(db, event_id=event_id)
     
@@ -365,26 +367,20 @@ def get_bout(event_id: int, db: Session = Depends(get_db)):
 
 # ! trial for posting bout information with an address
 @api_app.post("/bouts/", response_model=schemas.EventBase)
-def create_bout(bout: schemas.Bout, address: schemas.Address, db: Session = Depends(get_db)):
+def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: schemas.Bout, address: schemas.Address, db: Session = Depends(get_db)):
     
     existing_address = crud.get_address(db=db, address=address)
     
-    # print(traceback.format_exc())
-    # print("you are hitting the bouts post route!!!")
-    # print("****** bout *****:", bout)
-
     if existing_address: 
         address_id = existing_address.address_id
     else:
         address_id = crud.create_address(db=db, address=address)
-    print("&&&&&&&& address_id &&&&&&&&&&")
+
     bout.address_id = address_id
     existing_bout = crud.get_bout_by_address_date_time_team_opposing_team(db=db, bout=bout)
-    print("****** existing_bout *****:", existing_bout)
+
     if existing_bout: 
         raise HTTPException(status_code=409, detail=f"Bout already exists at the same address, on the same date, at the same time, and with the same teams.")
-    print("bout!!!! in post bouts:", bout)
-    # crud.create_bout(db=db, bout=bout)
    
     return crud.create_bout(db=db, bout=bout)
 
@@ -400,7 +396,7 @@ def create_bout(bout: schemas.Bout, address: schemas.Address, db: Session = Depe
 # * creates a new mixer with address 
 
 @api_app.post("/mixers/", response_model=schemas.EventBase)
-def create_bout(mixer: schemas.Mixer, address: schemas.Address, db: Session = Depends(get_db)):
+def create_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: schemas.Mixer, address: schemas.Address, db: Session = Depends(get_db)):
     print("****** mixer *****:", mixer)
     existing_address = crud.get_address(db=db, address=address)
     
@@ -430,7 +426,7 @@ def create_bout(mixer: schemas.Mixer, address: schemas.Address, db: Session = De
 # * updates an existing bout 
 
 @api_app.put("/bouts/{event_id}", response_model=schemas.BoutUpdate)
-def update_bout(bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(get_db)):
+def update_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(get_db)):
     
     print('user in /bouts/{event_id}', bout)
     
@@ -445,7 +441,7 @@ def update_bout(bout: schemas.BoutUpdate, event_id: int, db: Session = Depends(g
 # * updates an existing mixer 
 
 @api_app.put("/mixers/{event_id}", response_model=schemas.MixerUpdate)
-def update_mixer(mixer: schemas.MixerUpdate, event_id: int, db: Session = Depends(get_db)):
+def update_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: schemas.MixerUpdate, event_id: int, db: Session = Depends(get_db)):
     
     print('user in /mixers/{event_id}', mixer)
     
@@ -461,7 +457,7 @@ def update_mixer(mixer: schemas.MixerUpdate, event_id: int, db: Session = Depend
 # ! note you may have to add some security measures on this
 
 @api_app.delete("/bouts/{event_id}", response_model=schemas.EventDelete)
-def delete_bout(bout: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
+def delete_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
     
     print('bout in /bouts/{event_id}', bout)
     
@@ -480,7 +476,7 @@ def delete_bout(bout: schemas.EventDelete, event_id: int, db: Session = Depends(
 # ! note you may have to add some security measures on this
 
 @api_app.delete("/mixers/{event_id}", response_model=schemas.EventDelete)
-def delete_bout(mixer: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
+def delete_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: schemas.EventDelete, event_id: int, db: Session = Depends(get_db)):
     
     print('mixer in /mixers/{event_id}', mixer)
     
@@ -500,7 +496,7 @@ def delete_bout(mixer: schemas.EventDelete, event_id: int, db: Session = Depends
 # * adds an address
 
 @api_app.post("/address/", response_model=schemas.Address)
-def create_address(address: schemas.Address, db: Session = Depends(get_db)):
+def create_address(token: Annotated[str, Depends(oauth2_scheme)], address: schemas.Address, db: Session = Depends(get_db)):
     
     return crud.create_address(db=db, address=address)
 
@@ -508,7 +504,7 @@ def create_address(address: schemas.Address, db: Session = Depends(get_db)):
 # * gets all addresses 
 
 @api_app.get("/address/", response_model=list[schemas.Address])
-def get_addresses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_addresses(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     return crud.get_addresses(db, skip=skip, limit=limit)
 
@@ -516,7 +512,7 @@ def get_addresses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 # * gets one address by id
 
 @api_app.get("/address/{address_id}", response_model=schemas.Address)
-def get_address(address_id:int, db: Session = Depends(get_db)):
+def get_address(token: Annotated[str, Depends(oauth2_scheme)], address_id:int, db: Session = Depends(get_db)):
     
     return crud.get_address_by_id(db, address_id=address_id)
 
@@ -526,7 +522,7 @@ def get_address(address_id:int, db: Session = Depends(get_db)):
 # * gets all rulesets 
 
 @api_app.get("/rulesets/", response_model=list[schemas.Ruleset])
-def get_rulesets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_rulesets(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     return crud.get_rulesets(db, skip=skip, limit=limit)
 
@@ -534,7 +530,7 @@ def get_rulesets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 # * gets one ruleset by id
 
 @api_app.get("/rulesets/{ruleset_id}", response_model=schemas.Ruleset)
-def get_ruleset(ruleset_id:int, db: Session = Depends(get_db)):
+def get_ruleset(token: Annotated[str, Depends(oauth2_scheme)], ruleset_id:int, db: Session = Depends(get_db)):
     
     return crud.get_ruleset_by_id(db, ruleset_id=ruleset_id)
 
@@ -544,7 +540,7 @@ def get_ruleset(ruleset_id:int, db: Session = Depends(get_db)):
 # * gets all positions 
 
 @api_app.get("/positions/", response_model=list[schemas.Position])
-def get_positions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_positions(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     return crud.get_positions(db, skip=skip, limit=limit)
     
@@ -552,7 +548,7 @@ def get_positions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 # * gets one position by id
 
 @api_app.get("/positions/{position_id}", response_model=schemas.Position)
-def get_position(position_id:int, db: Session = Depends(get_db)):
+def get_position(token: Annotated[str, Depends(oauth2_scheme)], position_id:int, db: Session = Depends(get_db)):
     
     return crud.get_position_by_id(db, position_id=position_id)
 
@@ -562,7 +558,7 @@ def get_position(position_id:int, db: Session = Depends(get_db)):
 # * gets all locations 
 
 @api_app.get("/locations/", response_model=list[schemas.Location])
-def get_locations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_locations(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     return crud.get_locations(db, skip=skip, limit=limit)
     
@@ -570,6 +566,6 @@ def get_locations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 # * gets one location by id
 
 @api_app.get("/locations/{location_id}", response_model=schemas.Location)
-def get_location(location_id:int, db: Session = Depends(get_db)):
+def get_location(token: Annotated[str, Depends(oauth2_scheme)], location_id:int, db: Session = Depends(get_db)):
     
     return crud.get_location_by_id(db, location_id=location_id)

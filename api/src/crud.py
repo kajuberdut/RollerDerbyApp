@@ -117,7 +117,8 @@ def delete_user(db: Session, user: schemas.UserDelete, user_id):
     db.delete(db_user)
     db.commit()
     
-    return db_user
+    # return db_user
+    return {"user": "deleted"}
 
     
 # *Events CRUD 
@@ -168,7 +169,7 @@ def update_bout(db: Session, bout: schemas.BoutUpdate, event_id):
     "level": bout.level,
     "co_ed": bout.co_ed, 
     "ruleset": bout.ruleset,
-    "jersey_colors": bout.jersey_colors,
+    # "jersey_colors": bout.jersey_colors,
     "opposing_team": bout.opposing_team, 
     "team": bout.team
     }
@@ -199,7 +200,7 @@ def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id):
     "level": mixer.level,
     "co_ed": mixer.co_ed, 
     "ruleset": mixer.ruleset,
-    "jersey_colors": mixer.jersey_colors,
+    # "jersey_colors": mixer.jersey_colors,
     "signup_link": mixer.signup_link
     }
 
@@ -260,6 +261,7 @@ def create_address(db: Session, address: schemas.Address):
     db.refresh(db_address)
     
     return db_address.address_id
+    # ! note if for some reason you want to add an address seperately and not with a bout or mixer you will have to return the full address and not the id or it doesnt conform to the route but works for insomnia for testing
     # return db_address
     
 
