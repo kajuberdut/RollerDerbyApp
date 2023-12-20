@@ -13,6 +13,11 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 from .database import SessionLocal, engine, create_all_tables
 
@@ -26,6 +31,10 @@ models.SQLAlchemyBase.metadata.create_all(bind=engine)
 
 
 # * Auth Token
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+ALGORITHM = os.environ.get("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -64,27 +73,36 @@ def get_db():
 # def verify_password(plain_password, hashed_password):
 #     return pwd_context.verify(plain_password, hashed_password)
 
-# def get_password_hash(password):
-#     return pwd_context.hash(password)
+# *** HASH PASSWORD FOR NEW USER **** 
 
-# def authenticate_user(fake_db, username: str, password: str):
-#     user = get_user(fake_db, username)
-#     if not user:
-#         return False
-#     if not verify_password(password, user.password):
-#         return False
-#     return user
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def hash_password(password):
+    return pwd_context.hash(password)
+
+def authenticate_user(db, username: str, password: str):
+    # gets user from database by using the username that was submitted on the frontend
+    user = crud.get_user_by_username(db, username)
+    print("user in authenticte user in main.py:", user)
+    # print("password in authenticate user", user.hashed_password)
+    if not user:
+        return False
+    # calls verify password to compare the password the user submitted on the frontend to the hashed password on the backend 
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
 
 
-# def create_access_token(data: dict, expires_delta: timedelta | None = None):
-#     to_encode = data.copy()
-#     if expires_delta:
-#         expire = datetime.utcnow() + expires_delta
-#     else:
-#         expire = datetime.utcnow() + timedelta(minutes=15)
-#     to_encode.update({"exp": expire})
-#     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-#     return encoded_jwt
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
 
 # async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 #     credentials_exception = HTTPException(
@@ -105,22 +123,26 @@ def get_db():
 #         raise credentials_exception
 #     return user
 
-# # ! authentication testing post testing
+# # # ! authentication testing post testing
 
-# @api_app.post("/token")
-# # async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-# def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-#     # user_dict = fake_users_db.get(form_data.username)
-#     user = crud.get_user_by_derby_name(form_data.derby_name)
-#     if not user:
-#         raise HTTPException(status_code=400, detail="Incorrect username or password")
-#     # user = UserCreate(**user_dict)
-#     # * not sure what this line is doing.... 
-#     hashed_password = fake_hash_password(form_data.password)
-#     if not hashed_password == user.hashed_password:
-#         raise HTTPException(status_code=400, detail="Incorrect username or password")
+@api_app.post("/token",  response_model=schemas.Token)
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
 
-#     return {"access_token": user.username, "token_type": "bearer"}
+    # authenticates user and then returns user 
+    print("form_data.username in main.py:", form_data.username)
+    print("form_data.password in main.py:", form_data.password)
+    user = authenticate_user(db, form_data.username, form_data.password)
+    print("user in main.py:", user)
+    if not user:
+        raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Incorrect username or password",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+    
+    access_token = create_access_token(data={"sub": user.user_id})
+
+    return {"access_token": access_token, "token_type": "bearer"}
 
 #  **** User routes *** 
 
@@ -130,8 +152,9 @@ def get_db():
 
 @api_app.get("/users/", response_model=list[schemas.UserBase])
 # def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(oauth2_scheme)):
-# ! this basically says you need authentication to hit the route Depends(oauth2_scheme) which means, all routes will need this later on.
-def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+# def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+# *THIS APPEARS TO BE AUTHENTICATED AND EXPECTS A TOKEN NOW
+def get_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     users = crud.get_users(db, skip=skip, limit=limit)
 
@@ -155,14 +178,34 @@ def get_user(username: str, db: Session = Depends(get_db)):
     
     return user
 
+# * get /users/{user_id} 
+# * returns one specific user by user_id
+
+# @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
+@api_app.get("/login/{user_id}", response_model=schemas.UserBase)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    print("users/user_id is running")
+    
+    user = crud.get_user_by_id(db, user_id=user_id)
+    
+    if user_id is None: 
+        raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")
+    
+    return user
+
 # * post /users/ 
 # * creates a new user 
 
 @api_app.post("/users/", response_model=schemas.UserBase)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     
-    print(traceback.format_exc())
+    hashed_password = hash_password(user.password)
+    print("hashed!!!!password!!!!", hashed_password)
+
+    user.password = hashed_password   
+    # print(traceback.format_exc())
     print("you are hitting the users/post route!!!")
+    print("&&& user &&&", user)
     
     db_user_email = crud.get_user_by_email(db, email=user.email)
     print("db_user_email:", db_user_email)
@@ -172,6 +215,8 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user_username = crud.get_user_by_username(db, username=user.username)
     if db_user_username:
         raise HTTPException(status_code=400, detail="Derby name already registered")
+    
+    # todo you will need to create a new access token for this I believe. 
     return crud.create_user(db=db, user=user)
 
 # * put /users/{user_id} 

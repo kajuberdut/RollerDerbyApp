@@ -8,6 +8,10 @@ import re
 
 # ! THIS IS MY PYDANTIC MODEL
 
+SECRET_KEY = "0e4f3587ea32a1b62169336a04a71efc160b34c93c3f03bdc1895c6058dbbcec"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 print("schemas.py is running")
     
 # User Pydantic Models
@@ -18,13 +22,13 @@ print("schemas.py is running")
 
 #  **** Token schemas for testing Authentication *** 
 
-# class Token(BaseModel):
-#     access_token: str
-#     token_type: str
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
-# class TokenData(BaseModel):
-#     username: str | None = None
+class TokenData(BaseModel):
+    username: str | None = None
 #     # ! note that for authentication it seems that I must have a username field so may have to adjust that from derby_name
 
 #  **** User Pydantic Models  *** 

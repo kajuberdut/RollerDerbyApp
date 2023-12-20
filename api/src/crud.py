@@ -16,7 +16,20 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 def get_user_by_username(db: Session, username: str):
-    return db.query(models.User).filter(models.User.username == username).first()
+    print("username in get_user_by_username in crud.py", username)
+    
+    user = db.query(models.User).filter(models.User.username == username).first()
+    print("user in crud.py", user)
+    return user
+
+# def get_user_by_username_login(db: Session, username: str):
+#     user = db.query(models.User).filter(models.User.username == username).first()
+    
+#     print("user in get_user_by_username_login", user)
+#     print("user.username:", user.username)
+#     print("user.passsword:", user.password)
+    
+#     return user
   
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
@@ -42,9 +55,8 @@ def create_user(db: Session, user: schemas.UserCreate):
 # def create_user(derby_name: str, email: str, password: str, db: Session, user: schemas.UserCreate):
     print("create user in crud.py is working")
     print("user in crud.py:", user)
-    password = user.password + "notreallyhashed"
     
-    db_user = models.User(username=user.username, email=user.email, hashed_password=password)
+    db_user = models.User(username=user.username, email=user.email, hashed_password=user.password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

@@ -14,6 +14,9 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
 
 class FastApi {
 
+    // the token for interactive with the API will be stored here.
+    static token;
+
     static async request(endpoint = "", data = {}, method = "get") {
         // static async request(endpoint, method = "get") {
         // console.log("request is running")
@@ -24,7 +27,7 @@ class FastApi {
         //there are multiple ways to pass an authorization token, this is how you pass it in the header.
         //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
         const url = `${BASE_URL}/${endpoint}`;
-        // const headers = { Authorization: `Bearer ${JoblyApi.token}` };
+        const headers = { Authorization: `Bearer ${FastApi.token}` };
         // *This is our authorization for our request
         // console.log("header in api:", headers)
         const params = (method === "get")
@@ -33,7 +36,7 @@ class FastApi {
     
         try {
             
-          return (await axios({ url, method, data, params })).data;
+          return (await axios({ url, method, data, params, headers })).data;
         // return (await axios({ url, method })).data;
         } catch (err) {
           console.error("API Error:", err);
@@ -46,6 +49,36 @@ class FastApi {
         }
       }
 
+    /** Post user by data*/
+
+    static async signup(data) {
+      console.log("!!!!data in Api.js:", data)
+      // let testData = {derby_name: "happyJack", email: "happyJack@gmail.com", password: "password"}
+      // ! note must have a user_id of 0  on your user obect to post and be sucessful 
+      
+      data["user_id"] = 0
+      let res = await this.request('users', data, "post");
+      return res;
+    }
+
+       /** Post login user by data*/
+
+       static async login(data) {
+        console.log("!!!!data in login Api.js:", data)
+   
+        let formData = new FormData();
+       
+
+        formData.append("username", data.username)
+        formData.append("password", data.password)
+        console.log("formData in login:", formData)
+    
+        let res = await this.request('token', formData, "post");
+        console.log("res in login:", res)
+        // !note will need to change this most likely to accessToken after you get inCase working
+        return res.access_token;
+      }
+
   /** Get all users*/
 
     static async getUsers(handle) {
@@ -54,7 +87,7 @@ class FastApi {
         return res
     }
 
-      /** Get one user*/
+      /** Get one user by username */
 
     static async getUser(username) {
         console.log("you are hitting the get user route in Api.js")
@@ -67,17 +100,16 @@ class FastApi {
         return res
     }
 
-  /** Post user by data*/
-
-    static async signup(data) {
-        console.log("!!!!data in Api.js:", data)
-        // let testData = {derby_name: "happyJack", email: "happyJack@gmail.com", password: "password"}
-        // ! note must have a user_id of 0  on your user obect to post and be sucessful 
-        
-        data["user_id"] = 0
-        let res = await this.request('users', data, "post");
-        return res;
-    }
+    static async getUserById(id) {
+      console.log("you are hitting the get user by id route in Api.js")
+      let res = await this.request(`login/${id}`);
+      console.log("res:", res)
+      // if(res.ruleset === null) {
+      //   res.ruleset = 0; 
+      //   console.log("res in api.js", res)
+      // }
+      return res
+  }
 
         /** Update user by data */
 

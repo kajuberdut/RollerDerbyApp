@@ -38,7 +38,7 @@ return (
 
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm signup={signup} />} />
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm login={login} />} />
         <Route path="/setup" element={<SetupProfileForm update={update}/>} />
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
         <Route path="/profile" element={<Profile />} />

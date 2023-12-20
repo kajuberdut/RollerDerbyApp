@@ -1,5 +1,5 @@
-// import React, { useContext } from "react";
-// import UserContext from "../MultiUse/UserContext";
+import React, { useContext } from "react";
+import UserContext from "../multiUse/UserContext";
 import './Home.css'
 import { Link } from "react-router-dom";
 import { 
@@ -19,7 +19,7 @@ function Home() {
 
   /** Get user from context*/
 
-//   const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   /** Render page */
 
@@ -31,17 +31,18 @@ function Home() {
           </CardTitle>
           <CardBody >
             <CardText></CardText>
-            {/* {user && <h2>Welcome Back, {user.firstName}!</h2>} */}
+            {user && <h2>Welcome Back, {user.username}!</h2>}
             {/* {user && <h2>Welcome Back</h2>} */}
             {/* { !user && ( <> <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>
               <Link className="Home-Link" to="/signup"><Button>Signup</Button></Link>
             </CardText>
             </>)} */}
-            <CardText>
+            {!user && <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>
               <Link className="Home-Link" to="/signup"><Button>Signup</Button></Link>
             </CardText>
+            }
           </CardBody>
         </Card>
       </section>

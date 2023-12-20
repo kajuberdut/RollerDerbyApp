@@ -1,13 +1,21 @@
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
-from os import environ 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
+
 
 # * starting engine inside of docker 
-# engine = create_engine('postgresql://postgres:changedpass@db:5432/roller_derby_db')
+# engine = create_engine('{POSTGRES_HOST}://{POSTGRES_USER:{POSTGRES_PASSWORD}@db:5432/roller_derby_db')
 
 # *correct engine below for starting it outside of docker 
-engine = create_engine('postgresql://postgres:changedpass@localhost:5432/roller_derby_db')
+engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/roller_derby_db')
 
 print("Engine", engine)
 

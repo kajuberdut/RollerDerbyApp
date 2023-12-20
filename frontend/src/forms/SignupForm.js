@@ -36,7 +36,7 @@ const SignupForm = ({signup, update}) => {
   const [errorMessage, setErrorMessage] = useState([]);
 const navigate = useNavigate();
 
-  let INITIAL_STATE; 
+  // let INITIAL_STATE; 
 
  
   /** If user, set initial state and the then set the formdata as initial state. 
@@ -44,14 +44,14 @@ const navigate = useNavigate();
    * Gives value to InitialState
   */
 
-  if(user) {
-    INITIAL_STATE = { username: user.username, email: user.email };
+  // if(user) {
+  //   INITIAL_STATE = { username: user.username, email: user.email };
 
-  } else {
-    INITIAL_STATE = { username: "", email: "" };
-  }
+  // } else {
+  //   INITIAL_STATE = { username: "", email: "" };
+  // }
 
-//  let INITIAL_STATE = { derbyName: "",  email: "", password: ""};
+ let INITIAL_STATE = { username: "",  email: "", password: ""};
 // let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
 
   /** Sets formData in initial state */
@@ -120,7 +120,7 @@ const navigate = useNavigate();
 
     // if(result.success) {
     if(result) {
-      navigate('/profile')
+      navigate('/login')
 
     } else {
       // let message = result.errors[0]
