@@ -16,62 +16,102 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
  * User detail form
  */
 
+// ! issue I am not storing all th data in the user information so Its not being updated all the way
+
 function Profile() {
 
    /** Get url handle and set jobs and is loading in state*/
-    // console.log("company:", company)
     const username = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
-    // const [user, setUser]= useState("");
-    const { user } = useContext(UserContext);
-    // console.log("user in profile.js:", user)
+    // const { user } = useContext(UserContext);
+    // const [user, setUser] = useState(); 
+    const [rulesets, setRulesets] = useState();
+    const [positions, setPositions] = useState();
+    const [location, setLocation] = useState();
+    const [city, setCity] = useState();
+    const [state, setState] = useState();
 
+    // retrieve user from localStorage so that page can be refreshed 
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log("user in profile.js", user)
+
+    
+    
+    useEffect(() => {
+      function fetchData() {
+          // Fetch ruleset data
+          if (user.ruleset_id) {
+            getUserRulesets()
+          }
+          // Fetch position data
+          if (user.position_id) {
+            getUserPosition()
+          }
+          // Fetch location data
+          if (user.location_id) {
+            console.log("user.location_id is running")
+            getUserLocation()
+          }
+        }
+  
+      fetchData();
+    }, []); 
+
+  async function getUserRulesets() {
     let rs = []; 
-
-    if (user.ruleset.WFTDA) {
+    let ruleset = await FastApi.getRuleset(user.ruleset_id);
+    if (ruleset.wftda) {
       rs.push("WFTDA ");
     }
-    if (user.ruleset.USARS) {
+    if (ruleset.usars) {
       rs.push("USARS ");
     }
-    if (user.ruleset.bankedTrack) {
+    if (ruleset.banked_track) {
       rs.push("Banked Track ")
     }
-    if (user.ruleset.shortTrack) {
+    if (ruleset.short_track) {
       rs.push("Short Track ")
     }
-    let rulesets = rs.join(", ")
+    let userRulesets = rs.join(", ")
+    setRulesets(userRulesets)
 
+  }
+
+  async function getUserPosition() {
     let pos = []; 
+    let position = await FastApi.getPosition(user.position_id)
+      if (position.jammer) {
+        pos.push("Jammer ");
+      }
+      if (position.blocker) {
+        pos.push("Blocker ");
+      }
+      if (position.pivot) {
+        pos.push("Pivot ")
+      }
+    let userPositions = pos.join(", ")
+    console.log("positions before state:", positions)
+    setPositions(userPositions)
+    console.log("positions after state:", positions)
 
-    if (user.position.jammer) {
-      pos.push("Jammer ");
-    }
-    if (user.position.blocker) {
-      pos.push("Blocker ");
-    }
-    if (user.position.pivot) {
-      pos.push("Pivot ")
-    }
+  }
 
-    let positions = pos.join(", ")
-    
-    console.log("user.image in profile.js", user.image)
-    // console.log(require('./images/skater_02.svg'))
+  async function getUserLocation() {
+    let userLocation = await FastApi.getLocation(user.location_id);
+    setCity(userLocation.city)
+    setState(userLocation.state)
+  }
 
     /** Render cards */
     // ! will need to rework this
 
     return (
-      // <div className="PROFILE" style={{backgroundColor: 'red', boxShadow: '100px 100px 100px black'}} >
-      // <div className="PROFILE" style={{backgroundColor: 'red', border: '100px solid black'}} >
-      // <div className="PROFILE" style={{backgroundColor: 'red'}} >
       <div className="PROFILE" style={{backgroundColor: 'white', padding: '100px'}} >
 
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 
             <MDBCol lg="9" xl="10">
-              <MDBCard style={{minWidth: '300px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+              <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
 
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
@@ -86,45 +126,49 @@ function Profile() {
                     </button>
                   </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{user.username} #{user.primaryNumber}</MDBTypography>
-                    <MDBCardText>{user.location.city}, {user.location.state}</MDBCardText>
-                    {/* <div style={{paddingLeft: '500px', paddingBottom: '20px'}}>
-                    <MDBCardText tag="h4" >{user.level}</MDBCardText>
-                    </div> */}
+                    <MDBTypography tag="h4">{user.username} #{user.primary_number}</MDBTypography>
+                    {user.location_id && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                    <div>
+                    { user.level && <div>
                       <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{user.level}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
                     </div>
-                    <div>
+                    }
+                    { user.position_id && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
                     </div>
+                    }
+                    { user.ruleset_id &&
                     <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
                     </div>
+                    }
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">
-                  <div className="mb-5">
+                { user.about && <div className="mb-5">
                     <p className="lead fw-normal mb-1">About</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{user.about}</MDBCardText>
                     </div>
                   </div>
-                  <div className="mb-5">
+                  }
+                  { user.associatedLeagues && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Associated Leagues</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{user.associatedLeagues}</MDBCardText>
                     </div>
                   </div>
-                  <div className="mb-5">
+                  }
+                  { user.facebookName && <div className="mb-5">
                     <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebookName}</p>
                   </div>
+                  }
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>

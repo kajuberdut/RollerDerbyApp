@@ -86,6 +86,11 @@ class UserDetailsPublic(UserBase):
             raise ValueError('Invalid level')
         return value
     
+class UserDetailsPrivate(UserDetailsPublic): 
+    first_name: Optional[str] = None 
+    last_name: Optional[str] = None 
+    secondary_number: Optional[int] = None
+    
 # * note with this you dont have to have the user_id in the object but you could change this. 
 
 class UserDelete(BaseModel):

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FastApi from "../Api";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import UserContext from "../multiUse/UserContext";
@@ -21,22 +21,36 @@ import {
  * Form for creating a user or updating a logged in user.
  */
 
-const SetupProfileForm = ({signup, update}) => {
+// const SetupProfileForm = ({update}) => {
+function SetupProfileForm({update}) {
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
-const { user, setUser } = useContext(UserContext);
+  // ! note for some reason this is not allowing us to destructure user or setUSer 
+// const { user, setUser } = useContext(UserContext);
+// const { user } = useContext(UserContext);
+// ! now this isn't working either 
+const userCont = useContext(UserContext)
+console.log("userCont !!! in setup profile form", userCont)
+let user  = userCont.user
+console.log("user !!! in setup profile form", user)
+// console.log("user.user", user.user)
 
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
 //   const [errorMessage, setErrorMessage] = useState([]);
-const [dropdownOpen, setDropdownOpen] = useState(false);
 // const [file, setFile] = useState<File | undefined>();
 // const [preview, setPreview] = useState<string | undefined>();
 const navigate = useNavigate();
 
 // let user = "SockHer Blue"  
+
+useEffect(() => {
+  if (user) {
+      // Perform actions when user becomes available
+  }
+}, [user]);
 
   /** 
    * Sets Initial State of Form
@@ -58,57 +72,6 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
     console.log("FormData in SetupProfileForm.js", formData)
     setFormData(INITIAL_STATE);
    
-      // this will be if(user) then preset the form to being filled with what is already in their profile. 
-     /** Update profile*/
-    //  ! this is where you ar ein setup profile
-    //  if(user) {
-    //   const derbyName = user.derbyName;
-    //   const image = user.image;
-    //   const email = formData.email; 
-    //   const firstName = formData.firstName;
-    //   const lastName = formData.lastName;
-    //   const facebookName = formData.facebookName;
-    //   const about = formData.about;
-    //   const primNum = user.primNum;
-    //   const secNum = user.secNum; 
-    //   const level = user.level;
-    //   const primIns = user.primIns;
-    //   const primInsNum = user.primInsNum;
-    //   const secIns = user.secIns;
-    //   const secInsNum = user.secInsNum; 
-    //   const assocLeagues = user.assocLeagues;
-    
-    //  }
-      // delete formData.username;
-      // delete formData.email; 
-      // *Not sure what the above are doing? 
-
-      // update(formData, derbyName);
-      // let result = await FastApi.update(formData);
-
-      // let profileData = {
-      //   derbyName: derbyName,
-      //   image: image, 
-      //   firstName: firstName, 
-      //   lastName: lastName, 
-      //   email: email, 
-      //   facebookName: facebookName,
-      //   about: about, 
-      //   primNum: primNum, 
-      //   secNum: secNum, 
-      //   level: level, 
-      //   primIns: primIns, 
-      //   primInsNum: primInsNum,
-      //   secIns: secIns, 
-      //   secInsNum: secInsNum, 
-      //   assocLeagues: assocLeagues
-      // }
-      //   console.log("profileData:", profileData)
-      //   // setUser(profileData)
-      //   console.log("USER!!!!!:", user)
-      //   setFormData(profileData);
-    //     // todo: this is working but you need to relook at it as I think you made it more complicated than needed. 
-    // let result = await FastApi.update(formData);
     console.log("update!!!!!:", update)
     let result = await update(formData);
 

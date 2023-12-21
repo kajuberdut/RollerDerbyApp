@@ -181,15 +181,42 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: S
 # * get /users/{user_id} 
 # * returns one specific user by user_id
 
-@api_app.get("/login/{user_id}", response_model=schemas.UserBase)
+@api_app.get("/login/{user_id}", response_model=schemas.UserDetailsPrivate)
+# @api_app.get("/login/{user_id}", response_model=schemas.UserBase)
 def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
 # def get_user(user_id: int, db: Session = Depends(get_db)):
     print("users/user_id is running")
     
     user = crud.get_user_by_id(db, user_id=user_id)
+    print("user in /login/{user_id}", user)
+    print("user.username", user.username)
+    print("user.email", user.email)
+    print("user.first_name", user.first_name)
     
+    
+    # user.username
+    # user = crud.get_user_by_id(db, user_id=user_id)
+        
     if user_id is None: 
         raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")
+    
+    # user = {
+    # # "derby_name": user.derby_name,
+    # "username": user.username,
+    # "email": user.email,
+    # "first_name": user.first_name, 
+    # "last_name": user.last_name,
+    # "facebook_name": user.facebook_name, 
+    # "about": user.about,
+    # "primary_number": user.primary_number, 
+    # "secondary_number": user.secondary_number,
+    # "level": user.level,
+    # "ruleset_id": user.ruleset_id,
+    # "position_id": user.position_id,
+    # "location_id": user.location_id,
+    # "associated_leagues": user.associated_leagues
+    # }
+    
     
     return user
 

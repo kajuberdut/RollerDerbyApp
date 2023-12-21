@@ -7,7 +7,7 @@ import Loading from "./multiUse/loading/Loading";
 import UserContext from "./multiUse/UserContext";
 // import { UserContext } from "./multiUse/UserContext";
 import FastApi from "./Api";
-import useLocalStorage from "./hooks/localStorage";
+import useLocalStorage from "./hooks/useLocalStorage";
 // import jwt from "jsonwebtoken";
 // import * as jwt_decode from 'jwt-decode';
 // import jwt_decode from 'jwt-decode'
@@ -18,50 +18,68 @@ export const TOKEN_STORAGE_ID = "api-token";
 
 function App() {
 
-  // const [user, setUser] = useState(null);
-  const [user, setUser] = useState();
-  
-  // const [user, setUser] = useState({username: "happyJack", email: "happyJack@gmail.com", facebookName: "Happy Jack fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primaryNumber: 12, level: "B", location: {city: "Denver", state: "CO"}, associatedLeagues: "Rocky Mountain Roller Derby", ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}});
-
+  const [user, setUser] = useState(null);
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
   // const [isLoading, setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { default: jwt_decode } = require("jwt-decode");
 
 
-  // try {
-  //   let token = await JoblyApi.apply(username, id);
-  //   setToken(token);
-  //   return { success: true };
-  // } catch (errors) {
-  //   console.error("applied to job failed", errors);
-  //   return { success: false, errors };
-  // }
-// }
+  // useEffect(() => {
+  //   // get user from local storage  
+  //   const storedUser = localStorage.getItem('user');
+  //   console.log("storedUser *** ", storedUser)
+    
+  //   // if there is user in local starage set user in state 
+  //   if (storedUser) {
+  //     setUser(JSON.parse(storedUser));
+  //   }
 
-  // if (isLoading) {
-  //   return (
-  //       <Loading />
-  //   )
+  //   // if there is a token we are going to get the user 
+  //   if (token) {
+  //     getUser();
+  //   }
+  // }, [token, getUser]);
+
+  // async function getUser() {
+  //   try {
+  //     const { sub } = jwtDecode(token);
+  //     FastApi.token = token;
+  //     const user = await FastApi.getUserById(sub);
+  //     setUser(user);
+  //     // useLocalStorage.setItem('user', JSON.stringify(user));
+  //   } catch (err) {
+  //     console.error("App loadUserInfo: problem loading", err);
+  //     setUser(null);
+  //   }
   // }
+
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem('user'));
+  
+  //   if (user) {
+  //     setUser(user);
+  //   }
+  // }, []);
+
 
   useEffect(function loadUser() {
     console.debug("App useEffect loadUserInfo", "token=", token);
     /** If token changes then API get request for user using user_id after decoding token if value of token changes rerun. */
 
     async function getUser() {
-      console.log("token:", token)
-      console.log("**** GETUSER IS RUNNING !!!")
         if (token) {
 
           try {
             let { sub } = jwtDecode(token);
-            console.log("sub:", sub)
+ 
             // storing the token in static token in FastApi 
             FastApi.token = token;
             let user = await FastApi.getUserById(sub);
-            // let user = await FastApi.getUser(user_id);
+            // !note that local storage is not what you imported this is a built in function!
+            localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
+
           } catch (err) {
             console.error("App loadUserInfo: problem loading", err);
             setUser(null);
@@ -102,6 +120,8 @@ function App() {
     function logout() {
       setToken(null);
       setUser(null);
+      localStorage.setItem('user', null);
+
     }
 
     async function updateUser(derby_name, data) {
@@ -152,6 +172,15 @@ function App() {
       }
     }
 
+     /** Display isLoading if API call is has not returned */
+
+  if (isLoading) {
+    return (
+        <Loading />
+    )
+  }
+
+
   return (
     
     <div className="App">
@@ -160,7 +189,6 @@ function App() {
         <Fragment>
           <NavBar logout={logout}/>
           <main>
-            {/* <Routes login={login} signup={signup} update={update} apply={apply} /> */}
             <AllRoutes signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
           </main>
         </Fragment>
@@ -171,3 +199,28 @@ function App() {
   }
 
 export default App;
+
+
+// async function getUser() {
+//   console.log("token:", token)
+//   console.log("**** GETUSER IS RUNNING !!!")
+//     if (token) {
+
+//       try {
+//         let { sub } = jwtDecode(token);
+//         console.log("sub:", sub)
+//         // storing the token in static token in FastApi 
+//         FastApi.token = token;
+//         let user = await FastApi.getUserById(sub);
+//         console.log("!!!! user in app.js !!!!", user)
+//         setUser(user);
+//       } catch (err) {
+//         console.error("App loadUserInfo: problem loading", err);
+//         setUser(null);
+//       }
+//     }
+//     setIsLoading(false);
+//     console.log("setinfoloaded true")
+//   }
+//   getUser();
+// }, [token]);
