@@ -260,7 +260,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 # todo: COME BACK TO THIS TOMORROW NOTE THAT YOU NEED TO MAKE SURE YOU ARE ADDING THE user_id and ruleset_id to the USER_RULESET table
 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: list[schemas.Position], location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
     
     # print("**** ruleset ****:", ruleset)
     
@@ -273,14 +273,21 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
     
     user.location_id = location_id
     
-    existing_position = crud.get_position(db=db, position=position)
+    for pos in position:
+        existing_position = crud.get_position(db=db, position=pos)
     
-    if existing_position: 
-        position_id = existing_position.position_id 
-    else: 
-        position_id = crud.create_position(db=db, position=position)
+        if existing_position: 
+            position_id = existing_position.position_id 
+        else: 
+            position_id = crud.create_position(db=db, position=pos)
     
-    user.position_id = position_id
+        existing_user_position = crud.get_user_position_by_id(db, user_id=user_id, position_id=position_id)
+        print("does existing_user_position exist?", existing_user_position)
+        if not existing_user_position:
+            print("crud existing_user_position does NOT exist")
+            new_e_u_p = crud.create_user_position(db, user_id=user_id, position_id=position_id)
+            print("new existing user position:", new_e_u_p)
+ 
     
     # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
     for rs in ruleset: 
@@ -567,7 +574,7 @@ def get_address(token: Annotated[str, Depends(oauth2_scheme)], address_id:int, d
 # * get /user/ruleset/ 
 # * gets all user rulesets 
 
-@api_app.get("/user/ruleset/", response_model=list[schemas.UserRulesetSchema])
+@api_app.get("/user/ruleset/", response_model=list[schemas.UserRuleset])
 def get_users_rulesets(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
      return crud.get_user_ruleset(db, skip=skip, limit=limit)
@@ -588,6 +595,14 @@ def get_ruleset(token: Annotated[str, Depends(oauth2_scheme)], ruleset_id:int, d
     return crud.get_ruleset_by_id(db, ruleset_id=ruleset_id)
 
 #  **** position routes ***
+
+# * get /user/position/ 
+# * gets all user positions 
+
+@api_app.get("/user/position/", response_model=list[schemas.UserPosition])
+def get_users_positions(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+
+     return crud.get_user_position(db, skip=skip, limit=limit)
 
 # * get /positions/ 
 # * gets all positions 

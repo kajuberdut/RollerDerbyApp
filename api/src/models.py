@@ -13,6 +13,14 @@ class UserRuleset(SQLAlchemyBase):
     ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), primary_key=True)
     user = relationship("User", back_populates="ruleset")
     ruleset = relationship("Ruleset", back_populates="user")
+    
+class UserPosition(SQLAlchemyBase):
+    __tablename__ = "user_position"
+
+    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    position_id = Column(Integer, ForeignKey("position.position_id"), primary_key=True)
+    user = relationship("User", back_populates="position")
+    position = relationship("Position", back_populates="user") 
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -32,7 +40,8 @@ class User(SQLAlchemyBase):
     level = Column(String, nullable=True)
     # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
     ruleset = relationship("UserRuleset", back_populates="user")
-    position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
+    position = relationship("UserPosition", back_populates="user")
+    # position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
     location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
     # ruleset = relationship("UserRuleset", back_populates="user")
@@ -53,10 +62,12 @@ class Ruleset(SQLAlchemyBase):
 class Position(SQLAlchemyBase):
     __tablename__ = "position"  
     position_id = Column(Integer, primary_key=True)
-    jammer = Column(Boolean)
-    blocker = Column(Boolean)
-    pivot = Column(Boolean)
-    user = relationship("User", backref="position")
+    position = Column(String)
+    user = relationship("UserPosition", back_populates="position")
+    # jammer = Column(Boolean)
+    # blocker = Column(Boolean)
+    # pivot = Column(Boolean)
+    # user = relationship("User", backref="position")
     
 class Location(SQLAlchemyBase):
     __tablename__ = "location"

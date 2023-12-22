@@ -56,7 +56,7 @@ class TokenData(BaseModel):
 
 
 
-class UserRulesetSchema(BaseModel):
+class UserRuleset(BaseModel):
     # id: int
     user_id: int
     ruleset_id: int
@@ -64,6 +64,13 @@ class UserRulesetSchema(BaseModel):
     class Config:
         from_attributes = True
         # getter_dict = UserRulesetGetter
+        
+class UserPosition(BaseModel):
+    user_id: int
+    position_id: int
+
+    class Config:
+        from_attributes = True
         
 # *** end user ruleset pydantic models ***
 
@@ -96,7 +103,23 @@ class Ruleset(BaseModel):
         if v not in ruleset_list:
             raise ValueError("Invalid ruleset")
         return v  
+
+    class Config:
+        from_attributes = True
+        
+class Position(BaseModel): 
+    position_id: int = Field(default_factory=lambda: 0)
+    position: str
     
+    @field_validator('position')
+    def validate_rulesets(cls, v):
+        position_list = [
+        'jammer', 'pivot', 'blocker'
+        ]
+        if v not in position_list:
+            raise ValueError("Invalid position")
+        return v  
+
     class Config:
         from_attributes = True
 
@@ -112,7 +135,8 @@ class UserUpdate(UserBase):
     # ? this appears necessary to patch update user and ruleset is returning null even though it is creating the ruleset? 
     # ? not sure how to get the relationship but I think its creating it???? 
     ruleset: Ruleset = None
-    position_id: int
+    position: Position = None
+    # position_id: int
     location_id: int
     associated_leagues: str
    
@@ -133,8 +157,9 @@ class UserDetailsPublic(UserBase):
     # ruleset_id: Optional[int] = None
     # ruleset: Optional[list[Ruleset]] = None
     # ruleset: Optional[list] = None
-    ruleset: Optional[list[UserRulesetSchema]] = None
-    position_id: Optional[int] = None
+    ruleset: Optional[list[UserRuleset]] = None
+    position: Optional[list[UserPosition]] = None
+    # position_id: Optional[int] = None
     location_id: Optional[int] = None
     associated_leagues: Optional[str] = None
     
@@ -157,13 +182,11 @@ class UserDelete(BaseModel):
     password: str
     
 
-
-
-class Position(BaseModel): 
-    position_id: int = Field(default_factory=lambda: 0)
-    jammer: bool
-    pivot: bool
-    blocker: bool   
+# class Position(BaseModel): 
+#     position_id: int = Field(default_factory=lambda: 0)
+#     jammer: bool
+#     pivot: bool
+#     blocker: bool   
     
 class Location(BaseModel):
     location_id: int = Field(default_factory=lambda: 0)

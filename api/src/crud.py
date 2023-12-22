@@ -110,7 +110,7 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     "secondary_number": user.secondary_number,
     "level": user.level,
     # "ruleset_id": user.ruleset_id,
-    "position_id": user.position_id,
+    # "position_id": user.position_id,
     "location_id": user.location_id,
     "associated_leagues": user.associated_leagues
     }
@@ -321,12 +321,7 @@ def get_rulesets(db: Session, skip: int = 0, limit: int = 100):
 
 # ! get ruleset for many to many relationship 
 def get_ruleset(db: Session, ruleset: schemas.Ruleset):
-    
-    test = db.query(models.Ruleset).filter(models.Ruleset.name == ruleset.name).first()
-    
-    print("&&& test &&&", test)
-  
-    return test
+    return db.query(models.Ruleset).filter(models.Ruleset.name == ruleset.name).first()
 
 def get_ruleset_by_id(db: Session, ruleset_id: int):
     return db.query(models.Ruleset).filter(models.Ruleset.ruleset_id == ruleset_id).first()
@@ -356,6 +351,8 @@ def create_ruleset(db: Session, ruleset: schemas.Ruleset):
     
     return db_ruleset.ruleset_id
 
+# *** CRUD user ruleset *** 
+
 def get_user_ruleset_by_id(db: Session, user_id: int, ruleset_id: int): 
     return db.query(models.UserRuleset).filter(models.UserRuleset.user_id == user_id, models.UserRuleset.ruleset_id == ruleset_id).first()
 
@@ -370,33 +367,70 @@ def create_user_ruleset(db: Session, user_id: int, ruleset_id: int):
     return db_user_ruleset
     
 #  *** CRUD positions ***
-    
+
 def get_positions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Position).offset(skip).limit(limit).all()
 
+# ! get position for many to many relationship 
 def get_position(db: Session, position: schemas.Position):
     
-    # test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
-    
-    # print("&&& test &&&", test)
-  
-    # return test
-    
-    return db.query(models.Position).filter(models.Position.jammer == position.jammer, models.Position.pivot == position.pivot, models.Position.blocker == position.blocker).first()
+    return db.query(models.Position).filter(models.Position.position == position.position).first()
+
 
 def get_position_by_id(db: Session, position_id: int):
     return db.query(models.Position).filter(models.Position.position_id == position_id).first()
 
+# ! create_position many to many relationship 
+
 def create_position(db: Session, position: schemas.Position):
-    # print("****** address.name *******", address.name)
-    # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
-    # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
-    db_position = models.Position(jammer=position.jammer, pivot=position.pivot, blocker=position.blocker)
+    print("position in create_position CRUD", position)
+    db_position = models.Position(position=position.position)
     db.add(db_position)
     db.commit()
     db.refresh(db_position)
     
     return db_position.position_id
+
+# ! get position one to many relationship
+# def get_position(db: Session, position: schemas.Position):
+    
+#     # test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
+    
+#     # print("&&& test &&&", test)
+  
+#     # return test
+    
+#     return db.query(models.Position).filter(models.Position.jammer == position.jammer, models.Position.pivot == position.pivot, models.Position.blocker == position.blocker).first()
+
+# def get_position_by_id(db: Session, position_id: int):
+#     return db.query(models.Position).filter(models.Position.position_id == position_id).first()
+
+# ! create position one to many relationship 
+# def create_position(db: Session, position: schemas.Position):
+#     # print("****** address.name *******", address.name)
+#     # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+#     # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+#     db_position = models.Position(jammer=position.jammer, pivot=position.pivot, blocker=position.blocker)
+#     db.add(db_position)
+#     db.commit()
+#     db.refresh(db_position)
+    
+#     return db_position.position_id
+
+# *** CRUD user position *** 
+
+def get_user_position_by_id(db: Session, user_id: int, position_id: int): 
+    return db.query(models.UserPosition).filter(models.UserPosition.user_id == user_id, models.UserPosition.position_id == position_id).first()
+
+def get_user_position(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.UserPosition).offset(skip).limit(limit).all()
+    
+def create_user_position(db: Session, user_id: int, position_id: int): 
+    db_user_position = models.UserPosition(user_id=user_id, position_id=position_id)
+    db.add(db_user_position)
+    db.commit()
+    db.refresh(db_user_position)
+    return db_user_position
 
 #  *** CRUD locations ***
 

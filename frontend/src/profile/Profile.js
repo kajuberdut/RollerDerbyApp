@@ -44,7 +44,7 @@ function Profile() {
             getUserRulesets()
           }
           // Fetch position data
-          if (user.position_id) {
+          if (user.position) {
             getUserPosition()
           }
           // Fetch location data
@@ -68,23 +68,33 @@ function Profile() {
   }
 
   async function getUserPosition() {
-    let pos = []; 
-    let position = await FastApi.getPosition(user.position_id)
-      if (position.jammer) {
-        pos.push("Jammer ");
-      }
-      if (position.blocker) {
-        pos.push("Blocker ");
-      }
-      if (position.pivot) {
-        pos.push("Pivot ")
-      }
-    let userPositions = pos.join(", ")
-    console.log("positions before state:", positions)
+    let posArr = []
+    for(let pos of user.position) {
+      let position = await FastApi.getPosition(pos.position_id);
+      posArr.push(position.position)
+    }
+    let userPositions = posArr.join(", ")
     setPositions(userPositions)
-    console.log("positions after state:", positions)
-
   }
+
+  // async function getUserPosition() {
+  //   let pos = []; 
+  //   let position = await FastApi.getPosition(user.position_id)
+  //     if (position.jammer) {
+  //       pos.push("Jammer ");
+  //     }
+  //     if (position.blocker) {
+  //       pos.push("Blocker ");
+  //     }
+  //     if (position.pivot) {
+  //       pos.push("Pivot ")
+  //     }
+  //   let userPositions = pos.join(", ")
+  //   console.log("positions before state:", positions)
+  //   setPositions(userPositions)
+  //   console.log("positions after state:", positions)
+
+  // }
 
   async function getUserLocation() {
     let userLocation = await FastApi.getLocation(user.location_id);
@@ -127,7 +137,7 @@ function Profile() {
                       <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
                     </div>
                     }
-                    { user.position_id && <div>
+                    { user.position && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
                     </div>
