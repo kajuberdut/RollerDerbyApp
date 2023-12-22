@@ -40,7 +40,7 @@ function Profile() {
     useEffect(() => {
       function fetchData() {
           // Fetch ruleset data
-          if (user.ruleset_id) {
+          if (user.ruleset) {
             getUserRulesets()
           }
           // Fetch position data
@@ -58,23 +58,13 @@ function Profile() {
     }, []); 
 
   async function getUserRulesets() {
-    let rs = []; 
-    let ruleset = await FastApi.getRuleset(user.ruleset_id);
-    if (ruleset.wftda) {
-      rs.push("WFTDA ");
+    let rsArr = []
+    for(let rs of user.ruleset) {
+      let ruleset = await FastApi.getRuleset(rs.ruleset_id);
+      rsArr.push(ruleset.name)
     }
-    if (ruleset.usars) {
-      rs.push("USARS ");
-    }
-    if (ruleset.banked_track) {
-      rs.push("Banked Track ")
-    }
-    if (ruleset.short_track) {
-      rs.push("Short Track ")
-    }
-    let userRulesets = rs.join(", ")
+    let userRulesets = rsArr.join(", ")
     setRulesets(userRulesets)
-
   }
 
   async function getUserPosition() {
@@ -142,7 +132,7 @@ function Profile() {
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
                     </div>
                     }
-                    { user.ruleset_id &&
+                    { user.ruleset &&
                     <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>

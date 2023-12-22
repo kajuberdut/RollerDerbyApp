@@ -38,6 +38,7 @@ const navigate = useNavigate();
 const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
 const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
 const [formRulesets, setFormRulesets] = useState([]);
+const [displayRulesets, setDisplayRulesets] = useState([]);
 
 
 // if(!user) {
@@ -91,15 +92,22 @@ let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastN
   /** Update local state with current state of input element */
 
   const handleRulesetsChange = evt => {
-    // ! note you are going to have to adjust this right now you have rulesets as an array but in the database you have rulesets that are an object. 
     console.log("you are hitting handleRulesetsChange")
-    // setFormRulesets(evt.target.value);
-    // setFormRulesets((prevRulesets) => [...prevRulesets, ...evt.target.value]);
-    setFormRulesets((prevRulesets) => [
-      ...prevRulesets,
-      ...Array.from(evt.target.selectedOptions).map((option) => option.value),
-    ])
-    /
+
+// ! note should be able to refactor this so that I am only using one state and then altering the data from the state in the new data and not submitting to state 
+      setFormRulesets((prevRulesets) => {
+        const newRulesets = Array.from(evt.target.selectedOptions)
+          .map((option) => ({ ruleset_id: 0, name: option.value }))
+          .filter((ruleset) => !prevRulesets.some((r) => r.name === ruleset.name)); // Filter for unique names
+        return [...prevRulesets, ...newRulesets];
+      });
+
+      setDisplayRulesets((prevRulesets) => {
+        const newRulesets = Array.from(evt.target.selectedOptions)
+          .map((option) => option.value)
+          .filter((rulesetName) => !prevRulesets.includes(rulesetName)); // Filter for unique names
+        return [...prevRulesets, ...newRulesets];
+      });
     console.log("!!!!!!!!!!!!!! formRulesets:", formRulesets)
   };
 
@@ -434,6 +442,7 @@ let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastN
                         Short Track 
                       </option>
                         </Input>
+                        <p><b>Selected rulesets: {displayRulesets.join(', ')}</b></p>
 
 
                         {/* todod need to add this in */}

@@ -1,5 +1,41 @@
 
 
+# ! working instance of ruleset with one to many relationship (should be many to many)
+
+class User(SQLAlchemyBase):
+    __tablename__ = "user"
+    
+    user_id = Column(Integer, Identity(), primary_key=True, index=True)
+    # ! changing derby name to username but will have it appear as derby_name in frontend.
+    # derby_name = Column(String, unique=True)
+    username = Column(String, unique=True)
+    hashed_password = Column(String)
+    email = Column(String, unique=True, index=True)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    facebook_name = Column(String, nullable=True)
+    about = Column(String, nullable=True)
+    primary_number = Column(Integer, nullable=True)
+    secondary_number = Column(Integer, nullable=True)
+    level = Column(String, nullable=True)
+    ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
+    position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
+    location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
+    associated_leagues = Column(String, nullable=True)
+
+class Ruleset(SQLAlchemyBase):
+    __tablename__ = "ruleset"
+
+    ruleset_id = Column(Integer, primary_key=True)
+    wftda = Column(Boolean)
+    usars = Column(Boolean)  
+    banked_track = Column(Boolean)
+    short_track = Column(Boolean) 
+    user = relationship("User", backref="ruleset")
+
+#! end of working instance ruleset 
+
+
 class Insurance(SQLAlchemyBase):
     __tablename__ = "insurance"  
     insurance_id = Column(Integer, primary_key=True)

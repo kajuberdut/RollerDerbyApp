@@ -2,11 +2,15 @@
 from pydantic import BaseModel, EmailStr, field_validator, Field
 from datetime import datetime, date, time
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
+from pydantic.utils import GetterDict
 # !just added below will see if it works
 # from . import models
 import re
 
 # ! THIS IS MY PYDANTIC MODEL
+
+# ? userRulesets pydantic model 
+# todohttps://www.gormanalysis.com/blog/many-to-many-relationships-in-fastapi/
 
 SECRET_KEY = "0e4f3587ea32a1b62169336a04a71efc160b34c93c3f03bdc1895c6058dbbcec"
 ALGORITHM = "HS256"
@@ -33,6 +37,36 @@ class TokenData(BaseModel):
 
 #  **** User Pydantic Models  *** 
 
+# **** user ruleset pyndantic models
+
+# class UserRulesetGetter(GetterDict):
+#     def get(self, key: str, default: Any = None) -> Any:
+#         if key in {'id', 'name'}:
+#             return getattr(self._obj.author, key)
+#         else:
+#             return super(BookAuthorGetter, self).get(key, default)
+
+# class UserRulesetGetter(GetterDict):
+#     def get(self, key: str, default: Any = None) -> Any:
+#         if key in {'id', 'name', 'ruleset_id'}:
+#             return getattr(self._obj.ruleset, key)
+#         else:
+#             return super(UserRulesetGetter, self).get(key, default)
+# # ! GetterDict has apparently been removed. 
+
+
+
+class UserRulesetSchema(BaseModel):
+    # id: int
+    user_id: int
+    ruleset_id: int
+
+    class Config:
+        from_attributes = True
+        # getter_dict = UserRulesetGetter
+        
+# *** end user ruleset pydantic models ***
+
 class UserBase(BaseModel): 
     user_id: int = Field(default_factory=lambda: 0)
     # derby_name: str
@@ -46,6 +80,25 @@ class UserDelete(BaseModel):
     user_id: int 
     password: str
     
+class Ruleset(BaseModel): 
+    ruleset_id: int = Field(default_factory=lambda: 0)
+    name: str
+    # wftda: bool
+    # usars: bool
+    # banked_track: bool
+    # short_track: bool
+    
+    @field_validator('name')
+    def validate_rulesets(cls, v):
+        ruleset_list = [
+        'WFTDA', 'USARS', 'banked track', 'short track'
+        ]
+        if v not in ruleset_list:
+            raise ValueError("Invalid ruleset")
+        return v  
+    
+    class Config:
+        from_attributes = True
 
 class UserUpdate(UserBase):
     first_name: str
@@ -55,7 +108,10 @@ class UserUpdate(UserBase):
     primary_number: int
     secondary_number: int
     level: str
-    ruleset_id: int
+    # ruleset_id: int
+    # ? this appears necessary to patch update user and ruleset is returning null even though it is creating the ruleset? 
+    # ? not sure how to get the relationship but I think its creating it???? 
+    ruleset: Ruleset = None
     position_id: int
     location_id: int
     associated_leagues: str
@@ -74,7 +130,10 @@ class UserDetailsPublic(UserBase):
     about: Optional[str] = None 
     primary_number: Optional[int] = None
     level: Optional[str] = None 
-    ruleset_id: Optional[int] = None
+    # ruleset_id: Optional[int] = None
+    # ruleset: Optional[list[Ruleset]] = None
+    # ruleset: Optional[list] = None
+    ruleset: Optional[list[UserRulesetSchema]] = None
     position_id: Optional[int] = None
     location_id: Optional[int] = None
     associated_leagues: Optional[str] = None
@@ -97,12 +156,7 @@ class UserDelete(BaseModel):
     user_id: int
     password: str
     
-class Ruleset(BaseModel): 
-    ruleset_id: int = Field(default_factory=lambda: 0)
-    wftda: bool
-    usars: bool
-    banked_track: bool
-    short_track: bool
+
 
 
 class Position(BaseModel): 

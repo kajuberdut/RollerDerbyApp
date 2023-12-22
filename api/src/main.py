@@ -178,7 +178,7 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: S
     
     return user
 
-# * get /users/{user_id} 
+# * get /login/{user_id} 
 # * returns one specific user by user_id
 
 @api_app.get("/login/{user_id}", response_model=schemas.UserDetailsPrivate)
@@ -188,16 +188,22 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
     print("users/user_id is running")
     
     user = crud.get_user_by_id(db, user_id=user_id)
-    print("user in /login/{user_id}", user)
-    print("user.username", user.username)
-    print("user.email", user.email)
-    print("user.first_name", user.first_name)
+    print("!!! user in /login/{user_id}", user)
+    print("!!! user.username", user.username)
+    print("!!! user.email", user.email)
+    print("!!! user.first_name", user.first_name)
+    print("!!! user.ruleset:", user.ruleset)
+    # !this is now returning the user with an empty ruleset or the rulesets themeselves.
+    # ? this is an empty object that is returning I dont know how to get the associated ruleset with this obect 
+    # print("user.ruleset in main.py :", user.ruleset)
+    # print("user.ruleset[0].name in main.py :", user.ruleset[0].name)
+    # print("user.ruleset.ruleset_id:", user.ruleset.ruleset_id)
     
     
     # user.username
     # user = crud.get_user_by_id(db, user_id=user_id)
-        
-    if user_id is None: 
+    if user is None: 
+    # if user_id is None: 
         raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")
     
     # user = {
@@ -251,9 +257,10 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 # * updates an existing user with rulesets and location positions
 
 # ! NEED TO VERIFY THAT THE TOKEN MATCHES THE USER WE ARE TRYING TO UPDATE
+# todo: COME BACK TO THIS TOMORROW NOTE THAT YOU NEED TO MAKE SURE YOU ARE ADDING THE user_id and ruleset_id to the USER_RULESET table
 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: schemas.Ruleset, position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: schemas.Position, location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
     
     # print("**** ruleset ****:", ruleset)
     
@@ -273,17 +280,29 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
     else: 
         position_id = crud.create_position(db=db, position=position)
     
-    existing_ruleset = crud.get_ruleset(db=db, ruleset=ruleset)
-    print(" ##### existing_ruleset #######", existing_ruleset)
-    
     user.position_id = position_id
     
-    if existing_ruleset: 
-        ruleset_id = existing_ruleset.ruleset_id 
-    else: 
-        ruleset_id = crud.create_ruleset(db=db, ruleset=ruleset)
+    # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
+    for rs in ruleset: 
+        # existing_ruleset = crud.get_ruleset(db=db, rs=ruleset)
+        existing_ruleset = crud.get_ruleset(db=db, ruleset=rs)
+        print(" ##### existing_ruleset #######", existing_ruleset)
+    
+    
+        if existing_ruleset: 
+            ruleset_id = existing_ruleset.ruleset_id
+        else: 
+            ruleset_id = crud.create_ruleset(db=db, ruleset=rs)
     # ruleset_id = crud.create_ruleset(db=db, wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
-    user.ruleset_id = ruleset_id
+    # user.ruleset = ruleset
+        existing_user_ruleset = crud.get_user_ruleset_by_id(db, user_id=user_id, ruleset_id=ruleset_id)
+        print("does existing_user_ruleset exist?", existing_user_ruleset)
+        if not existing_user_ruleset:
+            print("crud existing_user_ruleset does NOT exist")
+            new_e_u_r = crud.create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
+            print("new existing user ruleset:", new_e_u_r)
+    
+    
     print('user in /users/{user_id}', user)
     
     db_user = crud.get_user_by_id(db, user_id=user_id)    
@@ -545,6 +564,13 @@ def get_address(token: Annotated[str, Depends(oauth2_scheme)], address_id:int, d
 
 #  **** ruleset routes ***
 
+# * get /user/ruleset/ 
+# * gets all user rulesets 
+
+@api_app.get("/user/ruleset/", response_model=list[schemas.UserRulesetSchema])
+def get_users_rulesets(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+
+     return crud.get_user_ruleset(db, skip=skip, limit=limit)
 # * get /rulesets/ 
 # * gets all rulesets 
 

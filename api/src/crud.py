@@ -3,11 +3,40 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 from fastapi import Request
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
+from sqlalchemy.orm import joinedload
 
 # By creating functions that are only dedicated to interacting with the database (get a user or an item) independent of your path operation function, you can more easily reuse them in multiple parts and also add unit tests for them.
 
+# ! old get_user_by_id without many to many relationship of rulesets
+# def get_user_by_id(db: Session, user_id: int):
+#     return db.query(models.User).filter(models.User.user_id == user_id).first()
+
 def get_user_by_id(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.user_id == user_id).first()
+    # ? note that this fails if the there is no associated ruleset I want to return ruleset if it is exists but if it doesn't exist I still want to return the user
+    # user = db.query(models.User).options(joinedload(models.Ruleset.ruleset)).filter(models.User.user_id == user_id).first()
+    # if user: 
+    #     # print("^^^^^ user in get_user_by_id many to many relationship ^^^^^^", user)
+    #     # print("user.ruleset[0].ruleset_id in crud.py:", user.ruleset[0].ruleset_id)
+    #     return user
+    # else: 
+    #     user = db.query(models.User).filter(models.User.user_id == user_id)
+    user = (
+        db.query(models.User)
+        .options(joinedload(models.User.ruleset).load_only("ruleset_id"))  # Load only ruleset_id initially
+        .filter(models.User.user_id == user_id)
+        .first()
+    ) 
+    print("*** user in get_user_by_id crud ***", user)
+    print("*** user.username ***", user.username)
+    print("*** user.user_id ***", user.user_id)
+    print("*** user.ruleset in get_user_by_id crud ***", user.ruleset)
+    
+    # if user and user.ruleset:
+    #     user = db.query(models.Ruleset).options(joinedload(models.Ruleset.ruleset)).filter(
+    #         models.Ruleset.ruleset_id == user.ruleset_id
+    #     ).first()
+    #     print(" second user in get_user_by_id crud", user)
+    return user
 
 # def get_user_by_id_with_password(db: Session, user_id: int):
 #     return db.query(models.User).filter(models.User.user_id == user_id).first()
@@ -80,7 +109,7 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     "primary_number": user.primary_number, 
     "secondary_number": user.secondary_number,
     "level": user.level,
-    "ruleset_id": user.ruleset_id,
+    # "ruleset_id": user.ruleset_id,
     "position_id": user.position_id,
     "location_id": user.location_id,
     "associated_leagues": user.associated_leagues
@@ -281,9 +310,19 @@ def get_address_by_id(db: Session, address_id: int):
 def get_rulesets(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Ruleset).offset(skip).limit(limit).all()
 
+# ! get ruleset for one to many relationship 
+# def get_ruleset(db: Session, ruleset: schemas.Ruleset):
+    
+#     test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
+    
+#     print("&&& test &&&", test)
+  
+#     return test
+
+# ! get ruleset for many to many relationship 
 def get_ruleset(db: Session, ruleset: schemas.Ruleset):
     
-    test = db.query(models.Ruleset).filter(models.Ruleset.wftda == ruleset.wftda, models.Ruleset.usars == ruleset.usars, models.Ruleset.banked_track == ruleset.banked_track, models.Ruleset.short_track == ruleset.short_track).first()
+    test = db.query(models.Ruleset).filter(models.Ruleset.name == ruleset.name).first()
     
     print("&&& test &&&", test)
   
@@ -292,19 +331,43 @@ def get_ruleset(db: Session, ruleset: schemas.Ruleset):
 def get_ruleset_by_id(db: Session, ruleset_id: int):
     return db.query(models.Ruleset).filter(models.Ruleset.ruleset_id == ruleset_id).first()
 
-# def create_ruleset(db: Session, wftda: bool, usars: bool, banked_track: bool, short_track:bool):
+# ! create ruleset one to many relationship 
+# # def create_ruleset(db: Session, wftda: bool, usars: bool, banked_track: bool, short_track:bool):
+# def create_ruleset(db: Session, ruleset: schemas.Ruleset):
+# #     print("ruleset in create_ruleset!!!!!:", wftda, usars, banked_track, short_track)
+#     # print("****** address.name *******", address.name)
+#     # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
+#     # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+#     db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+#     db.add(db_ruleset)
+#     db.commit()
+#     db.refresh(db_ruleset)
+    
+#     return db_ruleset.ruleset_id
+#     # return db_address
+
+# ! create ruleset many to many relationship 
 def create_ruleset(db: Session, ruleset: schemas.Ruleset):
-#     print("ruleset in create_ruleset!!!!!:", wftda, usars, banked_track, short_track)
-    # print("****** address.name *******", address.name)
-    # db_address = models.Address(name=address.name, street_address=address.street_address, city=address.city, state=address.state, zip_code=address.zip_code)
-    # db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
-    db_ruleset = models.Ruleset(wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+    print("rulset in create_rulset CRUD", ruleset)
+    db_ruleset = models.Ruleset(name=ruleset.name)
     db.add(db_ruleset)
     db.commit()
     db.refresh(db_ruleset)
     
     return db_ruleset.ruleset_id
-    # return db_address
+
+def get_user_ruleset_by_id(db: Session, user_id: int, ruleset_id: int): 
+    return db.query(models.UserRuleset).filter(models.UserRuleset.user_id == user_id, models.UserRuleset.ruleset_id == ruleset_id).first()
+
+def get_user_ruleset(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.UserRuleset).offset(skip).limit(limit).all()
+    
+def create_user_ruleset(db: Session, user_id: int, ruleset_id: int): 
+    db_user_ruleset = models.UserRuleset(user_id=user_id, ruleset_id=ruleset_id)
+    db.add(db_user_ruleset)
+    db.commit()
+    db.refresh(db_user_ruleset)
+    return db_user_ruleset
     
 #  *** CRUD positions ***
     
