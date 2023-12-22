@@ -124,11 +124,13 @@ function App() {
 
     }
 
-    async function updateUser(derby_name, data) {
+    async function updateUser(user_id, data) {
       console.log("is this the error update")
       try {
-        let token = await FastApi.updateUser(derby_name, data);
+        let user = await FastApi.updateUser(user_id, data);
         // setToken(token);
+        // ! note I think you want to set the new user in storage but not 100% on this
+        localStorage.setItem('user', JSON.stringify(user));
         return { success: true };
       } catch (errors) {
         console.error("update failed", errors);

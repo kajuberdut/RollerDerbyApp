@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import FastApi from "../Api";
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import UserContext from "../multiUse/UserContext";
-
 import { useNavigate } from "react-router-dom";
+
 import "./SetupProfileForm.css"
 import {
     Card,
@@ -21,21 +19,15 @@ import {
  * Form for creating a user or updating a logged in user.
  */
 
-// const SetupProfileForm = ({update}) => {
 function SetupProfileForm({update}) {
 
-  /** Set user, history and initial state and set valid, invalid, and error message in state */
+/** Retrieve user from local storage */
 
-  // ! note for some reason this is not allowing us to destructure user or setUSer 
-// const { user, setUser } = useContext(UserContext);
-// const { user } = useContext(UserContext);
-// ! now this isn't working either 
-const userCont = useContext(UserContext)
-console.log("userCont !!! in setup profile form", userCont)
-let user  = userCont.user
-console.log("user !!! in setup profile form", user)
-// console.log("user.user", user.user)
 
+const user = JSON.parse(localStorage.getItem('user'));
+// console.log("user !!! in setup profile form", user)
+
+ /** Set user, history and initial state and set valid, invalid, and error message in state */
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
@@ -43,27 +35,32 @@ console.log("user !!! in setup profile form", user)
 // const [file, setFile] = useState<File | undefined>();
 // const [preview, setPreview] = useState<string | undefined>();
 const navigate = useNavigate();
+const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
+const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
+const [formRulesets, setFormRulesets] = useState([]);
 
-// let user = "SockHer Blue"  
 
-useEffect(() => {
-  if (user) {
-      // Perform actions when user becomes available
-  }
-}, [user]);
+// if(!user) {
+//   navigate('/')
+// }
 
-  /** 
-   * Sets Initial State of Form
-  */
-
-if(!user) {
-  navigate('/')
-}
-
-let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastName: user.lastName, email: user.Email,  facebookName: user.facebookName, about: user.about, primNum: user.primNum, secNum: user.secNum, level: user.level, primIns: user.primIns, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.assocLeagues, ruleset: []};
+let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastName: user.last_name, email: user.email,  facebookName: user.facebook_name, about: user.about, primNum: user.prim_number, secNumber: user.secondary_number, level: user.level, primIns: user.primary_Insurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associated_leagues };
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
+
+  function format(formData) {
+    console.log("formData.secIns", formData.secIns)
+    let ins1 = formData.primIns
+    let val1 = formData.primInsNum
+    let ins2 = formData.secIns
+    let val2 = formData.secInsNum
+    
+    let newData = {
+      username: formData.username, firstName: formData.first_name, lastName: formData.last_name, email: formData.email,  facebookName: formData.facebook_name, about: formData.about, primNum: formData.primary_number, secNumber: formData.secondary_number, level: formData.level, primIns: { [ins1]: val1 }, secIns: { [ins2]: val2 }, assocLeagues: user.associated_leagues, rulesets: formRulesets
+    }
+    console.log("newData:", newData)
+  }
   
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
@@ -73,7 +70,10 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
     setFormData(INITIAL_STATE);
    
     console.log("update!!!!!:", update)
-    let result = await update(formData);
+    format(formData)
+    // let result = await update(formData);
+    let result = false; 
+    console.log("fake form data has been submitted")
 
     //   setValid(true)
     if(result) {
@@ -81,13 +81,27 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
 
     } else {
       // let message = result.errors[0]
-      let message = result
+      // let message = result
       // setErrorMessage(message)
       // setInvalid(true)
+      console.log("fake form has failed to submit")
     }
    }
 
   /** Update local state with current state of input element */
+
+  const handleRulesetsChange = evt => {
+    // ! note you are going to have to adjust this right now you have rulesets as an array but in the database you have rulesets that are an object. 
+    console.log("you are hitting handleRulesetsChange")
+    // setFormRulesets(evt.target.value);
+    // setFormRulesets((prevRulesets) => [...prevRulesets, ...evt.target.value]);
+    setFormRulesets((prevRulesets) => [
+      ...prevRulesets,
+      ...Array.from(evt.target.selectedOptions).map((option) => option.value),
+    ])
+    /
+    console.log("!!!!!!!!!!!!!! formRulesets:", formRulesets)
+  };
 
   const handleChange = evt => {
     console.log('handleChange is running')
@@ -97,8 +111,35 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
       ...fData,
       [name]: value,
     }));
+
+    if (name === "primIns") {
+      if (value === "") {
+        setFormData((prevData) => ({
+          ...prevData,
+          primInsNum: "",
+        })); // Clear the insurance number field
+        setPrimInsNumDisabled(true); // Disable the insurance number field
+      } else {
+        setPrimInsNumDisabled(false); // Enable the insurance number field
+        // If needed, prompt for insurance number if it's still empty
+      }
+    };
+    if (name === "secIns") {
+      if (value === "") {
+        setFormData((prevData) => ({
+          ...prevData,
+          secInsNum: "",
+        })); // Clear the insurance number field
+        setSecInsNumDisabled(true); // Disable the insurance number field
+      } else {
+        setSecInsNumDisabled(false); // Enable the insurance number field
+        // If needed, prompt for insurance number if it's still empty
+  }
+
+  }
+
     console.log("formData in setupProfileForm:", formData)
-  };
+}
 
   /** toggle dropdown */
 
@@ -253,16 +294,19 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
   
                             // invalid={invalid}
                             >
-                              <option>
+                              <option value={""}>
+                                Prefer not to say.
+                              </option>
+                              <option value={"C"}>
                                 C
                               </option>
-                              <option>
+                              <option value={"B"}>
                                 B
                               </option>
-                              <option>
+                              <option value={"A"}>
                                 A
                               </option>
-                              <option>
+                              <option value={"AA"}>
                                 AA
                               </option>
                             {/* </Col> */}
@@ -276,17 +320,20 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
                             value={formData.primIns}
                             onChange={handleChange}
                             placeholder="Primary Insurance"
-                            id="primaryInsurance"
+                            id="primIns"
   
                             // invalid={invalid}
                             >
-                              <option>
+                              <option value={""}>
+                                N/A 
+                              </option>
+                              <option value={"WFTDA"}>
                                 WFTDA
                               </option>
-                              <option>
+                              <option value={"USARS"}>
                                 USARS
                               </option>
-                              <option>
+                              <option value={"other"}>
                                 Other
                               </option>
               
@@ -301,6 +348,7 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
                             onChange={handleChange}
                             placeholder="Primary Insurance Number"
                             id="primInsNum"
+                            disabled={primInsNumDisabled}
   
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
@@ -314,17 +362,20 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
                             value={formData.secIns}
                             onChange={handleChange}
                             placeholder="Secondary Insurance"
-                            id="secondaryInsurance"
+                            id="secIns"
   
                             // invalid={invalid}
                             >
-                              <option>
+                              <option value={""}>
+                                N/A 
+                              </option>
+                              <option value={"WFTDA"}>
                                 WFTDA
                               </option>
-                              <option>
+                              <option value={"USARS"}>
                                 USARS
                               </option>
-                              <option>
+                              <option value={"other"}>
                                 Other
                               </option>
                         </Input>
@@ -338,6 +389,7 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
                             onChange={handleChange}
                             placeholder="Secondary Insurance Number"
                             id="secInsNum"
+                            disabled={secInsNumDisabled}
   
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
@@ -357,34 +409,31 @@ let INITIAL_STATE = { username: user.username, firstName: user.firstName, lastNa
                             // note will have to restrict this to numbers only
                         />
 
-                        {/* <Label htmlFor="rulesets">Played Rulesets: </Label>
+                        <Label htmlFor="rulesets">Played Rulesets: </Label>
                         <Input
                             type="select"
                             name="rulesets"
                             className="form-control"
                             value={formData.rulesets}
-                            onChange={handleChange}
+                            onChange={handleRulesetsChange}
                             placeholder="Played Rulesets"
                             id="rulesets"
                             multiple
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
                             
                         >     
-                        <option>
+                        <option value={"WFTDA"}>
                         WFTDA
                       </option>
-                      <option>
+                      <option value={"USARS"}>
                         USARS
                       </option>
-                      <option>
+                      <option value={"banked track"}>
                         Banked Track 
                       </option>
-                      <option>
+                      <option value={"short track"}>
                         Short Track 
                       </option>
-                        </Input> */}
+                        </Input>
 
 
                         {/* todod need to add this in */}

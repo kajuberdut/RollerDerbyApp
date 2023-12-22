@@ -22,7 +22,7 @@ import {
 const LoginForm = ({login}) => {
     
    /** Set form data, history, valid, and errorMessage in State */
-   let INITIAL_STATE = { username: "", password: ""};
+  let INITIAL_STATE = { username: "", password: ""};
   const [formData, setFormData] = useState(INITIAL_STATE);
   // // const history = useHistory();
   // const [ invalid, setInvalid ] = useState(false);
