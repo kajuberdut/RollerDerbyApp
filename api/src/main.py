@@ -260,7 +260,8 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 # todo: COME BACK TO THIS TOMORROW NOTE THAT YOU NEED TO MAKE SURE YOU ARE ADDING THE user_id and ruleset_id to the USER_RULESET table
 
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: list[schemas.Position], location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: list[schemas.Position], insurance: list[schemas.Insurance], location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
+    print("!!!! INSURANCE IN MAIN.PY !!!! ", insurance)
     
     # print("**** ruleset ****:", ruleset)
     
@@ -286,14 +287,14 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
         if not existing_user_position:
             print("crud existing_user_position does NOT exist")
             new_e_u_p = crud.create_user_position(db, user_id=user_id, position_id=position_id)
-            print("new existing user position:", new_e_u_p)
+            # print("new existing user position:", new_e_u_p)
  
     
     # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
     for rs in ruleset: 
         # existing_ruleset = crud.get_ruleset(db=db, rs=ruleset)
         existing_ruleset = crud.get_ruleset(db=db, ruleset=rs)
-        print(" ##### existing_ruleset #######", existing_ruleset)
+        # print(" ##### existing_ruleset #######", existing_ruleset)
     
     
         if existing_ruleset: 
@@ -307,7 +308,39 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
         if not existing_user_ruleset:
             print("crud existing_user_ruleset does NOT exist")
             new_e_u_r = crud.create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
-            print("new existing user ruleset:", new_e_u_r)
+            # print("new existing user ruleset:", new_e_u_r)
+            
+    # ? looping through every insurance 
+    print("LOOPING THROUGH EVERY INSURANCE")
+    for ins in insurance: 
+        # ? find if that insurance already exists
+        print("!!!! ins in inurance !!!!:", ins)
+        existing_insurance = crud.get_insurance(db=db, insurance=ins)
+        print(" ##### existing_insurance #######", existing_insurance)
+    
+        # ? if it exists return insurance id
+        if existing_insurance: 
+            insurance_id = existing_insurance.insurance_id
+        # ? if insurance does not exist create insurance and return the id
+        else: 
+            insurance_id = crud.create_insurance(db=db, insurance=ins)
+    # ruleset_id = crud.create_ruleset(db=db, wftda=ruleset.wftda, usars=ruleset.usars, banked_track=ruleset.banked_track, short_track=ruleset.short_track)
+    # user.ruleset = ruleset
+        # ? using the insurance id which is why its idented 
+        existing_user_insurance = crud.get_user_insurance_by_id(db, user_id=user_id, insurance_id=insurance_id)
+        print("does existing_user_insurance exist?", existing_user_insurance)
+        
+        # !! need to get the insurance number to be able to create the new insurance if that does not already exist. 
+        if not existing_user_insurance:
+            print("crud existing_user_insurance does NOT exist")
+            # ! this might be an issue
+            print(" &&& insurance_number &&&", insurance )
+            # ? if there is NO existing_user_insurance we want to create a new one otherwise we just want to use that id??? 
+           
+            new_e_u_i = crud.create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
+            # ? returning user insurance if it is created 
+            # TODO ONLY ONE INSTANCE OF USER INSURANCE IS BEING ADDED 
+            print("new existing user insurance:", new_e_u_i)
     
     
     print('user in /users/{user_id}', user)
@@ -619,6 +652,32 @@ def get_positions(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, 
 def get_position(token: Annotated[str, Depends(oauth2_scheme)], position_id:int, db: Session = Depends(get_db)):
     
     return crud.get_position_by_id(db, position_id=position_id)
+
+#  **** insurance routes ***
+
+# * get /user/insurance/ 
+# * gets all user positions 
+
+@api_app.get("/user/insurance/", response_model=list[schemas.UserInsurance])
+def get_users_insurance(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+
+     return crud.get_user_insurance(db, skip=skip, limit=limit)
+
+# * get /insurances/ 
+# * gets all insurance
+
+@api_app.get("/insurance/", response_model=list[schemas.Insurance])
+def get_insurances(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    return crud.get_insurances(db, skip=skip, limit=limit)
+    
+# * get /insurances/{insurance_id} 
+# * gets one insurance by id
+
+@api_app.get("/insurances/{insurance_id}", response_model=schemas.Insurance)
+def get_insurance(token: Annotated[str, Depends(oauth2_scheme)], insurance_id:int, db: Session = Depends(get_db)):
+    
+    return crud.get_insurance_by_id(db, insurance_id=insurance_id)
 
 #  **** location routes ***
 

@@ -21,6 +21,15 @@ class UserPosition(SQLAlchemyBase):
     position_id = Column(Integer, ForeignKey("position.position_id"), primary_key=True)
     user = relationship("User", back_populates="position")
     position = relationship("Position", back_populates="user") 
+    
+class UserInsurance(SQLAlchemyBase):
+    __tablename__ = "user_insurance"
+
+    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    insurance_id = Column(Integer, ForeignKey("insurance.insurance_id"), primary_key=True)
+    insurance_number = Column(String)
+    user = relationship("User", back_populates="insurance")
+    insurance = relationship("Insurance", back_populates="user") 
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -38,12 +47,13 @@ class User(SQLAlchemyBase):
     primary_number = Column(Integer, nullable=True)
     secondary_number = Column(Integer, nullable=True)
     level = Column(String, nullable=True)
-    # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
     ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
-    # position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
+    insurance = relationship("UserInsurance", back_populates="user")
     location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
+    # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
+    # position_id = Column(Integer, ForeignKey("position.position_id"), nullable=True)
     # ruleset = relationship("UserRuleset", back_populates="user")
     # ruleset = relationship("Ruleset", back_populates="user")
     
@@ -68,7 +78,13 @@ class Position(SQLAlchemyBase):
     # blocker = Column(Boolean)
     # pivot = Column(Boolean)
     # user = relationship("User", backref="position")
-    
+
+class Insurance(SQLAlchemyBase):
+    __tablename__ = "insurance"  
+    insurance_id = Column(Integer, primary_key=True)
+    type = Column(String)
+    user = relationship("UserInsurance", back_populates="insurance")    
+
 class Location(SQLAlchemyBase):
     __tablename__ = "location"
 

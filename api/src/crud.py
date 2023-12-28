@@ -432,6 +432,46 @@ def create_user_position(db: Session, user_id: int, position_id: int):
     db.refresh(db_user_position)
     return db_user_position
 
+#  *** CRUD insurances ***
+
+def get_insurances(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Insurance).offset(skip).limit(limit).all()
+
+def get_insurance(db: Session, insurance: schemas.Insurance):
+    
+    return db.query(models.Insurance).filter(models.Insurance.type == insurance.type).first()
+
+def get_insurance_by_id(db: Session, insurance_id: int):
+    return db.query(models.Insurance).filter(models.Insurance.insurance_id == insurance_id).first()
+
+# ! NOTE THAT YOU PROBABLY NEED TO ENTER THE INSURANCE NUMBER AS WELL.... NEED TO FIGURE THAT OUT
+def create_insurance(db: Session, insurance: schemas.Insurance):
+    print("insurance.insurance_number:", insurance.insurance_number)
+    print("insurance.type in create_insurance CRUD", insurance.type)
+    print("insurance in create_insurance CRUD", insurance)
+    # print("insurance.insurance_number:", insurance.insurance_number)
+    db_insurance = models.Insurance(type=insurance.type)
+    db.add(db_insurance)
+    db.commit()
+    db.refresh(db_insurance)
+    
+    return db_insurance.insurance_id
+
+#  *** CRUD user insurance ***
+
+def get_user_insurance_by_id(db: Session, user_id: int, insurance_id: int): 
+    return db.query(models.UserInsurance).join(models.Insurance).filter(models.UserInsurance.user_id == user_id, models.Insurance.insurance_id == insurance_id).first()
+
+def get_user_insurance(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.UserInsurance).offset(skip).limit(limit).all()
+    
+def create_user_insurance(db: Session, user_id: int, insurance_id: int, insurance_number: str): 
+    db_user_insurance = models.UserInsurance(user_id=user_id, insurance_id=insurance_id, insurance_number=insurance_number)
+    db.add(db_user_insurance)
+    db.commit()
+    db.refresh(db_user_insurance)
+    return db_user_insurance
+
 #  *** CRUD locations ***
 
 def get_locations(db: Session, skip: int = 0, limit: int = 100):

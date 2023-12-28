@@ -72,6 +72,7 @@ class UserPosition(BaseModel):
     class Config:
         from_attributes = True
         
+        
 # *** end user ruleset pydantic models ***
 
 class UserBase(BaseModel): 
@@ -106,7 +107,7 @@ class Ruleset(BaseModel):
 
     class Config:
         from_attributes = True
-        
+
 class Position(BaseModel): 
     position_id: int = Field(default_factory=lambda: 0)
     position: str
@@ -122,6 +123,38 @@ class Position(BaseModel):
 
     class Config:
         from_attributes = True
+        
+        
+class UserInsurance(BaseModel):
+    user_id: int
+    insurance_id: int
+    insurance_number: str
+
+    class Config:
+        from_attributes = True
+        
+class Insurance(BaseModel): 
+    insurance_id: int = Field(default_factory=lambda: 0)
+    type: str
+    insurance_number: str
+    # todo unsure about this above line 
+    
+    @field_validator('type')
+    def validate_insurance(cls, v):
+        insurance_list = [
+        'WFTDA', 'USARS', 'other'
+        ]
+        if v not in insurance_list:
+            raise ValueError("Invalid insurance")
+        return v  
+
+    class Config:
+        from_attributes = True
+
+
+# ! just added this to handle the isnurance number    
+# class InsuranceUpdate(Insurance): 
+#     insurance_number = str 
 
 class UserUpdate(UserBase):
     first_name: str
@@ -131,14 +164,13 @@ class UserUpdate(UserBase):
     primary_number: int
     secondary_number: int
     level: str
-    # ruleset_id: int
-    # ? this appears necessary to patch update user and ruleset is returning null even though it is creating the ruleset? 
-    # ? not sure how to get the relationship but I think its creating it???? 
     ruleset: Ruleset = None
     position: Position = None
-    # position_id: int
+    insurance: Insurance = None
     location_id: int
     associated_leagues: str
+    # ruleset_id: int
+    # position_id: int
    
     
 # class UserDetailsPublic(UserBase): 
@@ -154,14 +186,13 @@ class UserDetailsPublic(UserBase):
     about: Optional[str] = None 
     primary_number: Optional[int] = None
     level: Optional[str] = None 
-    # ruleset_id: Optional[int] = None
-    # ruleset: Optional[list[Ruleset]] = None
-    # ruleset: Optional[list] = None
     ruleset: Optional[list[UserRuleset]] = None
     position: Optional[list[UserPosition]] = None
-    # position_id: Optional[int] = None
+    insurance: Optional[list[UserInsurance]] = None
     location_id: Optional[int] = None
     associated_leagues: Optional[str] = None
+    # ruleset_id: Optional[int] = None
+    # position_id: Optional[int] = None
     
     @field_validator('level', mode="before")
     @classmethod
