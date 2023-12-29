@@ -150,6 +150,19 @@ class Insurance(BaseModel):
 
     class Config:
         from_attributes = True
+        
+class InsuranceOutput(BaseModel): 
+    insurance_id: int = Field(default_factory=lambda: 0)
+    type: str
+    
+    @field_validator('type')
+    def validate_insurance(cls, v):
+        insurance_list = [
+        'WFTDA', 'USARS', 'other'
+        ]
+        if v not in insurance_list:
+            raise ValueError("Invalid insurance")
+        return v  
 
 
 # ! just added this to handle the isnurance number    
@@ -157,9 +170,11 @@ class Insurance(BaseModel):
 #     insurance_number = str 
 
 class UserUpdate(UserBase):
+    phone_number: str
     first_name: str
     last_name: str
     facebook_name: str
+    additional_info: str
     about: str
     primary_number: int
     secondary_number: int
@@ -171,6 +186,14 @@ class UserUpdate(UserBase):
     associated_leagues: str
     # ruleset_id: int
     # position_id: int
+    
+    @field_validator('phone_number', mode="before")
+    @classmethod
+    def phone_number_must_be_valid(cls, value):
+        phone_regex = r"^\d{10}$"  
+        if not re.match(phone_regex, value):
+            raise ValueError("Invalid phone number format. Please enter a 10-digit number")
+        return value
    
     
 # class UserDetailsPublic(UserBase): 
@@ -202,8 +225,10 @@ class UserDetailsPublic(UserBase):
         return value
     
 class UserDetailsPrivate(UserDetailsPublic): 
+    phone_number: Optional[str] = None
     first_name: Optional[str] = None 
     last_name: Optional[str] = None 
+    additional_info: Optional[str] = None
     secondary_number: Optional[int] = None
     
 # * note with this you dont have to have the user_id in the object but you could change this. 
@@ -252,7 +277,8 @@ class EventBase(BaseModel):
     level: str
     co_ed: bool
     ruleset: str
-    # jersey_colors: str
+    floor_type: str
+    jersey_colors: str
     # address: Address
     
     class Config:

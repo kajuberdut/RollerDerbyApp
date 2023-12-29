@@ -39,13 +39,21 @@ const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
 const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
 const [formRulesets, setFormRulesets] = useState([]);
 const [displayRulesets, setDisplayRulesets] = useState([]);
+const [primIns, setPrimIns] = useState([]);
+const [secIns, setSecIns] = useState([]);
 
 
 // if(!user) {
 //   navigate('/')
 // }
 
-let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastName: user.last_name, email: user.email,  facebookName: user.facebook_name, about: user.about, primNum: user.prim_number, secNumber: user.secondary_number, level: user.level, primIns: user.primary_Insurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associated_leagues };
+console.log("USER IN EDIT PROFILE PAGE", user)
+
+// if(user.insurance) {
+//   getUserInsurance()
+// }
+
+let INITIAL_STATE = { username: user.username, phoneNumber: user.phone_number, firstName: user.first_name, lastName: user.last_name, additionalInfo: user.additional_info, email: user.email,  facebookName: user.facebook_name, about: user.about, primNum: user.primary_number, secNum: user.secondary_number, level: user.level, primIns: user.primary_Insurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associated_leagues };
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -56,13 +64,37 @@ let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastN
     let val1 = formData.primInsNum
     let ins2 = formData.secIns
     let val2 = formData.secInsNum
-    
+    // ! will have to prefill rulesets - primary insurance, secondary, insurance, 
+
     let newData = {
-      username: formData.username, firstName: formData.first_name, lastName: formData.last_name, email: formData.email,  facebookName: formData.facebook_name, about: formData.about, primNum: formData.primary_number, secNumber: formData.secondary_number, level: formData.level, primIns: { [ins1]: val1 }, secIns: { [ins2]: val2 }, assocLeagues: user.associated_leagues, rulesets: formRulesets
+      username: formData.username, phoneNumber: formData.phoneNumber, firstName: formData.firstName, lastName: formData.lastName, additional_info: formData.additionalInfo, email: formData.email,  facebookName: formData.facebookName, about: formData.about, primNum: formData.primNum, secNum: formData.secNum, level: formData.level, primIns: { [ins1]: val1 }, secIns: { [ins2]: val2 }, assocLeagues: formData.assocLeagues, rulesets: formRulesets
     }
     console.log("newData:", newData)
   }
   
+    /** Get user insurance information if it exists */
+
+  async function getUserInsurance() {
+    if(user.insurance[0]) {
+      let primIns = await FastApi.getInsurance(user.insurance[0].insurance_id)
+      console.log("primIns:", primIns)
+      setPrimIns(primIns)
+    }
+  
+    let insArr = []
+    // for(let ins of user.insurance) {
+    //   let insurance = await FastApi.getInsurance(ins.insurance_id);
+    //   insArr.push(insurance.type + ":")
+    //   insArr.push(ins.insurance_number)
+    // }
+    // if(insArr.length > 2){
+    //   insArr[1] += ","
+    // }    
+    // let userInsurances = insArr.join(" ")
+    // setInsurances(userInsurances)
+  }
+
+
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
   const handleSubmit = async evt => {
@@ -181,17 +213,34 @@ let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastN
                            // invalid={invalid}
                        />
 
-                    <Label htmlFor="image">Profile Image: </Label>
-                      <Input
-                          type="file"
-                          id="image"
-                          name="image"
-                          value={formData.image}
-                          onChange={handleChange}
-                          accept="image/png image/jpg"
-                          // valid={valid}
-                          // invalid={invalid}
-                      />
+                      <Label htmlFor="image">Profile Image: </Label>
+                        <Input
+                            type="file"
+                            id="image"
+                            name="image"
+                            value={formData.image}
+                            onChange={handleChange}
+                            accept="image/png image/jpg"
+                            // valid={valid}
+                            // invalid={invalid}
+                        />
+
+                      <Label htmlFor="phoneNumber">Phone Number: </Label>
+                       
+                        <Input
+                            type="tel"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                            pattern="[0-9]*"
+                            // pattern="/^-?\d+\.?\d*$/"
+                            maxLength="10"
+                            // valid={valid}
+                            // invalid={invalid}
+                        />
+                       
 
                         <Label htmlFor="firstName">First Name: </Label>
                        
@@ -215,6 +264,19 @@ let INITIAL_STATE = { username: user.username, firstName: user.first_name, lastN
                             value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Last Name"
+                            // valid={valid}
+                            // invalid={invalid}
+                        />
+
+                        
+                        <Label htmlFor="additionalInfo">Additional Information: </Label>
+                        <Input
+                            type="text"
+                            id="additionalInfo"
+                            name="additionalInfo"
+                            value={formData.additionalInfo}
+                            onChange={handleChange}
+                            placeholder="Additional Private Information"
                             // valid={valid}
                             // invalid={invalid}
                         />

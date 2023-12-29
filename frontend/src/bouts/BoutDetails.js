@@ -113,6 +113,13 @@ function BoutDetail() {
                     <p className="lead fw-normal mb-1">Details</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{bout.team} vs. {bout.opposing_team}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{bout.jersey_colors}</MDBCardText>
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Floor Type</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{bout.floor_type}</MDBCardText>
                     </div>
                   </div>
                   <div className="mb-5">

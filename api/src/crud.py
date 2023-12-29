@@ -102,8 +102,10 @@ def update_user(db: Session, user: schemas.UserUpdate, user_id):
     # "derby_name": user.derby_name,
     "username": user.username,
     "email": user.email,
+    "phone_number": user.phone_number,
     "first_name": user.first_name, 
     "last_name": user.last_name,
+    "additional_info": user.additional_info,
     "facebook_name": user.facebook_name, 
     "about": user.about,
     "primary_number": user.primary_number, 
@@ -162,10 +164,16 @@ def get_mixers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Mixer).offset(skip).limit(limit).all()
 
 def create_bout(db: Session, bout: schemas.Bout):
-
+    print("^^^^ BOUT in crud.py ^^^^^", bout)
     # db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team, jersey_colors=bout.jersey_colors)
     
-    db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, opposing_team=bout.opposing_team, team=bout.team)
+    print("bout.jersey_colors &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", bout.jersey_colors)
+
+    
+    db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, floor_type=bout.floor_type, jersey_colors=bout.jersey_colors, opposing_team=bout.opposing_team, team=bout.team)
+   
+    # db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, floor_type=bout.floor_type, opposing_team=bout.opposing_team, team=bout.team)
+     
      
     db.add(db_bout)
     db.commit()
@@ -175,7 +183,7 @@ def create_bout(db: Session, bout: schemas.Bout):
 
 def create_mixer(db: Session, mixer: schemas.Mixer):
 
-    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, address_id=mixer.address_id, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, signup_link=mixer. signup_link)
+    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, address_id=mixer.address_id, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, floor_type=mixer.floor_type, jersey_colors=mixer.jersey_colors, signup_link=mixer. signup_link)
      
     db.add(db_mixer)
     db.commit()
@@ -198,7 +206,8 @@ def update_bout(db: Session, bout: schemas.BoutUpdate, event_id):
     "level": bout.level,
     "co_ed": bout.co_ed, 
     "ruleset": bout.ruleset,
-    # "jersey_colors": bout.jersey_colors,
+    "floor_type": bout.floor_type,
+    "jersey_colors": bout.jersey_colors,
     "opposing_team": bout.opposing_team, 
     "team": bout.team
     }
@@ -229,7 +238,7 @@ def update_mixer(db: Session, mixer: schemas.MixerUpdate, event_id):
     "level": mixer.level,
     "co_ed": mixer.co_ed, 
     "ruleset": mixer.ruleset,
-    # "jersey_colors": mixer.jersey_colors,
+    "jersey_colors": mixer.jersey_colors,
     "signup_link": mixer.signup_link
     }
 

@@ -117,9 +117,21 @@ function MixerDetail() {
                     </div>
                   </div>
                   <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Floor Type</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{mixer.floor_type}</MDBCardText>
+                    </div>
+                  </div>
+                  <div className="mb-5">
                     <p className="lead fw-normal mb-1">Description</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{mixer.description}</MDBCardText>
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Jersey Colors</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{mixer.jersey_colors}</MDBCardText>
                     </div>
                   </div>
                 </MDBCardBody>

@@ -226,9 +226,9 @@ class FastApi {
     /** Get specific rulesets by ID*/
 
   static async getRuleset(rulesetId) {
-    console.log("hitting the getAddress in api.js")
+    // console.log("hitting the getAddress in api.js")
     let res = await this.request(`rulesets/${rulesetId}`);
-    console.log("res:", res)
+    // console.log("res:", res)
     return res
   }
 
@@ -236,7 +236,7 @@ class FastApi {
   
   static async getPosition(positionId) {
     let res = await this.request(`positions/${positionId}`);
-    console.log("res:", res)
+    // console.log("res:", res)
     return res
   }
 
@@ -244,9 +244,18 @@ class FastApi {
   
   static async getLocation(locationId) {
     let res = await this.request(`locations/${locationId}`);
+    // console.log("res:", res)
+  return res
+  }
+
+  /** Get specific positions by ID*/
+  
+  static async getInsurance(insuranceId) {
+    let res = await this.request(`insurances/${insuranceId}`);
     console.log("res:", res)
   return res
   }
+ 
  
 
 }

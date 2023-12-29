@@ -28,8 +28,10 @@ function Profile() {
     const [rulesets, setRulesets] = useState();
     const [positions, setPositions] = useState();
     const [location, setLocation] = useState();
+    const [insurances, setInsurances] = useState();
     const [city, setCity] = useState();
     const [state, setState] = useState();
+    const [phoneNumber, setPhoneNumber] = useState();
 
     // retrieve user from localStorage so that page can be refreshed 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -49,8 +51,16 @@ function Profile() {
           }
           // Fetch location data
           if (user.location_id) {
-            console.log("user.location_id is running")
+            // console.log("user.location_id is running")
             getUserLocation()
+          }
+          if (user.insurance) {
+            getUserInsurance()
+          }
+
+          if(user.phone_number){
+            console.log("IF STATEMENT IS RUNNING")
+            formatPhoneNumber()
           }
         }
   
@@ -77,29 +87,30 @@ function Profile() {
     setPositions(userPositions)
   }
 
-  // async function getUserPosition() {
-  //   let pos = []; 
-  //   let position = await FastApi.getPosition(user.position_id)
-  //     if (position.jammer) {
-  //       pos.push("Jammer ");
-  //     }
-  //     if (position.blocker) {
-  //       pos.push("Blocker ");
-  //     }
-  //     if (position.pivot) {
-  //       pos.push("Pivot ")
-  //     }
-  //   let userPositions = pos.join(", ")
-  //   console.log("positions before state:", positions)
-  //   setPositions(userPositions)
-  //   console.log("positions after state:", positions)
+  async function getUserInsurance() {
+    let insArr = []
+    for(let ins of user.insurance) {
+      let insurance = await FastApi.getInsurance(ins.insurance_id);
+      insArr.push(insurance.type + ":")
+      insArr.push(ins.insurance_number)
+    }
+    if(insArr.length > 2){
+      insArr[1] += ","
+    }    
+    let userInsurances = insArr.join(" ")
+    setInsurances(userInsurances)
+  }
 
-  // }
 
   async function getUserLocation() {
     let userLocation = await FastApi.getLocation(user.location_id);
     setCity(userLocation.city)
     setState(userLocation.state)
+  }
+
+  async function formatPhoneNumber() {
+    let formPhoneNum = user.phone_number.slice(0, 3) + '-' + user.phone_number.slice(3, 6) + '-' + user.phone_number.slice(6);
+    setPhoneNumber(formPhoneNum)
   }
 
     /** Render cards */
@@ -127,6 +138,7 @@ function Profile() {
                   </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
                     <MDBTypography tag="h4">{user.username} #{user.primary_number}</MDBTypography>
+                    {/* {user.first_name && user.last_name && <MDBCardText>{user.first_name} {user.last_name}</MDBCardText>} */}
                     {user.location_id && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
                   </div>
                 </div>
@@ -151,6 +163,22 @@ function Profile() {
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">
+                {/* { user.insurance && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Insurances</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{insurances}</MDBCardText>
+                    </div>
+                  </div>
+                  } */}
+                {/* { user.secondary_number && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Secondary Number</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{user.secondary_number}</MDBCardText>
+                    </div>
+                  </div>
+                  } */}
+                {/* { user.secondary_number && <p className="lead fw-normal mb-1">Secondary Number</p>
+                } */}
                 { user.about && <div className="mb-5">
                     <p className="lead fw-normal mb-1">About</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
@@ -158,22 +186,140 @@ function Profile() {
                     </div>
                   </div>
                   }
-                  { user.associatedLeagues && <div className="mb-5">
+                  { user.associated_leagues && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Associated Leagues</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.associatedLeagues}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{user.associated_leagues}</MDBCardText>
                     </div>
                   </div>
                   }
-                  { user.facebookName && <div className="mb-5">
-                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebookName}</p>
+                  { user.facebook_name && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebook_name}</p>
                   </div>
                   }
+                </MDBCardBody>
+
+                <MDBContainer>
+          <MDBRow className="justify-content-center align-items-center h-100"> 
+            <MDBCol lg="9" xl="10">
+              <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
+
+                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
+
+                  <MDBContainer 
+                     className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '200px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                      <div><h3>Private Information to be shared with team admins</h3></div>
+                      </MDBContainer>
+                  </div>
+                  <a href="/setup">
+                    <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
+                      style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
+                      Edit
+                    </button>
+                  </a>
+                  <div className="ms-3" style={{ marginTop: '180px'}}>
+                    {user.first_name && user.last_name && <MDBCardText tag="h4">{user.first_name} {user.last_name}</MDBCardText>}
+                    <MDBTypography tag="h4">{user.email}</MDBTypography>
+                    {user.phone_number && <MDBTypography tag="h4">{phoneNumber}</MDBTypography>}
+                  </div>
+                </div>
+                <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                  <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                
+                   
+              
+                  </div>
+                </div>
+                <MDBCardBody className="text-black p-4">
+                { user.insurance && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Insurances</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{insurances}</MDBCardText>
+                    </div>
+                  </div>
+                  }
+                
+                {user.additional_info && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Additonal Information</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{user.additional_info}</MDBCardText>
+                    </div>
+                  </div>
+                }
+                
+                { user.secondary_number && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Secondary Number</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{user.secondary_number}</MDBCardText>
+                    </div>
+                  </div>
+                  }           
+              
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
+              </MDBCard>
+            </MDBCol>
+          </MDBRow>
+          {/* <MDBContainer>
+          <MDBRow className="justify-content-center align-items-center h-100"> 
+            <MDBCol lg="9" xl="10">
+              <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
+
+                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
+
+                  <MDBContainer 
+                     className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '200px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                      <div><h3>Private Information to be shared with team admins</h3></div>
+                      </MDBContainer>
+                  </div>
+                  <a href="/setup">
+                    <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
+                      style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
+                      Edit
+                    </button>
+                  </a>
+                  <div className="ms-3" style={{ marginTop: '180px'}}>
+                    {user.first_name && user.last_name && <MDBCardText tag="h4">{user.first_name} {user.last_name}</MDBCardText>}
+                    <MDBTypography tag="h4">{user.username} #{user.primary_number}</MDBTypography>
+       
+                  </div>
+                </div>
+                <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                  <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                
+                   
+              
+                  </div>
+                </div>
+                <MDBCardBody className="text-black p-4">
+                { user.insurance && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Insurances</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{insurances}</MDBCardText>
+                    </div>
+                  </div>
+                  }
+                { user.secondary_number && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">Secondary Number</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{user.secondary_number}</MDBCardText>
+                    </div>
+                  </div>
+                  }           
+              
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer> */}
+        </MDBContainer>
+
+
       </div>
     )
 

@@ -48,7 +48,7 @@ if(!user) {
 
 // let INITIAL_STATE = { bout: { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""}, address: {streetAddres: "", city: "", state: "", zipCode: ""}};
 
-let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""};
+let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", opposingTeam: "", team: ""};
 
 let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
@@ -411,6 +411,32 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                                 Short Track
                               </option>
                         </Input>
+
+                      <Label htmlFor="floorType">Type of Floor: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="floorType"
+                           name="floorType"
+                           value={formDataBout.floorType}
+                           onChange={handleChange}
+                           placeholder="Floor Type"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
+                      <Label htmlFor="jerseyColors">Jersey Colors: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="jerseyColors"
+                           name="jerseyColors"
+                           value={formDataBout.jerseyColors}
+                           onChange={handleChange}
+                           placeholder="Both Teams Jersey Colors"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
 
                         <Label htmlFor="opposingTeam">Opposing Team: </Label>
                         <Input
