@@ -199,7 +199,7 @@ function Profile() {
                   }
                 </MDBCardBody>
 
-                <MDBContainer>
+        <MDBContainer style={{paddingBottom: '100px'}}>
           <MDBRow className="justify-content-center align-items-center h-100"> 
             <MDBCol lg="9" xl="10">
               <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
@@ -208,7 +208,7 @@ function Profile() {
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
 
                   <MDBContainer 
-                     className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '200px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                     className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '200px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)', color: 'black'}}>
                       <div><h3>Private Information to be shared with team admins</h3></div>
                       </MDBContainer>
                   </div>
@@ -232,7 +232,7 @@ function Profile() {
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">
-                { user.insurance && <div className="mb-5">
+                { insurances && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Insurances</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{insurances}</MDBCardText>
@@ -248,7 +248,7 @@ function Profile() {
                   </div>
                 }
                 
-                { user.secondary_number && <div className="mb-5">
+                { user.secondary_number != null && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Secondary Number</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{user.secondary_number}</MDBCardText>
