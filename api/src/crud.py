@@ -4,6 +4,7 @@ from . import models, schemas
 from fastapi import Request
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
 
 # By creating functions that are only dedicated to interacting with the database (get a user or an item) independent of your path operation function, you can more easily reuse them in multiple parts and also add unit tests for them.
 
@@ -61,7 +62,7 @@ def get_user_by_username(db: Session, username: str):
 #     return user
   
 def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+    return db.query(models.User).order_by(models.User.username).offset(skip).limit(limit).all()
 
 def get_bout_by_id(db: Session, event_id: int):
     return db.query(models.Bout).filter(models.Bout.event_id == event_id).first()
@@ -185,17 +186,16 @@ def get_events_by_type_date_location(db: Session, type: str, city: str = None, s
         query = query.filter(models.EventBase.date.between(start_date, end_date))
         print("QUERY IN CRUD.PY", query)
         
-
-    events = query.all()
+    events = query.order_by(models.EventBase.date).all()
 
     print("events in get_events_by_type crud.py", events)
     return events
 
 def get_bouts(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Bout).offset(skip).limit(limit).all()
+    return db.query(models.Bout).order_by(models.Bout.date).offset(skip).limit(limit).all()
 
 def get_mixers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Mixer).offset(skip).limit(limit).all()
+    return db.query(models.Mixer).order_by(models.Mixer.date).offset(skip).limit(limit).all()
 
 def create_bout(db: Session, bout: schemas.Bout):
     print("^^^^ BOUT in crud.py ^^^^^", bout)

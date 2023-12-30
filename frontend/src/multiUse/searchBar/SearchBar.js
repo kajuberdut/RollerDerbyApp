@@ -33,7 +33,7 @@ function SearchBar({formDataSB, setFormDataSB}) {
           {/* <Label htmlFor="city" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
-              placeholder="Choose a city"
+              placeholder="City"
               onChange={handleChange}
               value={formDataSB.city} 
               id="city" 
