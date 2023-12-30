@@ -4,6 +4,9 @@ import CardComponent from "../multiUse/cardComponent/CardComponent";
 // import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
 import "./BoutList.css";
+import SearchBar from "../multiUse/searchBar/SearchBar";
+import DatePick from "../multiUse/datePicker/DatePicker";
+import SearchComponent from "../multiUse/searchComponent/SearchComponent";
 
 /**
  * Display bouts page
@@ -65,7 +68,12 @@ function BoutList({getBouts}) {
   /** Render search bar and cards */
 
     return (
+      <>
+      {/* <SearchBar /> */}
+      {/* <DatePick /> */}
+      <SearchComponent getBouts={getBouts} setBouts={setBouts}/>
       <div className="BoutList">
+
         {/* <SearchBar getBouts={getBouts}/> */}
         <h1>Bouts</h1>
         <a href="/bouts/add">
@@ -77,6 +85,7 @@ function BoutList({getBouts}) {
         </a>
         {renderCards()}
       </div>
+      </>
     );
 
 }

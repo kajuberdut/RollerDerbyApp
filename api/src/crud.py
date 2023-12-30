@@ -157,6 +157,40 @@ def delete_user(db: Session, user: schemas.UserDelete, user_id):
 def get_events(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.EventBase).offset(skip).limit(limit).all()
 
+# !!!! YOU ARE HERE
+# def get_events_by_type_date_location(db: Session, type: str, city: str, state: str, zip_code: str, start_date, end_date):
+#     print("CRUD.PY IS RUNNING GET_EVENTS_BY_TYPE_LOCATION_DATE")
+#     events = db.query(models.EventBase).join(models.Address).filter(models.EventBase.type == type).filter(models.Address.city == city).filter(models.Address.state == state).filter(models.Address.zip_code == zip_code).filter(models.EventBase.date.between(start_date, end_date))
+    
+#     print("events in get_events_by_type crud.py", events)
+#     return events 
+
+def get_events_by_type_date_location(db: Session, type: str, city: str = None, state: str = None, zip_code: str = None, start_date: str = None, end_date: str = None):
+    print("CRUD.PY IS RUNNING GET_EVENTS_BY_TYPE_LOCATION_DATE")
+    print("START_DATE", start_date)
+    print("END_DATE", end_date)
+
+    # Build the query dynamically, filtering only on non-None parameters
+    query = db.query(models.EventBase).join(models.Address)
+    query = query.filter(models.EventBase.type == type)
+
+    if city is not None:
+        query = query.filter(models.Address.city == city)
+    if state is not None:
+        query = query.filter(models.Address.state == state)
+    if zip_code is not None:
+        query = query.filter(models.Address.zip_code == zip_code)
+    if start_date is not None and end_date is not None:
+        print("START DATE AND END DATE ARE NOT NONE")
+        query = query.filter(models.EventBase.date.between(start_date, end_date))
+        print("QUERY IN CRUD.PY", query)
+        
+
+    events = query.all()
+
+    print("events in get_events_by_type crud.py", events)
+    return events
+
 def get_bouts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Bout).offset(skip).limit(limit).all()
 

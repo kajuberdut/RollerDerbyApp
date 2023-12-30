@@ -255,7 +255,24 @@ class FastApi {
     console.log("res:", res)
   return res
   }
+
+   /** Get specific positions by ID*/
+  
+   static async getInsurance(insuranceId) {
+    let res = await this.request(`insurances/${insuranceId}`);
+    console.log("res:", res)
+  return res
+  }
  
+  /** Get specific positions by city, state, zip code, start date and end date */
+
+  static async getEvents(type, data) {
+    console.log("getEvents in API.JS is running")
+    console.log("data in getEvents:", data)
+    let res = await this.request(`events/${type}`, data, "get");
+    console.log("res:", res)
+  return res
+  }
  
 
 }

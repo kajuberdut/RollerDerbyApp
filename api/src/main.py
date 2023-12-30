@@ -1,6 +1,6 @@
 
 # ! test for sqlalchemy follow along
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 # from incase.middleware import JSONCaseTranslatorMiddleware
@@ -376,6 +376,26 @@ def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
 def get_events(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     events = crud.get_events(db, skip=skip, limit=limit)
     return events
+
+# * get /events/{event_type} 
+# * returns all events that match query by type, dates and city and/or state
+
+# !         WORKING HERE 
+#  todo *********************
+
+@api_app.get("/events/{type}", response_model=list[schemas.EventBase])
+def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+    print("main.py is running for /events/{type}")
+    print("type in main.py", type)
+    print("city in main.py:", city)
+    print("start_date in main.py", start_date)
+    print("end_date in main.py:", end_date)
+    
+    events = crud.get_events_by_type_date_location(db, type=type, city=city, state=state, zip_code=zip_code, start_date=start_date, end_date=end_date)
+    
+    print("events in get /events/{type} in main.py", events)
+    return events
+
 
 # * get /bouts/ 
 # * returns all bouts
