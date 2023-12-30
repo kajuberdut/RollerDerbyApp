@@ -4,7 +4,7 @@ import {
 Form
 } from "reactstrap";
 import DatePick from '../datePicker/DatePicker';
-import SearchBar from '../searchBar/SearchBar';
+import SearchBar from '../searchBar/SearchBarEvents';
 import { getDefaultLocale } from 'react-datepicker';
 import FastApi from '../../Api';
 

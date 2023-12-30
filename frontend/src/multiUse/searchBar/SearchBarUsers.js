@@ -1,4 +1,4 @@
-import './SearchBar.css'
+import './SearchBarUsers.css'
 import React, { useState } from 'react'
 import {
   Form,
@@ -11,38 +11,38 @@ import {
  * Display search bar
  */
 
-function SearchBar({formDataSB, setFormDataSB}) {
+function SearchBarUsers({formData, setFormData}) {
 
     /** Update local state with current state of input element */
 
     const handleChange = evt => {
         const { name, value }= evt.target;
         // setFormData(fData => ({
-          setFormDataSB(fData => ({
+          setFormData(fData => ({
           ...fData,
           [name]: value,
         }));
-        console.log("formDataSB in SearchBar:", formDataSB)
+        console.log("formData in SearchBarUsers:", formData)
       };
 
     /** Render search bar */
 
     return (
-        <div className='SearchBar' >
-          <div className='SearchBar-City'>
+        <div className='SearchBarUsers' >
+          <div className='SearchBarUsers-City'>
           {/* <Label htmlFor="city" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
               placeholder="City"
               onChange={handleChange}
-              value={formDataSB.city} 
+              value={formData.city} 
               id="city" 
               name="city"
               className='SearchBarInput'
               />
           </div>
           
-          <div className='SearchBar-State'>
+          <div className='SearchBarUsers-State'>
           {/* <Label htmlFor="state" sm={2} className="mb3"> </Label> */}
               <Input
                   type="select"
@@ -51,7 +51,7 @@ function SearchBar({formDataSB, setFormDataSB}) {
                   id="state" 
                   name="state"
                   className='SearchBarInput'
-                  value={formDataSB.state}
+                  value={formData.state}
                   maxLength={2}
                   >
                   <option value="">State</option>
@@ -110,21 +110,20 @@ function SearchBar({formDataSB, setFormDataSB}) {
                   </Input>
               </div>
 
-          <div className='SearchBar-ZipCode'>
+          <div className='SearchBarUsers-Username'>
           {/* <Label htmlFor="zipCode" sm={2} className="mb3"> </Label> */}
           <Input 
-              type="number"
-              placeholder="Zip Code"
+              type="text"
+              placeholder="Username"
               onChange={handleChange}
-              value={formDataSB.zipCode} 
-              id="zipCode" 
-              name="zipCode"
+              value={formData.username} 
+              id="username" 
+              name="username"
               className='SearchBarInput'
-              maxLength={5}
               />
           </div>
         </div>
     );
   }
   
-  export default SearchBar;
+  export default SearchBarUsers;

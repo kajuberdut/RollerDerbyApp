@@ -1,0 +1,49 @@
+.SearchBarUsers {
+    display: flex;   
+}
+
+.SearchBarUsers-City {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.SearchBarUsers-State {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.SearchBarUsers-Username {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+.SearchBarInput {
+    border: 1px solid rgb(100, 97, 97);
+    height: 30px;
+    border-radius: 7%;
+}
+
+.SearchBarInput:focus {
+    border-color: black !important;
+    border-width: 2px !important;
+    box-shadow: none !important;
+    border-radius: 7% !important;
+    padding: none !important;
+    margin: none !important;
+  }
+  
+#state {
+    width: 87px !important;
+    height: 30px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+#city {
+    width: 120px;
+}
+
+#username {
+    width: 120px;
+}

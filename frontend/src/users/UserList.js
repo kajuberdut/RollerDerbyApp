@@ -11,6 +11,8 @@ import {
   CardText,
   Button
 } from "reactstrap";
+import SearchBarUsers from "../multiUse/searchBar/SearchBarUsers";
+import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUsers";
 
 /**
  * Display users page
@@ -73,13 +75,15 @@ function UserList({getUsers}) {
   /** Render search bar and cards */
 
     return (
+      <>
+      <SearchComponentUsers getUsers={getUsers} setUsers={setUsers}/>
       <Card className="UserList">
         <CardBody>
-        {/* <SearchBar getUsers={getUsers}/> */}
         <CardTitle><h1>Users</h1></CardTitle>
         {renderCards()}
         </CardBody>
       </Card>
+      </>
     );
 
 }

@@ -61,8 +61,29 @@ def get_user_by_username(db: Session, username: str):
     
 #     return user
   
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).order_by(models.User.username).offset(skip).limit(limit).all()
+# def get_users(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.User).order_by(models.User.username).offset(skip).limit(limit).all()
+
+def get_users(db: Session, city: str = None, state: str = None, username: str = None, skip: int = 0, limit: int = 100):
+    print("city in crud.py:", city)
+    print("state in crud.py", state)
+    print("username in crud.py:", username)
+    
+    # ! note include users with no location unless filtered for outerjoin
+    query = db.query(models.User).outerjoin(models.Location)
+  
+    if city is not None:
+        query = query.filter(models.Location.city == city)
+    if state is not None:
+        query = query.filter(models.Location.state == state)
+    if username is not None:
+        query = query.filter(models.User.username.ilike(f"%{username}%"))
+        
+    # users = query.order_by(models.EventBase.date).all()
+    users = query.order_by(models.User.username).offset(skip).limit(limit).all()
+
+    print("users in get_users crud.py", users)
+    return users
 
 def get_bout_by_id(db: Session, event_id: int):
     return db.query(models.Bout).filter(models.Bout.event_id == event_id).first()

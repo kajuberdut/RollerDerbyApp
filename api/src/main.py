@@ -150,13 +150,20 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
 # * get /users/ 
 # * returns all users  
 
-@api_app.get("/users/", response_model=list[schemas.UserBase])
-# def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(oauth2_scheme)):
-# def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-# *THIS APPEARS TO BE AUTHENTICATED AND EXPECTS A TOKEN NOW
-def get_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+# @api_app.get("/users/", response_model=list[schemas.UserBase])
+# # def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(oauth2_scheme)):
+# # def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+# # *THIS APPEARS TO BE AUTHENTICATED AND EXPECTS A TOKEN NOW
+# def get_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
-    users = crud.get_users(db, skip=skip, limit=limit)
+#     users = crud.get_users(db, skip=skip, limit=limit)
+
+#     return users
+
+@api_app.get("/users/", response_model=list[schemas.UserBase])
+def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(None), state: str = Query(None), username: str = Query(None), skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    users = crud.get_users(db, city=city, state=state, username=username, skip=skip, limit=limit)
 
     return users
 

@@ -81,11 +81,17 @@ class FastApi {
 
   /** Get all users*/
 
-    static async getUsers(handle) {
-        let res = await this.request(`users`);
-        console.log("res:", res)
-        return res
-    }
+    // static async getUsers(handle) {
+    //     let res = await this.request(`users`);
+    //     console.log("res:", res)
+    //     return res
+    // }
+    static async getUsers(data) {
+      console.log("data in getusers", data)
+      let res = await this.request(`users`, data, "get");
+      console.log("res:", res)
+      return res
+  }
 
       /** Get one user by username */
 
