@@ -3,7 +3,20 @@
 from fastapi import Depends, FastAPI, HTTPException, status, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-# from incase.middleware import JSONCaseTranslatorMiddleware
+
+# * imports for incase from patrick
+from incase.middleware import JSONCaseTranslatorMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
+from incase import Case, Caseless
+import json
+import typing
+# * imports for incase from patrick
+
+RequestResponseEndpoint = typing.Callable[[Request], typing.Awaitable[Response]]
+
+
 import traceback
 from . import crud, models, schemas
 
@@ -28,6 +41,73 @@ print("main.py is running")
 create_all_tables()
 
 models.SQLAlchemyBase.metadata.create_all(bind=engine)
+
+# *everything  below is for incase patrick middle
+
+# class MaybeJsonAsyncIterator:
+#     """This is used to wrap the iterable body of the streaming response
+#     so that the json keys can be handled when the iterable is called.
+#     """
+
+def __init__(self):
+    self._iterable = []
+    self.length = 0
+
+async def ingest_body_iterable(self, base_iterable):
+    async for part in base_iterable:
+        try:
+            json_content = json.loads(part)
+            new_part = json.dumps(
+                {
+                    Caseless(key)[Case.CAMEL]: value
+                    for key, value in json_content.items()
+                }
+            ).encode(encoding="utf-8")
+            self.length += len(new_part)
+            self._iterable.append(new_part)
+        except json.JSONDecodeError:
+            self.length += len(part)
+            self._iterable.append(part)
+
+def __aiter__(self):
+    return self
+
+async def __anext__(self):
+    for item in self._iterable:
+        return item
+    raise StopAsyncIteration
+
+
+class JSONCaseTranslatorMiddleware(BaseHTTPMiddleware):
+# """This middleware translates the case of json keys recieved and sent by the
+# asgi app. It is helpful for allowing a python back-end to use snake_case
+# while allowing a javascript front end to use camelCase."""
+
+    print(" JSONCaseTranslatorMiddleware(BaseHTTPMiddleware) IS RUNNING ")
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
+        print(" !!!! dispatch(self, request: Request, call_next: RequestResponseEndpoint) IS RUNNING ")
+        try:
+            print("try statement is running")
+            data = await request.body()
+            request._body = json.dumps(
+                {
+                    Caseless(key)[Case.SNAKE]: value
+                    for key, value in json.loads(data).items()
+                }
+            ).encode(encoding="utf-8")
+            request.content_length = len(request._body)
+        except json.JSONDecodeError:
+            pass  # guess it wasn't json
+        response = await call_next(request)
+        if response.headers.get("content-type") == "application/json":
+            new_body = MaybeJsonAsyncIterator()
+            await new_body.ingest_body_iterable(response.body_iterator)
+            response.body_iterator = new_body
+        return response
+
+    
+# *Everything above is for incase middle from patrick
 
 
 # * Auth Token

@@ -106,7 +106,6 @@ function SearchBarUsers({formData, setFormData}) {
                   <option value="WV">WV</option>
                   <option value="WI">WI</option>
                   <option value="WY">WY</option>
-                  {/* </Col> */}
                   </Input>
               </div>
 
@@ -114,7 +113,7 @@ function SearchBarUsers({formData, setFormData}) {
           {/* <Label htmlFor="zipCode" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
-              placeholder="Username"
+              placeholder="Derby Name"
               onChange={handleChange}
               value={formData.username} 
               id="username" 

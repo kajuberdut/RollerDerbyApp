@@ -46,8 +46,12 @@ if(!user) {
 
 let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", signupLink: ""};
 
+let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
+
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
+
+  const [formDataAddress, setFormDataAddress] = useState(INITIAL_STATE_ADDRESS);
   
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
@@ -189,39 +193,121 @@ let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America
               
                         </Input>
 
-                        {/* <Select
-                            name="timeZone"
-                            className="form-control"
-                            value={formData.timeZone}
-                            onChange={(selectedOption) => setFormData({ ...formData, timeZone: selectedOption.value })}
-                            id="timeZone"
-  
-                            options={[
-                              { value: "America/Denver", label: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)" },
-                              { value: "America/Denver", label: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)" },
-                              { value: "America/New_York", label: "Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)" },
-                            ]}
-                            >
-                              </Select> */}
-                              {/* <option>
-                              Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)
-                              </option>
-                              <option>
-                              Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)
-                              </option>
-                              <option>
-                              Central Time (CT): America/Chicago (Chicago, Houston, New Orleans)
-                              </option>
-                              <option>
-                              Pacific Time (PT): America/Los_Angeles (Los Angeles, San Francisco, Seattle)
-                              </option>
-                              <option>
-                              Alaska Time (AKST): America/Anchorage (Anchorage)
-                              </option>
-                              <option>
-                              Hawaii Time (HST): Pacific/Honolulu (Honolulu)
-                              </option> */}
+                      <Label htmlFor="streetAddress">Street Address: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="streetAddress"
+                           name="streetAddress"
+                           value={formDataAddress.streetAddres}
+                           onChange={handleChange}
+                           placeholder="Street Address"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
 
+                    <Label htmlFor="city">City: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="city"
+                           name="city"
+                           value={formDataAddress.city}
+                           onChange={handleChange}
+                           placeholder="City"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
+                      <Label htmlFor="state">State: </Label>
+                       
+                       {/* <Input
+                           type="text"
+                           id="state"
+                           name="state"
+                           value={formDataAddress.state}
+                           onChange={handleChange}
+                           placeholder="State"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />         */}
+
+                      <Input
+                        type="select"
+                        placeholder="State"
+                        onChange={handleChange}
+                        id="state" 
+                        name="state"
+                        // className='SearchBarInput'
+                        value={formDataAddress.state}
+                        maxLength={2}
+                        >
+                        <option value="">State</option>
+                        <option value="AL">AL</option>
+                        <option value="AK">AK</option>
+                        <option value="AZ">AZ</option>
+                        <option value="AR">AR</option>
+                        <option value="CA">CA</option>
+                        <option value="CO">CO</option>
+                        <option value="CT">CT</option>
+                        <option value="DE">DE</option>
+                        <option value="DC">DC</option>
+                        <option value="FL">FL</option>
+                        <option value="GA">GA</option>
+                        <option value="HI">HI</option>
+                        <option value="ID">ID</option>
+                        <option value="IL">IL</option>
+                        <option value="IN">IN</option>
+                        <option value="IA">IA</option>
+                        <option value="KS">KS</option>
+                        <option value="KY">KY</option>
+                        <option value="LA">LA</option>
+                        <option value="ME">ME</option>
+                        <option value="MD">MD</option>
+                        <option value="MA">MA</option>
+                        <option value="MI">MI</option>
+                        <option value="MN">MN</option>
+                        <option value="MS">MS</option>
+                        <option value="MO">MO</option>
+                        <option value="MT">MT</option>
+                        <option value="NE">NE</option>
+                        <option value="NV">NV</option>
+                        <option value="NH">NH</option>
+                        <option value="NJ">NJ</option>
+                        <option value="NM">NM</option>
+                        <option value="NY">NY</option>
+                        <option value="NC">NC</option>
+                        <option value="ND">ND</option>
+                        <option value="OH">OH</option>
+                        <option value="OK">OK</option>
+                        <option value="OR">OR</option>
+                        <option value="PA">PA</option>
+                        <option value="RI">RI</option>
+                        <option value="SC">SC</option>
+                        <option value="SD">SD</option>
+                        <option value="TN">TN</option>
+                        <option value="TX">TX</option>
+                        <option value="UT">UT</option>
+                        <option value="VT">VT</option>
+                        <option value="VA">VA</option>
+                        <option value="WA">WA</option>
+                        <option value="WV">WV</option>
+                        <option value="WI">WI</option>
+                        <option value="WY">WY</option>
+                        </Input>
+
+                      <Label htmlFor="zipCode">Zip Code: </Label>
+                       
+                       <Input
+                           type="number"
+                           id="zipCode"
+                           name="zipCode"
+                           value={formDataAddress.zipCode}
+                           onChange={handleChange}
+                           placeholder="Zip Code"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />      
               
                   
 

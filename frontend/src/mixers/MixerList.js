@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import CardComponent from "../multiUse/cardComponent/CardComponent";
-// import SearchBar from "../repeated/searchBar/SearchBar";
+import SearchComponent from "../multiUse/searchComponent/SearchComponent";
 import Loading from "../multiUse/loading/Loading"
 import "./MixerList.css";
 
@@ -66,7 +66,7 @@ function MixerList({getMixers}) {
 
     return (
       <div className="MixerList">
-        {/* <SearchBar getBouts={getBouts}/> */}
+        <SearchComponent setMixers={setMixers}/>
         <h1>Mixers</h1>
         <a href="/mixers/add">
           {/* <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"

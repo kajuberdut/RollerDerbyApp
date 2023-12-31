@@ -120,12 +120,12 @@ class FastApi {
         /** Update user by data */
 
     static async updateUser(derby_id, data) {
-    // console.log("data: in api.js", data)
+    console.log("data: in api.js", data)
     // console.log("derbyName!!!:", derbyName)
     console.log("updateUser in api.js is running which means the error is after that")
-    let testData = {user_id: "8e56618d-8092-4f35-a452-b90324f2219b", derby_name: "TESTING", email: "TESTING@gmail.com", first_name: "testFirstName", last_name: "testLastName", facebook_name: "TESTING fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primary_number: 12, secondary_number: 14, level: "B", insurance: {WFTDA: "ABCDE", USARS: "EFGHI"}, location: {city: "Denver", state: "CO"}, associated_leagues: ["TESTING Roller Derby", "TEST2 Roller Derby Leagues"], ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}}
-    let res = await this.request(`users/happyJack`, testData, "patch");
-    // let res = await this.request(`users/{user_id}`, data, "patch");
+    // let testData = {user_id: "8e56618d-8092-4f35-a452-b90324f2219b", derby_name: "TESTING", email: "TESTING@gmail.com", first_name: "testFirstName", last_name: "testLastName", facebook_name: "TESTING fb", about: "I am a derby player that has been bouting since 2019. Blah blah blah blah", primary_number: 12, secondary_number: 14, level: "B", insurance: {WFTDA: "ABCDE", USARS: "EFGHI"}, location: {city: "Denver", state: "CO"}, associated_leagues: ["TESTING Roller Derby", "TEST2 Roller Derby Leagues"], ruleset: {WFTDA: true, USARS: true, bankedTrack: false, shortTrack: false}, position: {jammer: true, pivot: true, blocker: false}}
+    // let res = await this.request(`users/happyJack`, testData, "patch");
+    let res = await this.request(`users/{user_id}`, data, "patch");
     return res;
     // return "hello"
     }
@@ -158,7 +158,23 @@ class FastApi {
 
     static async addBout(data) {
       console.log("hitting the addBout in api.js")
-      let res = await this.request(`bouts/`, data, "post");
+      console.log("!!!! data in addBout !!!!!", data)
+      // data["bout"]["type"] = "bout";
+      // console.log("!!!! data AGAIN in addBout !!!!!", data)
+      // let res = await this.request(`bouts/`, data, "post");
+      let fakeData = {
+
+        "bout": {
+          "type": "bout", "date": "2024-02-10", "time": "13:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "FAKE DATA", "description": "blah blah blah", "level": "C", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and Blue", "floorType": "concrete", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
+        },
+      
+        "address": {
+        "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
+        }
+      
+      }
+
+      let res = await this.request(`bouts/`, fakeData, "post");
       console.log("res:", res)
       return res
     }

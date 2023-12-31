@@ -53,7 +53,7 @@ import {
 
     useEffect(() => {
       getAddress();
-    }, [bout]);
+    }, [bout, mixer]);
 
 
     // let timeObj = new Time(info.time)

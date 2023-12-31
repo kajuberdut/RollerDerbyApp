@@ -34,9 +34,7 @@ function SearchComponentUsers({getUsers, setUsers}) {
         getData(formData)
 
         console.log(" $$$$$$$$$$ formData $$$$$$$$$$$$$:", formData)
-        
-        // ? reseting form to inital state is causing an issue so not reseting form currently
-      setFormData(INITIAL_STATE);
+        setFormData(INITIAL_STATE);
     };
 
 

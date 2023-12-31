@@ -79,7 +79,6 @@ def get_users(db: Session, city: str = None, state: str = None, username: str = 
     if username is not None:
         query = query.filter(models.User.username.ilike(f"%{username}%"))
         
-    # users = query.order_by(models.EventBase.date).all()
     users = query.order_by(models.User.username).offset(skip).limit(limit).all()
 
     print("users in get_users crud.py", users)

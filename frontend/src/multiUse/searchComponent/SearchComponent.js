@@ -12,7 +12,7 @@ import FastApi from '../../Api';
  * Display search component 
  */
 
-function SearchComponent({getBouts, setBouts}) {
+function SearchComponent({setBouts, setMixers}) {
 
     /** Set initial state, set for data as initial state*/
   
@@ -28,7 +28,9 @@ function SearchComponent({getBouts, setBouts}) {
 
     const [formDataSB, setFormDataSB] = useState(INITIAL_STATE_SB); 
 
-    // let getData = getUsers !== undefined ? getUsers : getBouts; 
+    // let getEvents = getBouts !== undefined ? getBouts : getMixers; 
+    let type = setBouts !== undefined ? "bout" : "mixer";
+    let setData = setBouts !== undefined ? setBouts : setMixers;
 
     /** Handle submit, get API result for companies or jobs, set formData to initial state*/
     
@@ -69,8 +71,8 @@ function SearchComponent({getBouts, setBouts}) {
 
     async function getData(formData) {
         console.log("formData ^^^^^^^^^^^^^^^^^^^", formData)
-        let events = await FastApi.getEvents("bout", formData)
-        setBouts(events)
+        let events = await FastApi.getEvents(type, formData)
+        setData(events)
         console.log("events:", events)
         // * get all bouts or mixers search by location and date if provided 
     } 

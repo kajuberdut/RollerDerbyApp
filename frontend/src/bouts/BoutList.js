@@ -71,7 +71,7 @@ function BoutList({getBouts}) {
       <>
       {/* <SearchBar /> */}
       {/* <DatePick /> */}
-      <SearchComponent getBouts={getBouts} setBouts={setBouts}/>
+      <SearchComponent setBouts={setBouts}/>
       <div className="BoutList">
 
         {/* <SearchBar getBouts={getBouts}/> */}
