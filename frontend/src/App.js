@@ -8,6 +8,8 @@ import UserContext from "./multiUse/UserContext";
 // import { UserContext } from "./multiUse/UserContext";
 import FastApi from "./Api";
 import useLocalStorage from "./hooks/useLocalStorage";
+// ! this will probably need to be moved 
+import Chat from './Chat';
 // import jwt from "jsonwebtoken";
 // import * as jwt_decode from 'jwt-decode';
 // import jwt_decode from 'jwt-decode'
@@ -192,6 +194,7 @@ function App() {
           <NavBar logout={logout}/>
           <main>
             <AllRoutes signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
+            <Chat />
           </main>
         </Fragment>
         </UserContext.Provider>

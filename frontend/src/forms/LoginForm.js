@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FastApi from "../Api";
 import "./LoginForm.css";
 import {
     Card,
@@ -35,7 +36,11 @@ const LoginForm = ({login}) => {
   const  handleSubmit = async evt => {
     evt.preventDefault();
     setFormData(INITIAL_STATE);
+    console.log("formdata in login form !!!", formData)
+    
     let result = await login(formData); 
+    // !note using this to test real fast 
+    // let result = await FastApi.testing(); 
     
     if(result.success) {
         navigate('/')

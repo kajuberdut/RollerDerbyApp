@@ -364,3 +364,6 @@ class MixerUpdate(EventBase):
     
 class EventDelete(BaseModel): 
     event_id: int 
+    
+class Test(BaseModel): 
+    info: str

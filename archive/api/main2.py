@@ -17,6 +17,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+# *everything  below is for incase patrick middle
+
 # class MaybeJsonAsyncIterator:
 #     """This is used to wrap the iterable body of the streaming response
 #     so that the json keys can be handled when the iterable is called.
@@ -76,7 +78,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 #         return response
     
     
-# *Everything above is for middle from patrick
+# *Everything above is for incase middle from patrick
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

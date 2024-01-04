@@ -64,16 +64,18 @@ class FastApi {
        /** Post login user by data*/
 
        static async login(data) {
-        console.log("!!!!data in login Api.js:", data)
-   
-        let formData = new FormData();
-       
 
+        console.log("!!!!data in login Api.js:", data)
+        
+        // ? NOTE THAT THIS STILL WORKS BUT NOT WITH THE INCASE MIDDLEWARE
+        let formData = new FormData();
+  
         formData.append("username", data.username)
         formData.append("password", data.password)
         console.log("formData in login:", formData)
-    
         let res = await this.request('token', formData, "post");
+
+        // let res = await this.request('token', data, "post");
         console.log("res in login:", res)
         // !note will need to change this most likely to accessToken after you get inCase working
         return res.access_token;
@@ -294,6 +296,33 @@ class FastApi {
     let res = await this.request(`events/${type}`, data, "get");
     console.log("res:", res)
   return res
+  }
+
+  static async testing() {
+    console.log("hitting testing in api.js")
+
+    let fakeData = {
+
+      "bout": {
+        "type": "bout", "date": "2024-02-3", "time": "14:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "TESTING CAMELCASE POSt", "description": "blah blah blah", "level": "B", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and green", "floorType": "polished wood", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
+      },
+    
+      "address": {
+      "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
+      }
+    
+    }
+
+   
+    // let fakeData = {
+    //      "type": "bout", "date": "2024-02-3", "time": "14:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "TESTING CAMELCASE POSt", "description": "blah blah blah", "level": "B", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and green", "floorType": "polished wood", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
+    //   }
+      
+    console.log("fakeData:", fakeData)
+
+    let res = await this.request(`testing`, fakeData, "post");
+    console.log("res in Api.js:", res)
+    return res
   }
  
 
