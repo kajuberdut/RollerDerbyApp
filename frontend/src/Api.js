@@ -67,9 +67,10 @@ class FastApi {
 
         console.log("!!!!data in login Api.js:", data)
         
-        // ? NOTE THAT THIS STILL WORKS BUT NOT WITH THE INCASE MIDDLEWARE
+        console.log("data in login:", data)
+        // note this is the type of form that you have to submit for login 
+
         let formData = new FormData();
-  
         formData.append("username", data.username)
         formData.append("password", data.password)
         console.log("formData in login:", formData)
@@ -78,7 +79,7 @@ class FastApi {
         // let res = await this.request('token', data, "post");
         console.log("res in login:", res)
         // !note will need to change this most likely to accessToken after you get inCase working
-        return res.access_token;
+        return res.accessToken;
       }
 
   /** Get all users*/
@@ -242,6 +243,7 @@ class FastApi {
 
   static async getAddress(addressId) {
     console.log("hitting the getAddress in api.js")
+    console.log("addressId in getAddress:", addressId)
     let res = await this.request(`address/${addressId}`);
     console.log("res:", res)
     return res
@@ -298,32 +300,32 @@ class FastApi {
   return res
   }
 
-  static async testing() {
-    console.log("hitting testing in api.js")
+  // static async testing() {
+  //   console.log("hitting testing in api.js")
 
-    let fakeData = {
+  //   let fakeData = {
 
-      "bout": {
-        "type": "bout", "date": "2024-02-3", "time": "14:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "TESTING CAMELCASE POSt", "description": "blah blah blah", "level": "B", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and green", "floorType": "polished wood", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
-      },
+  //     "bout": {
+  //       "type": "bout", "date": "2024-02-3", "time": "14:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "TESTING CAMELCASE POSt", "description": "blah blah blah", "level": "B", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and green", "floorType": "polished wood", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
+  //     },
     
-      "address": {
-      "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
-      }
+  //     "address": {
+  //     "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
+  //     }
     
-    }
+  //   }
 
    
     // let fakeData = {
     //      "type": "bout", "date": "2024-02-3", "time": "14:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "TESTING CAMELCASE POSt", "description": "blah blah blah", "level": "B", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and green", "floorType": "polished wood", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
     //   }
       
-    console.log("fakeData:", fakeData)
+    // console.log("fakeData:", fakeData)
 
-    let res = await this.request(`testing`, fakeData, "post");
-    console.log("res in Api.js:", res)
-    return res
-  }
+    // let res = await this.request(`testing`, fakeData, "post");
+    // console.log("res in Api.js:", res)
+    // return res
+    // }
  
 
 }

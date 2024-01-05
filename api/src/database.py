@@ -7,15 +7,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
 
+DB_URL = os.environ.get("DB_URL")
 
 # * starting engine inside of docker 
-engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/roller_derby_db')
+# engine = create_engine(DB_URL)
 
 # *correct engine below for starting it outside of docker 
-# engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/roller_derby_db')
+engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/roller_derby_db')
 
 print("Engine", engine)
 

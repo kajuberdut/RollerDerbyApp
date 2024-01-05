@@ -53,7 +53,7 @@ console.log("USER IN EDIT PROFILE PAGE", user)
 //   getUserInsurance()
 // }
 
-let INITIAL_STATE = { username: user.username, phoneNumber: user.phone_number, firstName: user.first_name, lastName: user.last_name, additionalInfo: user.additional_info, email: user.email,  facebookName: user.facebook_name, about: user.about, primNum: user.primary_number, secNum: user.secondary_number, level: user.level, primIns: user.primary_Insurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associated_leagues };
+let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, email: user.email,  facebookName: user.facebookName, about: user.about, primNum: user.primaryNumber, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associatedLeagues };
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -129,7 +129,7 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phone_number, f
 // ! note should be able to refactor this so that I am only using one state and then altering the data from the state in the new data and not submitting to state 
       setFormRulesets((prevRulesets) => {
         const newRulesets = Array.from(evt.target.selectedOptions)
-          .map((option) => ({ ruleset_id: 0, name: option.value }))
+          .map((option) => ({ rulesetId: 0, name: option.value }))
           .filter((ruleset) => !prevRulesets.some((r) => r.name === ruleset.name)); // Filter for unique names
         return [...prevRulesets, ...newRulesets];
       });

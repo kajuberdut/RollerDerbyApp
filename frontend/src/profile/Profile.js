@@ -50,7 +50,7 @@ function Profile() {
             getUserPosition()
           }
           // Fetch location data
-          if (user.location_id) {
+          if (user.locationId) {
             // console.log("user.location_id is running")
             getUserLocation()
           }
@@ -58,7 +58,7 @@ function Profile() {
             getUserInsurance()
           }
 
-          if(user.phone_number){
+          if(user.phoneNumber){
             console.log("IF STATEMENT IS RUNNING")
             formatPhoneNumber()
           }
@@ -70,7 +70,7 @@ function Profile() {
   async function getUserRulesets() {
     let rsArr = []
     for(let rs of user.ruleset) {
-      let ruleset = await FastApi.getRuleset(rs.ruleset_id);
+      let ruleset = await FastApi.getRuleset(rs.rulesetId);
       rsArr.push(ruleset.name)
     }
     let userRulesets = rsArr.join(", ")
@@ -80,7 +80,7 @@ function Profile() {
   async function getUserPosition() {
     let posArr = []
     for(let pos of user.position) {
-      let position = await FastApi.getPosition(pos.position_id);
+      let position = await FastApi.getPosition(pos.positionId);
       posArr.push(position.position)
     }
     let userPositions = posArr.join(", ")
@@ -90,9 +90,9 @@ function Profile() {
   async function getUserInsurance() {
     let insArr = []
     for(let ins of user.insurance) {
-      let insurance = await FastApi.getInsurance(ins.insurance_id);
+      let insurance = await FastApi.getInsurance(ins.insuranceId);
       insArr.push(insurance.type + ":")
-      insArr.push(ins.insurance_number)
+      insArr.push(ins.insuranceNumber)
     }
     if(insArr.length > 2){
       insArr[1] += ","
@@ -103,13 +103,13 @@ function Profile() {
 
 
   async function getUserLocation() {
-    let userLocation = await FastApi.getLocation(user.location_id);
+    let userLocation = await FastApi.getLocation(user.locationId);
     setCity(userLocation.city)
     setState(userLocation.state)
   }
 
   async function formatPhoneNumber() {
-    let formPhoneNum = user.phone_number.slice(0, 3) + '-' + user.phone_number.slice(3, 6) + '-' + user.phone_number.slice(6);
+    let formPhoneNum = user.phoneNumber.slice(0, 3) + '-' + user.phoneNumber.slice(3, 6) + '-' + user.phoneNumber.slice(6);
     setPhoneNumber(formPhoneNum)
   }
 
@@ -137,9 +137,9 @@ function Profile() {
                     </button>
                   </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{user.username} #{user.primary_number}</MDBTypography>
+                    <MDBTypography tag="h4">{user.username} #{user.primaryNumber}</MDBTypography>
                     {/* {user.first_name && user.last_name && <MDBCardText>{user.first_name} {user.last_name}</MDBCardText>} */}
-                    {user.location_id && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
+                    {user.locationId && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -186,15 +186,15 @@ function Profile() {
                     </div>
                   </div>
                   }
-                  { user.associated_leagues && <div className="mb-5">
+                  { user.associatedLeagues && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Associated Leagues</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.associated_leagues}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{user.associatedLeagues}</MDBCardText>
                     </div>
                   </div>
                   }
-                  { user.facebook_name && <div className="mb-5">
-                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebook_name}</p>
+                  { user.facebookName && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebookName}</p>
                   </div>
                   }
                 </MDBCardBody>
@@ -219,9 +219,9 @@ function Profile() {
                     </button>
                   </a>
                   <div className="ms-3" style={{ marginTop: '180px'}}>
-                    {user.first_name && user.last_name && <MDBCardText tag="h4">{user.first_name} {user.last_name}</MDBCardText>}
+                    {user.firstName && user.lastName && <MDBCardText tag="h4">{user.firstName} {user.lastName}</MDBCardText>}
                     <MDBTypography tag="h4">{user.email}</MDBTypography>
-                    {user.phone_number && <MDBTypography tag="h4">{phoneNumber}</MDBTypography>}
+                    {user.phoneNumber && <MDBTypography tag="h4">{phoneNumber}</MDBTypography>}
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -243,15 +243,15 @@ function Profile() {
                 {user.additional_info && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Additonal Information</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.additional_info}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{user.additionalInfo}</MDBCardText>
                     </div>
                   </div>
                 }
                 
-                { user.secondary_number != null && <div className="mb-5">
+                { user.secondaryNumber != null && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Secondary Number</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.secondary_number}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{user.secondaryNumber}</MDBCardText>
                     </div>
                   </div>
                   }           

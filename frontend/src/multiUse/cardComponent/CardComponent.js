@@ -29,7 +29,7 @@ import {
     let type = bout !== undefined ? "bouts" : "mixers";
     console.log("info:", info)
     // let key = bout !== undefined ? bout.eventId : mixer.eventId;
-    let key = info.event_id
+    let key = info.eventId
     // ! note will need to change this back to eventId after you solve that problem in api 
     console.log("***key***", key)
 
@@ -44,7 +44,7 @@ import {
   //   /** API get request for a specific address */ 
 
     async function getAddress() {
-      let address = await FastApi.getAddress(info.address_id)
+      let address = await FastApi.getAddress(info.addressId)
       console.log("address:", address)
       setAddress(address)
       // setIsLoading(false)

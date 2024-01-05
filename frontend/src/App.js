@@ -110,6 +110,7 @@ function App() {
       let token = await FastApi.login(userData); 
       console.log("!!!!! token from signup!!!", token)
       setToken(token);
+      console.log("token /setTokn:", token)
       return { success: true};
       } catch (err) {
         console.log("login failed", err);
@@ -186,8 +187,11 @@ function App() {
 
 
   return (
-    
+    <>
+    <div className="track-out">  </div>
+    <div className="track-in">  </div>
     <div className="App">
+   
       <BrowserRouter>
       <UserContext.Provider value={{user, setUser}}>
         <Fragment>
@@ -199,7 +203,9 @@ function App() {
         </Fragment>
         </UserContext.Provider>
       </BrowserRouter>
-    </div>
+      </div>
+      </>
+    
   );
   }
 

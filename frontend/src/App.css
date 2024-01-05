@@ -5,6 +5,8 @@
   /* background-color: orange; */
   height: 100vh;
   /* margin-top: 150px; */
+  background-color: transparent;
+  z-index: 1;
 
 }
 
@@ -17,32 +19,40 @@ body {
   height: 100vh;
   background-position: right top; 
   background-attachment: fixed;
+  overflow-x: hidden;
+  /** note that this was working but you want overflow hidden left and right I think not up and down for lists?  */
 
 }
 
-/* body { */
-  /* background-image: url("./images/skater-3-poses_01.svg"); */
-  /* background-size: 500px; */
-  /* background-size: cover;  */
-  /* background-size: contain; 
-  background-repeat: no-repeat;
-  background-color: blue; */
-  /* cover uses the image once  */
-  /* background-image: url("./images/skater-jam_02.svg"); */
-  /* background-image: url("./images/skater-jam_02.svg");
-  height: 100vh; */
-  /* background-position: left 130% top 50%;  */
-  /* background-position: right top; 
-  background-attachment: fixed; */
+.track-out {
+  width: 3800px;
+  /* height: 2000px; */
+  height: 3800px;
+  border: 5px solid black;
+  border-radius: 50% 50%;
+  background-color: transparent;
+  position: absolute; 
+  top: 240%; 
+  left: 60%; 
+  transform: translate(-50%, -50%);
+  z-index: -1; 
+}
+
+.track-in {
+  width: 2100px;
+  /* height: 2000px; */
+  height: 2300px;
+  border: 5px solid black;
+  border-radius: 50% 50%;
+  background-color: transparent;
+  position: absolute; 
+  top: 240%; 
+  left: 60%; 
+  transform: translate(-50%, -50%);
+  z-index: -1; 
+}
 
 
-  /* background-size: cover; */
-  /* background-origin: padding-box;
-  padding: 400px; */
-  /* padding a way to shrink the iamge */
-  /* background-blend-mode: ; */
-  /* min-width: 500px; */
- /* } */
 
  @media only screen and (max-width: 870px) {
   body {

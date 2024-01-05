@@ -25,6 +25,8 @@ function BoutList({getBouts}) {
       console.log("getAllBouts is running in BoutList.js")
       let bouts = await getBouts();
       console.log("bouts in BoutList.js", bouts)
+      console.log(" !!!!!!!!!!!!!!!!!!!!!!!!! bout[0].addressId", bouts[0].addressId)
+      console.log(" !!!!!!!!!!!!!!!!!!!!!!!!! bout[0].addressId", typeof(bouts[0].addressId)   )
     //   try{
     //     let bouts = await JoblyApi.getJobs(title);
     //     setBouts(bouts);

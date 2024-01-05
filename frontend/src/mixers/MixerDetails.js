@@ -26,7 +26,7 @@ function MixerDetail() {
 
     async function getBout() {
       let mixer = await FastApi.getMixer(eventId.id);
-      let address = await FastApi.getAddress(mixer.address_id)
+      let address = await FastApi.getAddress(mixer.addressId)
       console.log("address:", address)
       console.log("!!!!mixer!!!!:", mixer)
       setMixer(mixer);
@@ -75,8 +75,8 @@ function MixerDetail() {
                   <div className="d-flex justify-content-beginning text-center py-1" style={{marginTop: '2px'}}>
              
                   <div className="d-flex flex-column text-center py-1">
-                    <MDBCardText>{address.street_address}</MDBCardText>
-                    <MDBCardText style={{ position: 'absolute', top: '16rem' }}>{address.city}, {address.state} {address.zip_code}</MDBCardText>
+                    <MDBCardText>{address.streetAddress}</MDBCardText>
+                    <MDBCardText style={{ position: 'absolute', top: '16rem' }}>{address.city}, {address.state} {address.zipCode}</MDBCardText>
                   </div>
                   </div>
                     <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
@@ -89,12 +89,12 @@ function MixerDetail() {
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{mixer.ruleset}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>ruleset</MDBCardText>
                     </div>
-                   { mixer.co_ed && <div className="px-3">
+                   { mixer.coEd && <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>Yes</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>co-ed</MDBCardText>
                     </div>
                     }       
-                     { !mixer.co_ed && <div className="px-3">
+                     { !mixer.coEd && <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>No</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>co-ed</MDBCardText>
                     </div>
@@ -107,19 +107,19 @@ function MixerDetail() {
                     <p className="lead fw-normal mb-1">Time</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
                       <MDBCardText className="font-italic mb-1">{mixer.time}</MDBCardText>
-                      <MDBCardText className="font-italic mb-1">{mixer.time_zone}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{mixer.timeZone}</MDBCardText>
                     </div>
                   </div>
                   <div className="mb-5">
                     <p className="lead fw-normal mb-1">Signup Here</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{mixer.signup_link}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{mixer.signupLink}</MDBCardText>
                     </div>
                   </div>
                   <div className="mb-5">
                     <p className="lead fw-normal mb-1">Floor Type</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{mixer.floor_type}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{mixer.floorType}</MDBCardText>
                     </div>
                   </div>
                   <div className="mb-5">
@@ -131,7 +131,7 @@ function MixerDetail() {
                   <div className="mb-5">
                     <p className="lead fw-normal mb-1">Jersey Colors</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{mixer.jersey_colors}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{mixer.jerseyColors}</MDBCardText>
                     </div>
                   </div>
                 </MDBCardBody>
