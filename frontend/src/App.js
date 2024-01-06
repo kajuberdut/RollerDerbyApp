@@ -9,7 +9,7 @@ import UserContext from "./multiUse/UserContext";
 import FastApi from "./Api";
 import useLocalStorage from "./hooks/useLocalStorage";
 // ! this will probably need to be moved 
-import Chat from './Chat';
+import Messages from './Messages';
 // import jwt from "jsonwebtoken";
 // import * as jwt_decode from 'jwt-decode';
 // import jwt_decode from 'jwt-decode'
@@ -25,6 +25,7 @@ function App() {
   // const [isLoading, setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { default: jwt_decode } = require("jwt-decode");
+  const [displayMessages, setDisplayMessages] = useState(false)
 
 
   // useEffect(() => {
@@ -123,6 +124,7 @@ function App() {
     function logout() {
       setToken(null);
       setUser(null);
+      setDisplayMessages(false);
       localStorage.setItem('user', null);
 
     }
@@ -177,6 +179,12 @@ function App() {
       }
     }
 
+    function handleMessages(userId) {
+      console.log("handleMessages is being clicked")
+      console.log("userId in App.js", userId)
+      displayMessages ? setDisplayMessages(false) : setDisplayMessages(true)
+    }
+
      /** Display isLoading if API call is has not returned */
 
   if (isLoading) {
@@ -197,8 +205,8 @@ function App() {
         <Fragment>
           <NavBar logout={logout}/>
           <main>
-            <AllRoutes signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
-            <Chat />
+            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
+          { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main>
         </Fragment>
         </UserContext.Provider>

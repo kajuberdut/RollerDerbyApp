@@ -14,6 +14,7 @@ import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
+import Messages from "../Messages";
 // import SetupTesting from "../test/SetupTesting"
 
 
@@ -23,8 +24,8 @@ import Profile from "../profile/Profile";
  * Display routes
  */
 
-function AllRoutes({login, signup, update, apply, id, getBouts, getMixers, getUsers}) {
- 
+function AllRoutes({login, signup, update, apply, id, getBouts, getMixers, getUsers, handleMessages}) {
+ console.log(" ^^^^^^ handleMessages in routes:", typeof handleMessages)
 /** Render routes */
 
 return (
@@ -47,13 +48,14 @@ return (
         <Route path="/update/:username" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
-        <Route path="/users/:username" element={<UserDetails />} />
+        <Route path="/users/:username" element={<UserDetails handleMessages={handleMessages} />} />
         <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
         <Route path="/bouts/add" element={<BoutForm/>} />
         <Route path="/bouts/:id" element={<BoutDetails />} />
         <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
         <Route path="/mixers/add" element={<MixerForm/>} />
         <Route path="/mixers/:id" element={<MixerDetails />} /> 
+        {/* <Route path="/messages" element={<Messages handleMessages={handleMessages}/>} />  */}
         <Route path="*" element={<NotFound />} /> 
         {/* <Route exact path="/signup">
             <SignupForm  signup={signup}/>

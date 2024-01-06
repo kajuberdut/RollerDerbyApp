@@ -252,6 +252,7 @@ class FastApi {
     /** Get specific rulesets by ID*/
 
   static async getRuleset(rulesetId) {
+    console.log("rulesetId in get ruleset:", rulesetId)
     // console.log("hitting the getAddress in api.js")
     let res = await this.request(`rulesets/${rulesetId}`);
     // console.log("res:", res)
