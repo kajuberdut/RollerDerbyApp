@@ -58,8 +58,7 @@ function UserDetails({ handleMessages }) {
  
 
       try {
-        // let indUser = await FastApi.getUser(username.username);1
-        let indUser = await FastApi.getOtherUser(username.userId);
+        let indUser = await FastApi.getUser(username.username);
         console.log("indUser!!!!!!!!!:", indUser)
         setUserId(indUser.userId)
         let rs = [];

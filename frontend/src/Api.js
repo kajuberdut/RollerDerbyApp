@@ -64,6 +64,7 @@ class FastApi {
        /** Post login user by data*/
 
        static async login(data) {
+        // !This is breaking with in case be aware of that 
 
         console.log("!!!!data in login Api.js:", data)
         
@@ -71,15 +72,20 @@ class FastApi {
         // note this is the type of form that you have to submit for login 
 
         let formData = new FormData();
+        console.log("formData1 in login:", formData)
         formData.append("username", data.username)
+        // formData.set("username", data.username)
+        console.log(formData.entries())
+        console.log("data.username:", data.username)
+        console.log("formData2 in login:", formData)
         formData.append("password", data.password)
-        console.log("formData in login:", formData)
+        console.log("formData3 in login:", formData)
         let res = await this.request('token', formData, "post");
 
         // let res = await this.request('token', data, "post");
         console.log("res in login:", res)
         // !note will need to change this most likely to accessToken after you get inCase working
-        return res.accessToken;
+        return res.access_token;
       }
 
   /** Get all users*/
@@ -107,6 +113,18 @@ class FastApi {
           console.log("res in api.js", res)
         }
         return res
+    }
+
+    static async getOtherUser(userId) {
+      console.log("you are hitting the get OTHER user route in Api.js")
+      console.log("!!!! userId !!!!", userId)
+      let res = await this.request(`users/${userId}`);
+      console.log("res:", res)
+      if(res.ruleset === null) {
+        res.ruleset = 0; 
+        console.log("res in api.js", res)
+      }
+      return res
     }
 
     static async getUserById(id) {

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 import traceback
 from . import crud, models, schemas
 from .database import SessionLocal, engine, create_all_tables
+import json
 
 
 # # ? imports for incase from patrick
@@ -77,15 +78,24 @@ def get_db():
     finally:
         db.close()
         
-
+        
+# class UserWebSocket(WebSocket):
+#     def __init__(self, *args, user_id: int, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.user_id = user_id
+        
+    # ! added this not necessary for base usage
 
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
         print("test this ")
     
-    async def connect(self, websocket: WebSocket):
+    # * connect this user the logged in user to the websocket active_connections list
+    async def connect(self, websocket: WebSocket, user_id: int):
+        print("In connect in main.py the user_id:", user_id)
         await websocket.accept()
+        websocket.user_id = user_id 
         self.active_connections.append(websocket)
         # new user comes to our connection then added to the list of active_connections
 
@@ -94,6 +104,7 @@ class ConnectionManager:
         # This is disconnecting them from that connection
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
+        print("hitting send_personal_message")
         await websocket.send_text(message)
     
     async def broadcast(self, message: str):
@@ -106,14 +117,60 @@ manager = ConnectionManager()
 @api_app.websocket("/ws/{user_id}")
 # @api_app.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int):
+# async def websocket_endpoint(websocket: UserWebSocket, user_id: int):
     print("websocket is running /ws/{user_id}")
-    await manager.connect(websocket)
+    print("websocket.scope['path']:", websocket.scope["path"])
+    
+    # websocket = UserWebSocket(user_id=user_id)
+    # ! added this not necessary for base usage
+    
+    await manager.connect(websocket, user_id)
     try: 
         while True:
             data = await websocket.receive_text()
             print("data in main.py:", data)
-            await manager.send_personal_message(f"You wrote: {data}", websocket)
-            await manager.broadcast(f"User Id {user_id} says: {data}")
+            # print("data.message in main.py:", data.message)
+            data_dict = json.loads(data)
+            message = data_dict["message"]
+            sender_id = data_dict["senderId"]
+            recipient_ids = data_dict["recipientIds"]
+            print("message in main.py **** ", message)
+            print("sender id in main.py ****", sender_id)
+            print("reciepent_id in main.py ****", recipient_ids)
+            # print("~~~~ manager.active_connections ~~~~:", manager.active_connections)
+            # print("~~~~ manager.active_connections ~~~~:", dir(manager.active_connections))
+            
+            # todo this is the line you need to work on.... 
+            # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
+            for recipient_id in recipient_ids:
+                # * if there is no connection between the recipiet and the user you will need to add one
+                recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recipient_id), None)
+                print("recipient connection:", recipient_connection)
+                print("recipient connection.user_id:", recipient_connection.user_id)
+                if recipient_connection:
+                    print("recipient connection is true")
+                    # await manager.send_personal_message(f"You wrote: {message}", websocket)
+                    # await manager.send_personal_message(f"Message from user with id {user_id}: {message}", recipient_connection)
+                    await manager.send_personal_message(f"Message from user with id: {message}", recipient_connection)
+                if not recipient_connection: 
+                    print("there is no recipient connection")
+                    print("add recipient connection")
+                    await manager.send_personal_message("Recipient is currently unavailable.", websocket)
+                
+            
+            # ! if you get rid of ----- if recipient_websocket 
+                # ! then you will print those items in the frontend 
+            
+            # if recipient_websocket:
+            #     await manager.send_personal_message(f"You wrote: {message}", recipient_websocket[0])
+            #     await manager.broadcast(f"User Id {user_id} says: {message}")
+                
+            # await manager.send_personal_message(f"You wrote: {message}", websocket)
+            # * broadcasting to all recipients regaradless of whether they user_id matches the recipient_id
+            # await manager.broadcast(f"User Id {user_id} says: {message}")
+            # else:
+            #     raise Exception("no recipient web socket")
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"User Id #{user_id} has left the chat")
@@ -215,20 +272,40 @@ def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(N
     return users
 
 
-# * get /users/{derby_name} 
+# * get /users/{username} 
+# * returns one specific user
+# * NOTE THAT YOU CANNOT HAVE BOTH users/{user_id} and users/{username} as it cannot tell the differnce. 
+
+# @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
+# @api_app.get("/users/{username}", response_model=schemas.UserDetailsPublic)
+# # ! Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
+
+# # todo: this is not working when the user does not have other data that is optional in it
+# def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: Session = Depends(get_db)):
+    
+#     user = crud.get_user_by_username(db, username=username)
+    
+#     if username is None: 
+#         raise HTTPException(status_code=404, detail=f"User with derby name {username} not found.")
+    
+#     return user
+
+# * get /users/{userId} 
 # * returns one specific user
 
 # @api_app.get("/users/{derby_name}", response_model=schemas.UserBase)
-@api_app.get("/users/{username}", response_model=schemas.UserDetailsPublic)
+@api_app.get("/users/{user_id}", response_model=schemas.UserDetailsPublic)
 # ! Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
 
 # todo: this is not working when the user does not have other data that is optional in it
-def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: Session = Depends(get_db)):
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+    print("YOU ARE HITTING THE /users/{user_id} ROUTE")
     
-    user = crud.get_user_by_username(db, username=username)
+    # user = crud.get_user_by_username(db, username=username)
+    user = crud.get_user_by_id(db, user_id=user_id)
     
-    if username is None: 
-        raise HTTPException(status_code=404, detail=f"User with derby name {username} not found.")
+    if user_id is None: 
+        raise HTTPException(status_code=404, detail=f"User with derby name {user_id} not found.")
     
     return user
 

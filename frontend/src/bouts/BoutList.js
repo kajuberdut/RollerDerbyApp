@@ -38,7 +38,7 @@ function BoutList({getBouts}) {
       // setIsLoading(false); 
     }
 
-   /** Reloading jobs when it changes request for jobs */
+   /** Reloading bouts when it changes request for bouts */
 
     useEffect(() => {
         getAllBouts();

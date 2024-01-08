@@ -48,7 +48,8 @@ return (
         <Route path="/update/:username" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
-        <Route path="/users/:username" element={<UserDetails handleMessages={handleMessages} />} />
+        {/* <Route path="/users/:username" element={<UserDetails handleMessages={handleMessages} />} /> */}
+        <Route path="/users/:userId" element={<UserDetails handleMessages={handleMessages} />} />
         <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
         <Route path="/bouts/add" element={<BoutForm/>} />
         <Route path="/bouts/:id" element={<BoutDetails />} />

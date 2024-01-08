@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLocation } from "react";
+import { useParams } from "react-router-dom";
+
 import io from "socket.io-client";
 import {
     Card,
@@ -30,13 +32,26 @@ const Messages = ({handleMessages}) => {
     let [socket, setSocket] = useState();
 
     const user = JSON.parse(localStorage.getItem('user'));
+    // console.log("user in messages.js", user)
+    // const location = useLocation();
+    // console.log(" **** use location in messages *****:", location)
+    const pathname = window.location.pathname
+    // console.log("pathname:", pathname)
+    let messageToUser = pathname.split('/')[2]
+    // pathname.split("/")[-1]
+    // console.log("messageToUser:", messageToUser)
 
-    
-
+    // const params = useParams()
+    // console.log("params &&&&&:", params)
+    // const { username } = useParams(); 
+    // console.log("!!!!!!!!! username !!!!!!!!!!", username)
     
     // console.log("before web socket in chat.js")
     // const socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
     // console.log("socket: ", socket)
+
+    
+   /** Reloading jobs when it changes request for jobs */
 
     useEffect(() => {
       console.log("before web socket in chat.js")
@@ -109,7 +124,18 @@ const Messages = ({handleMessages}) => {
         // const socket = io('http://localhost:8000', {path: `/ws/${userId}`});
         // console.log("event in Messages:", evt)
         // console.log("Message sent!")
-        socket.send(formData.message)
+
+        let messageData = {
+          "senderId": user.userId,
+          "recipientIds": [messageToUser],
+          "message": formData.message
+        }
+        let jsonData = JSON.stringify(messageData); 
+        console.log(" MESSAGE IN MESSAGES :", messageData)
+
+        // socket.send(formData.message)
+        // socket.send(messageData)
+        socket.send(jsonData)
         // setMessages([...messages, { message: formData.message}])
         setFormData(INITIAL_STATE)
         
