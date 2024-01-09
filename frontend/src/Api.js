@@ -64,7 +64,8 @@ class FastApi {
        /** Post login user by data*/
 
        static async login(data) {
-        // !This is breaking with in case be aware of that 
+        // !This is breaking with in case be aware of that. I believe its becasuse I
+        // ! am submitting the data in a multiform
 
         console.log("!!!!data in login Api.js:", data)
         
@@ -85,7 +86,8 @@ class FastApi {
         // let res = await this.request('token', data, "post");
         console.log("res in login:", res)
         // !note will need to change this most likely to accessToken after you get inCase working
-        return res.access_token;
+        // ! note that was an issue with not running inside of venv
+        return res.accessToken;
       }
 
   /** Get all users*/

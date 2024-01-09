@@ -60,6 +60,7 @@ class User(SQLAlchemyBase):
     ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
     insurance = relationship("UserInsurance", back_populates="user")
+    message = relationship("UserMessage", back_populates="user")
     location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
     # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)

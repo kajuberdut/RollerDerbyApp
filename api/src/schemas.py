@@ -71,7 +71,13 @@ class UserPosition(BaseModel):
 
     class Config:
         from_attributes = True
-        
+
+class UserMessage(BaseModel):
+    user_id: int
+    message_id: int
+
+    class Config:
+        from_attributes = True
         
 # *** end user ruleset pydantic models ***
 
@@ -163,6 +169,15 @@ class InsuranceOutput(BaseModel):
         if v not in insurance_list:
             raise ValueError("Invalid insurance")
         return v  
+    
+class Message(BaseModel): 
+    message_id: int = Field(default_factory=lambda: 0)
+    # message_id: int
+    message: str
+    date_time: str
+
+    class Config:
+        from_attributes = True
 
 
 # ! just added this to handle the isnurance number    
@@ -182,6 +197,7 @@ class UserUpdate(UserBase):
     ruleset: Ruleset = None
     position: Position = None
     insurance: Insurance = None
+    message: Message = None
     location_id: int
     associated_leagues: str
     # ruleset_id: int
@@ -238,12 +254,6 @@ class UserDelete(BaseModel):
     password: str
     
 
-# class Position(BaseModel): 
-#     position_id: int = Field(default_factory=lambda: 0)
-#     jammer: bool
-#     pivot: bool
-#     blocker: bool   
-    
 class Location(BaseModel):
     location_id: int = Field(default_factory=lambda: 0)
     city: str
@@ -364,6 +374,9 @@ class MixerUpdate(EventBase):
     
 class EventDelete(BaseModel): 
     event_id: int 
+
+class MessageDelete(BaseModel): 
+    message_id: int
     
 class Test(BaseModel): 
     info: str

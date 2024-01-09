@@ -138,14 +138,15 @@ const Messages = ({handleMessages}) => {
         let dateTime = (new Date().toLocaleString()); 
         console.log("%%%%% dateTime %%%%%:", dateTime)
         let messageData = {
+          "messageId": 0,
           "senderId": user.userId, 
           "recipientIds": [Number(messageToUser)],
           "message": formData.message,
           "dateTime": dateTime
         }
-
+        console.log(" !!!! 1 MESSAGE IN MESSAGES 1 !!!! :", messageData)
         let jsonData = JSON.stringify(messageData); 
-        console.log(" MESSAGE IN MESSAGES :", messageData)
+        // console.log(" !!!! 2 MESSAGE IN MESSAGES 2 !!!! :", messageData)
 
         // socket.send(formData.message)
         // socket.send(messageData)

@@ -45,7 +45,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # * Auth Token
 
-# api_app = FastAPI()
+api_app = FastAPI()
 
 # ?everything  below is for incase patrick middle *****************************
 
@@ -116,7 +116,7 @@ manager = ConnectionManager()
 
 @api_app.websocket("/ws/{user_id}")
 # @api_app.websocket("/ws/{user_id}")
-async def websocket_endpoint(websocket: WebSocket, user_id: int):
+async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
 # async def websocket_endpoint(websocket: UserWebSocket, user_id: int):
     print("websocket is running /ws/{user_id}")
     print("websocket.scope['path']:", websocket.scope["path"])
@@ -125,30 +125,57 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
     # websocket = UserWebSocket(user_id=user_id)
     # ! added this not necessary for base usage
     
+    # recipient_message = crud.create_message(db=db, )
+    
     await manager.connect(websocket, user_id)
     try: 
         while True:
             data = await websocket.receive_text()
+            
+            
             print("data in main.py:", data)
             # print("data.message in main.py:", data.message)
             data_dict = json.loads(data)
             print("data_dict:", data_dict)
+            message_id = data_dict["messageId"]
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
             recipient_ids = data_dict["recipientIds"]
             date_time = data_dict["dateTime"]
+            
+            print("message_id", message_id )
+            print("type message_id", type(message_id))
             print("date_time: ******", date_time)
             print("type date_time: ******", type(date_time))
             print("message in main.py **** ", message)
             print("sender id in main.py ****", sender_id)
             print("recipient_id in main.py ****", recipient_ids)
             print(" ****** manager.active_connections:", manager.active_connections)
+          
             # print("~~~~ manager.active_connections ~~~~:", manager.active_connections)
             # print("~~~~ manager.active_connections ~~~~:", dir(manager.active_connections))
+            
+            # * add to message to database for user
+            # ! THIS IS NOT RETURNING MY MESSAGE ID NOT SURE WHY 
+            this_message = {
+                "message": message, 
+                "date_time": date_time,
+                "message_id": 0 
+            }
+            db_message_id = crud.create_message(db=db, message=this_message)
+            # db_message_id = crud.create_message(db=db, message_id=message_id, message=message, date_time=date_time)
+            # db_message_id = crud.create_message(db=db, message=message, date_time=date_time)
+            print("db_message_id in main.py &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", db_message_id)
+            db_user_message = crud.create_user_message(db=db, user_id=user_id, message_id=db_message_id)
+   
             
             # todo this is the line you need to work on.... 
             # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
             for recipient_id in recipient_ids:
+                
+                # * add to message to database for each recipient 
+                db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
+                
                 print("Handling this recipient:", recipient_id)
                 print("Type of recipient:", type(recipient_id))
                 # * if there is no connection between the recipiet and the user you will need to add one
@@ -410,8 +437,10 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @api_app.put("/users/{user_id}", response_model=schemas.UserUpdate)
 def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.UserUpdate, ruleset: list[schemas.Ruleset], position: list[schemas.Position], insurance: list[schemas.Insurance], location: schemas.Location, user_id: int, db: Session = Depends(get_db)):
     print("!!!! INSURANCE IN MAIN.PY !!!! ", insurance)
+    # ! location_id is 0 here 
     
-    # print("**** ruleset ****:", ruleset)
+    
+    print("**** ruleset ****:", ruleset)
     
     existing_location = crud.get_location(db=db, location=location)
     
@@ -419,6 +448,7 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: schemas.Use
         location_id = existing_location.location_id 
     else: 
         location_id = crud.create_location(db=db, location=location)
+        print("**************** location_id in main.py***********", location_id)
     
     user.location_id = location_id
     
@@ -784,6 +814,8 @@ def delete_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: schemas.E
 @api_app.post("/address/", response_model=schemas.Address)
 def create_address(token: Annotated[str, Depends(oauth2_scheme)], address: schemas.Address, db: Session = Depends(get_db)):
     
+    print("address is getting hit:")
+    
     return crud.create_address(db=db, address=address)
 
 # * get /address/ 
@@ -900,7 +932,23 @@ def get_location(token: Annotated[str, Depends(oauth2_scheme)], location_id:int,
 
 
 
+# * delete /messages/{message_id} 
+# * deletes an existing message
 
+# @api_app.delete("/messages/{message_id}", response_model=schemas.MessageDelete)
+# def delete_message(token: Annotated[str, Depends(oauth2_scheme)], message: schemas.MessageDelete, message_id: int, db: Session = Depends(get_db)):
+    
+#     print('message in /messages/{message_id}', message)
+#     user = crud.get_user_by_id(db, user_id=user_id)
+#     db_message = crud.get_message_by_id(db, message_id=message_id)   
+#     print("db_message:", db_message)   
+#     print("db_message.message_id:", db_message.message_id)   
+    
+ 
+#     if not db_message:
+#         raise HTTPException(status_code=400, detail=f"Message with id {message_id} doesn't exist.")
+    
+#     return crud.delete_message(db=db, message_id=db_message.message_id)
 
 
 
@@ -920,30 +968,30 @@ def get_location(token: Annotated[str, Depends(oauth2_scheme)], location_id:int,
 
 # ****************************************************
 
-# @api_app.get("/json")
-# async def kenobi():
-#     return {"hello_there": "general kenobi"}
+@api_app.get("/json")
+async def kenobi():
+    return {"hello_there": "general kenobi"}
 
-# class UserPost(BaseModel): 
-#     username: str
-#     password: str
-#     email: str
-#     user_id: int
+class UserPost(BaseModel): 
+    username: str
+    password: str
+    email: str
+    user_id: int
 
-# @api_app.post("/users")
+@api_app.post("/userstest")
+async def receive_data(users: UserPost):
 # async def receive_data(users: UserPost):
-# # async def receive_data(users: UserPost):
-#     print("users", users)
+    print("users", users)
    
-#     # Generating an actual JSONResponse to avoid default_response_class
-#     return users
+    # Generating an actual JSONResponse to avoid default_response_class
+    return users
 
 # @api_app.get("/")
 # async def get():
 #     print("HITTING GET REQUESTS")
 #     return HTMLResponse(html)
 
-# @api_app.get("/blah")
-# async def get_blah():
-#     return {"messageTest": "blah blah"}
+@api_app.get("/blah")
+async def get_blah():
+    return {"messageTest": "blah blah"}
 

@@ -549,11 +549,63 @@ def get_location_by_id(db: Session, location_id: int):
     return db.query(models.Location).filter(models.Location.location_id == location_id).first()
 
 def create_location(db: Session, location: schemas.Location):
+    print("!!!!! location in crud.py !!!!!!:", location)
     
     db_location = models.Location(city=location.city, state=location.state)
+    
+    print("*** db_location *****", db_location)
+    print("*** db_location.location_id *****", db_location.location_id)
+    
     db.add(db_location)
     db.commit()
     db.refresh(db_location)
     
     return db_location.location_id
    
+#  *** CRUD messages ***
+
+# ! come back to this HERE HERE HERE 
+
+# def create_message(db: Session, message_id: int, message: str, date_time: str):
+
+def create_message(db: Session, message: schemas.Message):
+    print("message in create_message CRUD", message)
+    # print("message.MESSAGE in create_message CRUD", message.message)
+    print("message.MESSAGE in create_message CRUD", message['message'])
+ 
+
+    # db_message = models.Message(message_id=message_id, message=message, date_time=date_time)
+    # print("message_id in crud", message_id)
+    print("Before addig message to db")
+    # db_message = models.Message(message=message, date_time=date_time)
+    # db_message = models.Message(message=message.message, date_time=message.date_time)
+    db_message = models.Message(message=message['message'], date_time=message['date_time'])
+    print("After adding message to db")
+    # print("db_message", db_message)
+    # print("db_message.message_id", db_message.message_id)
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+    print("db_message ###############################", db_message)
+    print("db_message.message ###############################", db_message.message)
+    print("db_message.message_id ###############################", db_message.message_id)
+    
+    return db_message.message_id
+
+def create_user_message(db: Session, user_id: int, message_id: int): 
+    db_user_message = models.UserMessage(user_id=user_id, message_id=message_id)
+    db.add(db_user_message)
+    db.commit()
+    db.refresh(db_user_message)
+    return db_user_message
+
+def get_message_by_id(db: Session, message_id: int): 
+    return db.query(models.Message).filter(models.Message.message_id == message_id).first()
+
+def delete_message(db: Session, message_id: int):
+    db_message = get_message_by_id(db, message_id)      
+        
+    db.delete(db_message)
+    db.commit()
+    
+    return db_message
