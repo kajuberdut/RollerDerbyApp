@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useLocation } from "react";
 import { useParams } from "react-router-dom";
+import FastApi from "./Api";
+
 
 import io from "socket.io-client";
 import {
@@ -16,6 +18,7 @@ import {
     CardFooter
   } from "reactstrap";
 import NavBarMessages from "./navBar/NavBarMessages";
+import { faSliders } from "@fortawesome/free-solid-svg-icons";
 
   
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! yours is below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,6 +32,7 @@ const Messages = ({handleMessages}) => {
   /** Sets formData in initial state */
     const [formData, setFormData] = useState(INITIAL_STATE);
     const [isConnected, setIsConnected] = useState(false);
+    const [otherUser, setOtherUser] = useState({})
     let [socket, setSocket] = useState();
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -38,6 +42,28 @@ const Messages = ({handleMessages}) => {
     const pathname = window.location.pathname
     // console.log("pathname:", pathname)
     let messageToUser = pathname.split('/')[2]
+
+
+    useEffect(() => {
+
+      async function getOtherUser() {
+
+        try {
+          let otherUser =  await FastApi.getOtherUser(messageToUser);
+          // console.log("otherUser", otherUser)
+          setOtherUser(otherUser);
+        } catch (errors) {
+          console.error("Get Other User failed", errors);
+          return { success: false, errors };
+        }
+      }
+
+      getOtherUser()
+  
+    }, [messageToUser])
+
+
+
     // pathname.split("/")[-1]
     // console.log("messageToUser:", messageToUser)
 
@@ -58,64 +84,49 @@ const Messages = ({handleMessages}) => {
       
       // const socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
       if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.log("IF STATEMENT IS RUNNING")
+        
         socket = new WebSocket(`ws://localhost:8000/ws/${user.userId}`);
 
         setIsConnected(true)
+        console.log("isConnected:", isConnected)
 
-        // socket.addEventListener("open", event => {
-        //   socket.send("Connection established")
-        // });
-  
+        console.log("!!!! socket.readState:", socket.readyState)
+
         // Listen for messages
         socket.addEventListener("message", event => {
-          console.log("Message from server ", event.data)
           console.log("event in addeventListener:", event)
-          // setMessages([...messages, { message: event.data }])
-          setMessages((prevMessages) => [...prevMessages, { message: event.data }]);
+          console.log("Message from server ", event.data)
+          console.log("JSON.parse(event.data)", JSON.parse(event.data))
+          let eventData = JSON.parse(event.data)
+
+          // setMessages((prevMessages) => [...prevMessages, { message: event.data }]);
+          setMessages((prevMessages) => [...prevMessages, eventData ]);
           console.log("messages:", messages)
+          // const eventDataUserId = event.data.split(": ")
+          // const otherUserId = eventDataUserId[1].trim()
+         
+          // setMessages([...messages, { message: event.data }])
+        
+          // console.log("~~~~~~~~~~~~~~~messages~~~~~~~~~~~~~~~~~~:", messages)
+          
           // setMessages([...event.data, { message: formData.message}])
         });
+
+        // socket.onmessage.then(event => {
+        //   console.log("Message from server:", event.data);
+        // });
   
         setSocket(socket)
+        console.log("socket in useEffect:", socket)
       }
-
-      // console.log("socket: ", socket)
-      // console.log("@@@@@@@@ socket.current @@@@@@@@@@:", socket.current)
-
-      // Add event listeners for socket events (e.g., onmessage, onopen, onclose)
-      // setIsConnected(true)
-
-      // socket.addEventListener("open", event => {
-      //   socket.send("Connection established")
-      // });
-
-      // // Listen for messages
-      // socket.addEventListener("message", event => {
-      //   console.log("Message from server ", event.data)
-      // });
-
-      // setSocket(socket)
-
-      // socket.onmessage = async evt => {
-      //   console.log("socket on message is running %%%%%%%%%%%%%%%")
-        
-
-      //   }
-
+      else {
+        console.log("is socket and if statement is not running")
+      }
       // Cleanup function to close the socket when the component unmounts
       return () => socket.close();
   }, [userId]);
 
-    // console.log("socket outside of function:", socket)
-
-    // socket.onSubmit = function 
-
-    // socket.onmessage = async evt => {
-    //   console.log("socket on message is running %%%%%%%%%%%%%%%")
-    //   }
-
-
-  
 
     const handleSubmit = async evt => {
         evt.preventDefault();   
@@ -124,12 +135,15 @@ const Messages = ({handleMessages}) => {
         // const socket = io('http://localhost:8000', {path: `/ws/${userId}`});
         // console.log("event in Messages:", evt)
         // console.log("Message sent!")
-
+        // console.log("messageToUser in Messages.js", messageToUser)
+        // console.log(" typeof messageToUser in Messages.js", typeof messageToUser)
+        // console.log(" typeof int(messageToUser) in Messages.js", typeof Number(messageToUser))
         let messageData = {
           "senderId": user.userId,
-          "recipientIds": [messageToUser],
+          "recipientIds": [Number(messageToUser)],
           "message": formData.message
         }
+
         let jsonData = JSON.stringify(messageData); 
         console.log(" MESSAGE IN MESSAGES :", messageData)
 
@@ -140,6 +154,13 @@ const Messages = ({handleMessages}) => {
         setFormData(INITIAL_STATE)
         
         }
+    console.log("messages:", messages)
+    {messages.map((message) => (
+      console.log("message in messages.map:", message),
+      console.log("message.message in messages.map:", message.message),
+      console.log("message.user_id in messages.map:", message.user_id),
+      console.log("user.userId", user.userId)
+    ))}
 
     const handleChange = evt => {
         console.log('handleChange is running')
@@ -157,8 +178,8 @@ const Messages = ({handleMessages}) => {
     return (
         <div>
         <Card className="Messages"  style={{height: '500px', width: '350px', position: 'fixed', bottom: '0px', right: '30px', borderRadius: '20px'}}>
-          <CardHeader>
-            Header
+          <CardHeader style={{height: '40px'}}>
+            <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>{otherUser.username}</p>
             <Button onClick={handleMessages} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
           </CardHeader>
           <CardBody>
@@ -168,7 +189,7 @@ const Messages = ({handleMessages}) => {
             <CardText style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                   // <div key={message.timestamp}>
-                      <div style={{backgroundColor: 'lightgray', borderRadius: '10px', margin: '5px', padding: '5px'}}>
+                      <div style={{ backgroundColor: message.user_id == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.user_id == user.userId ? '80px' : '0px', textAlign: 'left' }}>
                       {/* Display sender or avatar if needed */}
                       {/* {message.sender}:  */}
                       {message.message}

@@ -89,7 +89,7 @@ def get_db():
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
-        print("test this ")
+        print("!! ! self.active_connectiosn", self.active_connections)
     
     # * connect this user the logged in user to the websocket active_connections list
     async def connect(self, websocket: WebSocket, user_id: int):
@@ -120,6 +120,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
 # async def websocket_endpoint(websocket: UserWebSocket, user_id: int):
     print("websocket is running /ws/{user_id}")
     print("websocket.scope['path']:", websocket.scope["path"])
+    print("user_id in main.py", user_id)
     
     # websocket = UserWebSocket(user_id=user_id)
     # ! added this not necessary for base usage
@@ -136,13 +137,16 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
             recipient_ids = data_dict["recipientIds"]
             print("message in main.py **** ", message)
             print("sender id in main.py ****", sender_id)
-            print("reciepent_id in main.py ****", recipient_ids)
+            print("recipient_id in main.py ****", recipient_ids)
+            print(" ****** manager.active_connections:", manager.active_connections)
             # print("~~~~ manager.active_connections ~~~~:", manager.active_connections)
             # print("~~~~ manager.active_connections ~~~~:", dir(manager.active_connections))
             
             # todo this is the line you need to work on.... 
             # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
             for recipient_id in recipient_ids:
+                print("Handling this recipient:", recipient_id)
+                print("Type of recipient:", type(recipient_id))
                 # * if there is no connection between the recipiet and the user you will need to add one
                 recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recipient_id), None)
                 print("recipient connection:", recipient_connection)
@@ -150,8 +154,17 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
                 if recipient_connection:
                     print("recipient connection is true")
                     # await manager.send_personal_message(f"You wrote: {message}", websocket)
+                    userData = json.dumps({"message": f"{message}", "user_id": f"{user_id}" })
+                    await manager.send_personal_message(userData, websocket)
                     # await manager.send_personal_message(f"Message from user with id {user_id}: {message}", recipient_connection)
-                    await manager.send_personal_message(f"Message from user with id: {message}", recipient_connection)
+                    
+                    # await manager.send_personal_message(f"Message from user with id: {message}", recipient_connection)
+                    
+                    # recipientData = json.dumps({"message": f"{message}", "user_id": f"{recipient_id}" })
+                    recipientData = json.dumps({"message": f"{message}", "user_id": f"{user_id}" })
+                    await manager.send_personal_message(recipientData, recipient_connection)
+                    # await manager.send_personal_message({ "message": f"{message}", "user_id": f"{recipient_id}"}, recipient_connection)
+                    
                 if not recipient_connection: 
                     print("there is no recipient connection")
                     print("add recipient connection")
