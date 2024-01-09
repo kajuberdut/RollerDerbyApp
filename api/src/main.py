@@ -132,9 +132,13 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
             print("data in main.py:", data)
             # print("data.message in main.py:", data.message)
             data_dict = json.loads(data)
+            print("data_dict:", data_dict)
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
             recipient_ids = data_dict["recipientIds"]
+            date_time = data_dict["dateTime"]
+            print("date_time: ******", date_time)
+            print("type date_time: ******", type(date_time))
             print("message in main.py **** ", message)
             print("sender id in main.py ****", sender_id)
             print("recipient_id in main.py ****", recipient_ids)

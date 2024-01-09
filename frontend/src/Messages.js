@@ -18,10 +18,7 @@ import {
     CardFooter
   } from "reactstrap";
 import NavBarMessages from "./navBar/NavBarMessages";
-import { faSliders } from "@fortawesome/free-solid-svg-icons";
-
-  
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! yours is below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+import { faCropSimple, faSliders } from "@fortawesome/free-solid-svg-icons";
 
 const Messages = ({handleMessages}) => {
     const [messages, setMessages] = useState([]);
@@ -138,10 +135,13 @@ const Messages = ({handleMessages}) => {
         // console.log("messageToUser in Messages.js", messageToUser)
         // console.log(" typeof messageToUser in Messages.js", typeof messageToUser)
         // console.log(" typeof int(messageToUser) in Messages.js", typeof Number(messageToUser))
+        let dateTime = (new Date().toLocaleString()); 
+        console.log("%%%%% dateTime %%%%%:", dateTime)
         let messageData = {
-          "senderId": user.userId,
+          "senderId": user.userId, 
           "recipientIds": [Number(messageToUser)],
-          "message": formData.message
+          "message": formData.message,
+          "dateTime": dateTime
         }
 
         let jsonData = JSON.stringify(messageData); 

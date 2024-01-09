@@ -30,6 +30,14 @@ class UserInsurance(SQLAlchemyBase):
     insurance_number = Column(String)
     user = relationship("User", back_populates="insurance")
     insurance = relationship("Insurance", back_populates="user") 
+    
+class UserMessage(SQLAlchemyBase): 
+    __tablename__ = "user_message"
+    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
+    user = relationship("User", back_populates="message")
+    message = relationship("Message", back_populates="user") 
+    
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -65,27 +73,27 @@ class Ruleset(SQLAlchemyBase):
     ruleset_id = Column(Integer, primary_key=True)
     name = Column(String)
     user = relationship("UserRuleset", back_populates="ruleset")
-    # wftda = Column(Boolean)
-    # usars = Column(Boolean)  
-    # banked_track = Column(Boolean)
-    # short_track = Column(Boolean) 
-    # user = relationship("User", backref="ruleset")
+
     
 class Position(SQLAlchemyBase):
     __tablename__ = "position"  
     position_id = Column(Integer, primary_key=True)
     position = Column(String)
     user = relationship("UserPosition", back_populates="position")
-    # jammer = Column(Boolean)
-    # blocker = Column(Boolean)
-    # pivot = Column(Boolean)
-    # user = relationship("User", backref="position")
+
 
 class Insurance(SQLAlchemyBase):
     __tablename__ = "insurance"  
     insurance_id = Column(Integer, primary_key=True)
     type = Column(String)
     user = relationship("UserInsurance", back_populates="insurance")    
+    
+class Message(SQLAlchemyBase):
+    __tablename__ = "message"  
+    message_id = Column(Integer, primary_key=True)
+    message = Column(String)
+    date_time = Column(String)
+    user = relationship("UserMessage", back_populates="message")
 
 class Location(SQLAlchemyBase):
     __tablename__ = "location"
