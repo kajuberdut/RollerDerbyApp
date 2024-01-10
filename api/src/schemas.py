@@ -77,6 +77,7 @@ class UserMessage(BaseModel):
     sender_id: int
     message_id: int
     recipient_ids: list[int]
+    # ! pull recipient ids off and stick all ids on to chat 
 
     class Config:
         from_attributes = True
@@ -177,9 +178,26 @@ class Message(BaseModel):
     # message_id: int
     message: str
     date_time: str
+    # chat_id: int
 
     class Config:
         from_attributes = True
+        
+# class Chat(BaseModel):
+#     chat_id: int = Field(default_factory=lambda: 0)
+#     participant_ids: list[int]
+#     type: str
+#     group_id: int
+    
+#     @field_validator('type')
+#     def validate_us_states(cls, v):
+#         group_list = [
+#         'team', 'event', 'user'
+#         ]
+
+#         if v.upper() not in group_list:
+#             raise ValueError("Invalid Group Code")
+#         return v 
 
 
 # ! just added this to handle the isnurance number    

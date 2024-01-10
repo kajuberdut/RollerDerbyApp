@@ -37,7 +37,7 @@ class UserMessage(SQLAlchemyBase):
     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
     user = relationship("User", back_populates="message")
     message = relationship("Message", back_populates="user") 
-    recipient_ids = Column(ARRAY(Integer))
+    # recipient_ids = Column(ARRAY(Integer))
      # user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
     # ! remove recipient ids to Chat
     # ! note added recipeint ids and changed user_id to sender_id 
@@ -97,15 +97,15 @@ class Message(SQLAlchemyBase):
     message = Column(String)
     date_time = Column(String)
     user = relationship("UserMessage", back_populates="message")
-    # chat_id = Column(Integer, ForeignKey("chat.chat_id"), nullable=False)
+    chat_id = Column(Integer, ForeignKey("chat.chat_id"), nullable=False)
     
-# class Chat(SQLAlchemyBase): 
-#     __tablename__ = "chat"
-#     chat_id = Column(Integer, primary_key=True)
-#     group_id = Column(Integer)
-#     type = Column(String)
-#     # message = relationship("Message", back_populates="chat")
-#     message = relationship("Message", backref="chat")
+class Chat(SQLAlchemyBase): 
+    __tablename__ = "chat"
+    chat_id = Column(Integer, primary_key=True)
+    group_id = Column(Integer)
+    type = Column(String)
+    # message = relationship("Message", back_populates="chat")
+    message = relationship("Message", backref="chat")
     
 
     

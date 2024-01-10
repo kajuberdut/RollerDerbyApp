@@ -1,72 +1,246 @@
-import React, { useContext, useState, useEffect } from "react";
-import io from "socket.io-client"
-
-// import FastApi from "../Api";
-// import { useHistory } from "react-router-dom/cjss/react-router-dom.min";
-// import UserContext from "../multiUse/UserContext";
-// import Select from 'react-select';
-import { useNavigate } from "react-router-dom";
-import Message from "./Message";
 
 
 
-// ! path is what is throwing an error
-// ! maybe I am wrong and that is not what is throwing the error 
-// require('dotenv').config();
-// const socket = io(process.env.REACT_APP_API_URL, { path: process.env.REACT_APP_SOCKET_PATH });
-// const socket = io('http://localhost:8000', { path: '/sockets'});
 
-// const socket = io('http://localhost:8000', { path: '/socket.io' })
-// ? stopping here got a different error when I floppped the path.... to no way to handle requests debug more tomorrow. 
-// const socket = io('http://localhost:8000/socket.io');
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! with Chats !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+import React, { useState, useEffect, useLocation } from "react";
+import { useParams } from "react-router-dom";
+import FastApi from "./Api";
 
 
-// const socket = io(process.env.REACT_APP_API_URL, { "path": false });
-// const socket = io(process.env.REACT_APP_API_URL);
-// ! come back to  this it has an error on the backend but need to adjust on frontend 
-// https://github.com/pyropy/fastapi-socketio/issues/12
+import io from "socket.io-client";
+import {
+    Card,
+    CardBody,
+    CardTitle,
+    Form,
+    FormGroup,
+    Label, 
+    Input,
+    Button,
+    CardHeader, 
+    CardText, 
+    CardFooter
+  } from "reactstrap";
+import NavBarMessages from "./navBar/NavBarMessages";
+import { faCropSimple, faSliders } from "@fortawesome/free-solid-svg-icons";
 
-/** 
- * Form for creating a user or updating a logged in user.
- */
+const Messages = ({handleMessages}) => {
+    const [messages, setMessages] = useState([]);
+    // const [message, setCurrentMessage] = useState('');
+    // const [userId, setUserId] = useState(Date.now());
+    const [userId, setUserId] = useState(2);
+    let INITIAL_STATE = { message: ""};
+  /** Sets formData in initial state */
+    const [formData, setFormData] = useState(INITIAL_STATE);
+    const [isConnected, setIsConnected] = useState(false);
+    const [otherUser, setOtherUser] = useState({})
+    let [socket, setSocket] = useState();
+    const [chatId, setChatId] = useState(0);
 
-const Chat = () => {
-    console.log("chat is running!!!!")
-    // const [isConnected, setIsConnected] = useState(socket.connect)
-    const [isConnected, setIsConnected] = useState(false)
+    const user = JSON.parse(localStorage.getItem('user'));
+    // console.log("user in messages.js", user)
+    // const location = useLocation();
+    // console.log(" **** use location in messages *****:", location)
+    const pathname = window.location.pathname
+    // console.log("pathname:", pathname)
+    let messageToUser = pathname.split('/')[2]
 
 
-    // const socket = io('http://localhost:8000', { path: '/socket.io' });
-    const socket = io('http://localhost:8000/socket.io');
+    useEffect(() => {
 
-  useEffect(() => {
-    // Handle connection events
-    socket.on('connect', () => {
-      setIsConnected(true);
-      console.log('Socket connected');
+      async function getOtherUser() {
 
-      // Emit events to test functionality
-      socket.emit('join');
-      socket.emit('socket');
-    });
+        try {
+          let otherUser =  await FastApi.getOtherUser(messageToUser);
+          // console.log("otherUser", otherUser)
+          setOtherUser(otherUser);
+        } catch (errors) {
+          console.error("Get Other User failed", errors);
+          return { success: false, errors };
+        }
+      }
 
-    // Cleanup function to disconnect socket when component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  /** render form */
-
-  return (
-    <div className="" style={{marginTop: "150px"}}>
-        <h2>status: {isConnected ? 'connected' : 'disconnected'}</h2>
-        <div style={{height: '500px', overflowY: 'scroll', border: 'solid black 2px', padding: '10px', marginTop: '15px', display: 'flex', flexDirection: 'column'}}>
-            <Message />
-        </div>
-    </div>
+      getOtherUser()
   
-);
-};
+    }, [messageToUser])
 
-export default Chat;
+
+   /** Reloading websockets when it changes request for websockets */
+
+    useEffect(() => {
+      console.log("before web socket in chat.js")
+      
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.log("IF STATEMENT IS RUNNING")
+        
+        socket = new WebSocket(`ws://localhost:8000/ws/${user.userId}`);
+
+        setIsConnected(true)
+        console.log("isConnected:", isConnected)
+
+        console.log("!!!! socket.readState:", socket.readyState)
+
+        // Listen for messages
+        socket.addEventListener("message", event => {
+          console.log("event in addeventListener:", event)
+          console.log("Message from server ", event.data)
+          console.log("JSON.parse(event.data)", JSON.parse(event.data))
+          let eventData = JSON.parse(event.data)
+          console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& eventData:", eventData)
+
+          // setMessages((prevMessages) => [...prevMessages, { message: event.data }]);
+          setMessages((prevMessages) => [...prevMessages, eventData ]);
+          if(eventData.chatId !== chatId) {
+            setChatId(eventData.chatId)
+          }
+
+          console.log("messages:", messages)
+          // const eventDataUserId = event.data.split(": ")
+          // const otherUserId = eventDataUserId[1].trim()
+         
+          // setMessages([...messages, { message: event.data }])
+        
+          // console.log("~~~~~~~~~~~~~~~messages~~~~~~~~~~~~~~~~~~:", messages)
+          
+          // setMessages([...event.data, { message: formData.message}])
+        });
+
+        // socket.onmessage.then(event => {
+        //   console.log("Message from server:", event.data);
+        // });
+  
+        setSocket(socket)
+        console.log("socket in useEffect:", socket)
+      }
+      else {
+        console.log("is socket and if statement is not running")
+      }
+      // Cleanup function to close the socket when the component unmounts
+      return () => socket.close();
+  }, [userId]);
+
+
+    const handleSubmit = async evt => {
+        evt.preventDefault();   
+        console.log("formData in handle Submit chat.js:", formData)
+        // ! this is breaking the app but doesnt start sending requests and get infinite 404 requests until it is 
+        // const socket = io('http://localhost:8000', {path: `/ws/${userId}`});
+        // console.log("event in Messages:", evt)
+        // console.log("Message sent!")
+        // console.log("messageToUser in Messages.js", messageToUser)
+        // console.log(" typeof messageToUser in Messages.js", typeof messageToUser)
+        // console.log(" typeof int(messageToUser) in Messages.js", typeof Number(messageToUser))
+        let dateTime = (new Date().toLocaleString()); 
+        console.log("%%%%% dateTime %%%%%:", dateTime)
+
+        let messageData;
+
+        if(chatId !== 0) {
+          console.log("chatId is not 0 !!!!!!!!!!!!!!!!!!!!")
+          messageData = {
+            "messageId": 0,
+            "senderId": user.userId, 
+            // "recipientIds": [Number(messageToUser)],
+            "message": formData.message,
+            "dateTime": dateTime,
+            "chatId": chatId
+          }
+  
+          console.log(" !!!! 1 MESSAGE IN MESSAGES 1 !!!! :", messageData)
+  
+        } 
+     
+        if(chatId == 0) {
+
+          console.log("chatId is 0 if statement is running")
+          messageData = {
+            "messageId": 0,
+            "senderId": user.userId, 
+            "message": formData.message,
+            "dateTime": dateTime,
+            "chatId": chatId,
+            "type": "user", 
+            "groupId": Number(messageToUser)
+          }
+        }
+
+        let jsonData = JSON.stringify(messageData);
+          
+        socket.send(jsonData)
+
+        // setMessages([...messages, { message: formData.message}])
+        setFormData(INITIAL_STATE)
+        
+        }
+    console.log("messages:", messages)
+    {messages.map((message) => (
+      console.log("message in messages.map:", message),
+      console.log("message.message in messages.map:", message.message),
+      console.log("message.user_id in messages.map:", message.user_id),
+      console.log("user.userId", user.userId)
+    ))}
+
+    const handleChange = evt => {
+        console.log('handleChange is running')
+    
+        const { name, value }= evt.target;
+    
+        setFormData(fData => ({
+          ...fData,
+          [name]: value,
+          
+        }));
+        // console.log("formData in chat.js:", formData)
+      };
+  
+    return (
+        <div>
+        <Card className="Messages"  style={{height: '500px', width: '350px', position: 'fixed', bottom: '0px', right: '30px', borderRadius: '20px'}}>
+          <CardHeader style={{height: '40px'}}>
+            <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>{otherUser.username}</p>
+            <Button onClick={handleMessages} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
+          </CardHeader>
+          <CardBody>
+            <CardTitle tag="h5">
+              Special Title Treatment
+            </CardTitle>
+            <CardText style={{ overflowY: 'auto', height: 300 }}> 
+                      {messages.map((message) => (
+                  // <div key={message.timestamp}>
+                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
+                      {/* Display sender or avatar if needed */}
+                      {/* {message.sender}:  */}
+                      {message.message}
+                      <br />
+                  </div>
+              ))}
+            </CardText>       
+          </CardBody>
+          <CardFooter>
+            <Form style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '50px'}}>
+          {/* <Form onClick={handleSubmit} style={{ display: 'flex', alignItems: 'center', height: '100px'}}> */}
+            {/* dispaly the button so have to set the components next to eachother */}
+           {/* <Label htmlFor="message">Message: </Label> */}
+                  <Input
+                    type="textarea"
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Type a message.."
+                    style={{ width: '240px', height: '40px', resize: 'none', bottom: '7px'}}
+                  />
+                  {/* <Button type="submit">Send</Button> */}
+                  <Button onClick={handleSubmit} style={{width: '63px', height: '36px'}}>Send</Button>
+               </Form>
+               {/* </div> */}
+          </CardFooter>
+        </Card>
+        </div>
+              
+    )
+};
+  
+export default Messages;

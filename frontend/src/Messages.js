@@ -144,6 +144,7 @@ const Messages = ({handleMessages}) => {
           "message": formData.message,
           "dateTime": dateTime
         }
+
         console.log(" !!!! 1 MESSAGE IN MESSAGES 1 !!!! :", messageData)
         let jsonData = JSON.stringify(messageData); 
         // console.log(" !!!! 2 MESSAGE IN MESSAGES 2 !!!! :", messageData)
@@ -190,7 +191,7 @@ const Messages = ({handleMessages}) => {
             <CardText style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                   // <div key={message.timestamp}>
-                      <div style={{ backgroundColor: message.user_id == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.user_id == user.userId ? '80px' : '0px', textAlign: 'left' }}>
+                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
                       {/* Display sender or avatar if needed */}
                       {/* {message.sender}:  */}
                       {message.message}

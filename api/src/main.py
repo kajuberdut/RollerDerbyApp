@@ -85,6 +85,8 @@ def get_db():
 #         self.user_id = user_id
         
     # ! added this not necessary for base usage
+    
+# ************** WEB SOCKETS below ********************
 
 class ConnectionManager:
     def __init__(self):
@@ -179,6 +181,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             # todo this is the line you need to work on.... 
             # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
             for recipient_id in recipient_ids:
+                print("handling recipient_id:", recipient_id)
                 
                 # * add to message to database for each recipient 
                 # db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
@@ -193,14 +196,14 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 if recipient_connection:
                     print("recipient connection is true")
                     # await manager.send_personal_message(f"You wrote: {message}", websocket)
-                    userData = json.dumps({"message": f"{message}", "user_id": f"{user_id}" })
+                    userData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
                     await manager.send_personal_message(userData, websocket)
                     # await manager.send_personal_message(f"Message from user with id {user_id}: {message}", recipient_connection)
                     
                     # await manager.send_personal_message(f"Message from user with id: {message}", recipient_connection)
                     
                     # recipientData = json.dumps({"message": f"{message}", "user_id": f"{recipient_id}" })
-                    recipientData = json.dumps({"message": f"{message}", "user_id": f"{user_id}" })
+                    recipientData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
                     await manager.send_personal_message(recipientData, recipient_connection)
                     # await manager.send_personal_message({ "message": f"{message}", "user_id": f"{recipient_id}"}, recipient_connection)
                     
