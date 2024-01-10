@@ -143,38 +143,46 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             recipient_ids = data_dict["recipientIds"]
             date_time = data_dict["dateTime"]
             
-            print("message_id", message_id )
-            print("type message_id", type(message_id))
-            print("date_time: ******", date_time)
-            print("type date_time: ******", type(date_time))
-            print("message in main.py **** ", message)
-            print("sender id in main.py ****", sender_id)
-            print("recipient_id in main.py ****", recipient_ids)
-            print(" ****** manager.active_connections:", manager.active_connections)
+            # print("message_id", message_id )
+            # print("type message_id", type(message_id))
+            # print("date_time: ******", date_time)
+            # print("type date_time: ******", type(date_time))
+            # print("message in main.py **** ", message)
+            # print("sender id in main.py ****", sender_id)
+            # print("recipient_id in main.py ****", recipient_ids)
+            # print(" ****** manager.active_connections:", manager.active_connections)
           
             # print("~~~~ manager.active_connections ~~~~:", manager.active_connections)
             # print("~~~~ manager.active_connections ~~~~:", dir(manager.active_connections))
             
+             # *** chat history ***
+            # chat_history = crud.get_chat_history(db=db, user_id=user_id, recipient_ids=recipient_ids)
+            # *** chat history ***
+            
+            # print("chat_history:", chat_history)
             # * add to message to database for user
             # ! THIS IS NOT RETURNING MY MESSAGE ID NOT SURE WHY 
             this_message = {
                 "message": message, 
                 "date_time": date_time,
-                "message_id": 0 
+                "message_id": 0,
+                # "recipient_ids": recipient_ids
             }
             db_message_id = crud.create_message(db=db, message=this_message)
             # db_message_id = crud.create_message(db=db, message_id=message_id, message=message, date_time=date_time)
             # db_message_id = crud.create_message(db=db, message=message, date_time=date_time)
             print("db_message_id in main.py &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", db_message_id)
-            db_user_message = crud.create_user_message(db=db, user_id=user_id, message_id=db_message_id)
-   
-            
+            db_user_message = crud.create_user_message(db=db, sender_id=sender_id, message_id=db_message_id, recipient_ids=recipient_ids)
+            # 
+            print("db_user_message:", db_user_message)
+            print("db_user_message.recipient_ids:", db_user_message.recipient_ids)
             # todo this is the line you need to work on.... 
             # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
             for recipient_id in recipient_ids:
                 
                 # * add to message to database for each recipient 
-                db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
+                # db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
+                 # * add to message to database for each recipient 
                 
                 print("Handling this recipient:", recipient_id)
                 print("Type of recipient:", type(recipient_id))
@@ -930,7 +938,50 @@ def get_location(token: Annotated[str, Depends(oauth2_scheme)], location_id:int,
     
     return crud.get_location_by_id(db, location_id=location_id)
 
+#  **** message routes ***
+# ! note may not need to use these at all 
 
+# * get /messages/users
+# * gets all messages and users
+# todo this does not work but may not be necessary 
+# @api_app.get("/messages/users", response_model=list[schemas.Message])
+@api_app.get("/messages/users", response_model=list[schemas.MessageWithUser])
+def get_messages_with_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    print("hitting /messages in main.py")
+    data = crud.get_messages_with_user_ids(db, skip=skip, limit=limit)
+    print("data[0] in /messages", data[0])
+    print("data[0].message_id in /messages", data[0].message_id)
+    print("data[0].message in /messages", data[0].message)
+    print("data[0].date_time in /messages", data[0].date_time)
+    print("data[0].user in /messages", data[0].user)
+    print("data[0].user[0] in /messages", dir(data[0].user[0]))
+    print("data[0].user[0].user_id in /messages", data[0].user[0].user_id)
+    return data
+
+# # * get /user/message
+# # * gets all user messages
+
+# @api_app.get("/user/message", response_model=list[schemas.UserMessage])
+# def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#     print("hitting /messages in main.py")
+#     return crud.get_user_message(db, skip=skip, limit=limit)
+
+# * get /user/message
+# * gets all user messages
+
+@api_app.get("/user/message/", response_model=list[schemas.MessageObject])
+def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    print("hitting /user/messages in main.py")
+    # return crud.get_user_message(db, skip=skip, limit=limit)
+    return crud.get_chat_history(db)
+
+# * get /messages 
+# * gets all messages 
+
+@api_app.get("/messages", response_model=list[schemas.Message])
+def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    print("hitting /messages in main.py")
+    return crud.get_messages(db, skip=skip, limit=limit)
 
 # * delete /messages/{message_id} 
 # * deletes an existing message

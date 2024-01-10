@@ -4,7 +4,10 @@ from . import models, schemas
 from fastapi import Request
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from sqlalchemy.orm import joinedload
-from sqlalchemy import desc
+from sqlalchemy import desc, select, join, or_
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
 
 # By creating functions that are only dedicated to interacting with the database (get a user or an item) independent of your path operation function, you can more easily reuse them in multiple parts and also add unit tests for them.
 
@@ -566,6 +569,58 @@ def create_location(db: Session, location: schemas.Location):
 
 # ! come back to this HERE HERE HERE 
 
+def get_messages(db: Session, skip: int = 0, limit: int = 100):
+    print("hitting crud get messages")
+    return db.query(models.Message).offset(skip).limit(limit).all()
+
+def get_user_message(db: Session, skip: int = 0, limit: int = 100):
+    print("hitting crud get user messages")
+    return db.query(models.UserMessage).offset(skip).limit(limit).all()
+
+# def get_chat_history(db: Session, user_id: int, recipient_ids: List[int]) -> List[dict]:
+def get_chat_history(db: Session):
+    """Retrieves chat history between a user and specified recipients."""
+    print("hitting get_chat_history in CRUD.py")
+    messages = (
+        db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+        .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
+        .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
+        # .filter(models.Message.id == 0)  # Filter by message ID
+        # .filter(Message.sender_id == 3)  # Filter by sender ID
+        # .filter(User.id.in_([1]))  # Filter by recipient IDs
+        # .filter(models.Message.message_id == )  # Filter by Chat ids?????
+        .order_by(models.Message.date_time.asc())
+        .all()
+    )
+
+    message_objects = []
+    
+    for message, sender, recipient_ids in messages:
+        
+        message_object = {
+            "message_id": message.message_id,
+            "sender_id": sender.user_id,
+            "recipient_ids": recipient_ids,
+            "message": message.message,
+            "date_time": message.date_time
+        }
+        message_objects.append(message_object)
+    
+    return message_objects
+
+def get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):
+    print("Fetching messages with user IDs...")
+  
+    messages = (
+        db.query(models.Message)
+        .options(joinedload(models.Message.user))  # Eagerly load users
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return messages
+
 # def create_message(db: Session, message_id: int, message: str, date_time: str):
 
 def create_message(db: Session, message: schemas.Message):
@@ -592,8 +647,8 @@ def create_message(db: Session, message: schemas.Message):
     
     return db_message.message_id
 
-def create_user_message(db: Session, user_id: int, message_id: int): 
-    db_user_message = models.UserMessage(user_id=user_id, message_id=message_id)
+def create_user_message(db: Session, sender_id: int, message_id: int, recipient_ids: list[int]): 
+    db_user_message = models.UserMessage(sender_id=sender_id, message_id=message_id, recipient_ids=recipient_ids)
     db.add(db_user_message)
     db.commit()
     db.refresh(db_user_message)

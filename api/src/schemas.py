@@ -73,8 +73,10 @@ class UserPosition(BaseModel):
         from_attributes = True
 
 class UserMessage(BaseModel):
-    user_id: int
+    # user_id: int
+    sender_id: int
     message_id: int
+    recipient_ids: list[int]
 
     class Config:
         from_attributes = True
@@ -377,6 +379,24 @@ class EventDelete(BaseModel):
 
 class MessageDelete(BaseModel): 
     message_id: int
+    
+class MessageWithUser(Message): 
+    message: Message
+    user_id: int
+    
+class MessageObject(BaseModel): 
+    message_id: int
+    # user_id: int
+    sender_id: int
+    recipient_ids: list[int]
+    message: str
+    date_time: str
+    
+    @property
+    def user_id(self):
+        return self.sender_id
+
+    
     
 class Test(BaseModel): 
     info: str

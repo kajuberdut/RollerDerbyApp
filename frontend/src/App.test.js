@@ -6,12 +6,13 @@ import App from './App';
 
 test('renders learn react link', () => {
   render(<App />);
-  const navbar = screen.getByRole('navigation'); // Or use other appropriate queries
+  const navbar = screen.getByRole('navigation'); 
   expect(navbar).toBeInTheDocument();
-  // const linkElement = screen.getByText(/learn react/i);
-  // expect(linkElement).toBeInTheDocument();
 });
 
 
-// https://stackoverflow.com/questions/58613492/how-to-resolve-cannot-use-import-statement-outside-a-module-from-jest-when-run
-// testing issue Kate
+test('matches snapshot', function() {
+  const { asFragment } = render(<App />);
+  expect(asFragment()).toMatchSnapshot(); 
+})
+

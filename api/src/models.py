@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity, ARRAY
 from sqlalchemy.orm import relationship
 from .database import SQLAlchemyBase
 
@@ -33,18 +33,18 @@ class UserInsurance(SQLAlchemyBase):
     
 class UserMessage(SQLAlchemyBase): 
     __tablename__ = "user_message"
-    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    # user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
     user = relationship("User", back_populates="message")
     message = relationship("Message", back_populates="user") 
-    
+    recipient_ids = Column(ARRAY(Integer))
+    # ! note added recipeint ids and changed user_id to sender_id 
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
     
     user_id = Column(Integer, Identity(), primary_key=True, index=True)
-    # ! changing derby name to username but will have it appear as derby_name in frontend.
-    # derby_name = Column(String, unique=True)
     username = Column(String, unique=True)
     hashed_password = Column(String)
     email = Column(String, unique=True, index=True)
