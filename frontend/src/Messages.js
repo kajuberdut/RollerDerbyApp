@@ -38,7 +38,8 @@ const Messages = ({handleMessages}) => {
     // console.log(" **** use location in messages *****:", location)
     const pathname = window.location.pathname
     // console.log("pathname:", pathname)
-    let messageToUser = pathname.split('/')[2]
+    let messageToUser = Number(pathname.split('/')[2])
+
 
 
     useEffect(() => {
@@ -56,6 +57,27 @@ const Messages = ({handleMessages}) => {
       }
 
       getOtherUser()
+  
+    }, [messageToUser])
+
+    useEffect(() => {
+
+      async function getChatHistory() {
+
+        try {
+          
+          let chatHistory =  await FastApi.getChatHistory([messageToUser, user.userId]);
+          console.log("chatHistory in messages.py:", chatHistory)
+          // console.log("otherUser", otherUser)
+          // setOtherUser(otherUser);
+          setMessages(chatHistory)
+        } catch (errors) {
+          console.error("Get Other User failed", errors);
+          return { success: false, errors };
+        }
+      }
+
+      getChatHistory()
   
     }, [messageToUser])
 
@@ -140,7 +162,7 @@ const Messages = ({handleMessages}) => {
         let messageData = {
           "messageId": 0,
           "senderId": user.userId, 
-          "recipientIds": [Number(messageToUser)],
+          "recipientIds": [messageToUser, Number(user.userId)],
           "message": formData.message,
           "dateTime": dateTime
         }
@@ -191,7 +213,7 @@ const Messages = ({handleMessages}) => {
             <CardText style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                   // <div key={message.timestamp}>
-                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
+                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
                       {/* Display sender or avatar if needed */}
                       {/* {message.sender}:  */}
                       {message.message}

@@ -321,6 +321,20 @@ class FastApi {
   return res
   }
 
+  static async getChatHistory(recipient_ids) {
+    console.log("getChatHIstory in API.JS is running")
+    console.log("recipient in getChatHistory:", recipient_ids)
+    // let ids = json.Stringify(recipient_ids)
+    // console.log("ids:", ids)
+    // let res = await this.request(`history/`, data, "get");
+    // recipient_ids.join(',')
+    // console.log("recipient_ids as string in getChatHistory:", recipient_ids)
+
+    let res = await this.request(`history/${recipient_ids}`);
+    console.log("res:", res)
+  return res
+  }
+
   // static async testing() {
   //   console.log("hitting testing in api.js")
 

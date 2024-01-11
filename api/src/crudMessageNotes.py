@@ -200,3 +200,25 @@ def delete_message(db: Session, message_id: int):
     db.commit()
     
     return db_message
+
+# !!!!!!!!!!! trying to get the correct format for geting userObject out of it !!!!!!!!!
+
+  # messages = (
+    #     db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+    #     .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
+    #     # .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
+    #     .filter(models.UserMessage.recipient_ids == recipient_ids)
+    #     .order_by(models.Message.date_time.asc())
+    #     .all()
+    # )
+    
+    messages = (
+        db.query(models.Message, models.UserMessage)
+        .join(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
+        # .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
+        # .outerjoin(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
+        # # .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
+        .filter(models.UserMessage.recipient_ids == [3, 1])
+        .order_by(models.Message.date_time.asc())
+        .all()
+    )

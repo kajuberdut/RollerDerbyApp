@@ -4,8 +4,9 @@ from . import models, schemas
 from fastapi import Request
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from sqlalchemy.orm import joinedload
-from sqlalchemy import desc, select, join, or_
+from sqlalchemy import desc, select, join, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
+
 
 
 
@@ -569,9 +570,6 @@ def create_location(db: Session, location: schemas.Location):
 
 # ! come back to this HERE HERE HERE 
 
-#  *** CRUD messages ***
-
-# ! come back to this HERE HERE HERE 
 
 def get_messages(db: Session, skip: int = 0, limit: int = 100):
     print("hitting crud get messages")
@@ -582,35 +580,57 @@ def get_user_message(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.UserMessage).offset(skip).limit(limit).all()
 
 # def get_chat_history(db: Session, user_id: int, recipient_ids: List[int]) -> List[dict]:
-def get_chat_history(db: Session):
+def get_chat_history(db: Session, recipient_ids: List[int]):
     """Retrieves chat history between a user and specified recipients."""
     print("hitting get_chat_history in CRUD.py")
+    print("recipient_ids:", recipient_ids)
+
     messages = (
-        db.query(models.Message, models.User, models.UserMessage.recipient_ids)
-        .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
-        .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
-        # .filter(models.Message.id == 0)  # Filter by message ID
-        # .filter(Message.sender_id == 3)  # Filter by sender ID
-        # .filter(User.id.in_([1]))  # Filter by recipient IDs
-        # .filter(models.Message.message_id == )  # Filter by Chat ids?????
+        db.query(models.Message, models.UserMessage)
+        .join(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
+        .filter(models.UserMessage.recipient_ids == recipient_ids)
+        # .filter(models.UserMessage.recipient_ids == [1, 3])
+        # .filter(func.array_remove(models.UserMessage.recipient_ids, [1, 3]) == [])
+        # .filter(
+        # func.all(
+        #     func.unnest(models.UserMessage.recipient_ids)
+        #     .in_([1, 3])  # Check if each element is present in the comparison array
+        # )
+        # )
+        # .filter(
+        # func.unnest(models.UserMessage.recipient_ids).intersect([1, 3])
+        # )
         .order_by(models.Message.date_time.asc())
         .all()
     )
+    
+    # print("messages******************:", messages)
+    # print("messages******************:", messages)
+    # print("messages******************:", messages)
 
     message_objects = []
     
-    for message, sender, recipient_ids in messages:
+    # for message, sender, recipient_ids in messages:
+    for message, user_message  in messages:
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item:", message)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", message.date_time)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", user_message.sender_id)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item.user_message:", item.user_message)
+        
+        # ! sender appears to be a list of all the users? 
         
         message_object = {
             "message_id": message.message_id,
-            "sender_id": sender.user_id,
-            "recipient_ids": recipient_ids,
+            # "sender_id": user_message.sender_id,
+            "user_id": user_message.sender_id,
+            "recipient_ids": user_message.recipient_ids,
             "message": message.message,
             "date_time": message.date_time
         }
         message_objects.append(message_object)
     
     return message_objects
+    # return messages
 
 def get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):
     print("Fetching messages with user IDs...")

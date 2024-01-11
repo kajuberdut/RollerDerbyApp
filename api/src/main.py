@@ -142,7 +142,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             message_id = data_dict["messageId"]
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
-            recipient_ids = data_dict["recipientIds"]
+            recipient_ids = sorted(data_dict["recipientIds"])
             date_time = data_dict["dateTime"]
             
             # print("message_id", message_id )
@@ -151,17 +151,14 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             # print("type date_time: ******", type(date_time))
             # print("message in main.py **** ", message)
             # print("sender id in main.py ****", sender_id)
-            # print("recipient_id in main.py ****", recipient_ids)
-            # print(" ****** manager.active_connections:", manager.active_connections)
-          
-            # print("~~~~ manager.active_connections ~~~~:", manager.active_connections)
-            # print("~~~~ manager.active_connections ~~~~:", dir(manager.active_connections))
-            
+            print("recipient_id in main.py ****", recipient_ids)
+
              # *** chat history ***
-            # chat_history = crud.get_chat_history(db=db, user_id=user_id, recipient_ids=recipient_ids)
+            # chat_history = crud.get_chat_history(db=db, recipient_ids=recipient_ids)           
+            # print("***************** chat_history *********************:", chat_history)
             # *** chat history ***
+      
             
-            # print("chat_history:", chat_history)
             # * add to message to database for user
             # ! THIS IS NOT RETURNING MY MESSAGE ID NOT SURE WHY 
             this_message = {
@@ -171,15 +168,20 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 # "recipient_ids": recipient_ids
             }
             db_message_id = crud.create_message(db=db, message=this_message)
-            # db_message_id = crud.create_message(db=db, message_id=message_id, message=message, date_time=date_time)
-            # db_message_id = crud.create_message(db=db, message=message, date_time=date_time)
-            print("db_message_id in main.py &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", db_message_id)
+    
             db_user_message = crud.create_user_message(db=db, sender_id=sender_id, message_id=db_message_id, recipient_ids=recipient_ids)
-            # 
-            print("db_user_message:", db_user_message)
-            print("db_user_message.recipient_ids:", db_user_message.recipient_ids)
-            # todo this is the line you need to work on.... 
-            # recipient_websocket = [ws for ws in manager.active_connections if ws.user_id == recipient_id]
+            
+            # if chat_history: 
+            #     for recip_id in chat_history[0]['recipient_ids']:
+                    
+            #         recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recip_id), None)
+                    
+            #         if recipient_connection:
+            #             for chat_message in chat_history: 
+            #                 recipientData = json.dumps({"message": f"{chat_message['message']}", "userId": f"{chat_message['sender_id']}" })
+            #                 await manager.send_personal_message(recipientData, recipient_connection)
+
+            
             for recipient_id in recipient_ids:
                 print("handling recipient_id:", recipient_id)
                 
@@ -187,44 +189,26 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 # db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
                  # * add to message to database for each recipient 
                 
-                print("Handling this recipient:", recipient_id)
-                print("Type of recipient:", type(recipient_id))
-                # * if there is no connection between the recipiet and the user you will need to add one
+                
                 recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recipient_id), None)
-                print("recipient connection:", recipient_connection)
-                print("recipient connection.user_id:", recipient_connection.user_id)
+
+                # * if the recipient is connected to active connections
                 if recipient_connection:
                     print("recipient connection is true")
-                    # await manager.send_personal_message(f"You wrote: {message}", websocket)
-                    userData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
-                    await manager.send_personal_message(userData, websocket)
-                    # await manager.send_personal_message(f"Message from user with id {user_id}: {message}", recipient_connection)
+  
+                    # userData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
+                    # await manager.send_personal_message(userData, websocket)
                     
-                    # await manager.send_personal_message(f"Message from user with id: {message}", recipient_connection)
-                    
-                    # recipientData = json.dumps({"message": f"{message}", "user_id": f"{recipient_id}" })
+                    # ! treat sender as a recipient, that way you can search by recipients (all users involved in chat)
                     recipientData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
                     await manager.send_personal_message(recipientData, recipient_connection)
-                    # await manager.send_personal_message({ "message": f"{message}", "user_id": f"{recipient_id}"}, recipient_connection)
+                    
+
                     
                 if not recipient_connection: 
                     print("there is no recipient connection")
                     print("add recipient connection")
                     await manager.send_personal_message("Recipient is currently unavailable.", websocket)
-                
-            
-            # ! if you get rid of ----- if recipient_websocket 
-                # ! then you will print those items in the frontend 
-            
-            # if recipient_websocket:
-            #     await manager.send_personal_message(f"You wrote: {message}", recipient_websocket[0])
-            #     await manager.broadcast(f"User Id {user_id} says: {message}")
-                
-            # await manager.send_personal_message(f"You wrote: {message}", websocket)
-            # * broadcasting to all recipients regaradless of whether they user_id matches the recipient_id
-            # await manager.broadcast(f"User Id {user_id} says: {message}")
-            # else:
-            #     raise Exception("no recipient web socket")
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
@@ -568,9 +552,6 @@ def get_events(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, lim
 
 # * get /events/{event_type} 
 # * returns all events that match query by type, dates and city and/or state
-
-# !         WORKING HERE 
-#  todo *********************
 
 @api_app.get("/events/{type}", response_model=list[schemas.EventBase])
 def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
@@ -972,11 +953,33 @@ def get_messages_with_users(token: Annotated[str, Depends(oauth2_scheme)], skip:
 # * get /user/message
 # * gets all user messages
 
-@api_app.get("/user/message/", response_model=list[schemas.MessageObject])
+# @api_app.get("/user/message/", response_model=list[schemas.MessageObject])
+@api_app.get("/user/message/")
 def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     print("hitting /user/messages in main.py")
     # return crud.get_user_message(db, skip=skip, limit=limit)
-    return crud.get_chat_history(db)
+    return crud.get_chat_history(db, recipient_ids=[1, 3])
+    # return crud.get_chat_history(db)
+
+# * get /history
+# * gets chat history
+
+# @api_app.get("/user/message/", response_model=list[schemas.MessageObject])
+@api_app.get("/history/{recipient_ids}")
+# def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, recipient_ids: str = Query(), db: Session = Depends(get_db)):
+def get_messages(token: Annotated[str, Depends(oauth2_scheme)], recipient_ids: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    print("hitting /history in main.py")
+    print("! !!!!!!!!!!!!!!!!!!!!!!!recipient ids in main.py", recipient_ids)
+    
+    recipient_ids_list = sorted(recipient_ids.split(","))
+    print("recipient_ids_list !!!!!!!!!!!!!!!!!!!!!!!!!!!!", recipient_ids_list)
+    # for recipient_id in recipient_ids: 
+    #     print("recipient_id *************", recipient_id)
+    # return crud.get_user_message(db, skip=skip, limit=limit)
+    # return crud.get_chat_history(db, recipient_ids=[1, 3])
+    # return crud.get_chat_history(db)
+    # return crud.get_chat_history(db, recipient_ids=sorted(recipient_ids))
+    return crud.get_chat_history(db, recipient_ids=recipient_ids_list)
 
 # * get /messages 
 # * gets all messages 
