@@ -15,6 +15,8 @@ import Messages from './chats/Messages';
 // import jwt_decode from 'jwt-decode'
 // import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { jwtDecode } from "jwt-decode"
+import ChatIcon from "./chats/ChatIcon"
+import { Link } from 'react-router-dom';
 
 export const TOKEN_STORAGE_ID = "api-token";
 
@@ -180,7 +182,7 @@ function App() {
     }
 
     function handleMessages(userId) {
-      console.log("handleMessages is being clicked")
+      console.log("!!!!!!!!!!!!!!!!! handleMessages is being clicked!!!!!!!!!!!!!")
       console.log("userId in App.js", userId)
       displayMessages ? setDisplayMessages(false) : setDisplayMessages(true)
     }
@@ -208,6 +210,10 @@ function App() {
             <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main>
+          {user && <Link to={`/chats/${user.userId}`}>
+            <ChatIcon className="ChatIcon"/>
+          </Link>
+          }
         </Fragment>
         </UserContext.Provider>
       </BrowserRouter>

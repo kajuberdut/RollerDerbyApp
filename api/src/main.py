@@ -1005,6 +1005,8 @@ def get_messages(token: Annotated[str, Depends(oauth2_scheme)], participant_ids:
     
     db_group = crud.get_group_id_by_participants(db, participant_ids=participant_ids_list)
     
+    print("what is the group_id in main.py ??????????????????", db_group)
+    
     db_chat = crud.get_chat_by_group_id(db, group_id=db_group.group_id)
     
     db_messages = crud.get_messages_by_chat_id(db, chat_id=db_chat.chat_id)

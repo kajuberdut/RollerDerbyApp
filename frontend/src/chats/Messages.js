@@ -32,14 +32,21 @@ const Messages = ({handleMessages}) => {
     const [otherUser, setOtherUser] = useState({})
     let [socket, setSocket] = useState();
     const [chatId, setChatId] = useState(0);
+    const [messageToUser, setMessageToUser] = useState()
 
     const user = JSON.parse(localStorage.getItem('user'));
     // console.log("user in messages.js", user)
     // const location = useLocation();
     // console.log(" **** use location in messages *****:", location)
     const pathname = window.location.pathname
+    console.log("***************pathname in Messages.js ******************", pathname)
+  
     // console.log("pathname:", pathname)
-    let messageToUser = Number(pathname.split('/')[2])
+
+    useEffect(() => {
+      setMessageToUser(Number(pathname.split('/')[2]))
+    })
+    // let messageToUser = Number(pathname.split('/')[2])
 
 
 
@@ -228,7 +235,7 @@ const Messages = ({handleMessages}) => {
   
     return (
         <div>
-        <Card className="Messages"  style={{height: '500px', width: '350px', position: 'fixed', bottom: '0px', right: '30px', borderRadius: '20px'}}>
+        <Card className="Messages"  style={{height: '500px', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
           <CardHeader style={{height: '40px'}}>
             <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>{otherUser.username}</p>
             <Button onClick={handleMessages} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>

@@ -66,6 +66,12 @@ body {
   
 }
 
+.ChatIcon {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+}
+
 
 /* body {
   background-image: url('data:images/utf8skater-3-poses_01.svg,<svg ...><g stroke="red" ... /></g></svg>');

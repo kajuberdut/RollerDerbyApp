@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./NavBar.css";
 import Star from "./Star"
+import ChatIcon from "../chats/ChatIcon";
 import UserContext from "../multiUse/UserContext";
 import { 
   Navbar, 
@@ -57,9 +58,9 @@ function NavBar({logout}) {
             <NavItem className="Navbar-Mixers">
                 <NavLink to="/mixers">Mixers</NavLink>
             </NavItem>
-            <NavItem className="Navbar-Messages">
-                <NavLink to="/chats">Chats</NavLink>
-            </NavItem>
+            {/* <NavItem className="Navbar-Messages">
+                <NavLink to="/chats"><div><ChatIcon/></div></NavLink>
+            </NavItem> */}
             <NavItem className="Navbar-Logout">
                 <NavLink to="/" onClick={logout}>Logout</NavLink>
             </NavItem>

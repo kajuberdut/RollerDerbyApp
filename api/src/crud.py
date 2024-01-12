@@ -827,9 +827,21 @@ def create_group(db: Session, group: schemas.CreateGroup):
     return db_group
 
 def get_group_id_by_participants(db: Session, participant_ids: list[int]):
-    print("!!!!! get_chat_by_participant_id in crud.py !!!!!!:", participant_ids)
+    print("!!!!! get_group_by_participant_id in crud.py !!!!!!:", participant_ids)
     
-    group_db = db.query(models.Group).join(models.UserGroup).join(models.User).filter(models.User.user_id.in_(participant_ids)).first()
+    # group_db = db.query(models.Group).join(models.UserGroup).join(models.User).filter(models.User.user_id.in_(participant_ids)).first()
+    # group_db = db.query(models.Group).join(models.UserGroup).join(models.User).filter(models.UserGroup.participant_ids == participant_ids).first()
+    
+    group_db = (
+        db.query(models.Group)
+        .join(models.UserGroup)
+        .join(models.User)
+        .filter(models.User.user_id.in_(participant_ids))
+        .group_by(models.Group.group_id)  # Group by group ID
+        .having(func.count(models.User.user_id.distinct()) == len(participant_ids))  # Count distinct users
+        .first()
+    )
+    
     
     return group_db
 

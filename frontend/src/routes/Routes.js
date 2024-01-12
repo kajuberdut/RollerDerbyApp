@@ -58,7 +58,7 @@ return (
         <Route path="/mixers/add" element={<MixerForm/>} />
         <Route path="/mixers/:id" element={<MixerDetails />} /> 
         {/* <Route path="/messages" element={<Messages handleMessages={handleMessages}/>} />  */}
-        <Route path="/chats" element={<ChatList/>} /> 
+        <Route path="/chats/:userId" element={<ChatList/>} /> 
         <Route path="*" element={<NotFound />} /> 
         {/* <Route exact path="/signup">
             <SignupForm  signup={signup}/>
