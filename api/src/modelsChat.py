@@ -37,9 +37,9 @@ class UserMessage(SQLAlchemyBase):
     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
     user = relationship("User", back_populates="message")
     message = relationship("Message", back_populates="user") 
-    # recipient_ids = Column(ARRAY(Integer))
+    # participant_ids = Column(ARRAY(Integer))
      # user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
-    # ! remove recipient ids to Chat
+    # ! remove participant ids to Chat
     # ! note added recipeint ids and changed user_id to sender_id 
 
 class User(SQLAlchemyBase):

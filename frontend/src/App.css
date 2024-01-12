@@ -25,29 +25,32 @@ body {
 }
 
 .track-out {
-  width: 3800px;
+  /* width: 3800px; */
+  width: 4400px;
+  height: 5400px;
+  border: 5px solid black;
+  border-radius: 50% 50%;
+  background-color: transparent;
+  position: absolute; 
+  top: 130%; 
+  /* left: 60%;  */
+  left: -25%; 
+  transform: translate(-50%, -50%);
+  z-index: -1; 
+}
+
+.track-in {
+  width: 2200px;
   /* height: 2000px; */
   height: 3800px;
   border: 5px solid black;
   border-radius: 50% 50%;
   background-color: transparent;
   position: absolute; 
-  top: 240%; 
-  left: 60%; 
-  transform: translate(-50%, -50%);
-  z-index: -1; 
-}
-
-.track-in {
-  width: 2100px;
-  /* height: 2000px; */
-  height: 2300px;
-  border: 5px solid black;
-  border-radius: 50% 50%;
-  background-color: transparent;
-  position: absolute; 
-  top: 240%; 
-  left: 60%; 
+  /* top: 240%;  */
+  top: 130%; 
+  /* left: 60%;  */
+  left: -25%; 
   transform: translate(-50%, -50%);
   z-index: -1; 
 }

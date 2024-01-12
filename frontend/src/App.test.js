@@ -4,7 +4,7 @@ import App from './App';
 // npm test App.test.js
 // must be in frontend directory 
 
-test('renders learn react link', () => {
+test('renders App', () => {
   render(<App />);
   const navbar = screen.getByRole('navigation'); 
   expect(navbar).toBeInTheDocument();

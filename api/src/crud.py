@@ -579,58 +579,27 @@ def get_user_message(db: Session, skip: int = 0, limit: int = 100):
     print("hitting crud get user messages")
     return db.query(models.UserMessage).offset(skip).limit(limit).all()
 
-# def get_chat_history(db: Session, user_id: int, recipient_ids: List[int]) -> List[dict]:
-def get_chat_history(db: Session, recipient_ids: List[int]):
-    """Retrieves chat history between a user and specified recipients."""
-    print("hitting get_chat_history in CRUD.py")
-    print("recipient_ids:", recipient_ids)
+# def get_chat_history(db: Session, user_id: int, participant_ids: List[int]) -> List[dict]:
+def get_messages_by_chat_id(db: Session, chat_id: int):
+    """Retrieves chat history between a user and specified participants."""
+    print("hitting get_messages_by_chat_id in CRUD.py")
 
-    messages = (
-        db.query(models.Message, models.UserMessage)
-        .join(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
-        .filter(models.UserMessage.recipient_ids == recipient_ids)
-        # .filter(models.UserMessage.recipient_ids == [1, 3])
-        # .filter(func.array_remove(models.UserMessage.recipient_ids, [1, 3]) == [])
-        # .filter(
-        # func.all(
-        #     func.unnest(models.UserMessage.recipient_ids)
-        #     .in_([1, 3])  # Check if each element is present in the comparison array
-        # )
-        # )
-        # .filter(
-        # func.unnest(models.UserMessage.recipient_ids).intersect([1, 3])
-        # )
-        .order_by(models.Message.date_time.asc())
-        .all()
-    )
-    
-    # print("messages******************:", messages)
-    # print("messages******************:", messages)
-    # print("messages******************:", messages)
+    messages = db.query(models.Message).filter(models.Message.chat_id == chat_id).all()
 
     message_objects = []
     
-    # for message, sender, recipient_ids in messages:
-    for message, user_message  in messages:
-        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item:", message)
-        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", message.date_time)
-        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", user_message.sender_id)
-        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item.user_message:", item.user_message)
-        
-        # ! sender appears to be a list of all the users? 
+    for message in messages:
         
         message_object = {
             "message_id": message.message_id,
-            # "sender_id": user_message.sender_id,
-            "user_id": user_message.sender_id,
-            "recipient_ids": user_message.recipient_ids,
+            "chat_id": message.chat_id,
+            "user_id": message.sender_id,
             "message": message.message,
             "date_time": message.date_time
         }
         message_objects.append(message_object)
     
     return message_objects
-    # return messages
 
 def get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):
     print("Fetching messages with user IDs...")
@@ -645,34 +614,29 @@ def get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):
 
     return messages
 
-# def create_message(db: Session, message_id: int, message: str, date_time: str):
-
 def create_message(db: Session, message: schemas.Message):
     print("message in create_message CRUD", message)
-    # print("message.MESSAGE in create_message CRUD", message.message)
-    print("message.MESSAGE in create_message CRUD", message['message'])
- 
-
-    # db_message = models.Message(message_id=message_id, message=message, date_time=date_time)
-    # print("message_id in crud", message_id)
+    print("message.message in create_message CRUD", message['message'])
     print("Before addig message to db")
-    # db_message = models.Message(message=message, date_time=date_time)
-    # db_message = models.Message(message=message.message, date_time=message.date_time)
-    db_message = models.Message(message=message['message'], date_time=message['date_time'])
+    
+    
+    db_message = models.Message(chat_id=message["chat_id"], message=message['message'], date_time=message['date_time'], sender_id=message["sender_id"])
     print("After adding message to db")
-    # print("db_message", db_message)
-    # print("db_message.message_id", db_message.message_id)
+    print("db_message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", db_message)
+    print("db_message.message_id", db_message.message_id)
+    print("db_message.message", db_message.message)
+    # ! this line is breaking it  print("db_message['message_id']", db_message["message"])
+    print("db_message.message_id", db_message.message_id)
+    
     db.add(db_message)
+    
     db.commit()
     db.refresh(db_message)
-    print("db_message ###############################", db_message)
-    print("db_message.message ###############################", db_message.message)
-    print("db_message.message_id ###############################", db_message.message_id)
     
     return db_message.message_id
 
-def create_user_message(db: Session, sender_id: int, message_id: int, recipient_ids: list[int]): 
-    db_user_message = models.UserMessage(sender_id=sender_id, message_id=message_id, recipient_ids=recipient_ids)
+def create_user_message(db: Session, sender_id: int, message_id: int, participant_ids: list[int]): 
+    db_user_message = models.UserMessage(sender_id=sender_id, message_id=message_id, participant_ids=participant_ids)
     db.add(db_user_message)
     db.commit()
     db.refresh(db_user_message)
@@ -697,28 +661,28 @@ def delete_message(db: Session, message_id: int):
 #     print("hitting crud get user messages")
 #     return db.query(models.UserMessage).offset(skip).limit(limit).all()
 
-# # def get_chat_history(db: Session, user_id: int, recipient_ids: List[int]) -> List[dict]:
+# # def get_chat_history(db: Session, user_id: int, participant_ids: List[int]) -> List[dict]:
 # def get_chat_history(db: Session):
-#     """Retrieves chat history between a user and specified recipients."""
+#     """Retrieves chat history between a user and specified partipantss."""
 #     print("hitting get_chat_history in CRUD.py")
 #     messages = (
-#         db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+#         db.query(models.Message, models.User, models.UserMessage.participant_ids)
 #         .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
 #         .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
 #         # .filter(Message.sender_id == 3)  # Filter by sender ID
-#         # .filter(User.id())  # Filter by recipient IDs
+#         # .filter(User.id())  # Filter by partipants IDs
 #         .order_by(models.Message.date_time.asc())
 #         .all()
 #     )
 
 #     message_objects = []
     
-#     for message, sender, recipient_ids in messages:
+#     for message, sender, participant_ids in messages:
         
 #         message_object = {
 #             "message_id": message.message_id,
 #             "sender_id": sender.user_id,
-#             "recipient_ids": recipient_ids,
+#             "participant_ids": participant_ids,
 #             "message": message.message,
 #             "date_time": message.date_time
 #         }
@@ -773,31 +737,120 @@ def delete_message(db: Session, message_id: int):
 
 #  *** CRUD chats ***
 
-# def create_chat(db: Session, chat: schemas.Chat):
-#     print("!!!!! chat in crud.py !!!!!!:", chat)
-#     print("chat['type']", chat['type'])
-#     # ! group_id
-#     # ! type 
-#     # ! chat_id 
+def create_chat(db: Session, chat: schemas.Chat):
     
-#     db_chat = models.Chat(type=chat['type'], group_id=chat['group_id'])
+    # db_chat = models.Chat(participant_ids=chat['participant_ids'], name="testing")
+    db_chat = models.Chat(group_id=chat['group_id'])
     
-#     print("*** db_chat *****", db_chat)
-#     print("*** db_chat.chat_id *****", db_chat.chat_id)
+    print("*** !!!!!!!!!!!! db_chat !!!!!!!!!!!!!!!! *****", db_chat)
     
-#     db.add(db_chat)
-#     db.commit()
-#     db.refresh(db_chat)
+    db.add(db_chat)
+    db.commit()
+    db.refresh(db_chat)
     
-#     return db_chat.chat_id
+    return db_chat
 
 # def get_chat_by_id(db: Session, chat_id: int):
 #     print("!!!!! get_chat_by_id in crud.py !!!!!!:", chat_id)
     
 #     return db.query(models.Chat).filter(models.Chat.chat_id == chat_id).first()
 
-# def get_chat_by_participants(db: Session, user_id: int):
-#     print("!!!!! get_chat_by_id in crud.py !!!!!!:", chat_id)
+# def get_chat_id_by_participants(db: Session, participant_ids: list[int]):
+#     print("!!!!! get_chat_by_participant_id in crud.py !!!!!!:", participant_ids)
     
-#     return db.query(models.Chat).filter(models.Chat.chat_id == chat_id).first()
+#     chat_db = db.query(models.Chat).filter(models.Chat.participant_ids == participant_ids).first()
+    
+#     print("!!!!!!!!!!!! chat_db", chat_db)
 
+#     return chat_db
+
+def get_chat_by_group_id(db: Session, group_id: int):
+    print("!!!!! get_chat_by_id in crud.py !!!!!!:", group_id)
+    
+    return db.query(models.Chat).filter(models.Chat.group_id == group_id).first()
+
+def get_chats_by_group_ids(db: Session, group_ids: list[int]):
+    print("!!!!! get_chats_by_group_ids in crud.py !!!!!!:", group_ids)
+
+    # chats = db.query(models.Chat).filter(models.Chat.group_id.in_(group_ids)).all()
+    
+    chats = db.query(models.Chat, models.Group.name) \
+          .join(models.Group, models.Chat.group_id == models.Group.group_id) \
+          .filter(models.Chat.group_id.in_(group_ids)) \
+          .all()
+     
+    chat_objects = []
+    
+    for chat in chats:
+        print("chat in chats!!!!!!!!!!!", chat)
+        print("!!!!!!! chat[0]:", type(chat[0].chat_id))
+        print("chat[1] in chats!!!!!!!!!!!", chat[1])
+        chat_object = {
+            "chat_id": chat[0].chat_id,
+            "name": chat[1],
+        }
+        print("before appending chat_objects")
+        chat_objects.append(chat_object)
+        print("after appending chat_objects")
+    
+    return chat_objects
+    
+
+def get_chats_by_user_id(db: Session, user_id: int):
+    
+    print("!!!!! get_chats_by_user_id in crud.py !!!!!!:", user_id)
+    
+    chats = db.query(models.Chat).filter(models.Chat.participant_ids.any(user_id)).all()
+    
+    print("!!!!!!!!!!!! chats", chats)
+
+    return chats
+
+#  *** CRUD groups ***
+
+def create_group(db: Session, group: schemas.CreateGroup):
+    print("create group is running in crud.py")
+    print("group in create group crud.py:", group)
+    db_group = models.Group(name=group['name'])
+    
+    # print("*** !!!!!!!!!!!! db_chat !!!!!!!!!!!!!!!! *****", db_group)
+    # print("*** db_chat.chat_id *****", db_group.group_id)
+    # # print("*** db_chat['chat_id'] *****", db_chat['chat_id'])
+    # print("*** db_chat.participant_ids *****", db_group.participant_ids)
+    # print("*** db_chat.name *****", db_group.name)
+    
+    
+    db.add(db_group)
+    db.commit()
+    db.refresh(db_group)
+    
+    return db_group
+
+def get_group_id_by_participants(db: Session, participant_ids: list[int]):
+    print("!!!!! get_chat_by_participant_id in crud.py !!!!!!:", participant_ids)
+    
+    group_db = db.query(models.Group).join(models.UserGroup).join(models.User).filter(models.User.user_id.in_(participant_ids)).first()
+    
+    return group_db
+
+def add_user_to_group(db: Session, user_group: schemas.UserGroup):
+    
+    db_user_group = models.UserGroup(user_id=user_group['user_id'], group_id=user_group['group_id'])
+    
+    db.add(db_user_group)
+    db.commit()
+    db.refresh(db_user_group)
+    
+    return db_user_group
+
+def get_groups_by_participant(db: Session, user_id: int):
+    print("!!!!! get_groups_by_participant in crud.py !!!!!!:", user_id)
+    
+    # groups_db = db.query(models.Group).join(models.UserGroup).join(models.User).filter(models.User.user_id.in_(user_id)).all()
+    
+    # groups_db = db.query(models.Group).join(models.UserGroup.user_id == user_id).all()
+    groups_db = db.query(models.Group).join(models.UserGroup).filter(models.UserGroup.user_id == user_id).all()
+    
+    print("!!!!!!!!!!!!!!!! groups_db:", groups_db)
+    
+    return groups_db

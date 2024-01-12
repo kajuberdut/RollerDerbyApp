@@ -1,5 +1,47 @@
+
+# !!!!!!!!!!!!!! get chat history without groups
+
+def get_chat_history(db: Session, participant_ids: List[int]):
+    """Retrieves chat history between a user and specified participants."""
+    print("hitting get_chat_history in CRUD.py")
+    print("participants_ids:", participant_ids)
+
+    messages = (
+        db.query(models.Message, models.Chat)
+        .join(models.Chat, models.Message.chat_id == models.Chat.chat_id)
+        .filter(models.Chat.participant_ids == participant_ids)
+        .order_by(models.Message.date_time.asc())
+        .all()
+    )
+    
+       chats = db.query(models.Chat).filter(models.Chat.group_id.in_(group_ids)).join(models.Chat, models.Group.group_id.in_(group_ids)).all()
+
+    message_objects = []
+    
+    for message, chat in messages:
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item:", message)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", message.date_time)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! chat:", chat.sender_id)
+        
+        message_object = {
+            "message_id": message.message_id,
+            "chat_id": message.chat_id,
+            # "sender_id": user_message.sender_id,
+            "user_id": message.sender_id,
+            "participant_ids": chat.participant_ids,
+            "message": message.message,
+            "date_time": message.date_time
+        }
+        message_objects.append(message_object)
+    
+    return message_objects
+
+# !!!!!!!!!!!!!!! get chat history without groups
+
+
+
 def get_chat_history(db: Session):
-    """Retrieves chat history between a user and specified recipients."""
+    """Retrieves chat history between a user and specified  participants."""
 
     # Query for relevant messages, joining tables as needed
     messages = (
@@ -15,15 +57,15 @@ def get_chat_history(db: Session):
                 models.Message.message_id,
                 models.Message.message,
                 models.Message.date_time,
-                models.UserMessage.recipient_ids
+                models.UserMessage.participant_ids
             )
             # .limit(10)
             # .join(models.UserMessage.user)
             # .join(models.UserMessage.message)
             # .filter(
             #     or_(
-            #         (models.UserMessage.user_id == user_id) & models.User.user_id.in_(recipient_ids),
-            #         (models.UserMessage.user_id.in_(recipient_ids)) & (models.User.user_id == user_id),
+            #         (models.UserMessage.user_id == user_id) & models.User.user_id.in_(participant_ids),
+            #         (models.UserMessage.user_id.in_(participant_ids)) & (models.User.user_id == user_id),
             #     )
             # )
             # .order_by(models.Message.date_time.asc())  # Order messages chronologically
@@ -33,7 +75,7 @@ def get_chat_history(db: Session):
     
     
     def get_chat_history(db: Session):
-    """Retrieves chat history between a user and specified recipients."""
+    """Retrieves chat history between a user and specified participantss."""
     print("hitting get_chat_history in CRUD.py")
      # Query for relevant messages, joining tables as needed
     # messages = (
@@ -43,17 +85,17 @@ def get_chat_history(db: Session):
     #             models.Message.message_id,
     #             models.Message.message,
     #             models.Message.date_time,
-    #             # models.UserMessage.recipient_ids
+    #             # models.UserMessage.participant_ids
     #         )
     #     )
     # ).all()
     messages = (
-        db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+        db.query(models.Message, models.User, models.UserMessage.participant_ids)
         .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
         .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
         # .filter(models.Message.id == 0)  # Filter by message ID
         # .filter(Message.sender_id == 3)  # Filter by sender ID
-        # .filter(User.id.in_([1]))  # Filter by recipient IDs
+        # .filter(User.id.in_([1]))  # Filter by participant IDs
         # .order_by(Message.date_time)
         .all()
     )
@@ -67,17 +109,17 @@ def get_chat_history(db: Session):
     
     message_objects = []
     
-    for message, sender, recipient_ids in messages:
+    for message, sender, participant_ids in messages:
         # print(f"Message ID: {message.message_id}")
         # print(f"Sender ID: {sender.user_id}")
-        # print(f"Recipient IDs: {recipient_ids}")
+        # print(f"Participant IDs: {participant_ids}")
         # print(f"message: {message.message}")
         # print(f"date_time: {message.date_time}")
         
         # message_object = schemas.MessageObject(
         #     message_id=message.message_id,
         #     sender_id=sender.user_id,
-        #     recipient_ids=recipient_ids,
+        #     participant_ids=participant_ids,
         #     message=message.message,
         #     date_time=message.date_time
         # )
@@ -85,7 +127,7 @@ def get_chat_history(db: Session):
         message_object = {
             "message_id": message.message_id,
             "sender_id": sender.user_id,
-            "recipient_ids": recipient_ids,
+            "participant_ids": participant_idss,
             "message": message.message,
             "date_time": message.date_time
         }
@@ -108,7 +150,7 @@ def get_chat_history(db: Session):
     #     {"sender_id": row[0], "message_id": row[1], "message": row[2], "date_time": row[3]}
     #     for row in messages
     # ]
-    # *this is returning the correct information now.... but you will need to see if you need a recipient_id in here as well
+    # *this is returning the correct information now.... but you will need to see if you need a  participant_id in here as well
     # print("chat_history in crud.py **********************************************", len(chat_history))
     # return chat_history
     return message_objects
@@ -128,28 +170,28 @@ def get_user_message(db: Session, skip: int = 0, limit: int = 100):
     print("hitting crud get user messages")
     return db.query(models.UserMessage).offset(skip).limit(limit).all()
 
-# def get_chat_history(db: Session, user_id: int, recipient_ids: List[int]) -> List[dict]:
+# def get_chat_history(db: Session, user_id: int, participant_ids: List[int]) -> List[dict]:
 def get_chat_history(db: Session):
-    """Retrieves chat history between a user and specified recipients."""
+    """Retrieves chat history between a user and specified participants."""
     print("hitting get_chat_history in CRUD.py")
     messages = (
-        db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+        db.query(models.Message, models.User, models.UserMessage.participant_ids)
         .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
         .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
         # .filter(Message.sender_id == 3)  # Filter by sender ID
-        # .filter(User.id())  # Filter by recipient IDs
+        # .filter(User.id())  # Filter by participant IDs
         .order_by(models.Message.date_time.asc())
         .all()
     )
 
     message_objects = []
     
-    for message, sender, recipient_ids in messages:
+    for message, sender, participant_ids in messages:
         
         message_object = {
             "message_id": message.message_id,
             "sender_id": sender.user_id,
-            "recipient_ids": recipient_ids,
+            "participant_ids": participant_ids,
             "message": message.message,
             "date_time": message.date_time
         }
@@ -204,10 +246,10 @@ def delete_message(db: Session, message_id: int):
 # !!!!!!!!!!! trying to get the correct format for geting userObject out of it !!!!!!!!!
 
   # messages = (
-    #     db.query(models.Message, models.User, models.UserMessage.recipient_ids)
+    #     db.query(models.Message, models.User, models.UserMessage. participant_ids)
     #     .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
     #     # .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
-    #     .filter(models.UserMessage.recipient_ids == recipient_ids)
+    #     .filter(models.UserMessage participant_ids ==  participant_ids)
     #     .order_by(models.Message.date_time.asc())
     #     .all()
     # )
@@ -218,7 +260,74 @@ def delete_message(db: Session, message_id: int):
         # .join(models.UserMessage, models.UserMessage.message_id == models.Message.message_id)  # Join with UserMessage
         # .outerjoin(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
         # # .join(models.User, models.User.user_id == models.UserMessage.sender_id)  # Join with User
-        .filter(models.UserMessage.recipient_ids == [3, 1])
+        .filter(models.UserMessage. participant_ids == [3, 1])
         .order_by(models.Message.date_time.asc())
         .all()
     )
+    
+    
+    # !!!!!!!!!!!!!!!! get history with USER MESSAGE TABLE !!!!!!!!!!!!!!!!!1
+    def get_chat_history(db: Session, participant_ids: List[int]):
+    """Retrieves chat history between a user and specified participants."""
+    print("hitting get_chat_history in CRUD.py")
+    print("participants_ids:", participant_ids)
+
+    messages = (
+        db.query(models.Message, models.UserMessage)
+        .join(models.UserMessage, models.Message.message_id == models.UserMessage.message_id)
+        .filter(models.UserMessage.participant_ids == participant_ids)
+        # .filter(models.UserMessage.participant_ids == [1, 3])
+        # .filter(func.array_remove(models.UserMessage.participant_ids, [1, 3]) == [])
+        # .filter(
+        # func.all(
+        #     func.unnest(models.UserMessage.participant_ids)
+        #     .in_([1, 3])  # Check if each element is present in the comparison array
+        # )
+        # )
+        # .filter(
+        # func.unnest(models.UserMessage.participant_ids).intersect([1, 3])
+        # )
+        .order_by(models.Message.date_time.asc())
+        .all()
+    )
+    
+    # print("messages******************:", messages)
+    # print("messages******************:", messages)
+    # print("messages******************:", messages)
+
+    message_objects = []
+    
+    # for message, sender, participant_ids in messages:
+    for message, user_message  in messages:
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item:", message)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", message.date_time)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! message:", user_message.sender_id)
+        # print("!!!!!!!!!! CRUD.PY !!!!!!!!!!!!! item.user_message:", item.user_message)
+        
+        # ! sender appears to be a list of all the users? 
+        
+        message_object = {
+            "message_id": message.message_id,
+            # "sender_id": user_message.sender_id,
+            "user_id": user_message.sender_id,
+            "participant_ids": user_message.participant_ids,
+            "message": message.message,
+            "date_time": message.date_time
+        }
+        message_objects.append(message_object)
+    
+    return message_objects
+    # return messages
+
+def get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):
+    print("Fetching messages with user IDs...")
+  
+    messages = (
+        db.query(models.Message)
+        .options(joinedload(models.Message.user))  # Eagerly load users
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return messages

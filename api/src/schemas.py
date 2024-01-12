@@ -17,12 +17,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 print("schemas.py is running")
-    
-# User Pydantic Models
-
-# states_list = [
-#         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT','DE','FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ','NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-#         ]
 
 #  **** Token schemas for testing Authentication *** 
 
@@ -38,23 +32,6 @@ class TokenData(BaseModel):
 #  **** User Pydantic Models  *** 
 
 # **** user ruleset pyndantic models
-
-# class UserRulesetGetter(GetterDict):
-#     def get(self, key: str, default: Any = None) -> Any:
-#         if key in {'id', 'name'}:
-#             return getattr(self._obj.author, key)
-#         else:
-#             return super(BookAuthorGetter, self).get(key, default)
-
-# class UserRulesetGetter(GetterDict):
-#     def get(self, key: str, default: Any = None) -> Any:
-#         if key in {'id', 'name', 'ruleset_id'}:
-#             return getattr(self._obj.ruleset, key)
-#         else:
-#             return super(UserRulesetGetter, self).get(key, default)
-# # ! GetterDict has apparently been removed. 
-
-
 
 class UserRuleset(BaseModel):
     # id: int
@@ -72,12 +49,12 @@ class UserPosition(BaseModel):
     class Config:
         from_attributes = True
 
-class UserMessage(BaseModel):
-    # user_id: int
-    sender_id: int
-    message_id: int
-    recipient_ids: list[int]
-    # ! pull recipient ids off and stick all ids on to chat 
+# class UserMessage(BaseModel):
+#     # user_id: int
+#     sender_id: int
+#     message_id: int
+#     participant_ids: list[int]
+#     # ! pull participant ids off and stick all ids on to chat 
 
     class Config:
         from_attributes = True
@@ -100,10 +77,6 @@ class UserDelete(BaseModel):
 class Ruleset(BaseModel): 
     ruleset_id: int = Field(default_factory=lambda: 0)
     name: str
-    # wftda: bool
-    # usars: bool
-    # banked_track: bool
-    # short_track: bool
     
     @field_validator('name')
     def validate_rulesets(cls, v):
@@ -171,23 +144,54 @@ class InsuranceOutput(BaseModel):
         ]
         if v not in insurance_list:
             raise ValueError("Invalid insurance")
-        return v  
+        return v 
+    
+class UserGroup(BaseModel):
+    user_id: int
+    group_id: int
+
+    class Config:
+        from_attributes = True 
+    
+class Group(BaseModel): 
+    group_id: int = Field(default_factory=lambda: 0)
+    name: str
+    
+    # class Config:
+    #     from_attributes = True 
+    
+class CreateGroup(BaseModel): 
+    name: str
+    participant_ids: list[int]
+    
+    # class Config:
+    #     from_attributes = True 
     
 class Message(BaseModel): 
     message_id: int = Field(default_factory=lambda: 0)
-    # message_id: int
+    chat_id: int
     message: str
     date_time: str
-    # chat_id: int
+    sender_id: int
+  
 
+    # class Config:
+    #     from_attributes = True
+        
+class Chat(BaseModel):
+    chat_id: int = Field(default_factory=lambda: 0)
+    # name: str
+    group_id: int
+    # participant_ids: list[int]
+    # type: str
+    # group_id: int
+    
     class Config:
         from_attributes = True
         
-# class Chat(BaseModel):
-#     chat_id: int = Field(default_factory=lambda: 0)
-#     participant_ids: list[int]
-#     type: str
-#     group_id: int
+class ChatObject(BaseModel): 
+    chat_id: int
+    name: str
     
 #     @field_validator('type')
 #     def validate_us_states(cls, v):
@@ -398,15 +402,15 @@ class EventDelete(BaseModel):
 class MessageDelete(BaseModel): 
     message_id: int
     
-class MessageWithUser(Message): 
-    message: Message
-    user_id: int
+# class MessageWithUser(Message): 
+#     message: Message
+#     user_id: int
     
 class MessageObject(BaseModel): 
     message_id: int
     # user_id: int
     sender_id: int
-    recipient_ids: list[int]
+    participant_ids: list[int]
     message: str
     date_time: str
     

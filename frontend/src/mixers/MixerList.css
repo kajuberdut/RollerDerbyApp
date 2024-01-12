@@ -1,5 +1,5 @@
 .MixerList {
-    margin-top: 150px;
+    margin-top: 20px;
     /* background-color: pink;
     padding: 500px;
     border: 50px solid black; */
@@ -11,6 +11,10 @@
 .MixerList h1 {
     margin-right: 30%;
 }
-.Mixer-Button {
+.MixerList-Button {
     border-radius: 4px;
+}
+
+.MixerList-Button:hover {
+    background-color: #d1d2d4;
 }

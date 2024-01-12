@@ -9,7 +9,7 @@ import UserContext from "./multiUse/UserContext";
 import FastApi from "./Api";
 import useLocalStorage from "./hooks/useLocalStorage";
 // ! this will probably need to be moved 
-import Messages from './Messages';
+import Messages from './chats/Messages';
 // import jwt from "jsonwebtoken";
 // import * as jwt_decode from 'jwt-decode';
 // import jwt_decode from 'jwt-decode'

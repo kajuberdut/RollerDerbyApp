@@ -127,7 +127,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
     # websocket = UserWebSocket(user_id=user_id)
     # ! added this not necessary for base usage
     
-    # recipient_message = crud.create_message(db=db, )
+    # participant_message = crud.create_message(db=db, )
     
     await manager.connect(websocket, user_id)
     try: 
@@ -142,8 +142,9 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             message_id = data_dict["messageId"]
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
-            recipient_ids = sorted(data_dict["recipientIds"])
+            participant_ids = sorted(data_dict["participantIds"])
             date_time = data_dict["dateTime"]
+            chat_id = data_dict["chatId"]
             
             # print("message_id", message_id )
             # print("type message_id", type(message_id))
@@ -151,64 +152,93 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             # print("type date_time: ******", type(date_time))
             # print("message in main.py **** ", message)
             # print("sender id in main.py ****", sender_id)
-            print("recipient_id in main.py ****", recipient_ids)
-
-             # *** chat history ***
-            # chat_history = crud.get_chat_history(db=db, recipient_ids=recipient_ids)           
-            # print("***************** chat_history *********************:", chat_history)
-            # *** chat history ***
+            print("participant_ids in main.py ****", participant_ids)
+            print("chat_id in main.py ****", chat_id)
+            
       
             
-            # * add to message to database for user
+            if chat_id == 0:
+                
+                # chat_db = crud.get_chat_id_by_participants(db=db,  participant_ids=participant_ids)
+                group_db = crud.get_group_id_by_participants(db=db, participant_ids=participant_ids)
+                
+                if not group_db:
+                    
+                    group = {
+                        "participant_ids": participant_ids,
+                        "name": "Testing"
+                    }
+                    
+                    group_db = crud.create_group(db=db, group=group)
+                    
+                    for participant_id in participant_ids: 
+                        
+                        # ensures user exists 
+                        user_db = crud.get_user_by_id(db=db, user_id=participant_id)
+                             
+                        if user_db: 
+                            user_group = {
+                                "user_id": participant_id,
+                                "group_id": group_db.group_id
+                            }
+                            user_group_db = crud.add_user_to_group(db=db, user_group=user_group)
+                            
+                if group_db: 
+                    chat_db = crud.get_chat_by_group_id(db=db, group_id=group_db.group_id)       
+                    # ! not sure if this is indented properly
+                    
+                    if not chat_db: 
+                        chat = {
+                            "group_id": group_db.group_id
+                        }
+                        
+                        chat_db = crud.create_chat(db=db, chat=chat)
+                    
+                    print("*****************chat_db ********************", chat_db)
+                    print("*****************chat_d.chat_id ********************", chat_db)
+                    
+                    chat_id = chat_db.chat_id
+            # print("*****************chat_id ********************", chat_id)
+                
+                 # * add to message to database for user
             # ! THIS IS NOT RETURNING MY MESSAGE ID NOT SURE WHY 
-            this_message = {
+            new_message = {
+                # "message_id": 0,
+                "chat_id": chat_id,
                 "message": message, 
                 "date_time": date_time,
-                "message_id": 0,
-                # "recipient_ids": recipient_ids
+                "sender_id": sender_id
+                # "participant_ids": participant_ids
             }
-            db_message_id = crud.create_message(db=db, message=this_message)
+            
+            
+            db_message_id = crud.create_message(db=db, message=new_message)
     
-            db_user_message = crud.create_user_message(db=db, sender_id=sender_id, message_id=db_message_id, recipient_ids=recipient_ids)
+            # db_user_message = crud.create_user_message(db=db, sender_id=sender_id, message_id=db_message_id, participant_ids=participant_ids)
             
-            # if chat_history: 
-            #     for recip_id in chat_history[0]['recipient_ids']:
-                    
-            #         recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recip_id), None)
-                    
-            #         if recipient_connection:
-            #             for chat_message in chat_history: 
-            #                 recipientData = json.dumps({"message": f"{chat_message['message']}", "userId": f"{chat_message['sender_id']}" })
-            #                 await manager.send_personal_message(recipientData, recipient_connection)
-
             
-            for recipient_id in recipient_ids:
-                print("handling recipient_id:", recipient_id)
+            for participant_id in participant_ids:
+                print("handling participant_id:", participant_id)
                 
-                # * add to message to database for each recipient 
-                # db_recipient_message = crud.create_user_message(db=db, user_id=recipient_id, message_id=db_message_id)
-                 # * add to message to database for each recipient 
-                
-                
-                recipient_connection = next((conn for conn in manager.active_connections if conn.user_id == recipient_id), None)
+                participant_connection = next((conn for conn in manager.active_connections if conn.user_id == participant_id), None)
 
-                # * if the recipient is connected to active connections
-                if recipient_connection:
-                    print("recipient connection is true")
+                # * if the participant is connected to active connections
+                if participant_connection:
+                    print("participant connection is true")
   
                     # userData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
                     # await manager.send_personal_message(userData, websocket)
                     
-                    # ! treat sender as a recipient, that way you can search by recipients (all users involved in chat)
-                    recipientData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
-                    await manager.send_personal_message(recipientData, recipient_connection)
+                    # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
+                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
+                    await manager.send_personal_message( participantData,  participant_connection)
                     
 
                     
-                if not recipient_connection: 
-                    print("there is no recipient connection")
-                    print("add recipient connection")
-                    await manager.send_personal_message("Recipient is currently unavailable.", websocket)
+                # if not  participant_connection: 
+                #     print("there is no  participant connection")
+                #     print("add  participant connection")
+                #     await manager.send_personal_message(" participant is currently unavailable.", websocket)
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
@@ -928,8 +958,8 @@ def get_location(token: Annotated[str, Depends(oauth2_scheme)], location_id:int,
 # * get /messages/users
 # * gets all messages and users
 # todo this does not work but may not be necessary 
-# @api_app.get("/messages/users", response_model=list[schemas.Message])
-@api_app.get("/messages/users", response_model=list[schemas.MessageWithUser])
+@api_app.get("/messages/users", response_model=list[schemas.Message])
+# @api_app.get("/messages/users", response_model=list[schemas.MessageWithUser])
 def get_messages_with_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     print("hitting /messages in main.py")
     data = crud.get_messages_with_user_ids(db, skip=skip, limit=limit)
@@ -958,28 +988,30 @@ def get_messages_with_users(token: Annotated[str, Depends(oauth2_scheme)], skip:
 def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     print("hitting /user/messages in main.py")
     # return crud.get_user_message(db, skip=skip, limit=limit)
-    return crud.get_chat_history(db, recipient_ids=[1, 3])
+    return crud.get_chat_history(db, participant_ids=[1, 3])
     # return crud.get_chat_history(db)
 
 # * get /history
 # * gets chat history
 
-# @api_app.get("/user/message/", response_model=list[schemas.MessageObject])
-@api_app.get("/history/{recipient_ids}")
-# def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, recipient_ids: str = Query(), db: Session = Depends(get_db)):
-def get_messages(token: Annotated[str, Depends(oauth2_scheme)], recipient_ids: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@api_app.get("/history/{participant_ids}")
+def get_messages(token: Annotated[str, Depends(oauth2_scheme)], participant_ids: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     print("hitting /history in main.py")
-    print("! !!!!!!!!!!!!!!!!!!!!!!!recipient ids in main.py", recipient_ids)
+    print("! !!!!!!!!!!!!!!!!!!!!!!!participant ids in main.py", participant_ids)
     
-    recipient_ids_list = sorted(recipient_ids.split(","))
-    print("recipient_ids_list !!!!!!!!!!!!!!!!!!!!!!!!!!!!", recipient_ids_list)
-    # for recipient_id in recipient_ids: 
-    #     print("recipient_id *************", recipient_id)
-    # return crud.get_user_message(db, skip=skip, limit=limit)
-    # return crud.get_chat_history(db, recipient_ids=[1, 3])
-    # return crud.get_chat_history(db)
-    # return crud.get_chat_history(db, recipient_ids=sorted(recipient_ids))
-    return crud.get_chat_history(db, recipient_ids=recipient_ids_list)
+    participant_ids_list = sorted( participant_ids.split(","))
+    
+    print("participant_ids_list !!!!!!!!!!!!!!!!!!!!!!!!!!!!", participant_ids_list)
+    
+    db_group = crud.get_group_id_by_participants(db, participant_ids=participant_ids_list)
+    
+    db_chat = crud.get_chat_by_group_id(db, group_id=db_group.group_id)
+    
+    db_messages = crud.get_messages_by_chat_id(db, chat_id=db_chat.chat_id)
+    
+    print("db messages in /history/{participants_ids}:", db_messages)
+
+    return db_messages
 
 # * get /messages 
 # * gets all messages 
@@ -988,6 +1020,24 @@ def get_messages(token: Annotated[str, Depends(oauth2_scheme)], recipient_ids: s
 def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     print("hitting /messages in main.py")
     return crud.get_messages(db, skip=skip, limit=limit)
+
+# * get /chats/{user_id}
+# * gets all chats by user_id 
+
+@api_app.get("/chats/{user_id}", response_model=list[schemas.ChatObject])
+def get_chats(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+    print("hitting /chats in main.py")
+    
+    groups_db = crud.get_groups_by_participant(db=db, user_id=user_id)
+    print("groups db in main.py:", groups_db)
+    # for group_id in groups_db.group_id
+    group_ids = [group.group_id for group in groups_db]
+    print("group_ids in main.py:", group_ids)
+    
+    chats_db = crud.get_chats_by_group_ids(db=db, group_ids=group_ids)
+
+    return chats_db
+
 
 # * delete /messages/{message_id} 
 # * deletes an existing message
@@ -1008,6 +1058,26 @@ def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, l
 #     return crud.delete_message(db=db, message_id=db_message.message_id)
 
 
+# ! for testing only 
+
+@api_app.get("/chat/test/")
+def get_chats_testing(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
+    print("hitting /chat/test/group_ids in main.py")
+    group_ids = [3]
+    # return crud.get_user_message(db, skip=skip, limit=limit)
+    
+        
+    # groups_db = crud.get_groups_by_participant(db=db, user_id=user_id)
+    # print("groups db in main.py:", groups_db)
+    # # for group_id in groups_db.group_id
+    # group_ids = [group.group_id for group in groups_db]
+    # print("group_ids in main.py:", group_ids)
+    
+    # chats_db = crud.get_chats_by_group_ids(db=db, group_ids=group_ids)
+    
+    chats_db = crud.get_chats_by_group_ids(db=db, group_ids=group_ids)
+    
+    return chats_db
 
 
 

@@ -1,24 +1,15 @@
 .BoutList {
     margin-top: 20px;
-    /* background-color: pink;
-    padding: 500px;
-    border: 50px solid black; */
 }
-
-
-/* .BoutList-RenderCards {
-    margin-top: 500px;
-    background-color: pink;
-} */
 
 .BoutList h1 {
     margin-right: 30%;
 }
 
-.Bout-Button {
+.BoutList-Button {
     border-radius: 4px;
 }
 
-.Bout-Button:hover {
+.BoutList-Button:hover {
     background-color: #d1d2d4;
 }

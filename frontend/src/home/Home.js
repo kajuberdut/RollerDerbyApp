@@ -32,12 +32,6 @@ function Home() {
           <CardBody >
             <CardText></CardText>-
             {user && <h2>Welcome back, {user.username}!</h2>}
-            {/* {user && <h2>Welcome Back</h2>} */}
-            {/* { !user && ( <> <CardText>
-              <Link className="Home-Link" to="/login"><Button>Login</Button></Link>
-              <Link className="Home-Link" to="/signup"><Button>Signup</Button></Link>
-            </CardText>
-            </>)} */}
             {!user && <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>
               <Link className="Home-Link" to="/signup"><Button>Signup</Button></Link>

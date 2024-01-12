@@ -1,15 +1,9 @@
-
-
-
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! with Chats !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 import React, { useState, useEffect, useLocation } from "react";
 import { useParams } from "react-router-dom";
-import FastApi from "./Api";
+import FastApi from "../Api";
 
 
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import {
     Card,
     CardBody,
@@ -23,8 +17,8 @@ import {
     CardText, 
     CardFooter
   } from "reactstrap";
-import NavBarMessages from "./navBar/NavBarMessages";
-import { faCropSimple, faSliders } from "@fortawesome/free-solid-svg-icons";
+// import NavBarMessages from "../navBar/NavBarMessages";
+// import { faCropSimple, faSliders } from "@fortawesome/free-solid-svg-icons";
 
 const Messages = ({handleMessages}) => {
     const [messages, setMessages] = useState([]);
@@ -45,7 +39,8 @@ const Messages = ({handleMessages}) => {
     // console.log(" **** use location in messages *****:", location)
     const pathname = window.location.pathname
     // console.log("pathname:", pathname)
-    let messageToUser = pathname.split('/')[2]
+    let messageToUser = Number(pathname.split('/')[2])
+
 
 
     useEffect(() => {
@@ -66,12 +61,48 @@ const Messages = ({handleMessages}) => {
   
     }, [messageToUser])
 
+    useEffect(() => {
 
-   /** Reloading websockets when it changes request for websockets */
+      async function getChatHistory() {
+
+        try {
+          
+          let chatHistory =  await FastApi.getChatHistory([messageToUser, user.userId]);
+          console.log("chatHistory in messages.py:", chatHistory)
+          // console.log("otherUser", otherUser)
+          // setOtherUser(otherUser);
+          setMessages(chatHistory)
+        } catch (errors) {
+          console.error("Get Other User failed", errors);
+          return { success: false, errors };
+        }
+      }
+
+      getChatHistory()
+  
+    }, [messageToUser])
+
+
+
+    // pathname.split("/")[-1]
+    // console.log("messageToUser:", messageToUser)
+
+    // const params = useParams()
+    // console.log("params &&&&&:", params)
+    // const { username } = useParams(); 
+    // console.log("!!!!!!!!! username !!!!!!!!!!", username)
+    
+    // console.log("before web socket in chat.js")
+    // const socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+    // console.log("socket: ", socket)
+
+    
+   /** Reloading jobs when it changes request for jobs */
 
     useEffect(() => {
       console.log("before web socket in chat.js")
       
+      // const socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         console.log("IF STATEMENT IS RUNNING")
         
@@ -88,14 +119,9 @@ const Messages = ({handleMessages}) => {
           console.log("Message from server ", event.data)
           console.log("JSON.parse(event.data)", JSON.parse(event.data))
           let eventData = JSON.parse(event.data)
-          console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& eventData:", eventData)
 
           // setMessages((prevMessages) => [...prevMessages, { message: event.data }]);
           setMessages((prevMessages) => [...prevMessages, eventData ]);
-          if(eventData.chatId !== chatId) {
-            setChatId(eventData.chatId)
-          }
-
           console.log("messages:", messages)
           // const eventDataUserId = event.data.split(": ")
           // const otherUserId = eventDataUserId[1].trim()
@@ -134,6 +160,7 @@ const Messages = ({handleMessages}) => {
         // console.log(" typeof int(messageToUser) in Messages.js", typeof Number(messageToUser))
         let dateTime = (new Date().toLocaleString()); 
         console.log("%%%%% dateTime %%%%%:", dateTime)
+   
 
         let messageData;
 
@@ -141,11 +168,11 @@ const Messages = ({handleMessages}) => {
           console.log("chatId is not 0 !!!!!!!!!!!!!!!!!!!!")
           messageData = {
             "messageId": 0,
+            "chatId": chatId,
             "senderId": user.userId, 
-            // "recipientIds": [Number(messageToUser)],
+            "participantIds": [messageToUser, Number(user.userId)],
             "message": formData.message,
-            "dateTime": dateTime,
-            "chatId": chatId
+            "dateTime": dateTime
           }
   
           console.log(" !!!! 1 MESSAGE IN MESSAGES 1 !!!! :", messageData)
@@ -157,19 +184,23 @@ const Messages = ({handleMessages}) => {
           console.log("chatId is 0 if statement is running")
           messageData = {
             "messageId": 0,
+            "chatId": chatId,
+            "participantIds": [messageToUser, Number(user.userId)],
             "senderId": user.userId, 
             "message": formData.message,
             "dateTime": dateTime,
-            "chatId": chatId,
             "type": "user", 
             "groupId": Number(messageToUser)
           }
         }
 
-        let jsonData = JSON.stringify(messageData);
-          
-        socket.send(jsonData)
+        console.log(" !!!! 1 MESSAGE IN MESSAGES 1 !!!! :", messageData)
+        let jsonData = JSON.stringify(messageData); 
+        // console.log(" !!!! 2 MESSAGE IN MESSAGES 2 !!!! :", messageData)
 
+        // socket.send(formData.message)
+        // socket.send(messageData)
+        socket.send(jsonData)
         // setMessages([...messages, { message: formData.message}])
         setFormData(INITIAL_STATE)
         
@@ -209,7 +240,7 @@ const Messages = ({handleMessages}) => {
             <CardText style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                   // <div key={message.timestamp}>
-                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '230px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
+                      <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
                       {/* Display sender or avatar if needed */}
                       {/* {message.sender}:  */}
                       {message.message}

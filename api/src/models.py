@@ -31,16 +31,26 @@ class UserInsurance(SQLAlchemyBase):
     user = relationship("User", back_populates="insurance")
     insurance = relationship("Insurance", back_populates="user") 
     
-class UserMessage(SQLAlchemyBase): 
-    __tablename__ = "user_message"
-    sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
-    message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
-    user = relationship("User", back_populates="message")
-    message = relationship("Message", back_populates="user") 
-    recipient_ids = Column(ARRAY(Integer))
+    
+class UserGroup(SQLAlchemyBase): 
+    __tablename__ = "user_group"
+
+    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    group_id = Column(Integer, ForeignKey("group.group_id"), primary_key=True)
+    user = relationship("User", back_populates="group")
+    group = relationship("Group", back_populates="user") 
+    
+# class UserMessage(SQLAlchemyBase): 
+#     __tablename__ = "user_message"
+#     sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+#     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
+#     user = relationship("User", back_populates="message")
+#     message = relationship("Message", back_populates="user") 
+    # participant_ids = Column(ARRAY(Integer))
      # user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
-    # ! remove recipient ids to Chat
+    # ! remove participant ids to Chat
     # ! note added recipeint ids and changed user_id to sender_id 
+    
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -61,7 +71,8 @@ class User(SQLAlchemyBase):
     ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
     insurance = relationship("UserInsurance", back_populates="user")
-    message = relationship("UserMessage", back_populates="user")
+    group = relationship("UserGroup", back_populates="user")
+    # message = relationship("UserMessage", back_populates="user")
     location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
     associated_leagues = Column(String, nullable=True)
     # ruleset_id = Column(Integer, ForeignKey("ruleset.ruleset_id"), nullable=True)
@@ -90,25 +101,29 @@ class Insurance(SQLAlchemyBase):
     type = Column(String)
     user = relationship("UserInsurance", back_populates="insurance")    
     
+class Group(SQLAlchemyBase):
+    __tablename__ = "group"  
+    group_id = Column(Integer, primary_key=True)
+    name = Column(String)
+    user = relationship("UserGroup", back_populates="group")    
     
 class Message(SQLAlchemyBase):
     __tablename__ = "message"  
     message_id = Column(Integer, primary_key=True)
+    chat_id = Column(Integer, ForeignKey("chat.chat_id"), nullable=False)
     message = Column(String)
     date_time = Column(String)
-    user = relationship("UserMessage", back_populates="message")
-    # chat_id = Column(Integer, ForeignKey("chat.chat_id"), nullable=False)
+    sender_id = Column(Integer)
+    # user = relationship("UserMessage", back_populates="message")
+    # ! added chat_id for chatList 
     
-# class Chat(SQLAlchemyBase): 
-#     __tablename__ = "chat"
-#     chat_id = Column(Integer, primary_key=True)
-#     group_id = Column(Integer)
-#     type = Column(String)
-#     # message = relationship("Message", back_populates="chat")
-#     message = relationship("Message", backref="chat")
-    
-
-    
+class Chat(SQLAlchemyBase): 
+    __tablename__ = "chat"
+    chat_id = Column(Integer, primary_key=True)
+    # participant_ids = Column(ARRAY(Integer))
+    group_id = Column(Integer)
+    # name = Column(String)
+    message = relationship("Message", backref="chat")
 
 class Location(SQLAlchemyBase):
     __tablename__ = "location"

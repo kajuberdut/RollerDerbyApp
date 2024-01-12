@@ -57,6 +57,9 @@ function NavBar({logout}) {
             <NavItem className="Navbar-Mixers">
                 <NavLink to="/mixers">Mixers</NavLink>
             </NavItem>
+            <NavItem className="Navbar-Messages">
+                <NavLink to="/chats">Chats</NavLink>
+            </NavItem>
             <NavItem className="Navbar-Logout">
                 <NavLink to="/" onClick={logout}>Logout</NavLink>
             </NavItem>
