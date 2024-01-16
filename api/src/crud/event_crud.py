@@ -34,7 +34,7 @@ def crud_create_bout(db: Session, bout: Bout):
     """Create a specific bout."""
     print("^^^^ BOUT in crud.py ^^^^^", bout)
     
-    db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, floor_type=bout.floor_type, jersey_colors=bout.jersey_colors, opposing_team=bout.opposing_team, team=bout.team)
+    db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, floor_type=bout.floor_type, jersey_colors=bout.jersey_colors, opposing_team=bout.opposing_team, team=bout.team, group_id=bout.group_id, chat_id=bout.chat_id)
        
     db.add(db_bout)
     db.commit()

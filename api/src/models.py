@@ -150,6 +150,8 @@ class EventBase(SQLAlchemyBase):
     ruleset = Column(String, nullable=False)
     floor_type = Column(String, nullable=False)
     jersey_colors = Column(String, nullable=False)
+    group_id = Column(Integer, nullable=False)
+    chat_id = Column(Integer, nullable=False)
     # address = relationship("Address", backref="events")
     # detail = relationship("EventDetail", back_populates="events")
     

@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import FastApi from "../Api";
 
-
-// import io from "socket.io-client";
 import {
     Card,
     CardBody,
@@ -29,16 +27,13 @@ const ChatDetails = ({handleChat, chatId }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const [chat, setChat] = useState()
     const [chatParticipants, setChatParticipants] = useState([])
+    const [chatParticipantIds, setChatParticipantIds] = useState([])
+    const [groupName, setGroupName] = useState();
 
     // ! this was getting our basic tests to pass but breaking the component.
     // if(!chatId) {
     //   return
     // }
-
-
-    // useEffect(() => {
-    //   setMessageToUser(Number(pathname.split('/')[2]))
-    // })
 
     console.log("chatId in CHatDetails **********", chatId)
 
@@ -46,21 +41,56 @@ const ChatDetails = ({handleChat, chatId }) => {
 
       async function getChat() {
 
+            /** Get chat partipants by username */
+
         try {
+          // ! this is where my error is originating from chatId of 7
           let chatParticipants =  await FastApi.getChatParticipants(chatId);
+          console.log("chatPartipants:", chatParticipants)
           const filteredParticipants = chatParticipants.filter(
             (participant) => participant !== user.username
           );
           const formatParticipants = filteredParticipants.join(", ");
+          
           setChatParticipants(formatParticipants);
+          console.log("chat participants !!!!!!!!!!!!!!!!!!!!!!!!!!!!", chatParticipants)
         } catch (errors) {
           console.error("Get Other User failed", errors);
           return { success: false, errors };
         }
+
+         /** Get chat group name by chat id */
+
+        try {
+          // ! this is where my error is originating from chatId of 7
+          let groupName = await FastApi.getGroupNameByChatId(chatId);
+          console.log("groupName:", groupName)
+         
+          setGroupName(groupName);
+        } catch (errors) {
+          console.error("Get group name failed", errors);
+          return { success: false, errors };
+        }
+
+        /** Get chat partipant ids by chat id for socket messages  */
+
+          try {
+            
+            let chatParticipantIds =  await FastApi.getChatParticipantIds(chatId);
+            console.log("!!!!!!!!!!!!chat participant IDS ", chatParticipantIds)
+            console.log("chatPartipant Id TYPE:", typeof chatParticipantIds[0])
+            setChatParticipantIds(chatParticipantIds)
+          } catch (errors) {
+            console.error("Get chatParticipantIds failed", errors);
+            return { success: false, errors };
+          }
+
       }
 
       getChat()
     }, [userId])
+
+
 
     useEffect(() => {
 
@@ -80,6 +110,8 @@ const ChatDetails = ({handleChat, chatId }) => {
       getChatHistory()
   
     }, [messageToUser])
+
+
 
    /** Reloading jobs when it changes request for jobs */
 
@@ -130,7 +162,7 @@ const ChatDetails = ({handleChat, chatId }) => {
             "messageId": 0,
             "chatId": chatId,
             "senderId": user.userId, 
-            "participantIds": [messageToUser, Number(user.userId)],
+            "participantIds": chatParticipantIds,
             "message": formData.message,
             "dateTime": dateTime
           }
@@ -184,7 +216,7 @@ const ChatDetails = ({handleChat, chatId }) => {
           </CardHeader>
           <CardBody>
             <CardTitle tag="h5">
-              Special Title Treatment
+              {groupName}
             </CardTitle>
             {/* <CardText ref={cardTextRef} style={{ overflowY: 'auto', height: 300 }}>  */}
             <CardText style={{ overflowY: 'auto', height: 300 }}> 

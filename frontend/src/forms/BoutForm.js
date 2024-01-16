@@ -26,17 +26,10 @@ const BoutForm = () => {
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
 const { user, setUser } = useContext(UserContext);
-
-//   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
 //   const [errorMessage, setErrorMessage] = useState([]);
-const [dropdownOpen, setDropdownOpen] = useState(false);
-// const [file, setFile] = useState<File | undefined>();
-// const [preview, setPreview] = useState<string | undefined>();
 const navigate = useNavigate();
-
-// let user = "SockHer Blue"  
 
   /** 
    * Sets Initial State of Form
@@ -46,55 +39,48 @@ if(!user) {
   navigate('/')
 }
 
-// let INITIAL_STATE = { bout: { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", opposingTeam: "", team: ""}, address: {streetAddres: "", city: "", state: "", zipCode: ""}};
-
-let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", opposingTeam: "", team: ""};
+let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", opposingTeam: "", team: ""};
 
 let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
 
   /** Sets formData in initial state */
-  const [formDataBout, setFormDataBout] = useState(INITIAL_STATE_BOUT);
 
+  const [formDataBout, setFormDataBout] = useState(INITIAL_STATE_BOUT);
   const [formDataAddress, setFormDataAddress] = useState(INITIAL_STATE_ADDRESS);
   
 
-  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData:", formData)
-  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!formData.timeZone:", formData.timeZone)
-  /** Handle Submit by either creating user, updating profile, or returning an error message */
-
   const handleSubmit = async evt => {
     evt.preventDefault();   
-    // console.log("FormData in SetupProfileForm.js", formData)
-    // setFormData(INITIAL_STATE);
-      setFormDataAddress(INITIAL_STATE_ADDRESS)
-      setFormDataBout(INITIAL_STATE_BOUT)
-
    
-    // async function createBout() {
+    console.log("********************** INITIAL_STATE_BOUT:", INITIAL_STATE_BOUT)
+    console.log("^^^^^^^^^^^^^^^ INITIAL_STATE_ADDRESS:", INITIAL_STATE_ADDRESS)
 
-        // try {
-      
-        //   // return { success: true };
-        // //   return bout
-        // } catch (errors) {
-        //   console.error("Get Bouts failed", errors);
-        //   return { success: false, errors };
-        // }
- 
-    // console.log("update!!!!!:", update)
-    // let result = await update(formData);
+    setFormDataAddress(INITIAL_STATE_ADDRESS)
+    setFormDataBout(INITIAL_STATE_BOUT)
 
-    //   setValid(true)
-
-    console.log("formDataBout:", formDataBout)
-    console.log("formDataAddress:", formDataAddress)
+    console.log("*********************** formDataBout:", formDataBout)
+    console.log("********************** formDataAddress:", formDataAddress)
 
     formDataBout.addressId = 0; 
-    // console.log("!!!!formDataBout!!!!!:", formDataBout)
 
     const formData = {bout: formDataBout, address: formDataAddress}
     console.log("!!!!formData!!!!!:", formData)
+    console.log("!!!!formData['address']!!!!!:", formData['address'])
+
+    // todo this is what the formData needs to match 
+
+    // {
+
+    //   "bout": {
+    //     "type": "bout", "date": "2024-02-20", "time": "14:00", "time_zone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "February Slam", "description": "Testing on Jan 9th 2024", "level": "B", "co_ed": true, "ruleset": "WFTDA", "jersey_colors": "white and green", "floor_type": "polished wood", "opposing_team": "Cheynne Capidolls", "team": "Wydaho", "address_id": 6, "group_id": 0, "chat_id": 0
+    //   },
+    
+    //   "address": {
+    //   "street_address": "513 Main St", "city": "Boise", "state": "ID", "zip_code": "55555"
+    //   }
+    
+    // }
 
     let result = await FastApi.addBout(formData);
     if(result) {
@@ -115,24 +101,66 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
     const { name, value }= evt.target;
 
-    setFormDataBout(fData => ({
-      ...fData,
-      [name]: value,
-      
-    }));
+    if(name === "date" || name === "time" || name === "timeZone" || name === "theme" || name === "description" || name === "level" || name === "coEd" || name === "ruleset" || name === "floorType" || name === "jerseyColors" || name === "opposingTeam" || name === "team") {
+      setFormDataBout(fData => ({
+        ...fData,
+        [name]: value,
+        
+      }));
+      }
 
-    setFormDataAddress(fData => ({
-      ...fData,
-      [name]: value,
-      
-    }));
-    console.log("formDataBout in BoutForm:", formDataBout)
-    console.log("formDataAddress in BoutForm:", formDataAddress)
+    if(name === "streetAddress" || name === "city" || name === "state" || name === "zipCode") {
+      setFormDataAddress(fData => ({
+        ...fData,
+        [name]: value,
+        
+      }));
+    }
+
+    
+    // if (name.startsWith("formDataBout")) { // Fields related to bout data
+    //   setFormDataBout((fDataBout) => ({
+    //     ...fDataBout,
+    //     [name]: value,
+    //   }));
+    // } else if (name.startsWith("formDataAddress")) { // Fields related to address data
+    //   setFormDataAddress((fDataAddress) => ({
+    //     ...fDataAddress,
+    //     [name]: value,
+    //   }));
+    // }
+
+    // * not allowing me to enter into fields 
+    // // Updating a field within bout data:
+    // setFormDataBout((fDataBout) => ({
+    //   ...fDataBout,
+    //   date: formDataBout.date,  // Replace with the actual field name and value
+    //   time: formDataBout.time, 
+    //   timeZone: formDataBout.timeZone, 
+    //   theme: formDataBout.theme,
+    //   description: formDataBout.description, 
+    //   level: formDataBout.level,
+    //   coEd: formDataBout.coEd,
+    //   ruleset: formDataBout.ruleset,
+    //   floorType: formDataBout.floorType,
+    //   jerseyColors: formDataBout.jerseyColors,
+    //   opposingTeam: formDataBout.opposingTeam,
+    //   team: formDataBout.team
+
+    // }));
+
+    // // Updating a field within address data:
+    // setFormDataAddress((fDataAddress) => ({
+    //   ...fDataAddress,
+    //   streetAddress: formDataAddress.streetAddress, 
+    //   city: formDataAddress.city,  // Replace with the actual field name and value
+    //   state: formDataAddress.state,  // Replace with the actual field name and value
+    //   zipCode: formDataAddress.zipCode, 
+    // }));
+
+    console.log(" &&&&&&&&&&&&&&&&&&&&&&&&& formDataBout in BoutForm:", formDataBout)
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&formDataAddress in BoutForm:", formDataAddress)
   };
-
-  /** toggle dropdown */
-
-// const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   /** render form */
 
@@ -249,17 +277,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
                       <Label htmlFor="state">State: </Label>
                        
-                       {/* <Input
-                           type="text"
-                           id="state"
-                           name="state"
-                           value={formDataAddress.state}
-                           onChange={handleChange}
-                           placeholder="State"
-                           // valid={valid}
-                           // invalid={invalid}
-                       />         */}
-
                       <Input
                         type="select"
                         placeholder="State"

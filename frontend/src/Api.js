@@ -183,22 +183,29 @@ class FastApi {
     static async addBout(data) {
       console.log("hitting the addBout in api.js")
       console.log("!!!! data in addBout !!!!!", data)
-      // data["bout"]["type"] = "bout";
-      // console.log("!!!! data AGAIN in addBout !!!!!", data)
-      // let res = await this.request(`bouts/`, data, "post");
-      let fakeData = {
+      data["bout"]["type"] = "bout";
+     
 
-        "bout": {
-          "type": "bout", "date": "2024-02-10", "time": "13:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "FAKE DATA", "description": "blah blah blah", "level": "C", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and Blue", "floorType": "concrete", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
-        },
-      
-        "address": {
-        "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
-        }
-      
-      }
+      data["bout"]["group_id"] = 0; 
+      data["bout"]["chat_id"] = 0; 
+      console.log("!!!! data AGAIN in addBout !!!!!", data)
 
-      let res = await this.request(`bouts/`, fakeData, "post");
+      
+      let res = await this.request(`bouts/`, data, "post");
+
+      // let fakeData = {
+
+      //   "bout": {
+      //     "type": "bout", "date": "2024-02-10", "time": "13:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "FAKE DATA", "description": "blah blah blah", "level": "C", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and Blue", "floorType": "concrete", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
+      //   },
+      
+      //   "address": {
+      //   "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
+      //   }
+      
+      // }
+
+      // let res = await this.request(`bouts/`, fakeData, "post");
       console.log("res:", res)
       return res
     }
@@ -338,21 +345,62 @@ class FastApi {
   return res
   }
 
+       /** Get chat participants usernames by chat id*/
+
   static async getChatParticipants(chatId) {
     console.log("getChatById in API.JS is running")
+    console.log("chatId in api.js", chatId)
 
     let res = await this.request(`chat/${chatId}`);
     console.log("res:", res)
   return res
   }
+  
+       /** Get a single chat participant ids by chat id*/
+
+  static async getChatParticipantIds(chatId) {
+    console.log("getChatById in API.JS is running")
+    console.log("chatId in api.js", chatId)
+
+    let res = await this.request(`chat/participant/${chatId}`);
+    console.log("res:", res)
+  return res
+  }
+
+      /** Get group name by chat id*/
+
+  static async getGroupNameByChatId(chatId) {
+    console.log("getGroupNameByChatId in API.JS is running", chatId)
+
+    let res = await this.request(`group/name/${chatId}`);
+  
+    console.log("res:", res)
+  return res
+  }
 
   static async getChatHistoryByChatId(chatId) {
-    console.log("getChatById in API.JS is running")
+    console.log("getChatHistoryById in API.JS is running")
 
     let res = await this.request(`history/chat/${chatId}`);
     console.log("res:", res)
   return res
+  
   }
+
+    /** Add user to group*/
+
+  static async addUserToGroup(data) {
+    console.log("addUserToGroup in API.JS is running", data)
+
+    let res = await this.request(`groups/`, data, "post");
+  
+    console.log("res:", res)
+  return res
+  }
+
+
+
+
 
   // static async testing() {
   //   console.log("hitting testing in api.js")

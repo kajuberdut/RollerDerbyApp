@@ -169,7 +169,10 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             message_id = data_dict["messageId"]
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
+            # participant_ids = data_dict["participant_ids"]
+            # if participant_ids:
             participant_ids = sorted(data_dict["participantIds"])
+                
             date_time = data_dict["dateTime"]
             chat_id = data_dict["chatId"]
             
@@ -258,6 +261,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     
                     # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
                     participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
+                    print("!!!!!!!!!!!!participantData !!!!!!!!!!!!!!!:", participantData)
+                    
                     await manager.send_personal_message( participantData,  participant_connection)
                     
 
@@ -624,26 +629,16 @@ def get_mixer(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: 
         raise HTTPException(status_code=404, detail=f"Mixer with event id {event_id} not found.")
     
     return mixer
+
+
 # * post /bouts/ 
 # * creates a new bout 
-# !  working post bout without address field
-# @api_app.post("/bouts/", response_model=EventBase)
-# def create_bout(bout: Bout, db: Session = Depends(get_db)):
-    
-    
-#     print(traceback.format_exc())
-#     print("you are hitting the bouts post route!!!")
-#     print("****** bout *****:", bout)
-#     print("****** bout.time_zone *****:", bout.time_zone)
-#     print("****** type bout.time_zone *****:", type(bout.time_zone))
-   
-#     return crud.create_bout(db=db, bout=bout)
 
-# ! trial for posting bout information with an address
 @api_app.post("/bouts/", response_model=EventBase)
 def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: Bout, address: Address, db: Session = Depends(get_db)):
     
     print("!!!! bout !!!! in main.py STARTING OUT", bout)
+    
     
     existing_address = crud_get_address(db=db, address=address)
     
@@ -657,8 +652,35 @@ def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: Bout, addre
 
     if existing_bout: 
         raise HTTPException(status_code=409, detail=f"Bout already exists at the same address, on the same date, at the same time, and with the same teams.")
+    
+    # !creat a group associated with the bout and a chat associated with the bout
+    # todo add a group and create a chat for the group id
+    # todo add group_id and chat_id to frontend for bout submission
+    
+    group = {
+        "participant_ids": [],
+        "name": bout.theme
+    }
+    
+    group = crud_create_group(db=db, group=group)
+    print("************************group in create bout:", group)
+    print("************************group.group_id in create bout:", group.group_id)
+    bout.group_id = group.group_id
+    
+    chat = {
+        "group_id": group.group_id
+        }
+    
+    chat = crud_create_chat(db=db, chat=chat)
+    print("********************chat in create bout:", chat)
+    print("********************chat.chat_id in create bout:", chat.chat_id)
+    
+    bout.chat_id = chat.chat_id
+    
+    
    
     print("!!!! bout !!!! in main.py", bout)
+    # return "TESTING"
     return crud_create_bout(db=db, bout=bout)
 
 # @api_app.middleware("http")
@@ -1029,17 +1051,40 @@ def get_chats(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: S
     return chats_db
 
 # * get /chat/{chat_id}
-# * gets one chat by chat_id 
+# * gets participant usernames of chat by chat_id 
 
 @api_app.get("/chat/{chat_id}", response_model=list[str])
-def get_chat_participant(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
+def get_chat_participant_usernames(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
+    print("hitting /chat/chat_id in main.py")
+
+    #! may want to return group name instead later..... 
+     # todo NOTE YOU EDITED THIS IF THERE IS AN ERROR WITH WEB SOCKET CHAT START HERE  
+
+    group_id = crud_get_group_id_by_chat_id(db=db, chat_id=chat_id)
+    
+    participant_usernames = crud_get_participant_usernames_by_group_id(db=db, group_id=group_id)
+    print("participants in mian.py", participant_usernames)
+
+    return participant_usernames
+
+# * get /chat/{chat_id}
+# * gets participant ids of chat by chat_id 
+
+@api_app.get("/chat/participant/{chat_id}", response_model=list[int])
+def get_chat_participant_ids(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
     print("hitting /chat/chat_id in main.py")
 
     #! may want to return group name instead later.....  
 
-    participants = crud_get_group_id_by_chat_id(db=db, chat_id=chat_id)
+    group_id = crud_get_group_id_by_chat_id(db=db, chat_id=chat_id)
+    
+    participant_ids = crud_get_participant_ids_by_group_id(db=db, group_id=group_id)
+    print("participants in mian.py", participant_ids)
 
-    return participants
+    return participant_ids
+
+# * get /history/chat/{chat_id}
+# * gets history by chat_id
 
 @api_app.get("/history/chat/{chat_id}")
 def get_messages_by_chat_id(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -1047,6 +1092,40 @@ def get_messages_by_chat_id(token: Annotated[str, Depends(oauth2_scheme)], chat_
     db_messages = crud_get_messages_by_chat_id(db, chat_id=chat_id)
 
     return db_messages
+
+# * ????????????????????????? is this a post or a get route
+# * post /groups
+# * adds user to a group
+
+# todo add user to groups 
+
+# @api_app.post("/groups/", response_model=EventBase)
+@api_app.post("/groups/", response_model=UserGroup)
+def add_user_to_group(token: Annotated[str, Depends(oauth2_scheme)], user_group: UserGroup, db: Session = Depends(get_db)):
+    print("****** user_group *****:", user_group)
+    formatted_user_group = {
+                            "user_id": user_group.user_id,
+                            "group_id": user_group.group_id
+                        }
+    # * note: you could remove this formatting but if you do that you have to also do it in chats.
+    
+    user_group = crud_add_user_to_group(db=db, user_group=formatted_user_group)
+    
+    return user_group 
+    # return crud_add_user_to_group(db=db, user_group=user_group)
+
+# * get /group/name/{chat_id}
+# * get group name by chat_id
+
+@api_app.get("/group/name/{chat_id}")
+def get_group_name_by_chat_id(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
+        
+    db_group_name = crud_get_group_name_by_chat_id(db=db, chat_id=chat_id)
+
+    return db_group_name
+
+
+
 
 
 

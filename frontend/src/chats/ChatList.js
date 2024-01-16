@@ -68,6 +68,7 @@ const ChatList = ({handleChatList, handleChat}) => {
       <div className="ChatList-RenderCards" style={{marginRight: '25px'}}>
           <ul>
               {chats.map(chat => (
+      
                 <ChatComponent handleChat={handleChat} chat={chat} key={"Chat-" + chat.chatId} />
               ))}
           </ul>

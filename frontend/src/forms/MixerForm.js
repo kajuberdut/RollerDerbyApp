@@ -44,7 +44,7 @@ if(!user) {
   navigate('/')
 }
 
-let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All levels", coEd: "False", ruleset: "WFTDA", signupLink: ""};
+let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", signupLink: ""};
 
 let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
@@ -350,9 +350,9 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             // invalid={invalid}
                             >
                               <option
-                              value={"All levels"}
+                              value={"All Levels"}
                               >
-                                All levels
+                                All Levels
                               </option>
                               <option
                               value={"C"}

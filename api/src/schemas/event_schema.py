@@ -17,6 +17,8 @@ class EventBase(BaseModel):
     ruleset: str
     floor_type: str
     jersey_colors: str
+    group_id: int
+    chat_id: int
 
     
     class Config:

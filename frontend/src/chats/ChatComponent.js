@@ -22,6 +22,7 @@ import {
     }
 
     let key = chat.chatId;
+    console.log("key in chatComponent!!!!:", key)
 
      /** Render the card component */
       

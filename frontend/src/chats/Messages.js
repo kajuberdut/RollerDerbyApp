@@ -40,7 +40,7 @@ const Messages = ({handleMessages}) => {
     // const location = useLocation();
     // console.log(" **** use location in messages *****:", location)
     const pathname = window.location.pathname
-    console.log("***************pathname in Messages.js ******************", pathname)
+    // console.log("***************pathname in Messages.js ******************", pathname)
   
     // console.log("pathname:", pathname)
 
@@ -89,17 +89,17 @@ const Messages = ({handleMessages}) => {
   
     }, [messageToUser])
 
-    console.log("cardTextRef ****************************:", cardTextRef)
+    // console.log("cardTextRef ****************************:", cardTextRef)
 
-    useEffect(() => {
-      console.log("cardTextRef ****************************:", cardTextRef)
-      console.log("cardTextRef.current ****************************:", cardTextRef.current)
-      // if(cardTextRef.current) {
+    // useEffect(() => {
+    //   console.log("cardTextRef ****************************:", cardTextRef)
+    //   console.log("cardTextRef.current ****************************:", cardTextRef.current)
+    //   // if(cardTextRef.current) {
         
-      //   cardTextRef.current.scrollTop = cardTextRef.current.scrollHeight;
-      // }
-    // }, [messages]); // Re-run the effect when messages change
-    }, []);
+    //   //   cardTextRef.current.scrollTop = cardTextRef.current.scrollHeight;
+    //   // }
+    // // }, [messages]); // Re-run the effect when messages change
+    // }, []);
 
 
     // pathname.split("/")[-1]
