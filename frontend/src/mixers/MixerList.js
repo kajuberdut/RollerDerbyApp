@@ -18,20 +18,16 @@ function MixerList({getMixers}) {
 
   /** API get request for bouts */
 
-    async function getAllMixers(title) {
-      console.log("getAllBouts is running in BoutList.js")
-      let mixers = await getMixers();
-      console.log("mixers in MixerList.js", mixers)
-    //   try{
-    //     let bouts = await JoblyApi.getJobs(title);
-    //     setBouts(bouts);
-    //   } catch (errors) {
-    //   console.log("signup failed", errors);
-    //   return {success: false, errors};
-    // }
-      setMixers(mixers);
-      // setIsLoading(false); 
+  async function getAllMixers() {
+
+    try {
+      let mixers = await FastApi.getMixers();
+      setMixers(mixers)
+    } catch (errors) {
+      console.error("Get Mixers failed", errors);
+      return { success: false, errors };
     }
+  }
 
    /** Reloading jobs when it changes request for jobs */
 
@@ -65,18 +61,17 @@ function MixerList({getMixers}) {
   /** Render search bar and cards */
 
     return (
-      <div className="MixerList">
-        <SearchComponent setMixers={setMixers}/>
-        <h1>Mixers</h1>
-        <a href="/mixers/add">
-          {/* <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-            style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}> */}
-          <button className="MixerList-Button">
-            Create Mixer
-          </button>
-        </a>
-        {renderCards()}
-      </div>
+        
+        <div className="MixerList">
+          <SearchComponent setMixers={setMixers}/>
+          <h1>Mixers</h1>
+          <a href="/mixers/add">
+            <button className="MixerList-Button">
+              Create Mixer
+            </button>
+          </a>
+          {renderCards()}
+        </div>
     );
 
 }

@@ -350,18 +350,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
 # * get /users/ 
 # * returns all users  
 
-# @api_app.get("/users/", response_model=list[UserBase])
-# # def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(oauth2_scheme)):
-# # def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-# # *THIS APPEARS TO BE AUTHENTICATED AND EXPECTS A TOKEN NOW
-# def get_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    
-#     users = crud.get_users(db, skip=skip, limit=limit)
 
-#     return users
-
-# @api_app.get("/users/", response_model=list[schemas.UserBase])
-# @api_app.get("/users/", response_model=list[UserSchema.UserBase])
 @api_app.get("/users/", response_model=list[UserBase])
 def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(None), state: str = Query(None), username: str = Query(None), skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
@@ -416,45 +405,13 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
 @api_app.get("/login/{user_id}", response_model=UserDetailsPrivate)
 # @api_app.get("/login/{user_id}", response_model=UserBase)
 def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
-# def get_user(user_id: int, db: Session = Depends(get_db)):
+
     print("users/user_id is running")
     
     user = crud_get_user_by_id(db, user_id=user_id)
-    print("!!! user in /login/{user_id}", user)
-    print("!!! user.username", user.username)
-    print("!!! user.email", user.email)
-    print("!!! user.first_name", user.first_name)
-    print("!!! user.ruleset:", user.ruleset)
-    # !this is now returning the user with an empty ruleset or the rulesets themeselves.
-    # ? this is an empty object that is returning I dont know how to get the associated ruleset with this obect 
-    # print("user.ruleset in main.py :", user.ruleset)
-    # print("user.ruleset[0].name in main.py :", user.ruleset[0].name)
-    # print("user.ruleset.ruleset_id:", user.ruleset.ruleset_id)
-    
-    
-    # user.username
-    # user = crud.get_user_by_id(db, user_id=user_id)
+
     if user is None: 
-    # if user_id is None: 
-        raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")
-    
-    # user = {
-    # # "derby_name": user.derby_name,
-    # "username": user.username,
-    # "email": user.email,
-    # "first_name": user.first_name, 
-    # "last_name": user.last_name,
-    # "facebook_name": user.facebook_name, 
-    # "about": user.about,
-    # "primary_number": user.primary_number, 
-    # "secondary_number": user.secondary_number,
-    # "level": user.level,
-    # "ruleset_id": user.ruleset_id,
-    # "position_id": user.position_id,
-    # "location_id": user.location_id,
-    # "associated_leagues": user.associated_leagues
-    # }
-    
+        raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")  
     
     return user
 
@@ -463,17 +420,15 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
 
 @api_app.post("/users/", response_model=UserBase)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    print("you are hitting the users/post route!!!")
     
     hashed_password = hash_password(user.password)
-    print("hashed!!!!password!!!!", hashed_password)
 
     user.password = hashed_password   
-    # print(traceback.format_exc())
-    print("you are hitting the users/post route!!!")
-    print("&&& user &&&", user)
+
     
     db_user_email = crud_get_user_by_email(db, email=user.email)
-    print("db_user_email:", db_user_email)
+    
     if db_user_email:
         raise HTTPException(status_code=400, detail="Email already registered")
     
@@ -481,8 +436,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if db_user_username:
         raise HTTPException(status_code=400, detail="Derby name already registered")
     
-    # todo you will need to create a new access token for this I believe. 
-    return create_user(db=db, user=user)
+    return crud_create_user(db=db, user=user)
 
 
 # * put /users/{user_id} 
@@ -499,7 +453,7 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdate,
     
     print("**** ruleset ****:", ruleset)
     
-    existing_location = get_location(db=db, location=location)
+    existing_location = crud_get_location(db=db, location=location)
     
     if existing_location: 
         location_id = existing_location.location_id 

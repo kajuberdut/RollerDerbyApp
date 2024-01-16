@@ -7,9 +7,7 @@ import Loading from "../multiUse/loading/Loading"
 import {
   Card,
   CardBody,
-  CardTitle,
-  CardText,
-  Button
+  CardTitle
 } from "reactstrap";
 import SearchBarUsers from "../multiUse/searchBar/SearchBarUsers";
 import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUsers";
@@ -18,45 +16,42 @@ import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUse
  * Display users page
  */
 
-function UserList({getUsers}) {
+function UserList() {
 
     /** Set Users and is loading in state*/
 
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
+    const user = JSON.parse(localStorage.getItem('user'));
 
   /** API get request for users */
 
-    async function getAllUsers() {
+  async function getUsers() {
 
-      let users = await getUsers();
-      console.log("users in UserList.js:", users)
-    //   try{
-    //     let users = await FastApi.getUsers(title);
-    //     console.log("users", users)
-    //     setUsers(users);
-    //   } catch (err) {
-    //   console.log("Getting users failed in userList.js", err);
-    //   return {success: false, err};
-    // }
-     setUsers(users)
-     setIsLoading(false); 
+    try {
+      let users = await FastApi.getUsers();
+      setUsers(users)
+      setIsLoading(false)
+    } catch (errors) {
+      console.error("Get Users failed", errors);
+      return { success: false, errors };
     }
+  }
 
    /** Reloading jobs when it changes request for jobs */
 
     useEffect(() => {
-        getAllUsers();
+        getUsers();
     }, []);
 
 
   /** Display loading if API call is has not returned */
 
-    // if (isLoading) {
-    //   return (
-    //       <Loading />
-    //   )
-    // }
+    if (isLoading) {
+      return (
+          <Loading />
+      )
+    }
 
   /** Render the cards for jobs */
 
@@ -65,7 +60,9 @@ function UserList({getUsers}) {
         <div className="UserList-RenderCards">
             <ul>
                 {users.map(indUser => (
+                  indUser.username !== user.username ? (
                   <UserComponent indUser={indUser} key={"User-" + indUser.userId} />
+                  ) : null 
                 ))}
             </ul>
           </div>

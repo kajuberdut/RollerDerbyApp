@@ -12,7 +12,7 @@ import SearchComponent from "../multiUse/searchComponent/SearchComponent";
  * Display bouts list page
  */
 
-function BoutList({getBouts}) {
+function BoutList() {
 
     /** Set Bouts and is loading in state*/
 
@@ -21,20 +21,18 @@ function BoutList({getBouts}) {
 
   /** API get request for bouts */
 
-    async function getAllBouts(title) {
-      console.log("getAllBouts is running in BoutList.js")
-      let bouts = await getBouts();
+  async function getAllBouts() {
 
-    //   try{
-    //     let bouts = await JoblyApi.getJobs(title);
-    //     setBouts(bouts);
-    //   } catch (errors) {
-    //   console.log("signup failed", errors);
-    //   return {success: false, errors};
-    // }
-      setBouts(bouts);
-      // setIsLoading(false); 
+    try {
+      let bouts = await FastApi.getBouts();
+      setBouts(bouts)
+      // return { success: true };
+      return bouts
+    } catch (errors) {
+      console.error("Get Bouts failed", errors);
+      return { success: false, errors };
     }
+  }
 
    /** Reloading bouts when it changes request for bouts */
 
@@ -67,10 +65,9 @@ function BoutList({getBouts}) {
   
   /** Render search bar and cards */
 
-    return (
-      <>
-        <SearchComponent setBouts={setBouts}/>
+    return (   
         <div className="BoutList">
+        <SearchComponent setBouts={setBouts}/>
           <h1>Bouts</h1>
           <a href="/bouts/add">
             <button className="BoutList-Button">
@@ -79,7 +76,6 @@ function BoutList({getBouts}) {
           </a>
           {renderCards()}
         </div>
-      </>
     );
 
 }

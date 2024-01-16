@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-import FastApi from "../Api";
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
@@ -13,19 +11,14 @@ import {
     Label, 
     Input,
     Button,
-    FormFeedback,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
   } from "reactstrap";
-  import PropTypes from 'prop-types';
+
 
 /** 
  * Form for creating a user or updating a logged in user.
  */
 
-const SignupForm = ({signup, update}) => {
+const SignupForm = ({signup}) => {
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
@@ -57,60 +50,6 @@ const navigate = useNavigate();
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
   
-  /** Handle Submit by either creating user, updating profile, or returning an error message */
-
-//   const handleSubmit = async evt => {
-//     evt.preventDefault();   
-//     setFormData(INITIAL_STATE);
-
-     /** If user update profile*/
-
-    // if(user) {
-    //   const username = user.username;
-    //   const email = formData.email; 
-    //   const firstName = formData.firstName
-    //   const lastName = formData.lastName
-    
-    //   delete formData.username;
-    //   delete formData.email; 
-
-    //   update(formData, username);
-
-    //   let profileData = {
-    //     email: email, 
-    //     username: username,
-    //     isAdmin: user.isAdmin,
-    //     firstName: firstName,
-    //     lastName: lastName,
-    //     applications: user.applications
-    //   }
-    //     console.log("profileData:", profileData)
-    //     setUser(profileData)
-    //     console.log("USER!!!!!:", user)
-    //     setFormData(profileData);
-    //     // todo: this is working but you need to relook at it as I think you made it more complicated than needed. 
-
-    //   setValid(true)
-   
-    // }
-
-    /** If no user create profile or return error message*/
-
-//     if(!user) {
-//       let result = await signup(formData);
-
-//       if(result.success) {
-//         history.push("/")
-
-//       } else {
-//         let message = result.errors[0]
-//         setErrorMessage(message)
-//         setInvalid(true)
-//       }
-//     }
-
-//   };
-
   const handleSubmit = async evt => {
     evt.preventDefault();   
     setFormData(INITIAL_STATE);
@@ -124,9 +63,10 @@ const navigate = useNavigate();
 
     } else {
       // let message = result.errors[0]
-      let message = result
-      setErrorMessage(message)
-      setInvalid(true)
+      // let message = result
+      // setErrorMessage(message)
+      // setInvalid(true)
+      console.log("Signup broke")
     }
   }
 
@@ -150,8 +90,6 @@ const navigate = useNavigate();
     <section className="col-md-4 SignupForm">
         <Card>
             <CardTitle className="SignupForm-CardTitle">
-            {/* { !user && ( <h1>Create a Profile</h1> )}
-            { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Create a profile</h1>
             </CardTitle>
             <CardBody>
@@ -159,19 +97,7 @@ const navigate = useNavigate();
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                         <Label htmlFor="username" sm={10}>Derby Name: </Label>
-                        {/* { user && ( */}
-                        {/* <Input
-                            id="derbyName"
-                            name="derbyName"
-                            value={formData.derbyName}
-                            readOnly
-                            style={{backgroundColor: "lightGray", color: "black"}}
-                            invalid={invalid}
-                        /> */}
-                  
-                    {/* )}
-                   */}
-                        {/* { !user && ( */}
+                
                         <Input
                             id="username"
                             name="username"
@@ -216,8 +142,6 @@ const navigate = useNavigate();
 
                     </FormGroup>
 
-                    {/* { user && <Button >Save Changes</Button> }
-                    { !user && <Button >Create Profile</Button> } */}
                     <Button >Create Profile</Button>
                 </Form>
             </CardBody>

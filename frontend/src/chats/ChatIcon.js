@@ -7,7 +7,7 @@ import "./ChatIcon.css";
 
 function ChatIcon() {
     return (
-    <div className='ChatIcon'>
+    <div className='ChatIcon' role="ChatIcon">
       {/* <FontAwesomeIcon icon={faCommentAlt} style={{fontSize: '25px', marginRight: '7px'}}/> */}
       <FontAwesomeIcon icon={faCommentAlt} className='ChatIcon-Icon'/>
       {/* <FontAwesomeIcon icon={Star} style={{fontSize: '50px'}}/> */}

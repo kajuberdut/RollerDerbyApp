@@ -30,6 +30,11 @@ const ChatDetails = ({handleChat, chatId }) => {
     const [chat, setChat] = useState()
     const [chatParticipants, setChatParticipants] = useState([])
 
+    // ! this was getting our basic tests to pass but breaking the component.
+    // if(!chatId) {
+    //   return
+    // }
+
 
     // useEffect(() => {
     //   setMessageToUser(Number(pathname.split('/')[2]))

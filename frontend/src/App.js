@@ -105,6 +105,7 @@ function App() {
     async function signup(userData) {
       try {
       let token = await FastApi.signup(userData); 
+      console.log("token:", token)
     
       return { success: true};
       } catch (err) {
@@ -151,42 +152,6 @@ function App() {
       }
     }
 
-    async function getUsers() {
-
-      try {
-        let users = await FastApi.getUsers();
-        // return { success: true };
-        return users
-      } catch (errors) {
-        console.error("Get Users failed", errors);
-        return { success: false, errors };
-      }
-    }
-
-    async function getBouts() {
-
-      try {
-        let bouts = await FastApi.getBouts();
-        // return { success: true };
-        return bouts
-      } catch (errors) {
-        console.error("Get Bouts failed", errors);
-        return { success: false, errors };
-      }
-    }
-
-    async function getMixers() {
-
-      try {
-        let mixers = await FastApi.getMixers();
-        // return { success: true };
-        return mixers
-      } catch (errors) {
-        console.error("Get Bouts failed", errors);
-        return { success: false, errors };
-      }
-    }
-
     function handleMessages(userId) {
       console.log("!!!!!!!!!!!!!!!!! handleMessages is being clicked!!!!!!!!!!!!!")
       console.log("userId in App.js", userId)
@@ -225,8 +190,12 @@ function App() {
       <UserContext.Provider value={{user, setUser}}>
         <Fragment>
           <NavBar logout={logout}/>
-          <main>
+          {/* <main>
             <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
+          { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
+          </main> */}
+          <main>
+            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser}/>
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main>
           {/* {user && <Link to={`/chats/${user.userId}`}>

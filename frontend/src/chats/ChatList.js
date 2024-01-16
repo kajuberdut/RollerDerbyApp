@@ -8,14 +8,8 @@ import "./ChatList.css";
 import {
   Card,
   CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Label, 
-  Input,
   Button,
   CardHeader, 
-  CardText, 
   CardFooter
 } from "reactstrap";
 
@@ -71,7 +65,7 @@ const ChatList = ({handleChatList, handleChat}) => {
 
   const renderCards = () => {
     return (
-      <div className="ChatList-RenderCards">
+      <div className="ChatList-RenderCards" style={{marginRight: '25px'}}>
           <ul>
               {chats.map(chat => (
                 <ChatComponent handleChat={handleChat} chat={chat} key={"Chat-" + chat.chatId} />
@@ -89,16 +83,6 @@ const ChatList = ({handleChatList, handleChat}) => {
     {/* <SearchComponent setBouts={setBouts}/> */}
     <div className="ChatList">
 
-      {/* <h1>Chats</h1> */}
-
-      {/* <ul>
-               {chats.map(chat => (
-                <li>name: {chat.name} id: {chat.chatId}</li>
-                // <li>{chat.chatId}</li>
-               ))}
-       </ul> */}
-       {/* {renderCards()} */}
-    
     <Card className="ChatList"  style={{height: '800px', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
           <CardHeader style={{height: '40px'}}>
             <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>Chats</p>
