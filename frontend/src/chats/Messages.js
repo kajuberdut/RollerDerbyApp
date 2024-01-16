@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLocation } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import FastApi from "../Api";
 
@@ -35,6 +35,7 @@ const Messages = ({handleMessages}) => {
     const [messageToUser, setMessageToUser] = useState()
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const cardTextRef = useRef(null);
     // console.log("user in messages.js", user)
     // const location = useLocation();
     // console.log(" **** use location in messages *****:", location)
@@ -47,7 +48,6 @@ const Messages = ({handleMessages}) => {
       setMessageToUser(Number(pathname.split('/')[2]))
     })
     // let messageToUser = Number(pathname.split('/')[2])
-
 
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const Messages = ({handleMessages}) => {
         try {
           
           let chatHistory =  await FastApi.getChatHistory([messageToUser, user.userId]);
-          console.log("chatHistory in messages.py:", chatHistory)
+          // console.log("chatHistory in messages.py:", chatHistory)
           // console.log("otherUser", otherUser)
           // setOtherUser(otherUser);
           setMessages(chatHistory)
@@ -89,6 +89,17 @@ const Messages = ({handleMessages}) => {
   
     }, [messageToUser])
 
+    console.log("cardTextRef ****************************:", cardTextRef)
+
+    useEffect(() => {
+      console.log("cardTextRef ****************************:", cardTextRef)
+      console.log("cardTextRef.current ****************************:", cardTextRef.current)
+      // if(cardTextRef.current) {
+        
+      //   cardTextRef.current.scrollTop = cardTextRef.current.scrollHeight;
+      // }
+    // }, [messages]); // Re-run the effect when messages change
+    }, []);
 
 
     // pathname.split("/")[-1]
@@ -122,14 +133,14 @@ const Messages = ({handleMessages}) => {
 
         // Listen for messages
         socket.addEventListener("message", event => {
-          console.log("event in addeventListener:", event)
-          console.log("Message from server ", event.data)
-          console.log("JSON.parse(event.data)", JSON.parse(event.data))
+          // console.log("event in addeventListener:", event)
+          // console.log("Message from server ", event.data)
+          // console.log("JSON.parse(event.data)", JSON.parse(event.data))
           let eventData = JSON.parse(event.data)
 
           // setMessages((prevMessages) => [...prevMessages, { message: event.data }]);
           setMessages((prevMessages) => [...prevMessages, eventData ]);
-          console.log("messages:", messages)
+          // console.log("messages:", messages)
           // const eventDataUserId = event.data.split(": ")
           // const otherUserId = eventDataUserId[1].trim()
          
@@ -212,13 +223,13 @@ const Messages = ({handleMessages}) => {
         setFormData(INITIAL_STATE)
         
         }
-    console.log("messages:", messages)
-    {messages.map((message) => (
-      console.log("message in messages.map:", message),
-      console.log("message.message in messages.map:", message.message),
-      console.log("message.user_id in messages.map:", message.user_id),
-      console.log("user.userId", user.userId)
-    ))}
+    // console.log("messages:", messages)
+    // {messages.map((message) => (
+    //   console.log("message in messages.map:", message),
+    //   console.log("message.message in messages.map:", message.message),
+    //   console.log("message.user_id in messages.map:", message.user_id),
+    //   console.log("user.userId", user.userId)
+    // ))}
 
     const handleChange = evt => {
         console.log('handleChange is running')
@@ -244,7 +255,7 @@ const Messages = ({handleMessages}) => {
             <CardTitle tag="h5">
               Special Title Treatment
             </CardTitle>
-            <CardText style={{ overflowY: 'auto', height: 300 }}> 
+            <CardText ref={cardTextRef} style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                   // <div key={message.timestamp}>
                       <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>

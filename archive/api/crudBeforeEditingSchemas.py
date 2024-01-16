@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from ...api.src import models, schemas
 from fastapi import Request
 from typing import Union, Optional, Any, Annotated, List, Literal, TypeAlias
 from sqlalchemy.orm import joinedload

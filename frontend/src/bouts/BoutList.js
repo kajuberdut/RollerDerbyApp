@@ -51,14 +51,14 @@ function BoutList({getBouts}) {
       )
     }
 
-  /** Render the cards for jobs */
+  /** Render the a card for each bout */
 
     const renderCards = () => {
       return (
         <div className="BoutList-RenderCards">
             <ul>
                 {bouts.map(bout => (
-                  <CardComponent bout={bout} key={"Bout-" + bout.id} />
+                  <CardComponent bout={bout} key={"Bout-" + bout.boutId} />
                 ))}
             </ul>
           </div>

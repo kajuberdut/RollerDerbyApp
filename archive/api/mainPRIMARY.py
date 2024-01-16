@@ -19,6 +19,8 @@ from sqlalchemy.orm import Session
 # import socketio
 # # from . import sockets
 from fastapi_socketio import SocketManager
+
+from . import socket_manager
 # # ****
 
 # # from sockets import sio_app 
@@ -38,7 +40,7 @@ https://www.youtube.com/playlist?list=PL0Zuz27SZ-6NOkbTDxKi7grs_oxJhLu07
 
 
 import traceback
-from ...api.src import crud, models, schemas, socket_manager
+from ...api.src import crud, models, schemas
 
 # # ! authentication imports 
 from typing import Annotated, Any, Union

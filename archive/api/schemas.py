@@ -61,11 +61,11 @@ class UserPosition(BaseModel):
         
 # *** end user ruleset pydantic models ***
 
-class UserBase(BaseModel): 
-    user_id: int = Field(default_factory=lambda: 0)
-    # derby_name: str
-    username: str
-    email: str     
+# class UserBase(BaseModel): 
+#     user_id: int = Field(default_factory=lambda: 0)
+#     # derby_name: str
+#     username: str
+#     email: str     
     
 class UserCreate(UserBase):
     password: str

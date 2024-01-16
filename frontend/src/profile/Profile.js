@@ -117,7 +117,7 @@ function Profile() {
     // ! will need to rework this
 
     return (
-      <div className="PROFILE" style={{backgroundColor: 'white', padding: '100px'}} >
+      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px'}} >
 
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 

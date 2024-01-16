@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity, ARRAY
 from sqlalchemy.orm import relationship
-from .database import SQLAlchemyBase
+from ...api.src.database import SQLAlchemyBase
 
 print("models.py is running")
 

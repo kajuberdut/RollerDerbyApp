@@ -14,7 +14,6 @@ def get_chat_history(db: Session, participant_ids: List[int]):
         .all()
     )
     
-       chats = db.query(models.Chat).filter(models.Chat.group_id.in_(group_ids)).join(models.Chat, models.Group.group_id.in_(group_ids)).all()
 
     message_objects = []
     

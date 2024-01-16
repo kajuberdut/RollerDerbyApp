@@ -16,7 +16,9 @@ import Messages from './chats/Messages';
 // import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { jwtDecode } from "jwt-decode"
 import ChatIcon from "./chats/ChatIcon"
+import ChatList from './chats/ChatList';
 import { Link } from 'react-router-dom';
+import ChatDetails from './chats/ChatDetails';
 
 export const TOKEN_STORAGE_ID = "api-token";
 
@@ -28,6 +30,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const { default: jwt_decode } = require("jwt-decode");
   const [displayMessages, setDisplayMessages] = useState(false)
+  const [displayChatList, setDisplayChatList] = useState(false)
+  const [displayChats, setDisplayChats] = useState(false)
+  const [chatId, setChatId] = useState()
+
 
 
   // useEffect(() => {
@@ -187,6 +193,19 @@ function App() {
       displayMessages ? setDisplayMessages(false) : setDisplayMessages(true)
     }
 
+    function handleChat(chatId) {
+      console.log("!!!!!!!!!!!!!!!!! handleChat is being clicked!!!!!!!!!!!!!")
+      console.log("chatId in App.js", chatId)
+      setChatId(chatId)
+      displayChats ? setDisplayChats(false) : setDisplayChats(true)
+    }
+
+
+    function handleChatList() {
+      console.log("!!!!!!!!!!!!!!!!! handleChatList is being clicked!!!!!!!!!!!!!")
+      displayChatList ? setDisplayChatList(false) : setDisplayChatList(true)
+    }
+
      /** Display isLoading if API call is has not returned */
 
   if (isLoading) {
@@ -210,10 +229,14 @@ function App() {
             <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main>
-          {user && <Link to={`/chats/${user.userId}`}>
+          {/* {user && <Link to={`/chats/${user.userId}`}>
             <ChatIcon className="ChatIcon"/>
-          </Link>
+          </Link> } */}
+          {user && 
+            <div onClick={handleChatList}><ChatIcon className="ChatIcon"/></div>
           }
+          {user && displayChatList && <ChatList handleChatList={handleChatList} handleChat={handleChat} /> }
+          {user && displayChats && <ChatDetails handleChat={handleChat} chatId={chatId} /> }
         </Fragment>
         </UserContext.Provider>
       </BrowserRouter>
@@ -224,28 +247,3 @@ function App() {
   }
 
 export default App;
-
-
-// async function getUser() {
-//   console.log("token:", token)
-//   console.log("**** GETUSER IS RUNNING !!!")
-//     if (token) {
-
-//       try {
-//         let { sub } = jwtDecode(token);
-//         console.log("sub:", sub)
-//         // storing the token in static token in FastApi 
-//         FastApi.token = token;
-//         let user = await FastApi.getUserById(sub);
-//         console.log("!!!! user in app.js !!!!", user)
-//         setUser(user);
-//       } catch (err) {
-//         console.error("App loadUserInfo: problem loading", err);
-//         setUser(null);
-//       }
-//     }
-//     setIsLoading(false);
-//     console.log("setinfoloaded true")
-//   }
-//   getUser();
-// }, [token]);

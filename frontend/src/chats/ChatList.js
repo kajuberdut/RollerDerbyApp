@@ -1,18 +1,29 @@
 import React, { useContext, useState, useEffect } from "react";
 import FastApi from "../Api";
-import CardComponent from "../multiUse/cardComponent/CardComponent";
+import ChatComponent from "./ChatComponent";
 // import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
 import "./ChatList.css";
-// import SearchBar from "../multiUse/searchBar/SearchBarEvents";
-// import DatePick from "../multiUse/datePicker/DatePicker";
-// import SearchComponent from "../multiUse/searchComponent/SearchComponent";
+
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Form,
+  FormGroup,
+  Label, 
+  Input,
+  Button,
+  CardHeader, 
+  CardText, 
+  CardFooter
+} from "reactstrap";
 
 /** 
- * List Messages that that are active ??? 
+ * List Chats of logged in user
  */
 
-const ChatList = () => {
+const ChatList = ({handleChatList, handleChat}) => {
 
   /** render form */
 
@@ -26,7 +37,7 @@ const ChatList = () => {
 
 /** API get request for bouts */
 
-  async function getAllChats(title) {
+  async function getAllChats() {
     console.log("getAllBouts is running in BoutList.js")
     let chats = await FastApi.getChats(user.userId);
 
@@ -56,19 +67,19 @@ const ChatList = () => {
     )
   }
 
-/** Render the cards for jobs */
+  /** Render the a card for each chat */
 
-  // const renderCards = () => {
-  //   return (
-  //     <div className="BoutList-RenderCards">
-  //         <ul>
-  //             {messages.map(message => (
-  //               <MessageComponent message={message} key={"Message-" + message.messageId} />
-  //             ))}
-  //         </ul>
-  //       </div>
-  //     );
-  // }
+  const renderCards = () => {
+    return (
+      <div className="ChatList-RenderCards">
+          <ul>
+              {chats.map(chat => (
+                <ChatComponent handleChat={handleChat} chat={chat} key={"Chat-" + chat.chatId} />
+              ))}
+          </ul>
+        </div>
+      );
+  }
 
 /** Render search bar and cards */
 
@@ -78,24 +89,29 @@ const ChatList = () => {
     {/* <SearchComponent setBouts={setBouts}/> */}
     <div className="ChatList">
 
-      {/* <SearchBar getBouts={getBouts}/> */}
-      <h1>Chats</h1>
-      {/* {!chats && <h2>You have no messages.</h2>} */}
-      {/* {chats} */}
+      {/* <h1>Chats</h1> */}
 
-      <ul>
+      {/* <ul>
                {chats.map(chat => (
                 <li>name: {chat.name} id: {chat.chatId}</li>
                 // <li>{chat.chatId}</li>
                ))}
-       </ul>
-      {/* <a href="/bouts/add">
-        <button className="Bout-Button">
-          Create Bout
-        </button>
-      </a> */}
-      {/* {renderCards()} */}
-    </div>
+       </ul> */}
+       {/* {renderCards()} */}
+    
+    <Card className="ChatList"  style={{height: '800px', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
+          <CardHeader style={{height: '40px'}}>
+            <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>Chats</p>
+            <Button onClick={handleChatList} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
+          </CardHeader>
+          <CardBody>
+          {renderCards()}
+             
+          </CardBody>
+          <CardFooter>
+          </CardFooter>
+        </Card>
+        </div>
     </>
   );
 

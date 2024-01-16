@@ -331,9 +331,25 @@ class FastApi {
   }
 
   static async getChats(userId) {
-    console.log("getChatHIstory in API.JS is running")
+    console.log("getChat in API.JS is running")
 
     let res = await this.request(`chats/${userId}`);
+    console.log("res:", res)
+  return res
+  }
+
+  static async getChatParticipants(chatId) {
+    console.log("getChatById in API.JS is running")
+
+    let res = await this.request(`chat/${chatId}`);
+    console.log("res:", res)
+  return res
+  }
+
+  static async getChatHistoryByChatId(chatId) {
+    console.log("getChatById in API.JS is running")
+
+    let res = await this.request(`history/chat/${chatId}`);
     console.log("res:", res)
   return res
   }
