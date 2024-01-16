@@ -19,8 +19,8 @@ function BoutDetail() {
     const [bout, setBout ] = useState([]);
     const [address, setAddress ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [button, setButton] = useState("Join Chat");
-    const [disableButton, setDisableButton] = useState(false)
+    // const [button, setButton] = useState("Join Chat");
+    // const [disableButton, setDisableButton] = useState(false)
 
       //   /** Retrieve user from local storage  */ 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -65,8 +65,8 @@ function BoutDetail() {
       let result = await FastApi.addUserToGroup(data); 
 
       if(result.success) {
-        setButton("Joined");
-        setDisableButton(true);
+        // setButton("Joined");
+        // setDisableButton(true);
         // user.applications.push(job.id);
       } 
 
@@ -83,12 +83,13 @@ function BoutDetail() {
               <MDBCol lg="9" xl="10">
                 <MDBCard style={{minWidth: '300px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                   <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px'}}>
-                  {/* <a href="/setup"> */}
-                    <button type="button" className="btn btn-outline-dark" onClick={handleClick} data-mdb-ripple-color="dark" disabled={disableButton}
+           
+                    <button type="button" className="btn btn-outline-dark" onClick={handleClick} data-mdb-ripple-color="dark"
                       style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
-                      {button}
+                      {/* {button} */}
+                      Join Chat
                     </button>
-                  {/* </a> */}
+                
 
                     <div className="ms-3" style={{display: 'flex'}}>
                       <MDBCardText tag="h1" style={{ marginTop: '50px'}}>{bout.theme}</MDBCardText>

@@ -8,7 +8,7 @@ import "./MixerDetails.css"
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 
 /**  
- * Bout detail form
+ * Mixer detail form
  */
 
 function MixerDetail() {
@@ -20,11 +20,11 @@ function MixerDetail() {
     const [address, setAddress ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const user = JSON.parse(localStorage.getItem('user'));
 
+  //   /** API get request for a specific mixer */ 
 
-  //   /** API get request for a specific bout */ 
-
-    async function getBout() {
+    async function getMixer() {
       let mixer = await FastApi.getMixer(eventId.id);
       let address = await FastApi.getAddress(mixer.addressId)
       console.log("address:", address)
@@ -35,11 +35,10 @@ function MixerDetail() {
     }
    
 
-    /** Reloading company jobs when it changes request for company jobs */
+    /** Reloading mixers when it changes request for mixers */
    
     useEffect(() => {
-      // getCompanyJobs();
-      getBout();
+      getMixer();
     }, []);
 
     /** Display isLoading if API call is has not returned */
@@ -50,20 +49,41 @@ function MixerDetail() {
       )
     }
 
-    // ! going to have to adjust this 
+       /** Handle click of button  */
+
+       async function handleClick(e) {
+        e.preventDefault(); 
+  
+        let data = {userId: `${user.userId}`, groupId: `${mixer.groupId}`}
+        console.log("data in BoutDetails.js", data)
+  
+        let result = await FastApi.addUserToGroup(data); 
+  
+        if(result.success) {
+          // setButton("Joined");
+          // setDisableButton(true);
+          // user.applications.push(job.id);
+        } 
+  
+      }
 
     return (
 
       // <section key={"BoutDetail" + event_id}>
-      <section>
+    <section>
 
 
-<div className="MixerDetails" style={{marginRight: '35%', marginTop: '150px'}} >
-<MDBContainer>
-          <MDBRow className="justify-content-center align-items-center h-100"> 
+        <div className="MixerDetails" style={{marginRight: '35%', marginTop: '150px'}} >
+          <MDBContainer>
+            <MDBRow className="justify-content-center align-items-center h-100"> 
             <MDBCol lg="9" xl="10">
               <MDBCard style={{minWidth: '300px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px'}}>
+
+                  <button type="button" className="btn btn-outline-dark" onClick={handleClick} data-mdb-ripple-color="dark"
+                      style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
+                      Join Chat 
+                  </button>
 
                   <div className="ms-3" style={{display: 'flex'}}>
                     <MDBCardText tag="h1" style={{ marginTop: '50px'}}>{mixer.theme}</MDBCardText>

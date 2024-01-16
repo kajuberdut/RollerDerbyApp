@@ -247,6 +247,9 @@ class FastApi {
     static async addMixer(data) {
       console.log("hitting the addMixer in api.js")
       console.log("!!!!!!!!!!!!!! data !!!!!!!!!!!!!", data)
+      data["mixer"]["type"] = "mixer";
+      data["mixer"]["group_id"] = 0; 
+      data["mixer"]["chat_id"] = 0; 
       let res = await this.request(`mixers/`, data, "post");
       console.log("res:", res)
       return res

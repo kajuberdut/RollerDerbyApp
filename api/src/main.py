@@ -764,6 +764,22 @@ def create_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: Mixer, ad
   
     # print("bout!!!! in post bouts:", bout)
     # crud.create_bout(db=db, bout=bout)
+    
+    group = {
+        "participant_ids": [],
+        "name": mixer.theme
+    }
+    
+    group = crud_create_group(db=db, group=group)
+    
+    mixer.group_id = group.group_id
+    
+    chat = {
+        "group_id": group.group_id
+        }
+    chat = crud_create_chat(db=db, chat=chat)
+    
+    mixer.chat_id = chat.chat_id
    
     return crud_create_mixer(db=db, mixer=mixer)
 

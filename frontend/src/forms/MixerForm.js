@@ -29,7 +29,6 @@ const { user, setUser } = useContext(UserContext);
 //   const [ valid, setValid ] = useState(false);
 //   const [ invalid, setInvalid ] = useState(false);
 //   const [errorMessage, setErrorMessage] = useState([]);
-const [dropdownOpen, setDropdownOpen] = useState(false);
 // const [file, setFile] = useState<File | undefined>();
 // const [preview, setPreview] = useState<string | undefined>();
 const navigate = useNavigate();
@@ -44,37 +43,28 @@ if(!user) {
   navigate('/')
 }
 
-let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", signupLink: ""};
+let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", signupLink: ""};
 
 let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
   /** Sets formData in initial state */
-  const [formData, setFormData] = useState(INITIAL_STATE);
 
+  const [formDataMixer, setFormDataMixer] = useState(INITIAL_STATE);
   const [formDataAddress, setFormDataAddress] = useState(INITIAL_STATE_ADDRESS);
   
   /** Handle Submit by either creating user, updating profile, or returning an error message */
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
-    console.log("FormData in SetupProfileForm.js", formData)
-    setFormData(INITIAL_STATE);
+
+
+    setFormDataAddress(INITIAL_STATE_ADDRESS)
+    setFormDataMixer(INITIAL_STATE);
    
-    // async function createBout() {
+    formDataMixer.addressId = 0
 
-        // try {
-      
-        //   // return { success: true };
-        // //   return bout
-        // } catch (errors) {
-        //   console.error("Get Bouts failed", errors);
-        //   return { success: false, errors };
-        // }
- 
-    // console.log("update!!!!!:", update)
-    // let result = await update(formData);
-
-    //   setValid(true)
+    const formData = {mixer: formDataMixer, address: formDataAddress}
+  
     let result = await FastApi.addMixer(formData);
     if(result) {
       navigate('/mixers')
@@ -94,17 +84,22 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
     const { name, value }= evt.target;
 
-    setFormData(fData => ({
-      ...fData,
-      [name]: value,
-      
-    }));
-    console.log("formData in BoutForm:", formData)
+    if(name === "date" || name === "time" || name === "timeZone" || name === "theme" || name === "description" || name === "level" || name === "coEd" || name === "ruleset" || name === "floorType" || name === "jerseyColors" || name === "signupLink") {
+      setFormDataMixer(fData => ({
+        ...fData,
+        [name]: value,
+        
+      }));
+      }
+
+    if(name === "streetAddress" || name === "city" || name === "state" || name === "zipCode") {
+      setFormDataAddress(fData => ({
+        ...fData,
+        [name]: value,
+        
+      }));
+    }
   };
-
-  /** toggle dropdown */
-
-// const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   /** render form */
 
@@ -112,8 +107,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
     <section className="col-md-4 MixerForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="MixerForm-CardTitle">
-            {/* { !user && ( <h1>Create a Profile</h1> )}
-            { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Create a Mixer</h1>
             </CardTitle>
             <CardBody>
@@ -126,7 +119,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                           type="date"
                           id="date"
                           name="date"
-                          value={formData.date}
+                          value={formDataMixer.date}
                           onChange={handleChange}
                           // valid={valid}
                           // invalid={invalid}
@@ -138,7 +131,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            type="time"
                            id="time"
                            name="time"
-                           value={formData.time}
+                           value={formDataMixer.time}
                            onChange={handleChange}
                            placeholder="Time"
                            required
@@ -152,7 +145,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="select"
                             name="timeZone"
                             className="form-control"
-                            value={formData.timeZone}
+                            value={formDataMixer.timeZone}
                             onChange={handleChange}
                             placeholder="Time Zone"
                             id="timeZone"
@@ -317,7 +310,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="text"
                             id="theme"
                             name="theme"
-                            value={formData.theme}
+                            value={formDataMixer.theme}
                             onChange={handleChange}
                             placeholder="Theme"
                             // valid={valid}
@@ -329,7 +322,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="textarea"
                             name="description"
                             className="form-control"
-                            value={formData.description}
+                            value={formDataMixer.description}
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
@@ -342,7 +335,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="select"
                             name="level"
                             className="form-control"
-                            value={formData.level}
+                            value={formDataMixer.level}
                             onChange={handleChange}
                             placeholder="level"
                             id="level"
@@ -392,7 +385,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             {/* </Col> */}
                             </Input>
            
-                        <Label htmlFor="level">Is the bout co-ed? </Label>
+                        <Label htmlFor="level">Is the mixer co-ed? </Label>
                         <Input
                             type="select"
                             name="coEd"
@@ -421,7 +414,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="select"
                             name="ruleset"
                             className="form-control"
-                            value={formData.ruleset}
+                            value={formDataMixer.ruleset}
                             onChange={handleChange}
                             placeholder="Ruleset"
                             id="ruleset"
@@ -450,12 +443,38 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                               </option>
                         </Input>
 
+                        <Label htmlFor="floorType">Type of Floor: </Label>
+                       
+                          <Input
+                              type="text"
+                              id="floorType"
+                              name="floorType"
+                              value={formDataMixer.floorType}
+                              onChange={handleChange}
+                              placeholder="Floor Type"
+                              // valid={valid}
+                              // invalid={invalid}
+                          />
+
+                      <Label htmlFor="jerseyColors">Jersey Colors: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="jerseyColors"
+                           name="jerseyColors"
+                           value={formDataMixer.jerseyColors}
+                           onChange={handleChange}
+                           placeholder="Both Teams Jersey Colors"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
                         <Label htmlFor="opposingTeam">Signup Link: </Label>
                         <Input
                             type="text"
                             name="signupLink"
                             className="form-control"
-                            value={formData.signupLink}
+                            value={formDataMixer.signupLink}
                             onChange={handleChange}
                             placeholder="Signup Link"
                             id="signupLink"

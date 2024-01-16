@@ -46,7 +46,7 @@ def crud_create_bout(db: Session, bout: Bout):
 def crud_create_mixer(db: Session, mixer: Mixer):
     """Create a specific mixer."""
 
-    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, address_id=mixer.address_id, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, floor_type=mixer.floor_type, jersey_colors=mixer.jersey_colors, signup_link=mixer. signup_link)
+    db_mixer = models.Mixer(type=mixer.type, date=mixer.date, address_id=mixer.address_id, time=mixer.time, time_zone=mixer.time_zone, theme=mixer.theme, description=mixer.description, level=mixer.level, co_ed=mixer.co_ed, ruleset=mixer.ruleset, floor_type=mixer.floor_type, jersey_colors=mixer.jersey_colors, signup_link=mixer.signup_link, group_id=mixer.group_id, chat_id=mixer.chat_id)
      
     db.add(db_mixer)
     db.commit()

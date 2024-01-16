@@ -52,35 +52,13 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
-   
-    console.log("********************** INITIAL_STATE_BOUT:", INITIAL_STATE_BOUT)
-    console.log("^^^^^^^^^^^^^^^ INITIAL_STATE_ADDRESS:", INITIAL_STATE_ADDRESS)
 
     setFormDataAddress(INITIAL_STATE_ADDRESS)
     setFormDataBout(INITIAL_STATE_BOUT)
 
-    console.log("*********************** formDataBout:", formDataBout)
-    console.log("********************** formDataAddress:", formDataAddress)
-
     formDataBout.addressId = 0; 
 
     const formData = {bout: formDataBout, address: formDataAddress}
-    console.log("!!!!formData!!!!!:", formData)
-    console.log("!!!!formData['address']!!!!!:", formData['address'])
-
-    // todo this is what the formData needs to match 
-
-    // {
-
-    //   "bout": {
-    //     "type": "bout", "date": "2024-02-20", "time": "14:00", "time_zone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "February Slam", "description": "Testing on Jan 9th 2024", "level": "B", "co_ed": true, "ruleset": "WFTDA", "jersey_colors": "white and green", "floor_type": "polished wood", "opposing_team": "Cheynne Capidolls", "team": "Wydaho", "address_id": 6, "group_id": 0, "chat_id": 0
-    //   },
-    
-    //   "address": {
-    //   "street_address": "513 Main St", "city": "Boise", "state": "ID", "zip_code": "55555"
-    //   }
-    
-    // }
 
     let result = await FastApi.addBout(formData);
     if(result) {
@@ -116,47 +94,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
         
       }));
     }
-
-    
-    // if (name.startsWith("formDataBout")) { // Fields related to bout data
-    //   setFormDataBout((fDataBout) => ({
-    //     ...fDataBout,
-    //     [name]: value,
-    //   }));
-    // } else if (name.startsWith("formDataAddress")) { // Fields related to address data
-    //   setFormDataAddress((fDataAddress) => ({
-    //     ...fDataAddress,
-    //     [name]: value,
-    //   }));
-    // }
-
-    // * not allowing me to enter into fields 
-    // // Updating a field within bout data:
-    // setFormDataBout((fDataBout) => ({
-    //   ...fDataBout,
-    //   date: formDataBout.date,  // Replace with the actual field name and value
-    //   time: formDataBout.time, 
-    //   timeZone: formDataBout.timeZone, 
-    //   theme: formDataBout.theme,
-    //   description: formDataBout.description, 
-    //   level: formDataBout.level,
-    //   coEd: formDataBout.coEd,
-    //   ruleset: formDataBout.ruleset,
-    //   floorType: formDataBout.floorType,
-    //   jerseyColors: formDataBout.jerseyColors,
-    //   opposingTeam: formDataBout.opposingTeam,
-    //   team: formDataBout.team
-
-    // }));
-
-    // // Updating a field within address data:
-    // setFormDataAddress((fDataAddress) => ({
-    //   ...fDataAddress,
-    //   streetAddress: formDataAddress.streetAddress, 
-    //   city: formDataAddress.city,  // Replace with the actual field name and value
-    //   state: formDataAddress.state,  // Replace with the actual field name and value
-    //   zipCode: formDataAddress.zipCode, 
-    // }));
 
     console.log(" &&&&&&&&&&&&&&&&&&&&&&&&& formDataBout in BoutForm:", formDataBout)
     console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&formDataAddress in BoutForm:", formDataAddress)
