@@ -1,0 +1,170 @@
+from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Annotated
+from ..dependencies import oauth2_scheme, get_db, hash_password
+
+from ..schemas.user_schema import *
+from ..schemas.location_schema import *
+
+from ..crud.user_crud import *
+from ..crud.insurance_crud import *
+from ..crud.location_crud import *
+from ..crud.position_crud import *
+from ..crud.ruleset_crud import *
+
+router = APIRouter()
+
+
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
+# * get /users/ 
+# * returns all users  
+
+@router.get("/users/", response_model=list[UserBase])
+def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(None), state: str = Query(None), username: str = Query(None), skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    print("you are hitting users route in user_router.py !!!!!!!!!! ")
+    
+    
+    users = crud_get_users(db, city=city, state=state, username=username, skip=skip, limit=limit)
+
+    return users
+
+# * get /users/{userId} 
+# * returns one specific user
+
+@router.get("/users/{user_id}", response_model=UserDetailsPublic)
+# Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
+
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+    print("YOU ARE HITTING THE /users/{user_id} ROUTE")
+    
+    user = crud_get_user_by_id(db, user_id=user_id)
+    
+    if user_id is None: 
+        raise HTTPException(status_code=404, detail=f"User with derby name {user_id} not found.")
+    
+    return user
+
+# * post /users/ 
+# * creates a new user 
+
+@router.post("/users/", response_model=UserBase)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    print("you are hitting the users/post route!!!")
+    
+    hashed_password = hash_password(user.password)
+
+    user.password = hashed_password   
+
+    db_user_email = crud_get_user_by_email(db, email=user.email)
+    
+    if db_user_email:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    db_user_username = crud_get_user_by_username(db, username=user.username)
+    if db_user_username:
+        raise HTTPException(status_code=400, detail="Derby name already registered")
+    
+    return crud_create_user(db=db, user=user)
+
+# * put /users/{user_id} 
+# * updates an existing user with rulesets and location positions
+# # ! moved this one over to routers 
+
+# ! NEED TO VERIFY THAT THE TOKEN MATCHES THE USER WE ARE TRYING TO UPDATE
+
+@router.put("/users/{user_id}", response_model=UserUpdate)
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdate, ruleset: list[Ruleset], position: list[Position], insurance: list[Insurance], location: Location, user_id: int, db: Session = Depends(get_db)):
+    print("/users/{user_id} is running in user_router.py")
+    # ! location_id is 0 here 
+    
+    
+    print("**** ruleset ****:", ruleset)
+    
+    existing_location = crud_get_location(db=db, location=location)
+    
+    if existing_location: 
+        location_id = existing_location.location_id 
+    else: 
+        location_id = crud_create_location(db=db, location=location)
+        print("**************** location_id in main.py***********", location_id)
+    
+    user.location_id = location_id
+    
+    for pos in position:
+        existing_position = crud_get_position(db=db, position=pos)
+    
+        if existing_position: 
+            position_id = existing_position.position_id 
+        else: 
+            position_id = crud_create_position(db=db, position=pos)
+    
+        existing_user_position = crud_get_user_position_by_id(db, user_id=user_id, position_id=position_id)
+        print("does existing_user_position exist?", existing_user_position)
+        if not existing_user_position:
+            print("crud existing_user_position does NOT exist")
+            new_e_u_p = crud_create_user_position(db, user_id=user_id, position_id=position_id)
+            # print("new existing user position:", new_e_u_p)
+ 
+    
+    # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
+    for rs in ruleset: 
+        existing_ruleset = crud_get_ruleset(db=db, ruleset=rs) 
+    
+        if existing_ruleset: 
+            ruleset_id = existing_ruleset.ruleset_id
+        else: 
+            ruleset_id = crud_create_ruleset(db=db, ruleset=rs)
+
+        existing_user_ruleset = crud_get_user_ruleset_by_id(db, user_id=user_id, ruleset_id=ruleset_id)
+        print("does existing_user_ruleset exist?", existing_user_ruleset)
+        if not existing_user_ruleset:
+            print("crud existing_user_ruleset does NOT exist")
+            new_e_u_r = crud_create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
+            # print("new existing user ruleset:", new_e_u_r)
+            
+    for ins in insurance: 
+
+        existing_insurance = crud_get_insurance(db=db, insurance=ins)
+      
+        if existing_insurance: 
+            insurance_id = existing_insurance.insurance_id
+
+        else: 
+            insurance_id = crud_create_insurance(db=db, insurance=ins)
+ 
+        existing_user_insurance = crud_get_user_insurance_by_id(db, user_id=user_id, insurance_id=insurance_id)
+     
+        if not existing_user_insurance:
+            new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
+  
+    print('user in /users/{user_id}', user)
+    
+    db_user = crud_get_user_by_id(db, user_id=user_id)    
+    
+    if not db_user:
+        raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+    return crud_update_user(db=db, user=user, user_id=user_id)
+
+# * delete /users/{user_id} 
+# * deletes an existing user 
+
+# ! WILL HAVE TO VERIFY THAT THE TOKEN MATCHES THE USER THAT YOU ARE TRYING TO DELETE 
+# ! WILL ALSO NEED A FORM TO SUBMIT PASSWORD AND WILL HAVE TO CHECK THAT AGAINST THE db_user
+@router.delete("/users/{user_id}", response_model=UserDelete)
+def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserDelete, user_id: int, db: Session = Depends(get_db)):
+    
+    db_user = crud_get_user_by_id(db, user_id=user.user_id)      
+    
+    if not db_user:
+        raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+    crud_delete_user(db=db, user=user, user_id=user.user_id)
+    return { "user_id": 0, "password": "deleted"}
+
