@@ -73,17 +73,17 @@ import {
      /** Render the card component */
       
       return (
-          <div key={"User-Component-" + indUser.userId}>
+          <div key={"UserComponent-" + indUser.userId}>
             <Card className="UserComponent"> 
               <CardBody>
-                  <NavLink exact to={`/users/${indUser.userId}`} className="UserCard-Link">
+                  <NavLink exact to={`/users/${indUser.userId}`} className="UserComponent-Link" style={{color: '#555555'}}>
                 <CardTitle className="text-center UserComponent-Title">
                   <h4>{indUser.username}</h4>
                 </CardTitle>
                   </NavLink>
                  <CardTitle> 
                  </CardTitle>
-                <CardText className="CardComponent-Text">
+                <CardText className="UserComponent-Text">
                 </CardText>
               </CardBody>
             </Card>

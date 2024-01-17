@@ -93,10 +93,10 @@ import {
      /** Render the card component */
       
       return (
-          <section key={"Card-Component-" + key}>
+          <section key={"CardComponent-" + key}>
             <Card className="CardComponent"> 
               <CardBody>
-                  <NavLink exact to={`/${type}/${key}`} className="CompanyCard-Link" style={{color: '#555555', }}>
+                  <NavLink exact to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555'}}>
                 <CardTitle className="text-center CardComponent-Title">
                   <h3>{info.theme}</h3>
                 </CardTitle>

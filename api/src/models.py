@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity, ARRAY
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity, LargeBinary
 from sqlalchemy.orm import relationship
 from .database import SQLAlchemyBase
 
@@ -59,6 +59,7 @@ class User(SQLAlchemyBase):
     username = Column(String, unique=True)
     hashed_password = Column(String)
     email = Column(String, unique=True, index=True)
+    image = Column(LargeBinary, nullable=True)
     phone_number = Column(String, nullable=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)

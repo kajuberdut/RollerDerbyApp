@@ -154,6 +154,19 @@ class FastApi {
     // return "hello"
     }
 
+    /** Update user profile by data */
+
+    static async updateUserProfile(userId, data) {
+    console.log("data: in api.js", data)
+    // console.log("derbyName!!!:", derbyName)
+    console.log("updateUser in api.js is running which means the error is after that")
+
+   
+    let res = await this.request(`users/profile/${userId}`, data, "put");
+    return res;
+
+    }
+
   /** Delete user */
 
   static async deleteUser(userId) {

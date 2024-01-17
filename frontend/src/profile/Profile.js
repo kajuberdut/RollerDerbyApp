@@ -130,7 +130,7 @@ function Profile() {
                   <MDBCardImage src="/skater_02.svg"
                       alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   </div>
-                  <a href="/setup">
+                  <a href="/setup/profile">
                     <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
                       style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
                       Edit
@@ -193,7 +193,7 @@ function Profile() {
                                   <h2>Private Information </h2>
                                   <h3>Will be shared with team admin only.</h3>
                                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
-                                      <a href="/setup">
+                                      <a href="/setup/private">
                                           <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
                                             style={{zIndex: 1, height: '35px', backgroundColor: '#d1d2d4', position: 'absolute', top: '10px', right: '20px', marginTop: '10px', fontSize: '15px'}}>
                                             Edit

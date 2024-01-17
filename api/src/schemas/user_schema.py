@@ -27,6 +27,7 @@ class UserDelete(BaseModel):
     
 class UserUpdate(UserBase):
     """Pydantic class for update user."""
+    image: bytes
     phone_number: str
     first_name: str
     last_name: str
@@ -53,8 +54,24 @@ class UserUpdate(UserBase):
             raise ValueError("Invalid phone number format. Please enter a 10-digit number")
         return value
     
+class UserUpdateProfile(BaseModel):
+    """Pydantic class for update profile user (public details)."""
+    username: str
+    image: bytes
+    facebook_name: str
+    about: str
+    primary_number: int
+    level: str
+    ruleset: Ruleset = None
+    position: Position = None
+    location_id: int
+    associated_leagues: str
+    # ruleset_id: int
+    # position_id: int
+    
 class UserDetailsPublic(UserBase): 
     """Pydantic class for user details public that inherits from user base."""
+    image: Optional[bytes] = None
     facebook_name: Optional[str] = None 
     about: Optional[str] = None 
     primary_number: Optional[int] = None

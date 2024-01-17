@@ -38,78 +38,67 @@ const navigate = useNavigate();
 const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
 const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
 const [formRulesets, setFormRulesets] = useState([]);
+const [formPositions, setFormPositions] = useState([]);
 const [displayRulesets, setDisplayRulesets] = useState([]);
+const [displayPositions, setDisplayPositions] = useState([]);
 const [primIns, setPrimIns] = useState([]);
 const [secIns, setSecIns] = useState([]);
 
 
-// if(!user) {
-//   navigate('/')
-// }
+if(!user) {
+  navigate('/')
+}
 
 console.log("USER IN EDIT PROFILE PAGE", user)
 
-// if(user.insurance) {
-//   getUserInsurance()
-// }
-
-let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, email: user.email,  facebookName: user.facebookName, about: user.about, primNum: user.primaryNumber, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associatedLeagues };
+let INITIAL_STATE = { username: user.username, image: "", city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
 
   /** Sets formData in initial state */
+
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   function format(formData) {
-    console.log("formData.secIns", formData.secIns)
-    let ins1 = formData.primIns
-    let val1 = formData.primInsNum
-    let ins2 = formData.secIns
-    let val2 = formData.secInsNum
-    // ! will have to prefill rulesets - primary insurance, secondary, insurance, 
 
-    let newData = {
-      username: formData.username, phoneNumber: formData.phoneNumber, firstName: formData.firstName, lastName: formData.lastName, additional_info: formData.additionalInfo, email: formData.email,  facebookName: formData.facebookName, about: formData.about, primNum: formData.primNum, secNum: formData.secNum, level: formData.level, primIns: { [ins1]: val1 }, secIns: { [ins2]: val2 }, assocLeagues: formData.assocLeagues, rulesets: formRulesets
-    }
-    console.log("newData:", newData)
-  }
-  
-    /** Get user insurance information if it exists */
-
-  async function getUserInsurance() {
-    if(user.insurance[0]) {
-      let primIns = await FastApi.getInsurance(user.insurance[0].insurance_id)
-      console.log("primIns:", primIns)
-      setPrimIns(primIns)
-    }
-  
-    let insArr = []
-    // for(let ins of user.insurance) {
-    //   let insurance = await FastApi.getInsurance(ins.insurance_id);
-    //   insArr.push(insurance.type + ":")
-    //   insArr.push(ins.insurance_number)
-    // }
-    // if(insArr.length > 2){
-    //   insArr[1] += ","
-    // }    
-    // let userInsurances = insArr.join(" ")
-    // setInsurances(userInsurances)
+      let data = {
+        user: {
+          username: formData.username, image: formData.image, facebookName: formData.facebookName, about: formData.about, primaryNumber: formData.primNum, level: formData.level, positionId: 0, locationId: 0, associatedLeagues: formData.assocLeagues
+        }, 
+        location: {
+          city: formData.city,
+          state: formData.state
+        }
+    
+      }
+      data["ruleset"] = formRulesets;
+      data["position"] = formPositions;
+      console.log("data:", data);
+      
+      return data;
   }
 
+  // debugging purposes only 
+
+    useEffect(() => {
+      console.log("formRulesets:", formRulesets);
+      console.log("formPositions:", formPositions);
+  }, [formRulesets, formPositions]);
+
+  
 
   /** Handle Submit by either creating user, updating profile, or returning an error message */
-
   const handleSubmit = async evt => {
     evt.preventDefault();   
     console.log("FormData in SetupProfileForm.js", formData)
     setFormData(INITIAL_STATE);
    
     console.log("update!!!!!:", update)
-    format(formData)
+    let formattedData = format(formData);
     // let result = await update(formData);
-    let result = false; 
+    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData); 
     console.log("fake form data has been submitted")
 
     //   setValid(true)
-    if(result) {
+    if(updateProfile) {
       navigate('/profile')
 
     } else {
@@ -141,44 +130,39 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
         return [...prevRulesets, ...newRulesets];
       });
     console.log("!!!!!!!!!!!!!! formRulesets:", formRulesets)
-  };
 
-  const handleChange = evt => {
-    console.log('handleChange is running')
-    const { name, value }= evt.target;
+};
 
-    setFormData(fData => ({
-      ...fData,
-      [name]: value,
-    }));
+const handlePositionsChange = evt => {
+  console.log("you are hitting handlePositionsChange")
 
-    if (name === "primIns") {
-      if (value === "") {
-        setFormData((prevData) => ({
-          ...prevData,
-          primInsNum: "",
-        })); // Clear the insurance number field
-        setPrimInsNumDisabled(true); // Disable the insurance number field
-      } else {
-        setPrimInsNumDisabled(false); // Enable the insurance number field
-        // If needed, prompt for insurance number if it's still empty
-      }
-    };
-    if (name === "secIns") {
-      if (value === "") {
-        setFormData((prevData) => ({
-          ...prevData,
-          secInsNum: "",
-        })); // Clear the insurance number field
-        setSecInsNumDisabled(true); // Disable the insurance number field
-      } else {
-        setSecInsNumDisabled(false); // Enable the insurance number field
-        // If needed, prompt for insurance number if it's still empty
-  }
+  setFormPositions((prevPositions) => {
+    const newPositions = Array.from(evt.target.selectedOptions)
+      .map((option) => ({ positionId: 0, position: option.value }))
+      .filter((position) => !prevPositions.some((p) => p.name === position.name)); // Filter for unique names
+    return [...prevPositions, ...newPositions];
+  });
 
-  }
+  setDisplayPositions((prevPositions) => {
+    const newPositions = Array.from(evt.target.selectedOptions)
+      .map((option) => option.value)
+      .filter((positionName) => !prevPositions.includes(positionName)); // Filter for unique names
+    return [...prevPositions, ...newPositions];
+  });
+console.log("!!!!!!!!!!!!!! formPositions:", formPositions)
 
-    console.log("formData in setupProfileForm:", formData)
+};
+
+const handleChange = evt => {
+  console.log('handleChange is running')
+  const { name, value }= evt.target;
+
+  setFormData(fData => ({
+    ...fData,
+    [name]: value,
+  }));
+
+  console.log("formData in setupProfileForm:", formData)
 }
 
   /** toggle dropdown */
@@ -188,12 +172,13 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
   /** render form */
 
   return (
+
     <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="SetupProfileForm-CardTitle">
             {/* { !user && ( <h1>Create a Profile</h1> )}
             { user && (<h1>{user.username}'s Profile</h1>)} */}
-            <h1>Additional Information</h1>
+            <h1>Setup Public Profile</h1>
             </CardTitle>
             <CardBody>
                 {/* <Form> */}
@@ -223,79 +208,97 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
                             accept="image/png image/jpg"
                             // valid={valid}
                             // invalid={invalid}
-                        />
-
-                      <Label htmlFor="phoneNumber">Phone Number: </Label>
+                        /> 
+                                 <Label htmlFor="city">City: </Label>
                        
-                        <Input
-                            type="tel"
-                            id="phoneNumber"
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                            placeholder="Phone Number"
-                            pattern="[0-9]*"
-                            // pattern="/^-?\d+\.?\d*$/"
-                            maxLength="10"
-                            // valid={valid}
-                            // invalid={invalid}
-                        />
+                       <Input
+                           type="text"
+                           id="city"
+                           name="city"
+                           value={formData.city}
+                           onChange={handleChange}
+                           placeholder="City"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
+
+                      <Label htmlFor="state">State: </Label>
                        
+                       {/* <Input
+                           type="text"
+                           id="state"
+                           name="state"
+                           value={formDataAddress.state}
+                           onChange={handleChange}
+                           placeholder="State"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />         */}
 
-                        <Label htmlFor="firstName">First Name: </Label>
-                       
-                        <Input
-                            type="text"
-                            id="firstName"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            placeholder="First Name"
-                            // valid={valid}
-                            // invalid={invalid}
-                        />
-                        
-           
-                        <Label htmlFor="lastName">Last Name: </Label>
-                        <Input
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            placeholder="Last Name"
-                            // valid={valid}
-                            // invalid={invalid}
-                        />
+                      <Input
+                        type="select"
+                        placeholder="State"
+                        onChange={handleChange}
+                        id="state" 
+                        name="state"
+                        // className='SearchBarInput'
+                        value={formData.state}
+                        maxLength={2}
+                        >
+                        <option value="">State</option>
+                        <option value="AL">AL</option>
+                        <option value="AK">AK</option>
+                        <option value="AZ">AZ</option>
+                        <option value="AR">AR</option>
+                        <option value="CA">CA</option>
+                        <option value="CO">CO</option>
+                        <option value="CT">CT</option>
+                        <option value="DE">DE</option>
+                        <option value="DC">DC</option>
+                        <option value="FL">FL</option>
+                        <option value="GA">GA</option>
+                        <option value="HI">HI</option>
+                        <option value="ID">ID</option>
+                        <option value="IL">IL</option>
+                        <option value="IN">IN</option>
+                        <option value="IA">IA</option>
+                        <option value="KS">KS</option>
+                        <option value="KY">KY</option>
+                        <option value="LA">LA</option>
+                        <option value="ME">ME</option>
+                        <option value="MD">MD</option>
+                        <option value="MA">MA</option>
+                        <option value="MI">MI</option>
+                        <option value="MN">MN</option>
+                        <option value="MS">MS</option>
+                        <option value="MO">MO</option>
+                        <option value="MT">MT</option>
+                        <option value="NE">NE</option>
+                        <option value="NV">NV</option>
+                        <option value="NH">NH</option>
+                        <option value="NJ">NJ</option>
+                        <option value="NM">NM</option>
+                        <option value="NY">NY</option>
+                        <option value="NC">NC</option>
+                        <option value="ND">ND</option>
+                        <option value="OH">OH</option>
+                        <option value="OK">OK</option>
+                        <option value="OR">OR</option>
+                        <option value="PA">PA</option>
+                        <option value="RI">RI</option>
+                        <option value="SC">SC</option>
+                        <option value="SD">SD</option>
+                        <option value="TN">TN</option>
+                        <option value="TX">TX</option>
+                        <option value="UT">UT</option>
+                        <option value="VT">VT</option>
+                        <option value="VA">VA</option>
+                        <option value="WA">WA</option>
+                        <option value="WV">WV</option>
+                        <option value="WI">WI</option>
+                        <option value="WY">WY</option>
+                        </Input>                     
 
-                        
-                        <Label htmlFor="additionalInfo">Additional Information: </Label>
-                        <Input
-                            type="text"
-                            id="additionalInfo"
-                            name="additionalInfo"
-                            value={formData.additionalInfo}
-                            onChange={handleChange}
-                            placeholder="Additional Private Information"
-                            // valid={valid}
-                            // invalid={invalid}
-                        />
-
-                        <Label htmlFor="facebookName">Facebook Name: </Label>
-                        <Input
-                            type="text"
-                            name="facebookName"
-                            className="form-control"
-                            value={formData.facebookName}
-                            onChange={handleChange}
-                            placeholder="Facebook Name"
-                            id="facebookName"
-  
-                            // invalid={invalid}
-
-                        />
-                        {/* </> */}
-                        {/* )} */}
 
                         <Label htmlFor="about">About: </Label>
                         <Input
@@ -322,35 +325,6 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
   
                             // invalid={invalid}
                         />
-
-                        <Label htmlFor="secNum">Secondary Number: </Label>
-                        <Input
-                            type="number"
-                            name="secNum"
-                            className="form-control"
-                            value={formData.secNum}
-                            onChange={handleChange}
-                            placeholder="Secondary Number"
-                            id="secondaryNumber"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        />
-
-                        {/* <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
-                        <Input
-                            type="text"
-                            name="secInsNum"
-                            className="form-control"
-                            value={formData.secInsNum}
-                            onChange={handleChange}
-                            placeholder="Secondary Insurance Number"
-                            id="secInsNum"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        /> */}
-
       
                         <Label htmlFor="level">Skill Level: </Label>
                         <Input
@@ -382,89 +356,6 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
                             {/* </Col> */}
                             </Input>
 
-                        <Label htmlFor="primIns">Primary Insurance: </Label>
-                        <Input
-                            type="select"
-                            name="primIns"
-                            className="form-control"
-                            value={formData.primIns}
-                            onChange={handleChange}
-                            placeholder="Primary Insurance"
-                            id="primIns"
-  
-                            // invalid={invalid}
-                            >
-                              <option value={""}>
-                                N/A 
-                              </option>
-                              <option value={"WFTDA"}>
-                                WFTDA
-                              </option>
-                              <option value={"USARS"}>
-                                USARS
-                              </option>
-                              <option value={"other"}>
-                                Other
-                              </option>
-              
-                        </Input>
-
-                        <Label htmlFor="primInsNum">Primary Insurance Number: </Label>
-                        <Input
-                            type="text"
-                            name="primInsNum"
-                            className="form-control"
-                            value={formData.primInsNum}
-                            onChange={handleChange}
-                            placeholder="Primary Insurance Number"
-                            id="primInsNum"
-                            disabled={primInsNumDisabled}
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        />
-
-                        <Label htmlFor="secIns">Secondary Insurance: </Label>
-                        <Input
-                            type="select"
-                            name="secIns"
-                            className="form-control"
-                            value={formData.secIns}
-                            onChange={handleChange}
-                            placeholder="Secondary Insurance"
-                            id="secIns"
-  
-                            // invalid={invalid}
-                            >
-                              <option value={""}>
-                                N/A 
-                              </option>
-                              <option value={"WFTDA"}>
-                                WFTDA
-                              </option>
-                              <option value={"USARS"}>
-                                USARS
-                              </option>
-                              <option value={"other"}>
-                                Other
-                              </option>
-                        </Input>
-
-                        <Label htmlFor="secInsNum">Secondary Insurance Number: </Label>
-                        <Input
-                            type="text"
-                            name="secInsNum"
-                            className="form-control"
-                            value={formData.secInsNum}
-                            onChange={handleChange}
-                            placeholder="Secondary Insurance Number"
-                            id="secInsNum"
-                            disabled={secInsNumDisabled}
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        />
-
                         <Label htmlFor="assocLeagues">Associated Leagues: </Label>
                         <Input
                             type="text"
@@ -478,6 +369,29 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
                             // invalid={invalid}
                             // note will have to restrict this to numbers only
                         />
+
+                        <Label htmlFor="rulesets">Positions: </Label>
+                        <Input
+                            type="select"
+                            name="positions"
+                            className="form-control"
+                            value={formData.positions}
+                            onChange={handlePositionsChange}
+                            placeholder="Played Positions"
+                            id="positions"
+                            multiple  
+                        >     
+                        <option value={"jammer"}>
+                          jammer
+                        </option>
+                        <option value={"pivot"}>
+                          pivot
+                        </option>
+                        <option value={"blocker"}>
+                          blocker
+                        </option>
+                        </Input>
+                        <p><b>Selected positions: {displayPositions.join(', ')}</b></p>   
 
                         <Label htmlFor="rulesets">Played Rulesets: </Label>
                         <Input
@@ -504,25 +418,21 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
                         Short Track 
                       </option>
                         </Input>
-                        <p><b>Selected rulesets: {displayRulesets.join(', ')}</b></p>
-
-
-                        {/* todod need to add this in */}
-                        {/* Played Rulesets
-                        <Label htmlFor="playedRulesets">Played Rulesets: </Label>
+                        <p><b>Selected rulesets: {displayRulesets.join(', ')}</b></p>                     
+                            
+                        <Label htmlFor="facebookName">Facebook Name: </Label>
                         <Input
-                            type="radio"
-                            name="WFTDA"
+                            type="text"
+                            name="facebookName"
                             className="form-control"
-                            // value={formData.primaryNumber}
-                            // onChange={handleChange}
-                            id="WFTDA"
+                            value={formData.facebookName}
+                            onChange={handleChange}
+                            placeholder="Facebook Name"
+                            id="facebookName"
   
                             // invalid={invalid}
-                            // note will have to restrict this to numbers only
-                        /> */}
-                      
-                            
+
+                        />      
                         {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
                         <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
 

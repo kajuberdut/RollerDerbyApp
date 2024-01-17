@@ -65,6 +65,7 @@ def crud_update_user(db: Session, user: UserUpdate, user_id):
     user = {
     "username": user.username,
     "email": user.email,
+    "image": user.image,
     "phone_number": user.phone_number,
     "first_name": user.first_name, 
     "last_name": user.last_name,
@@ -83,6 +84,35 @@ def crud_update_user(db: Session, user: UserUpdate, user_id):
     print("db user in update user:", db_user)
     
     for field, value in user.items():
+        print("field:", field)
+        print("value:", value)
+        if value is not None: 
+            setattr(db_user, field, value)
+            print(f"Updating field: {field} with value: {value}")
+
+    db.commit()
+    return user 
+
+def crud_update_profile_user(db: Session, user: UserUpdateProfile, user_id: int): 
+    """Updates user profile by user_id."""
+    print("user in update user crud.py", user)
+    print("you are hitting update_user in crud.py")
+      
+    db_user = crud_get_user_by_id(db, user_id)
+    
+    print("db user in update user:", db_user)
+    
+    fields_to_update = {
+        "image": user.image,
+        "facebook_name": user.facebook_name,
+        "about": user.about,
+        "primary_number": user.primary_number,
+        "level": user.level,
+        "location_id": user.location_id,
+        "associated_leagues": user.associated_leagues
+    }
+
+    for field, value in fields_to_update.items():
         print("field:", field)
         print("value:", value)
         if value is not None: 

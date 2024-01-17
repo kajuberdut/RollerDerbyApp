@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import SignupForm from "../forms/SignupForm";
 import LoginForm from "../forms/LoginForm";
 import SetupProfileForm from "../forms/SetupProfileForm";
+import SetupPrivateDetailsForm from "../forms/SetupPrivateDetailsForm";
 import BoutForm from "../forms/BoutForm";
 import MixerForm from "../forms/MixerForm";
 import BoutList from "../bouts/BoutList";
@@ -42,7 +43,8 @@ return (
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm signup={signup} />} />
         <Route path="/login" element={<LoginForm login={login} />} />
-        <Route path="/setup" element={<SetupProfileForm update={update}/>} />
+        <Route path="/setup/profile" element={<SetupProfileForm update={update}/>} />
+        <Route path="/setup/private" element={<SetupPrivateDetailsForm update={update}/>} />
         {/* <Route path="/setup" element={<SetupTesting update={update}/>} /> */}
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
         <Route path="/profile" element={<Profile />} />
