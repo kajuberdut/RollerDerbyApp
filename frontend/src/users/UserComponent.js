@@ -9,7 +9,7 @@ import {
     CardText,
     Button
   } from "reactstrap";
-
+  // import {  MDBCardImage } from 'mdb-react-ui-kit';
   
 
   
@@ -73,21 +73,18 @@ import {
      /** Render the card component */
       
       return (
-          <div key={"UserComponent-" + indUser.userId}>
-            <Card className="UserComponent"> 
-              <CardBody>
-                  <NavLink exact to={`/users/${indUser.userId}`} className="UserComponent-Link" style={{color: '#555555'}}>
-                <CardTitle className="text-center UserComponent-Title">
-                  <h4>{indUser.username}</h4>
-                </CardTitle>
-                  </NavLink>
-                 <CardTitle> 
-                 </CardTitle>
-                <CardText className="UserComponent-Text">
-                </CardText>
-              </CardBody>
-            </Card>
-         </div>
+      <div key={"UserComponent-" + indUser.userId } className="UserComponent" style={{width: ' 350px', height: '90px', borderRadius: '5px'}}> 
+       <NavLink exact to={`/users/${indUser.userId}`}                  className="UserComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
+        <div style={{ display: 'flex'}}>
+            <div style={{paddingTop: '8px', paddingLeft: '20px', paddingRight: '20px'}} >
+            { indUser.image && <img src={indUser.image}
+              alt="Skater placeholder image" className="img-thumbnail" style={{ width: '60px', borderRadius: '50%', backgroundColor: '#d1d2d4', border: '2px solid black', padding: '0px'}}/> 
+            }
+            </div>           
+            <h4 style={{paddingTop: '30px'}}>{indUser.username}</h4>
+        </div>
+        </NavLink>
+      </div>
         );
   }
   

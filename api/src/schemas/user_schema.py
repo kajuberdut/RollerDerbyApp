@@ -15,6 +15,12 @@ class UserBase(BaseModel):
     user_id: int = Field(default_factory=lambda: 0)
     username: str
     email: str   
+
+class UserList(BaseModel): 
+    """Pydantic class for users list."""
+    user_id: int = Field(default_factory=lambda: 0)
+    username: str
+    image: Optional[bytes] = None
     
 class UserCreate(UserBase):
     """Pydantic class for create user."""
@@ -56,22 +62,43 @@ class UserUpdate(UserBase):
     
 class UserUpdateProfile(BaseModel):
     """Pydantic class for update profile user (public details)."""
-    username: str
-    image: bytes
-    facebook_name: str
-    about: str
-    primary_number: int
-    level: str
-    ruleset: Ruleset = None
-    position: Position = None
-    location_id: int
-    associated_leagues: str
+    username: Optional[str] = None
+    image: Optional[bytes] = None
+    facebook_name: Optional[str] = None
+    about: Optional[str] = None
+    primary_number: Optional[int] = None
+    level: Optional[str] = None
+    ruleset: Optional[Ruleset] = None
+    position: Optional[Position] = None
+    location_id: Optional[int] = None
+    associated_leagues: Optional[str] = None
     # ruleset_id: int
     # position_id: int
     
+class UserUpdatePrivateDetails(BaseModel):
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    additional_info: Optional[str] = None
+    secondary_number: Optional[int] = None
+    # insurance: Optional[Insurance] = None
+    
+    @field_validator('phone_number', mode="before")
+    @classmethod
+    def phone_number_must_be_valid(cls, value):
+        phone_regex = r"^\d{10}$"  
+        if not re.match(phone_regex, value):
+            raise ValueError("Invalid phone number format. Please enter a 10-digit number")
+        return value
+    
+class UserImage(BaseModel): 
+    image: Optional[bytes] = None
+    
 class UserDetailsPublic(UserBase): 
     """Pydantic class for user details public that inherits from user base."""
-    image: Optional[bytes] = None
+    # image: Optional[bytes] = None
+    # cant store image on local storage it is too large
     facebook_name: Optional[str] = None 
     about: Optional[str] = None 
     primary_number: Optional[int] = None
@@ -85,7 +112,7 @@ class UserDetailsPublic(UserBase):
     @field_validator('level', mode="before")
     @classmethod
     def level_must_be_valid(cls, value):
-        if value not in ['AA', 'A', 'B', 'C', None]:
+        if value not in ['AA', 'A', 'B', 'C', None, '']:
             raise ValueError('Invalid level')
         return value
     

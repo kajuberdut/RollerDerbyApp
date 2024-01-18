@@ -12,6 +12,7 @@ import {
 import SearchBarUsers from "../multiUse/searchBar/SearchBarUsers";
 import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUsers";
 
+
 /**
  * Display users page
  */
@@ -30,6 +31,7 @@ function UserList() {
 
     try {
       let users = await FastApi.getUsers();
+      console.log("users in userlist !!!!!!!!!!!!!!!  ", users)
       setUsers(users)
       setIsLoading(false)
     } catch (errors) {
@@ -58,13 +60,11 @@ function UserList() {
     const renderCards = () => {
       return (
         <div className="UserList-RenderCards">
-            <ul>
                 {users.map(indUser => (
                   indUser.username !== user.username ? (
                   <UserComponent indUser={indUser} key={"User-" + indUser.userId} />
                   ) : null 
                 ))}
-            </ul>
           </div>
         );
     }

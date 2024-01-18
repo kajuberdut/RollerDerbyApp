@@ -3,6 +3,7 @@ import FastApi from "../Api";
 import { useParams} from "react-router-dom";
 // import skateImg from "../public/logo512.png"
 // import defaultImg from "./images/skater_02"
+import Loading from "../multiUse/loading/Loading";
 
 
 
@@ -32,10 +33,32 @@ function Profile() {
     const [city, setCity] = useState();
     const [state, setState] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
+    const [image, setImage] = useState()
 
     // retrieve user from localStorage so that page can be refreshed 
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log("user in profile.js", user)
+    // console.log("user in profile.js", user)
+
+    useEffect(() => {
+
+        async function getImage() {
+
+          try {
+            const imageData = await FastApi.getImage(user.userId)
+            if(imageData.image) {
+              setImage(imageData.image)
+            }
+            setIsLoading(false)
+          } catch (errors) {
+            console.error("Get image failed", errors);
+            return { success: false, errors };
+          }
+        }
+
+        getImage()
+
+
+    }, [user.image]); 
 
     
     
@@ -113,6 +136,12 @@ function Profile() {
     setPhoneNumber(formPhoneNum)
   }
 
+  if (isLoading) {
+    return (
+        <Loading />
+    )
+  }
+
     /** Render cards */
     // ! will need to rework this
 
@@ -126,13 +155,16 @@ function Profile() {
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
 
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
-
-                  <MDBCardImage src="/skater_02.svg"
+                  {image && <MDBCardImage src={image}
                       alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
+                  }
+                  { !image && <MDBCardImage src="/skater_02.svg"
+                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
+                  }
                   </div>
                   <a href="/setup/profile">
                     <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-                      style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
+                      style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "20px", fontSize: '15px'}}>
                       Edit
                     </button>
                   </a>
@@ -195,7 +227,7 @@ function Profile() {
                                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
                                       <a href="/setup/private">
                                           <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-                                            style={{zIndex: 1, height: '35px', backgroundColor: '#d1d2d4', position: 'absolute', top: '10px', right: '20px', marginTop: '10px', fontSize: '15px'}}>
+                                             style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "20px", fontSize: '15px'}}>
                                             Edit
                                           </button>
                                       </a>

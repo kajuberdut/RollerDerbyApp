@@ -195,7 +195,7 @@ function App() {
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main> */}
           <main>
-            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser}/>
+            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} />
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main>
           {/* {user && <Link to={`/chats/${user.userId}`}>

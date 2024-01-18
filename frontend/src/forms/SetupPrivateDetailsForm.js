@@ -53,24 +53,84 @@ console.log("USER IN EDIT PROFILE PAGE", user)
 //   getUserInsurance()
 // }
 
-let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, email: user.email,  facebookName: user.facebookName, about: user.about, primNum: user.primaryNumber, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum, assocLeagues: user.associatedLeagues };
+let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum };
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   function format(formData) {
     console.log("formData.secIns", formData.secIns)
-    let ins1 = formData.primIns
+    let type1 = formData.primIns
     let val1 = formData.primInsNum
-    let ins2 = formData.secIns
+    let type2 = formData.secIns
     let val2 = formData.secInsNum
     // ! will have to prefill rulesets - primary insurance, secondary, insurance, 
 
-    let newData = {
-      username: formData.username, phoneNumber: formData.phoneNumber, firstName: formData.firstName, lastName: formData.lastName, additional_info: formData.additionalInfo, email: formData.email,  facebookName: formData.facebookName, about: formData.about, primNum: formData.primNum, secNum: formData.secNum, level: formData.level, primIns: { [ins1]: val1 }, secIns: { [ins2]: val2 }, assocLeagues: formData.assocLeagues, rulesets: formRulesets
+    let userData = {
+      email: formData.email, phoneNumber: formData.phoneNumber, firstName: formData.firstName, lastName: formData.lastName, additionalInfo: formData.additionalInfo, secondaryNumber: formData.secNum
     }
-    console.log("newData:", newData)
+
+      /** Delete all null fields */
+
+    for (const key in userData) {
+      if (userData[key] === null) {
+        delete userData[key];
+      }
+    }
+
+    console.log("userData:", userData)
+    let primaryInsurance;
+    let secondaryInsurance;
+
+    if(type1 && val1) {
+      primaryInsurance = {type: type1, insuranceNumber: val1, insuranceId: 0 }
+      console.log("primaryInsurance:", primaryInsurance )
+    }
+
+    if(type2 && val2) {
+      secondaryInsurance = {type: type2, insuranceNumber: val2, insuranceId: 0 }
+      console.log("secondaryInsurance:", secondaryInsurance)
+    }
+
+    let ins = []
+    if(primaryInsurance) {
+      ins.push(primaryInsurance)
+    }
+    if(secondaryInsurance) {
+      ins.push(secondaryInsurance)
+    }
+   
+    let data = {
+      user: userData, 
+      insurance: ins
+    }
+    console.log("data in setupprivatedetailsform", data)
+    return data;
+
   }
+
+  // { 
+  //   "user": {	
+  //     "email": "slashher@gmail.com",
+  //     "phone_number": "5553354566",
+  //     "first_name": "Billy",
+  //     "last_name": "Slash", 
+  //     "additional_info": "Epi pen in bag",
+  //     "secondary_number": 180
+  //     },
+  //     "insurance": [
+  //   {
+  //     "insurance_id": 0, 
+  //     "type": "WFTDA",
+  //     "insurance_number": "67890"
+  //    }, 
+  //   {
+  //     "insurance_id": 0, 
+  //     "type": "USARS",
+  //     "insurance_number": "00000"
+  //    }
+  //   ]
+  // }
   
     /** Get user insurance information if it exists */
 
@@ -95,53 +155,32 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
   }
 
 
-  /** Handle Submit by either creating user, updating profile, or returning an error message */
+ /** Handle Submit by either updating profile, or returning an error message */
+ const handleSubmit = async evt => {
+  evt.preventDefault();   
+  console.log("FormData in SetupPrivateDetailsForm.js", formData)
+  setFormData(INITIAL_STATE);
+ 
+  console.log("update!!!!!:", update)
+  let formattedData = format(formData);
+  // ! this is returning undefined
+  console.log("formattedData!!!! in PRIVATE ", formattedData)
 
-  const handleSubmit = async evt => {
-    evt.preventDefault();   
-    console.log("FormData in SetupProfileForm.js", formData)
-    setFormData(INITIAL_STATE);
-   
-    console.log("update!!!!!:", update)
-    format(formData)
-    // let result = await update(formData);
-    let result = false; 
-    console.log("fake form data has been submitted")
+  let updateProfile = await FastApi.updateUserPrivate(user.userId, formattedData);
+  console.log(" &&&& updateProfile:", updateProfile)  
+  
+  //   setValid(true)
+  if(updateProfile) {
+    navigate('/profile')
 
-    //   setValid(true)
-    if(result) {
-      navigate('/profile')
-
-    } else {
-      // let message = result.errors[0]
-      // let message = result
-      // setErrorMessage(message)
-      // setInvalid(true)
-      console.log("fake form has failed to submit")
-    }
-   }
-
-  /** Update local state with current state of input element */
-
-  const handleRulesetsChange = evt => {
-    console.log("you are hitting handleRulesetsChange")
-
-// ! note should be able to refactor this so that I am only using one state and then altering the data from the state in the new data and not submitting to state 
-      setFormRulesets((prevRulesets) => {
-        const newRulesets = Array.from(evt.target.selectedOptions)
-          .map((option) => ({ rulesetId: 0, name: option.value }))
-          .filter((ruleset) => !prevRulesets.some((r) => r.name === ruleset.name)); // Filter for unique names
-        return [...prevRulesets, ...newRulesets];
-      });
-
-      setDisplayRulesets((prevRulesets) => {
-        const newRulesets = Array.from(evt.target.selectedOptions)
-          .map((option) => option.value)
-          .filter((rulesetName) => !prevRulesets.includes(rulesetName)); // Filter for unique names
-        return [...prevRulesets, ...newRulesets];
-      });
-    console.log("!!!!!!!!!!!!!! formRulesets:", formRulesets)
-  };
+  } else {
+    // let message = result.errors[0]
+    // let message = result
+    // setErrorMessage(message)
+    // setInvalid(true)
+    console.log("fake form has failed to submit")
+  }
+ }
 
   const handleChange = evt => {
     console.log('handleChange is running')
@@ -178,7 +217,7 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
 
   }
 
-    console.log("formData in setupProfileForm:", formData)
+    console.log("formData in setupPrivateeForm:", formData)
 }
 
 
@@ -195,6 +234,19 @@ let INITIAL_STATE = { username: user.username, phoneNumber: user.phoneNumber, fi
             <CardBody>
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
+
+                    <Label htmlFor="email">Email: </Label>
+                       
+                       <Input
+                           type="text"
+                           id="email"
+                           name="email"
+                           value={formData.email}
+                           onChange={handleChange}
+                           placeholder="Email"
+                           // valid={valid}
+                           // invalid={invalid}
+                       />
 
                       <Label htmlFor="phoneNumber">Phone Number: </Label>
                        

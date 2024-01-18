@@ -51,27 +51,41 @@ if(!user) {
 
 console.log("USER IN EDIT PROFILE PAGE", user)
 
-let INITIAL_STATE = { username: user.username, image: "", city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
+let INITIAL_STATE = { username: user.username, city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
 
   /** Sets formData in initial state */
 
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   function format(formData) {
+    console.log("formData.image:", formData.image)
+    console.log("formData.city:", formData.city)
+
+      let userData = {
+        username: formData.username, image: formData.image, facebookName: formData.facebookName, about: formData.about, primaryNumber: formData.primNum, level: formData.level, positionId: 0, locationId: 0, associatedLeagues: formData.assocLeagues
+      }
+
+       /** Delete all null fields */
+
+      for (const key in userData) {
+        if (userData[key] === null) {
+          delete userData[key];
+        }
+      }
+      console.log("!!!!!!! userData:", userData);
+      
 
       let data = {
-        user: {
-          username: formData.username, image: formData.image, facebookName: formData.facebookName, about: formData.about, primaryNumber: formData.primNum, level: formData.level, positionId: 0, locationId: 0, associatedLeagues: formData.assocLeagues
-        }, 
+        user: userData, 
         location: {
-          city: formData.city,
-          state: formData.state
+          city: formData.city || "", 
+          state: formData.state || ""
         }
     
       }
       data["ruleset"] = formRulesets;
       data["position"] = formPositions;
-      console.log("data:", data);
+      console.log("***** data:", data);
       
       return data;
   }
@@ -82,6 +96,22 @@ let INITIAL_STATE = { username: user.username, image: "", city: user.city, state
       console.log("formRulesets:", formRulesets);
       console.log("formPositions:", formPositions);
   }, [formRulesets, formPositions]);
+
+
+
+  async function getUser() {
+    try {
+      let user = await FastApi.getUserById(user.userId);
+    console.log("user:", user)
+  
+    return { success: true};
+    } catch (err) {
+      console.log("get user failed", err);
+      return {success: false, err};
+    }
+  }
+
+
 
   
 
@@ -94,8 +124,11 @@ let INITIAL_STATE = { username: user.username, image: "", city: user.city, state
     console.log("update!!!!!:", update)
     let formattedData = format(formData);
     // let result = await update(formData);
-    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData); 
-    console.log("fake form data has been submitted")
+    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
+    console.log(" &&&& updateProfile:", updateProfile) 
+    console.log("!!!!!!!!!!!! image:", updateProfile.image) 
+    
+    
 
     //   setValid(true)
     if(updateProfile) {
@@ -157,10 +190,29 @@ const handleChange = evt => {
   console.log('handleChange is running')
   const { name, value }= evt.target;
 
+  if (name === "image") {
+    const imageFile = evt.target.files[0];
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const imageDataUrl = reader.result; // Get the base64-encoded data URL
+
+      setFormData(fData => ({
+        ...fData,
+        image: imageDataUrl, // Store the data URL in the form data
+      }));
+    };
+
+    reader.readAsDataURL(imageFile)
+
+  } else {
+
   setFormData(fData => ({
     ...fData,
     [name]: value,
   }));
+}
 
   console.log("formData in setupProfileForm:", formData)
 }
@@ -203,7 +255,7 @@ const handleChange = evt => {
                             type="file"
                             id="image"
                             name="image"
-                            value={formData.image}
+                            // value={formData.image}
                             onChange={handleChange}
                             accept="image/png image/jpg"
                             // valid={valid}

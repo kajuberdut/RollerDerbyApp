@@ -29,7 +29,10 @@ def crud_get_users(db: Session, city: str = None, state: str = None, username: s
         
     users = query.order_by(models.User.username).offset(skip).limit(limit).all()
 
-    print("users in get_users crud.py", users)
+    # print("users in get_users crud.py", users)
+    # print("users[0] in get_users crud.py", users[0])
+    # print("users[0].image in get_users crud.py", users[0].image)
+    
     return users
 
 def crud_get_user_by_id(db: Session, user_id: int):
@@ -110,6 +113,34 @@ def crud_update_profile_user(db: Session, user: UserUpdateProfile, user_id: int)
         "level": user.level,
         "location_id": user.location_id,
         "associated_leagues": user.associated_leagues
+    }
+
+    for field, value in fields_to_update.items():
+        print("field:", field)
+        print("value:", value)
+        if value is not None: 
+            setattr(db_user, field, value)
+            print(f"Updating field: {field} with value: {value}")
+
+    db.commit()
+    return user 
+
+def crud_update_private_user(db: Session, user: UserUpdatePrivateDetails, user_id: int): 
+    """Updates user private details by user_id."""
+    print("user in update user crud.py", user)
+    print("you are hitting update_user in crud.py")
+      
+    db_user = crud_get_user_by_id(db, user_id)
+    
+    print("db user in update private details user:", db_user)
+    
+    fields_to_update = {
+        "email": user.email,
+        "phone_number": user.phone_number,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "additional_info": user.additional_info,
+        "secondary_number": user.secondary_number
     }
 
     for field, value in fields_to_update.items():

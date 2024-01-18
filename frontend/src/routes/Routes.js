@@ -43,7 +43,7 @@ return (
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm signup={signup} />} />
         <Route path="/login" element={<LoginForm login={login} />} />
-        <Route path="/setup/profile" element={<SetupProfileForm update={update}/>} />
+        <Route path="/setup/profile" element={<SetupProfileForm update={update} />} />
         <Route path="/setup/private" element={<SetupPrivateDetailsForm update={update}/>} />
         {/* <Route path="/setup" element={<SetupTesting update={update}/>} /> */}
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}

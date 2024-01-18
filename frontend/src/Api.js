@@ -157,15 +157,24 @@ class FastApi {
     /** Update user profile by data */
 
     static async updateUserProfile(userId, data) {
-    console.log("data: in api.js", data)
-    // console.log("derbyName!!!:", derbyName)
-    console.log("updateUser in api.js is running which means the error is after that")
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!data: in api.js", data)
+      // console.log("derbyName!!!:", derbyName)
+      console.log("updateUser in api.js is running which means the error is after that")
 
-   
-    let res = await this.request(`users/profile/${userId}`, data, "put");
-    return res;
-
+    
+      let res = await this.request(`users/profile/${userId}`, data, "put");
+      return res;
     }
+
+      /** Update user private details by data */
+
+      static async updateUserPrivate(userId, data) {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!data: in api.js", data)
+        console.log("updateUserPrivate in api.js is running")
+  
+        let res = await this.request(`users/private/${userId}`, data, "put");
+        return res;
+      }
 
   /** Delete user */
 
@@ -198,27 +207,12 @@ class FastApi {
       console.log("!!!! data in addBout !!!!!", data)
       data["bout"]["type"] = "bout";
      
-
       data["bout"]["group_id"] = 0; 
       data["bout"]["chat_id"] = 0; 
       console.log("!!!! data AGAIN in addBout !!!!!", data)
 
-      
       let res = await this.request(`bouts/`, data, "post");
 
-      // let fakeData = {
-
-      //   "bout": {
-      //     "type": "bout", "date": "2024-02-10", "time": "13:00", "timeZone": " Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", "theme": "FAKE DATA", "description": "blah blah blah", "level": "C", "coEd": true, "ruleset": "WFTDA", "jerseyColors": "white and Blue", "floorType": "concrete", "opposingTeam": "Wild Fire", "team": "Wydaho", "addressId": 6
-      //   },
-      
-      //   "address": {
-      //   "streetAddress": "513 Main St", "city": "Boise", "state": "ID", "zipCode": "55555"
-      //   }
-      
-      // }
-
-      // let res = await this.request(`bouts/`, fakeData, "post");
       console.log("res:", res)
       return res
     }
@@ -413,6 +407,18 @@ class FastApi {
     console.log("res:", res)
   return res
   }
+
+      /** Get image by user id*/
+
+  static async getImage(userId) {
+    console.log("get image by user id in API.JS is running")
+
+    let res = await this.request(`users/image/${userId}`);
+    console.log("res:", res)
+  return res
+  
+  }
+
 
 
 
