@@ -7,13 +7,17 @@ from ..crud.chat_crud import *
 from ..crud.group_crud import *
 from ..crud.message_crud import *
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/chats",
+    tags=["chats"],
+    dependencies=[Depends(oauth2_scheme)],
+)
 
 # * get /chats/{user_id}
 # * gets all chats by user_id 
 
-@router.get("/chats/{user_id}", response_model=list[ChatObject])
-def get_chats(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+@router.get("/{user_id}", response_model=list[ChatObject])
+def get_chats(user_id: int, db: Session = Depends(get_db)):
     print("hitting /chats in main.py")
     
     groups_db = crud_get_groups_by_participant(db=db, user_id=user_id)
@@ -26,11 +30,11 @@ def get_chats(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: S
 
     return chats_db
 
-# * get /chat/{chat_id}
-# * gets participant usernames of chat by chat_id 
+# * get /chats/{chat_id}/participants/usernames
+# * gets participant usernames of one chat by chat_id 
 
-@router.get("/chat/{chat_id}", response_model=list[str])
-def get_chat_participant_usernames(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
+@router.get("/{chat_id}/participants/usernames", response_model=list[str])
+def get_chat_participant_usernames(chat_id: int, db: Session = Depends(get_db)):
     print("hitting /chat/chat_id in main.py")
 
     #! may want to return group name instead later..... 
@@ -43,11 +47,11 @@ def get_chat_participant_usernames(token: Annotated[str, Depends(oauth2_scheme)]
 
     return participant_usernames
 
-# * get /chat/{chat_id}
+# * get /chats/{chat_id}/participants/ids
 # * gets participant ids of chat by chat_id 
 
-@router.get("/chat/participant/{chat_id}", response_model=list[int])
-def get_chat_participant_ids(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, db: Session = Depends(get_db)):
+@router.get("/{chat_id}/participants/ids", response_model=list[int])
+def get_chat_participant_ids(chat_id: int, db: Session = Depends(get_db)):
     print("hitting /chat/chat_id in main.py")
 
     #! may want to return group name instead later.....  
@@ -59,11 +63,11 @@ def get_chat_participant_ids(token: Annotated[str, Depends(oauth2_scheme)], chat
 
     return participant_ids
 
-# * get /history/chat/{chat_id}
+# * get /chats/{chat_id}/history
 # * gets history by chat_id
 
-@router.get("/history/chat/{chat_id}")
-def get_messages_by_chat_id(token: Annotated[str, Depends(oauth2_scheme)], chat_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/{chat_id}/history")
+def get_messages_by_chat_id(chat_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
         
     db_messages = crud_get_messages_by_chat_id(db, chat_id=chat_id)
 

@@ -6,24 +6,22 @@ from ..crud.chat_crud import *
 from ..crud.group_crud import *
 from ..crud.message_crud import *
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/messages",
+    tags=["messages"],
+    dependencies=[Depends(oauth2_scheme)],
+)
 
-# * get /messages/users
-# * gets all messages and users
-
-@router.get("/messages/users", response_model=list[Message])
-def get_messages_with_users(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    data = crud_get_messages_with_user_ids(db, skip=skip, limit=limit)
-
-    return data
+# router = APIRouter()
 
 
-# * get /history
-# * gets chat history
+# * get /messages/{participant_ids}
+# * gets messages of chat 
+# ? this might be testing as well
 
-@router.get("/history/{participant_ids}")
-def get_messages(token: Annotated[str, Depends(oauth2_scheme)], participant_ids: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    print("hitting /history in messsages_router.py")
+@router.get("/{participant_ids}")
+def get_messages(participant_ids: str, db: Session = Depends(get_db)):
+    print("hitting /messages/{participant_ids} in messsages_router.py")
     
     participant_ids_list = sorted( participant_ids.split(","))
     
@@ -37,10 +35,22 @@ def get_messages(token: Annotated[str, Depends(oauth2_scheme)], participant_ids:
 
     return db_messages
 
-# * get /messages 
-# * gets all messages 
 
-@router.get("/messages", response_model=list[Message])
-def get_messages(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    print("hitting /messages in main.py")
-    return get_messages(db, skip=skip, limit=limit)
+# # * get /messages 
+# # * gets all messages 
+# ? testing only 
+
+# @router.get("/", response_model=list[Message])
+# def get_messages(limit: int = 100, db: Session = Depends(get_db)):
+#     print("hitting /messages in main.py")
+#     return get_messages(db=db)
+
+# * get /messages/users
+# * gets all messages and users
+# ? testing only 
+
+# @router.get("/users", response_model=list[Message])
+# def get_messages_with_users(limit: int = 100, db: Session = Depends(get_db)):
+#     data = crud_get_messages_with_user_ids(db, limit=limit)
+
+#     return data
