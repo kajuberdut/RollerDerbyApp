@@ -21,7 +21,7 @@ class EventBase(BaseModel):
     chat_id: int
 
     
-    class Config:
+    class ConfigDict:
         from_attributes = True
     
     @field_validator('level', mode="before")

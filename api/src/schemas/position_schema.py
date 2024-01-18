@@ -7,7 +7,7 @@ class UserPosition(BaseModel):
     user_id: int
     position_id: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
@@ -25,5 +25,5 @@ class Position(BaseModel):
             raise ValueError("Invalid position")
         return v  
 
-    class Config:
+    class ConfigDict:
         from_attributes = True

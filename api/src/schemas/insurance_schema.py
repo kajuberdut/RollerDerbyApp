@@ -8,7 +8,7 @@ class UserInsurance(BaseModel):
     insurance_id: int
     insurance_number: str
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
         
 class Insurance(BaseModel): 
@@ -26,7 +26,7 @@ class Insurance(BaseModel):
             raise ValueError("Invalid insurance")
         return v  
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
         
 class InsuranceOutput(BaseModel): 

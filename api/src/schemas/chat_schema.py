@@ -12,7 +12,7 @@ class Chat(BaseModel):
     # type: str
     # group_id: int
     
-    class Config:
+    class ConfigDict:
         from_attributes = True
         
 class ChatObject(BaseModel): 

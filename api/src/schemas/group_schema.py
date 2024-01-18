@@ -7,7 +7,7 @@ class UserGroup(BaseModel):
     user_id: int
     group_id: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True 
     
 class Group(BaseModel): 

@@ -7,7 +7,7 @@ class UserRuleset(BaseModel):
     user_id: int
     ruleset_id: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
         
 class Ruleset(BaseModel): 
@@ -24,5 +24,5 @@ class Ruleset(BaseModel):
             raise ValueError("Invalid ruleset")
         return v  
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
