@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import React from 'react';
 import Navbar from './NavBar';
 import { Nav } from 'reactstrap';
@@ -9,6 +9,8 @@ import '../setupTests.js';
 
 // npm test Navbar.test.js
 // must be in frontend directory 
+
+afterEach(cleanup)
 
 test('renders NavBar component', () => {
   render(

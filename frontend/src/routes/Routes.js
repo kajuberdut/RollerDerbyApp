@@ -26,7 +26,7 @@ import ChatList from "../chats/ChatList"
  * Display routes
  */
 
-function AllRoutes({login, signup, update, apply, id, getBouts, getMixers, getUsers, handleMessages}) {
+function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages}) {
  console.log(" ^^^^^^ handleMessages in routes:", typeof handleMessages)
 /** Render routes */
 

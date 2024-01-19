@@ -72,7 +72,7 @@ const LoginForm = ({login}) => {
     <section className="col-md-4 LoginForm">
         <Card>
             <CardTitle className="LoginForm-CardTitle">
-                <h1>Log In</h1>
+                <h1>Login</h1>
             </CardTitle>
             <CardBody>
                 <Form onSubmit={handleSubmit}>
