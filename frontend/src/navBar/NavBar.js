@@ -1,10 +1,8 @@
-// import React, { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React, { useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./NavBar.css";
 import Star from "./Star"
-import ChatIcon from "../chats/ChatIcon";
 import UserContext from "../multiUse/UserContext";
 import { 
   Navbar, 

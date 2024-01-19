@@ -30,7 +30,12 @@ const LoginForm = ({login}) => {
   // const [errorMessage, setErrorMessage] = useState([]);
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem('user'));
 
+  if(user) {
+    navigate('/');
+  }
+  
   /** Handle submit by either logging and redirecting in or returning an error message */
 
   const  handleSubmit = async evt => {
@@ -43,7 +48,7 @@ const LoginForm = ({login}) => {
     // let result = await FastApi.testing(); 
     
     if(result.success) {
-        navigate('/')
+        navigate('/');
 
     } else {
         let message = result.errors

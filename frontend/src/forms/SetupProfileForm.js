@@ -44,10 +44,11 @@ const [displayPositions, setDisplayPositions] = useState([]);
 const [primIns, setPrimIns] = useState([]);
 const [secIns, setSecIns] = useState([]);
 
-
-if(!user) {
-  navigate('/')
-}
+useEffect(() => {
+  if(!user) {
+    navigate('/')
+  }
+});
 
 console.log("USER IN EDIT PROFILE PAGE", user)
 

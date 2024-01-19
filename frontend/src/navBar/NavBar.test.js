@@ -10,7 +10,11 @@ import '../setupTests.js';
 // npm test Navbar.test.js
 // must be in frontend directory 
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  console.log("afterEach is running")
+})
+
 
 test('renders NavBar component', () => {
   render(

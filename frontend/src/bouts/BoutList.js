@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import CardComponent from "../multiUse/cardComponent/CardComponent";
-// import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
 import "./BoutList.css";
-import SearchBar from "../multiUse/searchBar/SearchBarEvents";
-import DatePick from "../multiUse/datePicker/DatePicker";
 import SearchComponent from "../multiUse/searchComponent/SearchComponent";
 
 /**

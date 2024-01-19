@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import Home from "./Home";
-import { BrowserRouter, MemoryRouter } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route } from "react-router-dom";
 import { UserProvider } from "../testUtils";
 import AllRoutes from "../routes/Routes";
 
@@ -19,9 +19,6 @@ import AllRoutes from "../routes/Routes";
 afterEach(() => {
   cleanup()
   console.log("afterEach is running")
-
-  // render(null); // Unmount any rendered components
-  // history.push("/")
 })
 
 // afterEach(() => {
@@ -110,15 +107,19 @@ describe("Tests Home Page Navigation", () => {
     });
 
 
+    // * this was just to simplify the test
     // test("it should render when logged in", () => {
 
-    //   // const { asFragment } = render(
-    //   //   <MemoryRouter initialEntries={["/"]}>
-    //   //     <UserProvider>
-    //   //         <Home />
-    //   //     </UserProvider>
-    //   //   </MemoryRouter>,
-    //   // );
+    //   render(  
+
+    //     <MemoryRouter initialEntries={["/"]}>
+    //       <UserProvider>
+    //         <Route path="/">
+    //           <Home url="/" /> 
+    //         </Route>
+    //       </UserProvider>
+    //     </MemoryRouter>,
+    //   );
     //   // render(<Router history={history}><App/></Router>);
 
     //   // const history = createMemoryHistory();
