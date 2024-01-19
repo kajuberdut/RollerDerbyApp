@@ -3,14 +3,7 @@ import { NavLink } from "react-router-dom";
 import FastApi from "../../Api";
 import "./CardComponent.css";
 import Loading from "../loading/Loading"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    CardText
-  } from "reactstrap";
-
-  
+import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
   
   /**  
@@ -59,20 +52,20 @@ import {
           <section key={"CardComponent-" + key}>
             <Card className="CardComponent"> 
               <CardBody>
-                  <NavLink exact to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555'}}>
-                <CardTitle className="text-center CardComponent-Title">
-                  <h3>{info.theme}</h3>
-                </CardTitle>
-                  </NavLink>
-                 <CardTitle> 
-                 <h5>{address.city}, {address.state}</h5>
-                 </CardTitle>
-                 <CardText className="CardComponent-Text">
-                 {info.date}
-                </CardText>
-                 <CardText className="CardComponent-Text">
-                  {info.description}
-                </CardText>
+                <NavLink exact to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
+                  <CardTitle className="text-center CardComponent-Title">
+                    <h3>{info.theme}</h3>
+                  </CardTitle>
+                  <CardTitle> 
+                  <h5>{address.city}, {address.state}</h5>
+                  </CardTitle>
+                  <CardText className="CardComponent-Text">
+                  {info.date}
+                  </CardText>
+                  <CardText className="CardComponent-Text">
+                    {info.description}
+                  </CardText>
+                </NavLink>
               </CardBody>
             </Card>
          </section>

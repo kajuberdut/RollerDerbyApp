@@ -42,10 +42,15 @@ class FastApi {
           console.error("API Error:", err);
         //   let message = err.response.data.error.message;
         // let message = err.response.message;
-        let message = err.response.data.detail; 
+        if(err.response) {
+          let message = err.response.data.detail; 
+          if(err.response.data) {
+          throw Array.isArray(message) ? message : [message];
+          }
+        }
         // console.log("err in api.js!!!!", err)
         // console.log("message in api.js!!!!", message)
-          throw Array.isArray(message) ? message : [message];
+      
         }
       }
 

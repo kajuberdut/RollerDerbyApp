@@ -1,6 +1,5 @@
 .CardComponent {
     background-color: #d1d2d4;
-    /* margin-top: 150px; */
     margin-top: 40px;
     height: 250px;
     width: 43%;
@@ -11,4 +10,8 @@
 .CardComponent-Title h3:hover,
 .CardComponent-Title h3[data-hover] {
   color: black; 
+}
+
+.CardComponent:hover {
+  background-color: #c7c6c6; 
 }

@@ -2,16 +2,9 @@ import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import UserComponent from "./UserComponent";
 import "./UserList.css"
-// import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
-import {
-  Card,
-  CardBody,
-  CardTitle
-} from "reactstrap";
-import SearchBarUsers from "../multiUse/searchBar/SearchBarUsers";
 import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUsers";
-
+import { Card, CardBody, CardTitle } from "reactstrap";
 
 /**
  * Display users page
@@ -35,15 +28,15 @@ function UserList() {
       setUsers(users)
       setIsLoading(false)
     } catch (errors) {
-      console.error("Get Users failed", errors);
       return { success: false, errors };
     }
   }
 
-   /** Reloading jobs when it changes request for jobs */
+   /** Reloads users when changes request for users */
 
     useEffect(() => {
         getUsers();
+        console.log("users!!!!!!!", users)
     }, []);
 
 
@@ -55,7 +48,7 @@ function UserList() {
       )
     }
 
-  /** Render the cards for jobs */
+  /** Render the cards for users*/
 
     const renderCards = () => {
       return (
@@ -77,7 +70,8 @@ function UserList() {
       <Card className="UserList">
         <CardBody>
         <CardTitle><h1>Users</h1></CardTitle>
-        {renderCards()}
+        {users && <div> {renderCards()} </div> }
+        {!users && <div>Sorry no users were located.</div>}
         </CardBody>
       </Card>
       </>
