@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import FastApi from "../Api";
 import ChatComponent from "./ChatComponent";
 // import SearchBar from "../repeated/searchBar/SearchBar";

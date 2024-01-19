@@ -10,7 +10,6 @@ import '../setupTests.js';
 // ! it wants a user.userId which is listed in testUtils but not sure how to access that 
 
 test('renders chat details page', () => {
-
   
   render(
   <BrowserRouter>
@@ -18,7 +17,6 @@ test('renders chat details page', () => {
           <ChatDetails />
       </UserProvider>
   </BrowserRouter>);
-
 
 });
 

@@ -5,7 +5,6 @@ import "./CardComponent.css";
 import Loading from "../loading/Loading"
 import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
-  
   /**  
   * Card component for bouts and mixers. 
   */

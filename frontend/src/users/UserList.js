@@ -71,7 +71,7 @@ function UserList() {
         <CardBody>
         <CardTitle><h1>Users</h1></CardTitle>
         {users && <div> {renderCards()} </div> }
-        {!users && <div>Sorry no users were located.</div>}
+        {!users && <div>Sorry, no users were located.</div>}
         </CardBody>
       </Card>
       </>

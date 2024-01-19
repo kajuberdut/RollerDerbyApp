@@ -13,7 +13,7 @@ function BoutList() {
 
     /** Set Bouts and is loading in state*/
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [bouts, setBouts] = useState([]);
 
   /** API get request for bouts */
@@ -23,6 +23,7 @@ function BoutList() {
     try {
       let bouts = await FastApi.getBouts();
       setBouts(bouts)
+      setIsLoading(false)
       // return { success: true };
       return bouts
     } catch (errors) {

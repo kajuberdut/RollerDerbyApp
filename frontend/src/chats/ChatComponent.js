@@ -1,14 +1,7 @@
 import React from "react";
-import {
-    Card,
-    CardBody,
-    CardTitle
-  } from "reactstrap";
-  import "./ChatComponent.css"
+import { Card, CardBody, CardTitle } from "reactstrap";
+import "./ChatComponent.css"
 
-  
-
-  
   /**  
   * Card component for chat 
   */
@@ -22,9 +15,8 @@ import {
     }
 
     let key = chat.chatId;
-    console.log("key in chatComponent!!!!:", key)
 
-     /** Render the card component */
+     /** Render the chat component */
       
       return (
           <section key={"ChatComponent-" + key} style={{paddingTop: '10px'}}>
