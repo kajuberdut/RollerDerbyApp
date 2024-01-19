@@ -1,50 +1,44 @@
 import React, { useState, useEffect, useContext } from "react";
 import FastApi from "../Api";
 import { useParams} from "react-router-dom";
-// import skateImg from "../public/logo512.png"
-// import defaultImg from "./images/skater_02"
 import Loading from "../multiUse/loading/Loading";
-
-
-
-// ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
-
-import UserContext from "../multiUse/UserContext";
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 
 
 /**  
- * User detail form
+ * User profile
  */
 
-// ! issue I am not storing all th data in the user information so Its not being updated all the way
 
 function Profile() {
 
-   /** Get url handle and set jobs and is loading in state*/
-    const username = useParams(); 
+   /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
     const [isLoading, setIsLoading] = useState(true);
-    // const { user } = useContext(UserContext);
-    // const [user, setUser] = useState(); 
     const [rulesets, setRulesets] = useState();
     const [positions, setPositions] = useState();
-    const [location, setLocation] = useState();
     const [insurances, setInsurances] = useState();
     const [city, setCity] = useState();
     const [state, setState] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
-    const [image, setImage] = useState()
+    const [image, setImage] = useState();
+    const [userState, setUserState] = useState({});
 
-    // retrieve user from localStorage so that page can be refreshed 
-    const user = JSON.parse(localStorage.getItem('user'));
-    // console.log("user in profile.js", user)
+    /** On mount, retrieve user from local storage and set in state*/
+
+    useEffect(() => {
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      setUserState(user);
+    }, []);
+
+    /** On change of image or on change of user state get image*/
 
     useEffect(() => {
 
         async function getImage() {
 
           try {
-            const imageData = await FastApi.getImage(user.userId)
+            const imageData = await FastApi.getImage(userState.userId)
             if(imageData.image) {
               setImage(imageData.image)
             }
@@ -58,41 +52,42 @@ function Profile() {
         getImage()
 
 
-    }, [user.image]); 
+    }, [image, userState]); 
 
-    
+    /** Fetch data from ids from user state and call function to get data  */
     
     useEffect(() => {
       function fetchData() {
-          // Fetch ruleset data
-          if (user.ruleset) {
+      
+          if (userState.ruleset) {
             getUserRulesets()
           }
-          // Fetch position data
-          if (user.position) {
+
+          if (userState.position) {
             getUserPosition()
           }
-          // Fetch location data
-          if (user.locationId) {
-            // console.log("user.location_id is running")
+  
+          if (userState.locationId) {
+   
             getUserLocation()
           }
-          if (user.insurance) {
+          if (userState.insurance) {
             getUserInsurance()
           }
 
-          if(user.phoneNumber){
-            console.log("IF STATEMENT IS RUNNING")
+          if(userState.phoneNumber){
             formatPhoneNumber()
           }
         }
   
       fetchData();
-    }, []); 
+    }, [userState]); 
+
+  /** Fetch user rulesets from api  */
 
   async function getUserRulesets() {
     let rsArr = []
-    for(let rs of user.ruleset) {
+    for(let rs of userState.ruleset) {
       let ruleset = await FastApi.getRuleset(rs.rulesetId);
       rsArr.push(ruleset.name)
     }
@@ -100,9 +95,11 @@ function Profile() {
     setRulesets(userRulesets)
   }
 
+  /** Fetch user positions from api  */
+
   async function getUserPosition() {
     let posArr = []
-    for(let pos of user.position) {
+    for(let pos of userState.position) {
       let position = await FastApi.getPosition(pos.positionId);
       posArr.push(position.position)
     }
@@ -110,9 +107,11 @@ function Profile() {
     setPositions(userPositions)
   }
 
+  /** Fetch user insurance from api  */
+
   async function getUserInsurance() {
     let insArr = []
-    for(let ins of user.insurance) {
+    for(let ins of userState.insurance) {
       let insurance = await FastApi.getInsurance(ins.insuranceId);
       insArr.push(insurance.type + ":")
       insArr.push(ins.insuranceNumber)
@@ -124,15 +123,18 @@ function Profile() {
     setInsurances(userInsurances)
   }
 
+  /** Fetch user location from api  */
 
   async function getUserLocation() {
-    let userLocation = await FastApi.getLocation(user.locationId);
+    let userLocation = await FastApi.getLocation(userState.locationId);
     setCity(userLocation.city)
     setState(userLocation.state)
   }
 
+  /** Format phone number  */
+
   async function formatPhoneNumber() {
-    let formPhoneNum = user.phoneNumber.slice(0, 3) + '-' + user.phoneNumber.slice(3, 6) + '-' + user.phoneNumber.slice(6);
+    let formPhoneNum = userState.phoneNumber.slice(0, 3) + '-' + userState.phoneNumber.slice(3, 6) + '-' + userState.phoneNumber.slice(6);
     setPhoneNumber(formPhoneNum)
   }
 
@@ -143,7 +145,6 @@ function Profile() {
   }
 
     /** Render cards */
-    // ! will need to rework this
 
     return (
       <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px'}} >
@@ -169,24 +170,23 @@ function Profile() {
                     </button>
                   </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
-                    <MDBTypography tag="h4">{user.username} #{user.primaryNumber}</MDBTypography>
-                    {/* {user.first_name && user.last_name && <MDBCardText>{user.first_name} {user.last_name}</MDBCardText>} */}
-                    {user.locationId && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
+                    <MDBTypography tag="h4">{userState.username} #{userState.primaryNumber}</MDBTypography>
+                    {userState.locationId && city && state && <MDBCardText>{city}, {state}</MDBCardText>}
                   </div>
                 </div>
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                    { user.level && <div>
-                      <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{user.level}</MDBCardText>
+                    { userState.level && <div>
+                      <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{userState.level}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
                     </div>
                     }
-                    { user.position && <div>
+                    { userState.position && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
                     </div>
                     }
-                    { user.ruleset &&
+                    { userState.ruleset &&
                     <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
@@ -196,22 +196,22 @@ function Profile() {
                 </div>
                 <MDBCardBody className="text-black p-4">
 
-                { user.about && <div className="mb-5">
+                { userState.about && <div className="mb-5">
                     <p className="lead fw-normal mb-1">About</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.about}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{userState.about}</MDBCardText>
                     </div>
                   </div>
                   }
-                  { user.associatedLeagues && <div className="mb-5">
+                  { userState.associatedLeagues && <div className="mb-5">
                     <p className="lead fw-normal mb-1">Associated Leagues</p>
                     <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                      <MDBCardText className="font-italic mb-1">{user.associatedLeagues}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{userState.associatedLeagues}</MDBCardText>
                     </div>
                   </div>
                   }
-                  { user.facebookName && <div className="mb-5">
-                    <p className="lead fw-normal mb-1">You can find me on facebook: {user.facebookName}</p>
+                  { userState.facebookName && <div className="mb-5">
+                    <p className="lead fw-normal mb-1">You can find me on facebook: {userState.facebookName}</p>
                   </div>
                   }
                 </MDBCardBody>
@@ -242,7 +242,7 @@ function Profile() {
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Name:
                                     </div>
-                                    {user.firstName && user.lastName && <MDBCardText style={{marginLeft: '150px', marginTop: '5px'}} tag="h4">{user.firstName} {user.lastName}</MDBCardText>}
+                                    {userState.firstName && userState.lastName && <MDBCardText style={{marginLeft: '150px', marginTop: '5px'}} tag="h4">{userState.firstName} {userState.lastName}</MDBCardText>}
                                     </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -253,7 +253,7 @@ function Profile() {
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Email:
                                     </div>
-                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px'}} tag="h4">{user.email} </MDBCardText>
+                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px'}} tag="h4">{userState.email} </MDBCardText>
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -265,7 +265,7 @@ function Profile() {
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Phone #:
                                     </div>
-                                    {user.phoneNumber && <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
+                                    {userState.phoneNumber && <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -291,8 +291,8 @@ function Profile() {
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Additional Info:
                                     </div>
 
-                                    {user.additionalInfo && 
-                                        <MDBTypography style={{marginLeft: '56px', marginTop: '5px'}} tag="h4">{user.additionalInfo}</MDBTypography>
+                                    {userState.additionalInfo && 
+                                        <MDBTypography style={{marginLeft: '56px', marginTop: '5px'}} tag="h4">{userState.additionalInfo}</MDBTypography>
                                     }
                                 </div>
 
@@ -305,8 +305,8 @@ function Profile() {
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Secondary #:
                                     </div>
 
-                                    {user.secondaryNumber != null && 
-                                        <MDBTypography style={{marginLeft: '90px', marginTop: '5px'}} tag="h4">{user.secondaryNumber}</MDBTypography>
+                                    {userState.secondaryNumber != null && 
+                                        <MDBTypography style={{marginLeft: '90px', marginTop: '5px'}} tag="h4">{userState.secondaryNumber}</MDBTypography>
                                     }
                                 </div>
 
