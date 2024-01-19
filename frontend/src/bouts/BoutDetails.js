@@ -5,7 +5,7 @@ import { useParams} from "react-router-dom";
 import Loading from "../multiUse/loading/Loading";
 import "./BoutDetails.css"
 
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody } from 'mdb-react-ui-kit';
 
 /**  
  * Display bout detail page
@@ -19,13 +19,11 @@ function BoutDetail() {
     const [bout, setBout ] = useState([]);
     const [address, setAddress ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [connected, setConnected] = useState(null)
+    const [error, setError] = useState(null)
+    
     // const [button, setButton] = useState("Join Chat");
     // const [disableButton, setDisableButton] = useState(false)
-
-      //   /** Retrieve user from local storage  */ 
-    const user = JSON.parse(localStorage.getItem('user'));
-
-
 
   //   /** API get request for a specific bout using id  */ 
 
@@ -59,18 +57,24 @@ function BoutDetail() {
     async function handleClick(e) {
       e.preventDefault(); 
 
+      //   /** Retrieve user from local storage  */ 
+      const user = JSON.parse(localStorage.getItem('user'));
+
       let data = {userId: `${user.userId}`, groupId: `${bout.groupId}`}
       console.log("data in BoutDetails.js", data)
 
-      let result = await FastApi.addUserToGroup(data); 
-
-      if(result.success) {
-        // setButton("Joined");
-        // setDisableButton(true);
-        // user.applications.push(job.id);
-      } 
-
-    }
+      try {
+        let result = await FastApi.addUserToGroup(data); 
+        
+        setConnected("Connected. Check your chats.")
+        return { success: true};
+        } catch (err) {
+          console.log("api request failed", err);
+          // return {success: false, err};
+          setError("Unable to connect to chat.")
+          return {success: false, description: "Unable to connect to chat."};
+        }
+    } 
 
     // ! going to have to adjust this 
 
@@ -86,10 +90,15 @@ function BoutDetail() {
            
                     <button type="button" className="btn btn-outline-dark" onClick={handleClick} data-mdb-ripple-color="dark"
                       style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
-                      {/* {button} */}
                       Join Chat
                     </button>
-                
+
+                    {(error || connected) && (
+                      <div style={{ color: error ? 'red' : 'green',fontSize: '14px', position: 'absolute',right: '10px', top: '40px', marginTop: '10px'}}
+                      >
+                        {error || connected}
+                      </div>
+                    )}
 
                     <div className="ms-3" style={{display: 'flex'}}>
                       <MDBCardText tag="h1" style={{ marginTop: '50px'}}>{bout.theme}</MDBCardText>
