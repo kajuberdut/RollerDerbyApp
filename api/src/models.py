@@ -114,6 +114,7 @@ class Message(SQLAlchemyBase):
     chat_id = Column(Integer, ForeignKey("chat.chat_id"), nullable=False)
     message = Column(String)
     date_time = Column(String)
+    sender_username = Column(String)
     sender_id = Column(Integer)
     # user = relationship("UserMessage", back_populates="message")
     # ! added chat_id for chatList 

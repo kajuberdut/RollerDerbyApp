@@ -41,7 +41,7 @@ function NavBar({logout}) {
           {user && <>
             <NavItem className="Navbar-Profile">
                 {/* <NavLink to='/users/{user.derbyName}'>{ user.derbyName }</NavLink> */}
-                <NavLink to='/profile'>{ user.username }</NavLink>
+                <NavLink to='/profile' style={{whiteSpace: 'nowrap'}}>{ user.username }</NavLink>
                 {/* <NavLink to="/user/:{user.id}">{ user.derbyName }</NavLink> */}
             </NavItem>
             {/* <NavItem className="Navbar-Setup">

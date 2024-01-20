@@ -6,12 +6,14 @@ function Messages({handleMessages }) {
 
     const [messages, setMessages] = useState([]);
     const [userId, setUserId] = useState();
+    const [username, setUsername] = useState();
+
     let INITIAL_STATE = { message: ""};
     const [formData, setFormData] = useState(INITIAL_STATE);
     const [otherUser, setOtherUser] = useState({});
     let [socket, setSocket] = useState();
     const [chatId, setChatId] = useState(0);
-    const [messageToUser, setMessageToUser] = useState();
+    const [otherUserId, setOtherUserId] = useState();
 
 
     const cardTextRef = useRef(null);
@@ -23,7 +25,8 @@ function Messages({handleMessages }) {
 
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem('user'));
-      setUserId(user.userId);
+      setUserId(Number(user.userId));
+      setUsername(user.username)
     }, []);
 
 
@@ -41,13 +44,14 @@ function Messages({handleMessages }) {
 
 
     useEffect(() => {
-      setMessageToUser(Number(pathname.split('/')[2]))
+      setOtherUserId(Number(pathname.split('/')[2]))
+      console.log("!!!! otherUserId:", otherUserId)
     })
 
     useEffect(() => {
       async function getOtherUser() {
         try {
-          let otherUser =  await FastApi.getOtherUser(messageToUser);
+          let otherUser =  await FastApi.getOtherUser(otherUserId);
           setOtherUser(otherUser);
         } catch (errors) {
           console.error("Get Other User failed", errors);
@@ -55,12 +59,12 @@ function Messages({handleMessages }) {
         }
       }
       getOtherUser()
-    }, [messageToUser])
+    }, [otherUserId])
 
     useEffect(() => {
       async function getChatHistory() {
         try {
-          let chatHistory =  await FastApi.getChatHistory([messageToUser, userId]);
+          let chatHistory =  await FastApi.getChatHistory([otherUserId, userId]);
           if(chatHistory){
             setMessages(chatHistory);
           }
@@ -70,7 +74,7 @@ function Messages({handleMessages }) {
         }
       }
       getChatHistory()
-    }, [messageToUser])
+    }, [otherUserId])
     
    /** Reloading socket when user id changes but I dont think  */
 
@@ -79,6 +83,7 @@ function Messages({handleMessages }) {
       
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         
+        console.log("userId:", userId)
         socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
 
         socket.addEventListener("message", event => {
@@ -107,7 +112,8 @@ function Messages({handleMessages }) {
               "messageId": 0,
               "chatId": chatId,
               "senderId": userId, 
-              "participantIds": [messageToUser, Number(userId)],
+              "senderUsername": username,
+              "participantIds": [otherUserId, userId],
               "message": formData.message,
               "dateTime": dateTime
             }
@@ -117,12 +123,14 @@ function Messages({handleMessages }) {
             messageData = {
               "messageId": 0,
               "chatId": chatId,
-              "participantIds": [messageToUser, Number(userId)],
+              "participantIds": [otherUserId, userId],
               "senderId": userId, 
+              "senderUsername": username,
               "message": formData.message,
               "dateTime": dateTime,
               "type": "user", 
-              "groupId": Number(messageToUser)
+              // "groupId": Number(messageToUser)
+              "groupId": 0
             }
         }
 

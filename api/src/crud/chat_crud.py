@@ -19,6 +19,7 @@ def crud_get_chat_by_group_id(db: Session, group_id: int):
     """Retrieve a specific chat by group_id."""
     print("crud_get_chat_by_id in chat_crud.py:", group_id)
     
+    
     return db.query(models.Chat).filter(models.Chat.group_id == group_id).first()
 
 def crud_get_chats_by_group_ids(db: Session, group_ids: list[int]):

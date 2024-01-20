@@ -34,6 +34,7 @@ class UserInsurance(SQLAlchemyBase):
 class UserMessage(SQLAlchemyBase): 
     __tablename__ = "user_message"
     sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    sender_username = Column(String, ForeignKey)
     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
     user = relationship("User", back_populates="message")
     message = relationship("Message", back_populates="user") 

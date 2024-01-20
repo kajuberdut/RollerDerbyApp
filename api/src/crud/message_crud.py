@@ -7,9 +7,10 @@ from ..schemas.message_schema import *
 
 def crud_create_message(db: Session, message: Message):
     """Create new message."""
-    print("message in create_message CRUD", message)  
+    print("!!!!! message in create_message CRUD", message)  
+    print("message['sender_username']", message["sender_username"])
     
-    db_message = models.Message(chat_id=message["chat_id"], message=message['message'], date_time=message['date_time'], sender_id=message["sender_id"])
+    db_message = models.Message(chat_id=message["chat_id"], message=message['message'], date_time=message['date_time'], sender_id=message["sender_id"], sender_username=message["sender_username"])
     
     db.add(db_message)
     db.commit()
@@ -17,9 +18,9 @@ def crud_create_message(db: Session, message: Message):
     
     return db_message.message_id
 
-def crud_create_user_message(db: Session, sender_id: int, message_id: int, participant_ids: list[int]): 
+def crud_create_user_message(db: Session, sender_id: int, sender_username: str, message_id: int, participant_ids: list[int]): 
     """Create new user message."""
-    db_user_message = models.UserMessage(sender_id=sender_id, message_id=message_id, participant_ids=participant_ids)
+    db_user_message = models.UserMessage(sender_id=sender_id, sender_username=sender_username, message_id=message_id, participant_ids=participant_ids)
     db.add(db_user_message)
     db.commit()
     db.refresh(db_user_message)
@@ -45,6 +46,8 @@ def crud_get_messages_by_chat_id(db: Session, chat_id: int):
     print("hitting get_messages_by_chat_id in CRUD.py")
 
     messages = db.query(models.Message).filter(models.Message.chat_id == chat_id).all()
+    
+    print("messages in messages_CRUD  &&&&&&&&&&", messages)
 
     message_objects = []
     
@@ -54,11 +57,13 @@ def crud_get_messages_by_chat_id(db: Session, chat_id: int):
             "message_id": message.message_id,
             "chat_id": message.chat_id,
             "user_id": message.sender_id,
+            "sender_username": message.sender_username,
             "message": message.message,
             "date_time": message.date_time
         }
         message_objects.append(message_object)
     
+    print(" ^^^^^^^^^^^^^^^ message_objects", message_objects)
     return message_objects
 
 def crud_get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):

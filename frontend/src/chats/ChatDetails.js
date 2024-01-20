@@ -12,13 +12,13 @@ function ChatDetails({handleChat, chatId }) {
   /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
 
     const [messages, setMessages] = useState([]);
-    const [userId, setUserId] = useState();
+    const [userId, setUserId] = useState(null);
+    const [username, setUsername] = useState();
 
     let INITIAL_STATE = { message: ""};
     const [formData, setFormData] = useState(INITIAL_STATE);
     let [socket, setSocket] = useState();
     const [messageToUser, setMessageToUser] = useState()
-    const user = JSON.parse(localStorage.getItem('user'));
     const [chatParticipants, setChatParticipants] = useState([])
     const [chatParticipantIds, setChatParticipantIds] = useState([])
     const [groupName, setGroupName] = useState();
@@ -30,8 +30,20 @@ function ChatDetails({handleChat, chatId }) {
     useEffect(() => {
 
       const user = JSON.parse(localStorage.getItem('user'));
-      setUserId(user.userId);
+      console.log("user!!!! from localStroage in chatDetaisl", user)
+      console.log("!!!!!!!!!!!!! user.userId in lcol stor", user.userId)
+      //! issue with setUSer ???? maybe??? 
+      setUserId(Number(user.userId))
+      console.log("userD in chatDetails!!!!!:", userId)
+      setUsername(user.username)
     }, []);
+
+    useEffect(() => {
+
+      console.log("userID in chatDetails!!!!!:", userId)
+
+    }, [userId]);
+
 
     /** Scroll view to bottom of chat */
 
@@ -55,10 +67,13 @@ function ChatDetails({handleChat, chatId }) {
 
           let chatParticipants =  await FastApi.getChatParticipants(chatId);
           const filteredParticipants = chatParticipants.filter(
-            (participant) => participant !== user.username
+            (participant) => participant !== username
           );
           const formatParticipants = filteredParticipants.join(", ");
           setChatParticipants(formatParticipants);
+          console.log("!!!!!!!!!! chatParticipant.length", chatParticipants.length)
+          console.log("!!!!!!!!chatParticipant.length >= 3 ", chatParticipants.length !== 2)
+          console.log("!!!!!!!!chatParticipant.length  3 ", chatParticipants.length >= 3)
         } catch (errors) {
 
           console.error("Get Other User failed", errors);
@@ -103,6 +118,8 @@ function ChatDetails({handleChat, chatId }) {
           let chatHistory =  await FastApi.getChatHistoryByChatId(chatId);
           setMessages(chatHistory)
 
+          console.log("chatHistory!!!:", chatHistory)
+
         } catch (errors) {
           console.error("Get chatHistory failed", errors);
           return { success: false, errors };
@@ -120,7 +137,7 @@ function ChatDetails({handleChat, chatId }) {
 
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         
-        socket = new WebSocket(`ws://localhost:8000/ws/${user.userId}`);
+        socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
 
         socket.addEventListener("message", event => {
           let eventData = JSON.parse(event.data);
@@ -146,7 +163,8 @@ function ChatDetails({handleChat, chatId }) {
           messageData = {
             "messageId": 0,
             "chatId": chatId,
-            "senderId": user.userId, 
+            "senderId": userId, 
+            "senderUsername": username,
             "participantIds": chatParticipantIds,
             "message": formData.message,
             "dateTime": dateTime
@@ -157,12 +175,14 @@ function ChatDetails({handleChat, chatId }) {
           messageData = {
             "messageId": 0,
             "chatId": chatId,
-            "participantIds": [messageToUser, Number(user.userId)],
-            "senderId": user.userId, 
+            "participantIds": [messageToUser, Number(userId)],
+            "senderId": userId, 
+            "senderUsername": username,
             "message": formData.message,
             "dateTime": dateTime,
             "type": "user", 
-            "groupId": Number(messageToUser)
+            "groupId": 0
+            // "groupId": Number(messageToUser)
           }
         }
 
@@ -192,13 +212,37 @@ function ChatDetails({handleChat, chatId }) {
               </CardTitle>
               <CardText style={{ overflowY: 'auto', height: 300 }}> 
                         {messages.map((message) => (
+                      
+                      <div>
+                          
+                        {/* {chatParticipants.length !== 2 && (
+                          <div style={{textAlign: 'left'}}>
+                          <div style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
+                            {message.senderUsername}
+                          </div>
+                          </div>
+                        )} */}
 
-                        <div style={{ backgroundColor: message.userId == user.userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == user.userId ? '80px' : '0px', textAlign: 'left' }}>
-  
-                        {message.message}
+                        
+                        <div style={{textAlign: 'left'}}>
+                          <div style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
+                            {message.senderUsername}
+                          </div>
+                        </div>
+                        
+                      
+                      <div style={{ backgroundColor: message.userId == userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == userId ? '80px' : '0px', textAlign: 'left' }}>
+
+                        {message.message} 
                         <br />
+                  
+
                         <div ref={messagesEndRef}></div>
-                    </div>
+
+                      </div>
+                      </div>
+                    
+
                 ))}
               </CardText>     
           </CardBody>

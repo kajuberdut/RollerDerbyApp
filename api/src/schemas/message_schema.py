@@ -9,6 +9,8 @@ class Message(BaseModel):
     message: str
     date_time: str
     sender_id: int
+    sender_username: str
+    # ! add sender_username to message as well then you can easily identify 
     
     # class Config:
     #     from_attributes = True
@@ -21,6 +23,7 @@ class MessageObject(BaseModel):
     """Pydantic class for message object."""
     message_id: int
     sender_id: int
+    sender_username: str
     participant_ids: list[int]
     message: str
     date_time: str

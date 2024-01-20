@@ -24,7 +24,7 @@ class ConnectionManager:
     
     # * connect this user the logged in user to the websocket active_connections list
     async def connect(self, websocket: WebSocket, user_id: int):
-        print("In connect in main.py the user_id:", user_id)
+        print("In connect in webSocket_router.py the user_id:", user_id)
         await websocket.accept()
         websocket.user_id = user_id 
         self.active_connections.append(websocket)
@@ -36,6 +36,7 @@ class ConnectionManager:
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
         print("hitting send_personal_message")
+        print("message in websocket router send_personal message:", message)
         await websocket.send_text(message)
     
     async def broadcast(self, message: str):
@@ -46,22 +47,27 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 @router.websocket("/ws/{user_id}")
+
 # @api_app.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
 # async def websocket_endpoint(websocket: UserWebSocket, user_id: int):
     print("websocket is running /ws/{user_id}")
     print("websocket.scope['path']:", websocket.scope["path"])
-    print("user_id in main.py", user_id)
+    print("user_id in websocket_router.py", user_id)
     
     # websocket = UserWebSocket(user_id=user_id)
     # ! added this not necessary for base usage
     
     # participant_message = crud.create_message(db=db, )
     
+    
+    
     await manager.connect(websocket, user_id)
+    
     try: 
         while True:
             data = await websocket.receive_text()
+            
             
             
             print("data in main.py:", data)
@@ -71,6 +77,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             message_id = data_dict["messageId"]
             message = data_dict["message"]
             sender_id = data_dict["senderId"]
+            sender_username = data_dict["senderUsername"]
             # participant_ids = data_dict["participant_ids"]
             # if participant_ids:
             participant_ids = sorted(data_dict["participantIds"])
@@ -83,11 +90,11 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             # print("date_time: ******", date_time)
             # print("type date_time: ******", type(date_time))
             # print("message in main.py **** ", message)
-            # print("sender id in main.py ****", sender_id)
+            print("sender id in main.py ****", sender_id)
+            print("sender id in main.py ****", type(sender_id))
+            print("sender username in main.py ****", sender_username)
             print("participant_ids in main.py ****", participant_ids)
             print("chat_id in main.py ****", chat_id)
-            
-      
             
             if chat_id == 0:
                 
@@ -139,12 +146,16 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 "chat_id": chat_id,
                 "message": message, 
                 "date_time": date_time,
+                "sender_username": sender_username,
                 "sender_id": sender_id
                 # "participant_ids": participant_ids
             }
             
             
+            
             db_message_id = crud_create_message(db=db, message=new_message)
+            
+            
     
             # db_user_message = crud.create_user_message(db=db, sender_id=sender_id, message_id=db_message_id, participant_ids=participant_ids)
             

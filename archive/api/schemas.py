@@ -172,6 +172,7 @@ class Message(BaseModel):
     chat_id: int
     message: str
     date_time: str
+    sender_username: str
     sender_id: int
   
 
@@ -410,6 +411,7 @@ class MessageObject(BaseModel):
     message_id: int
     # user_id: int
     sender_id: int
+    sender_username: str
     participant_ids: list[int]
     message: str
     date_time: str

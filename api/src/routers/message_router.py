@@ -30,8 +30,9 @@ def get_messages(participant_ids: str, db: Session = Depends(get_db)):
     db_chat = crud_get_chat_by_group_id(db, group_id=db_group.group_id)
     
     db_messages = crud_get_messages_by_chat_id(db, chat_id=db_chat.chat_id)
+
     
-    print("db messages in /history/{participants_ids}:", db_messages)
+    print("db messages in /messages/{participants_ids}:", db_messages)
 
     return db_messages
 

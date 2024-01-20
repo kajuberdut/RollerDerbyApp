@@ -2,17 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FastApi from "../Api";
 import "./LoginForm.css";
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form, 
-    FormGroup,
-    Label,
-    Input, 
-    Button,
-    FormFeedback
-  } from "reactstrap";
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 
 /** 
@@ -23,18 +13,15 @@ import {
 const LoginForm = ({login}) => {
     
    /** Set form data, history, valid, and errorMessage in State */
+   
   let INITIAL_STATE = { username: "", password: ""};
   const [formData, setFormData] = useState(INITIAL_STATE);
-  // // const history = useHistory();
+
   // const [ invalid, setInvalid ] = useState(false);
   // const [errorMessage, setErrorMessage] = useState([]);
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user'));
-
-  if(user) {
-    navigate('/');
-  }
   
   /** Handle submit by either logging and redirecting in or returning an error message */
 
