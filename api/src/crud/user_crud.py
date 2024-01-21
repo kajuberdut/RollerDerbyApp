@@ -58,6 +58,10 @@ def crud_get_user_by_username(db: Session, username: str):
     print("user in crud.py", user)
     return user
 
+# def crud_get_participant_usernames_by_ids(db: Session, user_ids: list[int]): 
+    
+#     usernames = db.query(models.User).filter(models.User.username == username).all
+
 def crud_update_user(db: Session, user: UserUpdate, user_id): 
     """Updates user by user_id."""
     print("user in update user crud.py", user)

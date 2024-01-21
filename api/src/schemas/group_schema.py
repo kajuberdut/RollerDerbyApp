@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Union
 
 # * Pydantic Models / Schemas for Group
 
@@ -13,7 +14,8 @@ class UserGroup(BaseModel):
 class Group(BaseModel): 
     """Pydantic class for group."""
     group_id: int = Field(default_factory=lambda: 0)
-    name: str
+    # name: str
+    name: Union[str, list[str]]
     
     # class Config:
     #     from_attributes = True 

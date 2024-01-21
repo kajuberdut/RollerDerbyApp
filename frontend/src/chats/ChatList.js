@@ -21,7 +21,7 @@ const ChatList = ({handleChatList, handleChat}) => {
 
   /** render form */
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [chats, setChats] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'));
@@ -34,6 +34,7 @@ const ChatList = ({handleChatList, handleChat}) => {
   async function getAllChats() {
     console.log("getAllBouts is running in BoutList.js")
     let chats = await FastApi.getChats(user.userId);
+    console.log("chats in chatList!!!!", chats)
 
   //   try{
   //     let bouts = await JoblyApi.getJobs(title);
@@ -43,7 +44,7 @@ const ChatList = ({handleChatList, handleChat}) => {
   //   return {success: false, errors};
   // }
     setChats(chats);
-    // setIsLoading(false); 
+    setIsLoading(false); 
   }
 
  /** Reloading bouts when it changes request for bouts */

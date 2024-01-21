@@ -14,6 +14,9 @@ import "./ChatComponent.css"
       return <></>
     }
 
+    console.log("Chat!!!!!", chat)
+    console.log("chat type of :", typeof chat.name)
+
     let key = chat.chatId;
 
      /** Render the chat component */
@@ -23,7 +26,7 @@ import "./ChatComponent.css"
             <Card className="ChatComponent" onClick={() => handleChat(key)}> 
               <CardBody>
                 <CardTitle className="text-center CardComponent-Title">
-                  <h3>{chat.name}</h3>
+                  { chat.name && <h3>{chat.name}</h3> }
                 </CardTitle>
               </CardBody>
             </Card>

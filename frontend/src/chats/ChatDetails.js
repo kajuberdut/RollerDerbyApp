@@ -116,6 +116,7 @@ function ChatDetails({handleChat, chatId }) {
       async function getChatHistory() {
         try {
           let chatHistory =  await FastApi.getChatHistoryByChatId(chatId);
+          console.log("chatHIstory!!!!", chatHistory)
           setMessages(chatHistory)
 
           console.log("chatHistory!!!:", chatHistory)
@@ -140,6 +141,7 @@ function ChatDetails({handleChat, chatId }) {
         socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
 
         socket.addEventListener("message", event => {
+          console.log("event.data:", event.data)
           let eventData = JSON.parse(event.data);
           setMessages((prevMessages) => [...prevMessages, eventData ]);
         });
@@ -210,10 +212,10 @@ function ChatDetails({handleChat, chatId }) {
               <CardTitle tag="h5">
                 {groupName}
               </CardTitle>
-              <CardText style={{ overflowY: 'auto', height: 300 }}> 
+              <div style={{ overflowY: 'auto', height: 300 }}> 
                         {messages.map((message) => (
                       
-                      <div>
+                      <div key={'history' + message.messageId}>
                           
                         {/* {chatParticipants.length !== 2 && (
                           <div style={{textAlign: 'left'}}>
@@ -222,29 +224,28 @@ function ChatDetails({handleChat, chatId }) {
                           </div>
                           </div>
                         )} */}
-
                         
-                        <div style={{textAlign: 'left'}}>
-                          <div style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
+                        <p style={{textAlign: 'left'}}>
+                          <span style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
                             {message.senderUsername}
-                          </div>
-                        </div>
+                          </span>
+                        </p>
                         
                       
-                      <div style={{ backgroundColor: message.userId == userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == userId ? '80px' : '0px', textAlign: 'left' }}>
+                        <p style={{ backgroundColor: message.userId == userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == userId ? '80px' : '0px', textAlign: 'left' }}>
 
-                        {message.message} 
-                        <br />
-                  
+                          {message.message} 
+                          <br />
+                    
 
-                        <div ref={messagesEndRef}></div>
+                          <span ref={messagesEndRef}></span>
 
-                      </div>
+                        </p>
                       </div>
                     
 
                 ))}
-              </CardText>     
+              </div>     
           </CardBody>
           <CardFooter>
               <Form style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '50px'}}>

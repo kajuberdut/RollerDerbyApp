@@ -39,6 +39,7 @@ def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(N
 
 def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{user_id} ROUTE")
+    print("user_id in USER ROUTER!!! ERROR:", user_id)
     
     user = crud_get_user_by_id(db, user_id=user_id)
     

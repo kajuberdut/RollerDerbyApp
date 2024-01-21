@@ -26,13 +26,13 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
-  // const [isLoading, setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { default: jwt_decode } = require("jwt-decode");
   const [displayMessages, setDisplayMessages] = useState(false)
   const [displayChatList, setDisplayChatList] = useState(false)
   const [displayChats, setDisplayChats] = useState(false)
   const [chatId, setChatId] = useState()
+  // const [displayErr, setDisplayErr] = useState(); 
 
 
 
@@ -80,7 +80,6 @@ function App() {
 
     async function getUser() {
         if (token) {
-
           try {
             let { sub } = jwtDecode(token);
  
@@ -110,6 +109,7 @@ function App() {
       return { success: true};
       } catch (err) {
         console.log("signup failed", err);
+        // setDisplayErr(err)
         return {success: false, err};
       }
     }
@@ -120,7 +120,7 @@ function App() {
       let token = await FastApi.login(userData); 
       console.log("!!!!! token from signup!!!", token)
       setToken(token);
-      console.log("token /setTokn:", token)
+      console.log("token /setToken:", token)
       return { success: true};
       } catch (err) {
         console.log("login failed", err);

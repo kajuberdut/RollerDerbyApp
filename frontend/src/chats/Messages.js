@@ -15,9 +15,8 @@ function Messages({handleMessages }) {
     const [chatId, setChatId] = useState(0);
     const [otherUserId, setOtherUserId] = useState();
 
-
-    const cardTextRef = useRef(null);
-    const pathname = window.location.pathname;
+    // const pathname = window.location.pathname;
+    // console.log("pathname!!!!!!:", pathname)
 
     const messagesEndRef = useRef(null);
 
@@ -25,8 +24,16 @@ function Messages({handleMessages }) {
 
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem('user'));
+      console.log("user in local storage *************************:", user)
       setUserId(Number(user.userId));
       setUsername(user.username)
+
+      const pathname = window.location.pathname;
+      console.log("pathname!!!!!!:", pathname)
+      let formOtherUserId = Number(pathname.split('/')[2]);
+      console.log("FormOtherUserId ######", formOtherUserId)
+      setOtherUserId(formOtherUserId)
+      console.log("^^^^^^^^^^^^^otherUserId", otherUserId)
     }, []);
 
 
@@ -44,21 +51,29 @@ function Messages({handleMessages }) {
 
 
     useEffect(() => {
-      setOtherUserId(Number(pathname.split('/')[2]))
+      // console.log("&&&& setOtherUserId(Number(pathname.split('/')[2]))", Number(pathname.split('/')[2]))
+      // console.log("&&&& setOtherUserId(Number(pathname.split('/')[2]))", typeof Number(pathname.split('/')[2]))
+      // const pathname = window.location.pathname;
+      // console.log("pathname!!!!!!:", pathname)
+      // setOtherUserId(Number(pathname.split('/')[2]))
+      
       console.log("!!!! otherUserId:", otherUserId)
-    })
+      // console.log("!!!! typeof otherUserId:", typeof otherUserId)
+    }, [otherUserId]);
 
     useEffect(() => {
-      async function getOtherUser() {
+      async function getOtherUserById() {
         try {
+          console.log("^^^!!!!!!!!!!!!!!!!!!!!!!!!!^^^^^^ other user id IN FUNCTION USEEFFECT:", otherUserId)
           let otherUser =  await FastApi.getOtherUser(otherUserId);
+          console.log("other user !!!", otherUser)
           setOtherUser(otherUser);
         } catch (errors) {
           console.error("Get Other User failed", errors);
           return { success: false, errors };
         }
       }
-      getOtherUser()
+      getOtherUserById()
     }, [otherUserId])
 
     useEffect(() => {
@@ -83,7 +98,7 @@ function Messages({handleMessages }) {
       
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         
-        console.log("userId:", userId)
+        console.log("userId BY WEBSOCKET !!!!!:", userId)
         socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
 
         socket.addEventListener("message", event => {
@@ -158,10 +173,10 @@ function Messages({handleMessages }) {
             <Button onClick={handleMessages} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
           </CardHeader>
           <CardBody>
-            <CardTitle tag="h5">
-              Special Title Treatment
-            </CardTitle>
-            <CardText ref={cardTextRef} style={{ overflowY: 'auto', height: 300 }}> 
+            {/* <CardTitle tag="h5">
+  
+            </CardTitle> */}
+            <CardText style={{ overflowY: 'auto', height: 300 }}> 
                       {messages.map((message) => (
                       <div style={{ backgroundColor: message.userId == userId ? 'lightgray' : 'lightblue', borderRadius: '10px', margin: '5px', padding: '5px', width: '210px', marginLeft: message.userId == userId ? '80px' : '0px', textAlign: 'left' }}>
                       {message.message}

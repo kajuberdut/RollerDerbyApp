@@ -18,10 +18,10 @@ const LoginForm = ({login}) => {
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   // const [ invalid, setInvalid ] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState([]);
+  const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  // const user = JSON.parse(localStorage.getItem('user'));
   
   /** Handle submit by either logging and redirecting in or returning an error message */
 
@@ -38,9 +38,8 @@ const LoginForm = ({login}) => {
         navigate('/');
 
     } else {
-        let message = result.errors
     //   let message = result.errors[0]
-    //   setErrorMessage(message);
+      setErrorMessage(result.err);
     //   setInvalid(true);
   }
 
@@ -65,6 +64,9 @@ const LoginForm = ({login}) => {
         <Card>
             <CardTitle className="LoginForm-CardTitle">
                 <h1>Login</h1>
+                <div>
+                  {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
+                </div>
             </CardTitle>
             <CardBody>
                 <Form onSubmit={handleSubmit}>

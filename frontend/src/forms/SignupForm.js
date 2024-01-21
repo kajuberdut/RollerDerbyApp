@@ -2,16 +2,7 @@ import React, { useContext, useState } from "react";
 import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 
 /** 
@@ -25,8 +16,8 @@ const SignupForm = ({signup}) => {
   const { user, setUser } = useContext(UserContext);
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
-  const [ invalid, setInvalid ] = useState(false);
-  const [errorMessage, setErrorMessage] = useState([]);
+const [ invalid, setInvalid ] = useState(false);
+const [errorMessage, setErrorMessage] = useState([]);
 const navigate = useNavigate();
 
   // let INITIAL_STATE; 
@@ -55,16 +46,12 @@ const navigate = useNavigate();
     setFormData(INITIAL_STATE);
     console.log("formData:", formData)
     // let result = await FastApi.signup(formData);
-    let result = await signup(formData)
+     let result = await signup(formData);
 
-    // if(result.success) {
-    if(result) {
-      navigate('/login')
-
+    if(result.success) {
+        navigate('/login')
     } else {
-      // let message = result.errors[0]
-      // let message = result
-      // setErrorMessage(message)
+      setErrorMessage(result.err)
       // setInvalid(true)
       console.log("Signup broke")
     }
@@ -91,6 +78,9 @@ const navigate = useNavigate();
         <Card>
             <CardTitle className="SignupForm-CardTitle">
             <h1>Create a profile</h1>
+            <div>
+              {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
+            </div>
             </CardTitle>
             <CardBody>
                 {/* <Form> */}

@@ -51,7 +51,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
           <section key={"CardComponent-" + key}>
             <Card className="CardComponent"> 
               <CardBody>
-                <NavLink exact to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
+                <NavLink to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
                   <CardTitle className="text-center CardComponent-Title">
                     <h3>{info.theme}</h3>
                   </CardTitle>

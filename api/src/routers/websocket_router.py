@@ -96,6 +96,15 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             print("participant_ids in main.py ****", participant_ids)
             print("chat_id in main.py ****", chat_id)
             
+            # ! not that this is to handle the two user chats
+            participant_names = []
+            
+            for participant_id in participant_ids: 
+                participant = crud_get_user_by_id(db=db, user_id=participant_id)
+                participant_names.append(participant.username)
+            # *trying to handle name for a two person chat 
+                
+            
             if chat_id == 0:
                 
                 # chat_db = crud.get_chat_id_by_participants(db=db,  participant_ids=participant_ids)
@@ -103,12 +112,16 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 
                 if not group_db:
                     
+                    # ! note this is chat between two particants so the name is going to be blank and the other user will be displayed. 
                     group = {
                         "participant_ids": participant_ids,
-                        "name": "Testing"
+                        "name": f"{participant_names[0]} & {participant_names[1]}"
+                        # "name": participant_names
+                        # "name": ""
                     }
                     
                     group_db = crud_create_group(db=db, group=group)
+                    print("group_db in websocket_router", group_db)
                     
                     for participant_id in participant_ids: 
                         
@@ -173,7 +186,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     # await manager.send_personal_message(userData, websocket)
                     
                     # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
-                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}" })
+                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}", "senderUsername": f"{sender_username}" })
                     print("!!!!!!!!!!!!participantData !!!!!!!!!!!!!!!:", participantData)
                     
                     await manager.send_personal_message( participantData,  participant_connection)
@@ -187,4 +200,6 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f"User Id #{user_id} has left the chat")
+        # jsonMessage = json.dumps(f"User Id #{user_id} has left the chat")
+        # * not you are not printing this on the frontend but could add in a green light if user is connected 
+        await manager.broadcast({"disconnected":f"User Id #{user_id} has left the chat" })
