@@ -100,6 +100,7 @@ function Messages({handleMessages }) {
         
         console.log("userId BY WEBSOCKET !!!!!:", userId)
         socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+        console.log("socket is this creating a new socket? in messages.js", socket)
 
         socket.addEventListener("message", event => {
           let eventData = JSON.parse(event.data)
@@ -149,9 +150,11 @@ function Messages({handleMessages }) {
             }
         }
 
-        let jsonData = JSON.stringify(messageData); 
+        // let jsonData = JSON.stringify(messageData);
+        // console.log("jsonData in messages", jsonData)
+        // console.log("type jsonData", typeof jsonData)
 
-          socket.send(jsonData)
+          socket.send(messageData)
           setFormData(INITIAL_STATE)     
         }
 

@@ -16,10 +16,11 @@ class FastApi {
 
     // the token for interactive with the API will be stored here.
     static token;
+    static socket;
 
+    
     static async request(endpoint = "", data = {}, method = "get") {
-        // static async request(endpoint, method = "get") {
-        // console.log("request is running")
+
         console.debug("API Call:", endpoint, data, method);
         console.debug("API CALL endpoint", endpoint)
         console.debug("API CALL data", data)
@@ -95,6 +96,59 @@ class FastApi {
         // ! note that was an issue with not running inside of venv
         return res.accessToken;
       }
+
+  /** Adding websocket to my api call */
+  // ! this is where you are at.... 
+
+  // static socket;
+
+
+  static connectSocket(userId) {
+    console.log("hitting connect Socket in FastApi")
+    if (!FastApi.socket || FastApi.socket.readyState !== WebSocket.OPEN) {
+      try {
+        FastApi.socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+
+        /** Wait until websocket is open initially before sending first message */
+        FastApi.socket.addEventListener('open', () => {
+
+          let messageData = {
+            "first_message": true,
+            "token": FastApi.token,
+            // "token": "fake token",
+          }
+
+          FastApi.sendMessage(messageData)
+        })
+        } catch (error) {
+        console.error("Error connection to webSocket :", error);
+      }
+
+    }
+  }
+
+  static sendMessage(messageData) {
+    console.log("hitting send MEssage n FastApi working")
+    console.log("FastApi.socket:", FastApi.socket)
+    console.log("FastApi.socket.readyState:", FastApi.socket.readyState)
+    if (FastApi.socket && FastApi.socket.readyState === WebSocket.OPEN) {
+      console.log("making it past first if")
+      try {
+        // const headers = FastApi.token ? { Authorization: `Bearer ${FastApi.token}` } : {};
+        
+        FastApi.socket.send(JSON.stringify(messageData));
+        // ! line above appears to not be hitting the rout 
+        console.log("apparently it sent wth hitting the route???")
+      } catch (error) {
+        console.error("Error sending socket message:", error);
+      }
+    } else {
+      console.error("Socket is not open. Unable to send message.");
+    }
+  }
+
+
+
 
   /** Get all users*/
 

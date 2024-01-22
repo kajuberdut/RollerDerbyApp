@@ -54,9 +54,12 @@ def crud_get_user_by_username(db: Session, username: str):
     """Retrieves user by username."""
     print("username in get_user_by_username in crud.py", username)
     
-    user = db.query(models.User).filter(models.User.username == username).first()
-    print("user in crud.py", user)
-    return user
+    user_login_data = db.query(models.User).filter(models.User.username == username).first()
+    # print("user in crud.py", user)
+    # print("user.user_id in crud.py", user.user_id)
+    # print("user.user_id in crud.py", user.username)
+    # print("user.user_id in crud.py", user.email)
+    return user_login_data
 
 # def crud_get_participant_usernames_by_ids(db: Session, user_ids: list[int]): 
     

@@ -19,5 +19,5 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     """Pydantic class for token data."""
-    username: str | None = None
+    user_id: int | None = None
 #    

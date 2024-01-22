@@ -47,7 +47,7 @@ def crud_get_messages_by_chat_id(db: Session, chat_id: int):
 
     messages = db.query(models.Message).filter(models.Message.chat_id == chat_id).all()
     
-    print("messages in messages_CRUD  &&&&&&&&&&", messages)
+    # print("messages in messages_CRUD  &&&&&&&&&&", messages)
 
     message_objects = []
     
@@ -63,7 +63,7 @@ def crud_get_messages_by_chat_id(db: Session, chat_id: int):
         }
         message_objects.append(message_object)
     
-    print(" ^^^^^^^^^^^^^^^ message_objects", message_objects)
+    # print(" ^^^^^^^^^^^^^^^ message_objects", message_objects)
     return message_objects
 
 def crud_get_messages_with_user_ids(db: Session, skip: int = 0, limit: int = 100):

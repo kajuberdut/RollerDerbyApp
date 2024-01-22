@@ -85,7 +85,7 @@ const ChatList = ({handleChatList, handleChat}) => {
     {/* <SearchComponent setBouts={setBouts}/> */}
     <div className="ChatList">
 
-    <Card className="ChatList"  style={{height: '800px', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
+    <Card className="ChatList"  style={{height: '85%', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
           <CardHeader style={{height: '40px'}}>
             <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>Chats</p>
             <Button onClick={handleChatList} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>

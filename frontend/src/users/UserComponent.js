@@ -73,7 +73,7 @@ import {
      /** Render the card component */
       
       return (
-      <div key={"UserComponent-" + indUser.userId } className="UserComponent" style={{width: ' 350px', height: '90px', borderRadius: '5px'}}> 
+      <div key={"UserComponent-" + indUser.userId } className="UserComponent" style={{width: '77%', height: '90px', borderRadius: '5px'}}> 
        <NavLink to={`/users/${indUser.userId}`}                  className="UserComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
         <div style={{ display: 'flex'}}>
             <div style={{paddingTop: '8px', paddingLeft: '20px', paddingRight: '20px'}} >

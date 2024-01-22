@@ -50,7 +50,6 @@ function Profile() {
 
         getImage()
 
-
     }, [image, userState]); 
 
     /** Fetch data from ids from user state and call function to get data  */

@@ -12,7 +12,7 @@ function ChatDetails({handleChat, chatId }) {
   /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
 
     const [messages, setMessages] = useState([]);
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState();
     const [username, setUsername] = useState();
 
     let INITIAL_STATE = { message: ""};
@@ -30,16 +30,15 @@ function ChatDetails({handleChat, chatId }) {
     useEffect(() => {
 
       const user = JSON.parse(localStorage.getItem('user'));
-      console.log("user!!!! from localStroage in chatDetaisl", user)
-      console.log("!!!!!!!!!!!!! user.userId in lcol stor", user.userId)
-      //! issue with setUSer ???? maybe??? 
-      setUserId(Number(user.userId))
+      setUserId(user.userId)
       console.log("userD in chatDetails!!!!!:", userId)
       setUsername(user.username)
     }, []);
 
     useEffect(() => {
 
+      console.log("userID in chatDetails!!!!! typeof:", typeof userId)
+      
       console.log("userID in chatDetails!!!!!:", userId)
 
     }, [userId]);
@@ -71,9 +70,9 @@ function ChatDetails({handleChat, chatId }) {
           );
           const formatParticipants = filteredParticipants.join(", ");
           setChatParticipants(formatParticipants);
-          console.log("!!!!!!!!!! chatParticipant.length", chatParticipants.length)
-          console.log("!!!!!!!!chatParticipant.length >= 3 ", chatParticipants.length !== 2)
-          console.log("!!!!!!!!chatParticipant.length  3 ", chatParticipants.length >= 3)
+          // console.log("!!!!!!!!!! chatParticipant.length", chatParticipants.length)
+          // console.log("!!!!!!!!chatParticipant.length >= 3 ", chatParticipants.length !== 2)
+          // console.log("!!!!!!!!chatParticipant.length  3 ", chatParticipants.length >= 3)
         } catch (errors) {
 
           console.error("Get Other User failed", errors);
@@ -116,10 +115,8 @@ function ChatDetails({handleChat, chatId }) {
       async function getChatHistory() {
         try {
           let chatHistory =  await FastApi.getChatHistoryByChatId(chatId);
-          console.log("chatHIstory!!!!", chatHistory)
-          setMessages(chatHistory)
 
-          console.log("chatHistory!!!:", chatHistory)
+          setMessages(chatHistory)
 
         } catch (errors) {
           console.error("Get chatHistory failed", errors);
@@ -133,31 +130,96 @@ function ChatDetails({handleChat, chatId }) {
 
    /** Reloading socket when userId changes */
   //  * look at this again. I dont think you need to do that with userId
+  // ! this  is handling sockets in chatDetails
 
-    useEffect(() => {
+  //   useEffect(() => {
 
-      if (!socket || socket.readyState !== WebSocket.OPEN) {
+  //     if (!socket || socket.readyState !== WebSocket.OPEN) {
         
-        socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+  //       socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
 
-        socket.addEventListener("message", event => {
-          console.log("event.data:", event.data)
-          let eventData = JSON.parse(event.data);
-          setMessages((prevMessages) => [...prevMessages, eventData ]);
-        });
+  //       socket.addEventListener("message", event => {
+  //         console.log("event.data:", event.data)
+  //         let eventData = JSON.parse(event.data);
+  //         setMessages((prevMessages) => [...prevMessages, eventData ]);
+  //       });
   
-        setSocket(socket);
-      }
-      else {
-        console.log("unable to connect to socket???")
-      }
-      // Cleanup function to close the socket when the component unmounts
-      return () => socket.close();
+  //       setSocket(socket);
+  //     }
+  //     else {
+  //       console.log("unable to connect to socket???")
+  //     }
+  //     // Cleanup function to close the socket when the component unmounts
+  //     return () => socket.close();
+  // }, [userId]);
+
+  //   const handleSubmit = async evt => {
+  //       evt.preventDefault();   
+  //       console.log("hitting handle submit")
+  //       let dateTime = (new Date().toLocaleString());
+  //       let messageData;
+
+  //       if(chatId !== 0) {
+  //         messageData = {
+  //           "messageId": 0,
+  //           "chatId": chatId,
+  //           "senderId": userId, 
+  //           "senderUsername": username,
+  //           "participantIds": chatParticipantIds,
+  //           "message": formData.message,
+  //           "dateTime": dateTime
+  //         }
+  //       } 
+     
+  //       if(chatId == 0) {
+  //         messageData = {
+  //           "messageId": 0,
+  //           "chatId": chatId,
+  //           "participantIds": [messageToUser, Number(userId)],
+  //           "senderId": userId, 
+  //           "senderUsername": username,
+  //           "message": formData.message,
+  //           "dateTime": dateTime,
+  //           "type": "user", 
+  //           "groupId": 0
+  //           // "groupId": Number(messageToUser)
+  //         }
+  //       }
+
+  //         let jsonData = JSON.stringify(messageData); 
+  //         // const token = localStorage.getItem('oauth2Token');
+  //         // console.log("!!!!!!!! token is prensent in chat details", token)
+  //         // socket.send(jsonData, { Authorization: `Bearer ${token}` })
+  //         socket.send(jsonData)
+  //         setFormData(INITIAL_STATE)
+  //       }
+
+  // ! this  is handling sockets in chatDetails
+
+  useEffect(() => {
+
+      /** Connect to websocket  */
+
+      FastApi.connectSocket(userId); 
+
+      /** Listen for responses from websocket  */
+
+      FastApi.socket.addEventListener("message", event => {
+        console.log("Socket message received in Api.js :", event.data);
+        try {
+          const eventData = JSON.parse(event.data);
+          setMessages((prevMessages) => [...prevMessages, eventData ]);
+        } catch (error) {
+          console.error("Error parsing socket message:", error);
+        }
+      });
+
   }, [userId]);
+
 
     const handleSubmit = async evt => {
         evt.preventDefault();   
-
+        console.log("hitting handle submit")
         let dateTime = (new Date().toLocaleString());
         let messageData;
 
@@ -177,19 +239,18 @@ function ChatDetails({handleChat, chatId }) {
           messageData = {
             "messageId": 0,
             "chatId": chatId,
-            "participantIds": [messageToUser, Number(userId)],
+            "participantIds": [messageToUser, userId],
             "senderId": userId, 
             "senderUsername": username,
             "message": formData.message,
             "dateTime": dateTime,
             "type": "user", 
             "groupId": 0
-            // "groupId": Number(messageToUser)
           }
         }
 
-        let jsonData = JSON.stringify(messageData); 
-          socket.send(jsonData)
+          FastApi.sendMessage(messageData)
+
           setFormData(INITIAL_STATE)
         }
  
@@ -212,7 +273,7 @@ function ChatDetails({handleChat, chatId }) {
               <CardTitle tag="h5">
                 {groupName}
               </CardTitle>
-              <div style={{ overflowY: 'auto', height: 300 }}> 
+              <div style={{ overflowY: 'auto', overflowX: 'hidden', height: 300 }}> 
                         {messages.map((message) => (
                       
                       <div key={'history' + message.messageId}>
