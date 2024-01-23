@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import FastApi from "../Api";
-import { Card, CardBody, CardTitle, Form, Input, Button, CardHeader, CardFooter } from "reactstrap";
+import { Card, CardBody, Form, Input, Button, CardHeader, CardFooter } from "reactstrap";
 
 function Chat({handleMessages, handleChat, chatId }) {
 
@@ -88,6 +88,27 @@ function Chat({handleMessages, handleChat, chatId }) {
         setIsMounted(true);
       }, [isMounted, otherUserId]);
 
+      /** Format the group name to display accordingly  */
+
+      function formatGrpNm(groupName) {
+     
+        let nwGrpName; 
+
+        if(groupName.includes('& ' + username)) {
+          nwGrpName = groupName.replace('& ' + username, " ")
+          } 
+          
+        if(groupName.includes(username + ' &')) {
+          nwGrpName = groupName.replace(username + ' &', " ")
+        }
+
+          if(nwGrpName) {
+            return nwGrpName
+          }
+          return groupName
+        } 
+
+      
 
       useEffect(() => {
         if (isMounted) {
@@ -119,7 +140,8 @@ function Chat({handleMessages, handleChat, chatId }) {
         
                     let groupName = await FastApi.getGroupNameByChatId(chatId);
                     console.log("groupName:", groupName)
-                    setGroupName(groupName);
+                    let frmGrpNm = formatGrpNm(groupName)
+                    setGroupName(frmGrpNm);
                 } catch (errors) {
         
                     console.error("Get group name failed", errors);
@@ -229,15 +251,10 @@ function Chat({handleMessages, handleChat, chatId }) {
         <Card className="Messages"  style={{height: '500px', width: '350px', position: 'fixed', bottom: '0px', right: '480px', borderRadius: '20px'}}>
             <CardHeader style={{height: '40px'}}>
 
-              {/* {chatId && chatParticipantIds.length !== 2 && 
-                <p tag="h5" style={{fontWeight: 'bold', fontSize: '18px'}}>
-                  {groupName}
-                </p>
-              } */}
-
-                <p tag="h5" style={{fontWeight: 'bold', fontSize: '18px'}}>
-                  {groupName}
-                </p>
+            { groupName && <p tag="h5" style={{fontWeight: 'bold', fontSize: '18px'}}>
+              {groupName}
+            </p>
+              }
 
 
               { otherUser.username && <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>{otherUser.username}</p> }
@@ -245,14 +262,7 @@ function Chat({handleMessages, handleChat, chatId }) {
               <Button onClick={handleChat ? handleChat : handleMessages} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
             </CardHeader>
 
-            {/* { chatId && <CardTitle style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>{chatParticipants}</CardTitle> } */}
-
             <CardBody>
-              {/* {chatId && chatParticipantIds.length !== 2 && 
-                <CardTitle tag="h5">
-                  {groupName}
-                </CardTitle>
-              } */}
 
                 {messages &&
                 <div style={{ overflowY: 'auto', overflowX: 'hidden', height: 300 }}> 
@@ -260,14 +270,6 @@ function Chat({handleMessages, handleChat, chatId }) {
                         
                         <div key={'history' + message.messageId}>
                             
-                          {/* {chatParticipants.length !== 2 && (
-                            <div style={{textAlign: 'left'}}>
-                            <div style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
-                              {message.senderUsername}
-                            </div>
-                            </div>
-                          )} */}
-                          
                           <p style={{textAlign: 'left'}}>
                             <span style={{ display: 'inline-block', paddingLeft: message.userId == userId ? '80px' : '0px', fontSize: 'smaller', fontStyle: 'italic' }}>
                               {message.senderUsername}
@@ -286,7 +288,6 @@ function Chat({handleMessages, handleChat, chatId }) {
                           </p>
                         </div>
                       
-  
                   ))}
                 </div> 
                 }    
