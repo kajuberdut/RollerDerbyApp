@@ -130,9 +130,11 @@ function App() {
     /** Logout - clear token and user */
 
     function logout() {
-      setToken(null);
-      setUser(null);
       setDisplayMessages(false);
+      setDisplayChatList(false);
+      setDisplayChats(false);
+      setUser(null);
+      setToken(null);
       localStorage.setItem('user', null);
 
     }

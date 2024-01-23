@@ -149,13 +149,12 @@ function Chat({handleMessages, handleChat, chatId }) {
                 }
         
                 /** Get chat partipant ids by chat id for socket messages  */
+                
         
                     try {
                     
                     let chatParticipantIds =  await FastApi.getChatParticipantIds(chatId);
                     
-                    console.log("!!!!!! !! chatParticipants length !!!!!!", chatParticipantIds)
-                    console.log("!!!!!! !! chatParticipants length !!!!!!", chatParticipantIds.length)
                     setChatParticipantIds(chatParticipantIds)
                     } catch (errors) {
         
@@ -283,7 +282,7 @@ function Chat({handleMessages, handleChat, chatId }) {
                             <br />
                       
   
-                            <span ref={messagesEndRef}></span>
+                            <span style={{ visibility: 'hidden' }} ref={messagesEndRef}></span>
   
                           </p>
                         </div>
@@ -293,6 +292,7 @@ function Chat({handleMessages, handleChat, chatId }) {
                 }    
             </CardBody>
             <CardFooter>
+                {/* <Form style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '50px'}} onSubmit={handleSubmit}> */}
                 <Form style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '50px'}}>
                     <Input
                       type="textarea"
@@ -302,6 +302,11 @@ function Chat({handleMessages, handleChat, chatId }) {
                       onChange={handleChange}
                       placeholder="Type a message.."
                       style={{ width: '240px', height: '40px', resize: 'none', bottom: '7px'}}
+                      onKeyDown={(evt) => {
+                        if (evt.key === 'Enter') {
+                          handleSubmit(evt);
+                        }
+                      }}
                     />
                     <Button onClick={handleSubmit} style={{width: '63px', height: '36px'}}>
                         Send
