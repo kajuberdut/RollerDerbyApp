@@ -26,6 +26,8 @@ def get_messages(participant_ids: str, db: Session = Depends(get_db)):
     participant_ids_list = sorted( participant_ids.split(","))
     
     db_group = crud_get_group_id_by_participants(db, participant_ids=participant_ids_list)
+    if not db_group: 
+        return []
     
     db_chat = crud_get_chat_by_group_id(db, group_id=db_group.group_id)
     

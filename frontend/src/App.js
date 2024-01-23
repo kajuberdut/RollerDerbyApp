@@ -9,7 +9,6 @@ import UserContext from "./multiUse/UserContext";
 import FastApi from "./Api";
 import useLocalStorage from "./hooks/useLocalStorage";
 // ! this will probably need to be moved 
-import Messages from './chats/Messages';
 // import jwt from "jsonwebtoken";
 // import * as jwt_decode from 'jwt-decode';
 // import jwt_decode from 'jwt-decode'
@@ -18,7 +17,6 @@ import { jwtDecode } from "jwt-decode"
 import ChatIcon from "./chats/ChatIcon"
 import ChatList from './chats/ChatList';
 import { Link } from 'react-router-dom';
-import ChatDetails from './chats/ChatDetails';
 import Chat from './chats/Chat';
 
 export const TOKEN_STORAGE_ID = "api-token";
@@ -197,7 +195,7 @@ function App() {
           </main> */}
           <main>
             <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} />
-          {/* { user && displayMessages &&  <Messages handleMessages={handleMessages} /> } */}
+  
           { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
           </main>
           {/* {user && <Link to={`/chats/${user.userId}`}>
@@ -207,7 +205,7 @@ function App() {
             <div onClick={handleChatList}><ChatIcon className="ChatIcon"/></div>
           }
           {user && displayChatList && <ChatList handleChatList={handleChatList} handleChat={handleChat} /> }
-          {/* {user && displayChats && <ChatDetails handleChat={handleChat} chatId={chatId} /> } */}
+
           {user && displayChats && <Chat handleChat={handleChat} chatId={chatId} /> }
         </Fragment>
         </UserContext.Provider>

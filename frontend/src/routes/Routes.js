@@ -15,7 +15,6 @@ import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
-import Messages from "../chats/Messages";
 import ChatList from "../chats/ChatList"
 // import SetupTesting from "../test/SetupTesting"
 
@@ -59,7 +58,6 @@ return (
         <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
         <Route path="/mixers/add" element={<MixerForm/>} />
         <Route path="/mixers/:id" element={<MixerDetails />} /> 
-        {/* <Route path="/messages" element={<Messages handleMessages={handleMessages}/>} />  */}
         <Route path="/chats/:userId" element={<ChatList/>} /> 
         <Route path="*" element={<NotFound />} /> 
       ''
