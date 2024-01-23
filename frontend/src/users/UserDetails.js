@@ -32,8 +32,7 @@ function UserDetails({ handleMessages }) {
     const [location, setLocation] = useState("");
     const [image, setImage] = useState("");
     const { user } = useContext(UserContext);
-    // const params = useParams();
-    // const derbyName = params.d;
+
     // console.log("user in profile.js:", user)
 
     // let pos = []; 

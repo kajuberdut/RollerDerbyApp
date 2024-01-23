@@ -19,6 +19,7 @@ import ChatIcon from "./chats/ChatIcon"
 import ChatList from './chats/ChatList';
 import { Link } from 'react-router-dom';
 import ChatDetails from './chats/ChatDetails';
+import Chat from './chats/Chat';
 
 export const TOKEN_STORAGE_ID = "api-token";
 
@@ -196,7 +197,8 @@ function App() {
           </main> */}
           <main>
             <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} />
-          { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
+          {/* { user && displayMessages &&  <Messages handleMessages={handleMessages} /> } */}
+          { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
           </main>
           {/* {user && <Link to={`/chats/${user.userId}`}>
             <ChatIcon className="ChatIcon"/>
@@ -205,7 +207,8 @@ function App() {
             <div onClick={handleChatList}><ChatIcon className="ChatIcon"/></div>
           }
           {user && displayChatList && <ChatList handleChatList={handleChatList} handleChat={handleChat} /> }
-          {user && displayChats && <ChatDetails handleChat={handleChat} chatId={chatId} /> }
+          {/* {user && displayChats && <ChatDetails handleChat={handleChat} chatId={chatId} /> } */}
+          {user && displayChats && <Chat handleChat={handleChat} chatId={chatId} /> }
         </Fragment>
         </UserContext.Provider>
       </BrowserRouter>

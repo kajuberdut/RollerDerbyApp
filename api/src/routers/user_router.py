@@ -36,7 +36,6 @@ def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(N
 
 @router.get("/users/{user_id}", response_model=UserDetailsPublic)
 # Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
-
 def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{user_id} ROUTE")
     print("user_id in USER ROUTER!!! ERROR:", user_id)

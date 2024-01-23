@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import FastApi from "../Api";
 import { Card, CardBody, Form, Input, Button, CardHeader, CardTitle,  CardFooter } from "reactstrap";
 
+
   /**  
  * Chat Details
  */
 
-function ChatDetails({handleMessages, handleChat, chatId }) {
+function ChatDetails({handleChat, chatId }) {
 
   /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
 
@@ -22,7 +23,7 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
 
     const messagesEndRef = useRef(null);
 
-
+    
 
     /** On mount, retrieve user from local storage and set user id in state*/
 
@@ -30,17 +31,8 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
 
       const user = JSON.parse(localStorage.getItem('user'));
       setUserId(user.userId)
-      console.log("userId in chatDetails!!!!!:", userId)
+      console.log("userD in chatDetails!!!!!:", userId)
       setUsername(user.username)
-
-      if(handleMessages) {
-        console.log("handleMessages is running ")
-        const pathname = window.location.pathname;
-        let formOtherUserId = Number(pathname.split('/')[2]);
-        setOtherUserId(formOtherUserId)
-
-      }
-      
     }, []);
 
     /** Scroll view to bottom of chat */
@@ -54,13 +46,9 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
     useEffect(() => {
       scrollToBottom()
     }, [messages]);
+   
 
-
-    if(chatId) {
-      console.log("if chat is running ")
-      getChat();
-    }
- 
+    useEffect(() => {
       async function getChat() {
 
         /** Get chat partipants by username */
@@ -104,22 +92,20 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
             console.error("Get chatParticipantIds failed", errors);
             return { success: false, errors };
           }
+
       }
+
+      getChat()
+    }, [userId])
 
 
 
     useEffect(() => {
       async function getChatHistory() {
-        
         try {
-          let chatHistory;
-          if(chatId) {
-            chatHistory =  await FastApi.getChatHistoryByChatId(chatId);
-          } else {           
-            chatHistory =  await FastApi.getChatHistory([otherUserId, userId]);
+          let chatHistory =  await FastApi.getChatHistoryByChatId(chatId);
 
-          }
-            setMessages(chatHistory)
+          setMessages(chatHistory)
 
         } catch (errors) {
           console.error("Get chatHistory failed", errors);

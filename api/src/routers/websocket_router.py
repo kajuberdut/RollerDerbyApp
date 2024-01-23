@@ -3,27 +3,17 @@ from typing import Annotated
 from ..dependencies import oauth2_scheme, get_db, hash_password, get_and_validate_current_user
 import json
 
-
-# from ..schemas.user_schema import *
-# from ..schemas.location_schema import *
-
 from ..crud.chat_crud import *
 from ..crud.group_crud import *
 from ..crud.message_crud import *
 from ..crud.user_crud import *
-
-# from ..crud.ruleset_crud import *
 
 router = APIRouter()
 
 # router = APIRouter(
 #     prefix="/ws",
 #     tags=["websocket"],
-#     dependencies=[Depends(oauth2_scheme)],
 # )
-
-
-
 
 class ConnectionManager:
     def __init__(self):
@@ -54,8 +44,6 @@ class ConnectionManager:
     
 manager = ConnectionManager()
 
-# authenticate = None
-
 @router.websocket("/ws/{user_id}")
 # @router.websocket("/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
@@ -72,6 +60,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
 
             # turn data into a dict 
             data_dict = json.loads(data)
+            print("data_dict ******************", data_dict)
 
             if "first_message" in data_dict:
                 
@@ -104,16 +93,20 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             date_time = data_dict["dateTime"]
             chat_id = data_dict["chatId"]
             
-            # print("message_id", message_id )
-            # print("type message_id", type(message_id))
-            # print("date_time: ******", date_time)
-            # print("type date_time: ******", type(date_time))
-            # print("message in main.py **** ", message)
-            print("sender id in main.py ****", sender_id)
-            print("sender id in main.py ****", type(sender_id))
-            print("sender username in main.py ****", sender_username)
-            print("participant_ids in main.py ****", participant_ids)
-            print("chat_id in main.py ****", chat_id)
+            # type = data_dict["type"]
+            # print("type in websocket!!!!", type)
+            
+            print("message_id", message_id )
+            print("type message_id", type(message_id))
+            print("date_time: ******", date_time)
+            print("type date_time: ******", type(date_time))
+            print("message in main.py **** ", message)
+            print("sender id in websocket_router.py ****", sender_id)
+            print("sender id in websocket_router.py ****", type(sender_id))
+            print("sender username in websocket_router.py ****", sender_username)
+            print("participant_ids in websocket_router.py ****", participant_ids)
+            print("chat_id in websocket_router.py ****", chat_id)
+            print("type chat_id in websocket_router.py ****", type(chat_id))
             
             # ! not that this is to handle the two user chats
             participant_names = []
@@ -187,15 +180,10 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 if participant_connection:
 
                     # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
-                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}", "senderUsername": f"{sender_username}" })
+                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}", "senderUsername": f"{sender_username}", "messageId": f"{db_message_id}" })
                     print("!!!!!!!!!!!!participantData !!!!!!!!!!!!!!!:", participantData)
                     
                     await manager.send_personal_message( participantData,  participant_connection)
-                     
-            # if not  participant_connection: 
-            #     print("there is no  participant connection")
-            #     print("add  participant connection")
-            #     await manager.send_personal_message(" participant is currently unavailable.", websocket)
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)

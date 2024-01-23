@@ -180,13 +180,13 @@ class FastApi {
     static async getOtherUser(userId) {
       console.log("you are hitting the get OTHER user route in Api.js")
       console.log("!!!! userId in api.js !!!!", userId)
+      console.log("type of userId in api.js", typeof userId)
       let res = await this.request(`users/${userId}`);
       console.log("res:", res)
       if(res.ruleset === null) {
         res.ruleset = 0; 
         console.log("res in api.js", res)
       }
-      console.log("THE ISSUE IS in api.js I think ", res)
       return res
     }
 
