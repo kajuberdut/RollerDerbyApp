@@ -26,19 +26,12 @@ import ChatList from "../chats/ChatList"
  * Display routes
  */
 
-function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages}) {
- console.log(" ^^^^^^ handleMessages in routes:", typeof handleMessages)
+function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList}) {
+ console.log(" ^^^^^^ getAllChats in routes:", typeof getAllChats)
 /** Render routes */
 
 return (
     <Routes>
-        {/* <Route exact path="/">
-        <Home  />
-        </Route> */}
-{/* 
-        <React.Fragment>
-            <SignupForm />
-        </React.Fragment> */}
 
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm signup={signup} />} />
@@ -47,35 +40,21 @@ return (
         <Route path="/setup/private" element={<SetupPrivateDetailsForm update={update}/>} />
         {/* <Route path="/setup" element={<SetupTesting update={update}/>} /> */}
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile displayChatList={displayChatList} />} />
         <Route path="/update/:username" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
         {/* <Route path="/users/:username" element={<UserDetails handleMessages={handleMessages} />} /> */}
-        <Route path="/users/:userId" element={<UserDetails handleMessages={handleMessages} />} />
+        <Route path="/users/:userId" element={<UserDetails handleMessages={handleMessages} displayChatList={displayChatList}/>} />
         {/* <Route path="/events/bouts" element={<BoutList getBouts={getBouts}/>} /> */}
         <Route path="/events/:type" element={<EventList getBouts={getBouts}/>} />
         <Route path="/events/bouts/add" element={<BoutForm/>} />
-        <Route path="/events/bouts/:id" element={<BoutDetails />} />
+        <Route path="/events/bouts/:id" element={<BoutDetails getAllChats={getAllChats} />} />
         {/* <Route path="events/mixers" element={<MixerList getMixers={getMixers}/>} /> */}
 
         <Route path="/events/mixers/add" element={<MixerForm/>} />
-        <Route path="/events/mixers/:id" element={<MixerDetails />} /> 
-        <Route path="/chats/:userId" element={<ChatList/>} /> 
+        <Route path="/events/mixers/:id" element={<MixerDetails getAllChats={getAllChats} />} /> 
         <Route path="*" element={<NotFound />} /> 
-      ''
-        {/* <Route exact path="/signup">
-            <SignupForm  signup={signup}/>
-            <SignupForm />
-        </Route> */}
-           
-        {/* <Route path="/admin">
-        <Redirect />
-        <CompanyDetail apply={apply}/>
-        </Route> */}
-    {/* <Route path="*">
-      <NotFound />
-    </Route> */}
   </Routes>
 )
 }

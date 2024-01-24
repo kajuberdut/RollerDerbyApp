@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// uses jest mocks 
+
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
 
 // const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:0080";
@@ -36,12 +38,12 @@ class FastApi {
             : {};
     
         try {
-          console.log("******************************************************")
-          console.log("url:", url)
-          console.log("heaeders:", headers)
-          console.log("params:", params)
+          // console.log("******************************************************")
+          // console.log("url:", url)
+          // console.log("heaeders:", headers)
+          // console.log("params:", params)
               
-          console.log("******************************************************")
+          // console.log("******************************************************")
        
           return (await axios({ url, method, data, params, headers })).data;
         // return (await axios({ url, method })).data;

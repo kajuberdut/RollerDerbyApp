@@ -11,7 +11,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody } from 
  * Display bout detail page
  */
 
-function BoutDetail() {
+function BoutDetail({getAllChats}) {
 
    /** Get set bouts, addresses and is loading in state*/
 
@@ -62,10 +62,12 @@ function BoutDetail() {
 
       let data = {userId: `${user.userId}`, groupId: `${bout.groupId}`}
       console.log("data in BoutDetails.js", data)
-
       try {
         let result = await FastApi.addUserToGroup(data); 
-        
+          if(result) {
+            getAllChats();
+          }
+
         setConnected("Connected. Check your chats.")
         return { success: true};
         } catch (err) {

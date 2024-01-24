@@ -9,7 +9,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
  */
 
 
-function Profile() {
+function Profile({displayChatList}) {
 
    /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
     const [isLoading, setIsLoading] = useState(true);
@@ -65,7 +65,8 @@ function Profile() {
     }, [image, userState, isMounted]); 
 
     /** Fetch data from ids from user state and call function to get data  */
-    
+    // todo update this so it renders when you edit the profile page
+
     useEffect(() => {
       function fetchData() {
       
@@ -94,6 +95,7 @@ function Profile() {
     }, [userState]); 
 
   /** Fetch user rulesets from api  */
+    // todo update this so it renders when you edit the profile page
 
   async function getUserRulesets() {
     let rsArr = []
@@ -106,7 +108,7 @@ function Profile() {
   }
 
   /** Fetch user positions from api  */
-
+    // todo update this so it renders when you edit the profile page
   async function getUserPosition() {
     let posArr = []
     for(let pos of userState.position) {
@@ -118,7 +120,7 @@ function Profile() {
   }
 
   /** Fetch user insurance from api  */
-
+    // todo update this so it renders when you edit the profile page
   async function getUserInsurance() {
     let insArr = []
     for(let ins of userState.insurance) {
@@ -142,7 +144,7 @@ function Profile() {
   }
 
   /** Format phone number  */
-
+    // todo update this so it renders when you edit the profile page
   async function formatPhoneNumber() {
     let formPhoneNum = userState.phoneNumber.slice(0, 3) + '-' + userState.phoneNumber.slice(3, 6) + '-' + userState.phoneNumber.slice(6);
     setPhoneNumber(formPhoneNum)
@@ -157,7 +159,7 @@ function Profile() {
     /** Render cards */
 
     return (
-      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px'}} >
+      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 

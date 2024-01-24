@@ -11,7 +11,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
  * Mixer detail form
  */
 
-function MixerDetail() {
+function MixerDetail({getAllChats}) {
 
    /** Get url handle and set jobs and is loading in state*/
 
@@ -53,6 +53,7 @@ function MixerDetail() {
 
        async function handleClick(e) {
         e.preventDefault(); 
+        getAllChats();
   
         let data = {userId: `${user.userId}`, groupId: `${mixer.groupId}`}
         console.log("data in BoutDetails.js", data)

@@ -12,17 +12,22 @@ import {
   CardHeader, 
   CardFooter
 } from "reactstrap";
+import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
 
 /** 
  * List Chats of logged in user
  */
 
-const ChatList = ({handleChatList, handleChat}) => {
+const ChatList = ({handleChatList, handleChat, getAllChats, chats, setChats}) => {
+
+  console.log("************************************")
+  console.log("************ chats:", chats)
+  console.log("setChats:", setChats)
 
   /** render form */
 
   const [isLoading, setIsLoading] = useState(true);
-  const [chats, setChats] = useState([]);
+  // const [chats, setChats] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'));
   console.log("user in MessageList.js", user)
@@ -31,9 +36,10 @@ const ChatList = ({handleChatList, handleChat}) => {
 
 /** API get request for bouts */
 
-  async function getAllChats() {
-    console.log("getAllBouts is running in BoutList.js")
-    let chats = await FastApi.getChats(user.userId);
+  async function getChats() {
+    console.log("getChats is running in ChatList.js")
+    // let chats = await FastApi.getChats(user.userId);
+    let chats = await getAllChats();
     console.log("chats in chatList!!!!", chats)
 
   //   try{
@@ -43,14 +49,15 @@ const ChatList = ({handleChatList, handleChat}) => {
   //   console.log("signup failed", errors);
   //   return {success: false, errors};
   // }
-    setChats(chats);
+    // setChats(chats);
     setIsLoading(false); 
   }
 
  /** Reloading bouts when it changes request for bouts */
 
   useEffect(() => {
-      getAllChats();
+      getChats();
+      console.log("chats!!!!!!!!!!!!!!!!!!!!!!!!!!!!", chats)
   }, []);
 
 

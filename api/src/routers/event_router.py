@@ -36,13 +36,13 @@ async def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, c
     
 # async def get_events(user: Annotated[dict, Depends(get_and_validate_current_user)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
 
-# async def get_events(token: Annotated[str, Depends(oauth2_scheme)], user: Annotated[dict, Depends(get_and_validate_current_user)]):
-
+# async def get_events(token: Annotated[str, Depends(oauth2_scheme)], user: Annotated[dict, Depends(get_and_validate_current_user)], db: Session = Depends(get_db)):
+ 
 # async def get_events(token: Annotated[str, Depends(oauth2_scheme)]):
 
 # async def get_events():
     
-    print("token in events!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", token)
+    # print("token in events!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", token)
     
     # ! i think this works for validation but then you have to put this in every route
     #! it also is not ideal because you are hitting the route before you are validating it. 

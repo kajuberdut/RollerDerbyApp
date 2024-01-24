@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import BoutDetails from './BoutDetails';
-// import FastApiMock from './FastApiMock';
+import FastApiMock from './FastApiMock';
 
 // npm test BoutDetails.test.js
 // must be in frontend directory 
@@ -15,11 +15,13 @@ test('matches snapshot', function() {
   expect(asFragment()).toMatchSnapshot(); 
 })
 
-// jest.mock('./FastApi', () => ({
-//   getBout: jest.fn(),
-//   getAddress: jest.fn(),
-//   addUserToGroup: jest.fn(),
-// }));
+// todo this is not wokring 
+
+jest.mock('./FastApi', () => ({
+  getBout: jest.fn(),
+  getAddress: jest.fn(),
+  addUserToGroup: jest.fn(),
+}));
 
 // const mockBout = {
 //   theme: 'Roller Derby Bout',

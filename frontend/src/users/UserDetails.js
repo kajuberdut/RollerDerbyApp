@@ -18,7 +18,7 @@ import { Button } from "reactstrap";
  * User detail form
  */
 
-function UserDetails({ handleMessages }) {
+function UserDetails({ handleMessages, displayChatList }) {
 
 
    /** Get url handle and set jobs and is loading in state*/
@@ -152,7 +152,7 @@ function UserDetails({ handleMessages }) {
       // <div className="PROFILE" style={{backgroundColor: 'red', boxShadow: '100px 100px 100px black'}} >
       // <div className="PROFILE" style={{backgroundColor: 'red', border: '100px solid black'}} >
       // <div className="PROFILE" style={{backgroundColor: 'red'}} >
-      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px'}} >
+      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 

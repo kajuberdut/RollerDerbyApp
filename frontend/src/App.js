@@ -27,10 +27,11 @@ function App() {
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
   const [isLoading, setIsLoading] = useState(false);
   const { default: jwt_decode } = require("jwt-decode");
-  const [displayMessages, setDisplayMessages] = useState(false)
-  const [displayChatList, setDisplayChatList] = useState(false)
-  const [displayChats, setDisplayChats] = useState(false)
-  const [chatId, setChatId] = useState()
+  const [displayMessages, setDisplayMessages] = useState(false);
+  const [displayChatList, setDisplayChatList] = useState(false);
+  const [displayChats, setDisplayChats] = useState(false);
+  const [chatId, setChatId] = useState();
+  const [chats, setChats] = useState([]);
   // const [displayErr, setDisplayErr] = useState(); 
 
 
@@ -153,10 +154,29 @@ function App() {
       }
     }
 
+    /** Get all chats allows me to update chat list when user adds a chat immediately */
+
+    async function getAllChats() {
+      console.log("is this the error update")
+      try {
+        let chats = await FastApi.getChats(user.userId);
+        setChats(chats);
+        return chats;
+      } catch (errors) {
+        console.error("get all chats failed", errors);
+        return { success: false, errors };
+      }
+    }
+
+   
+
     function handleMessages(userId) {
       console.log("!!!!!!!!!!!!!!!!! handleMessages is being clicked!!!!!!!!!!!!!")
       console.log("userId in App.js", userId)
-      displayMessages ? setDisplayMessages(false) : setDisplayMessages(true)
+      displayMessages ? setDisplayMessages(false) : setDisplayMessages(true);
+      if(displayChatList) {
+        getAllChats();
+      }
     }
 
     function handleChat(chatId) {
@@ -196,7 +216,7 @@ function App() {
           { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
           </main> */}
           <main>
-            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} />
+            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} />
   
           { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
           </main>
@@ -206,7 +226,7 @@ function App() {
           {user && 
             <div onClick={handleChatList}><ChatIcon className="ChatIcon"/></div>
           }
-          {user && displayChatList && <ChatList handleChatList={handleChatList} handleChat={handleChat} /> }
+          {user && displayChatList && <ChatList handleChatList={handleChatList} handleChat={handleChat} getAllChats={getAllChats} chats={chats} setChats={setChats}/> }
 
           {user && displayChats && <Chat handleChat={handleChat} chatId={chatId} /> }
         </Fragment>
