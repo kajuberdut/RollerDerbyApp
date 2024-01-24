@@ -174,12 +174,10 @@ function UserDetails({ handleMessages }) {
                     <MDBCardText>{location.city}, {location.state}</MDBCardText>
                     </div>
                     }
-                    {/* <a href="/messages"> */}
                       <button onClick={handleMessages} type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
                         style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "250px", fontSize: '15px'}}>
                         Message
                       </button>
-                    {/* </a> */}
                 </div>
 
                   </div>

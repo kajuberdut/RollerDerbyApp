@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import oauth2_scheme, get_db, get_and_validate_current_user
 
 from ..crud.address_crud import *
 from ..crud.chat_crud import *
@@ -22,16 +22,54 @@ def get_events(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, lim
     events = crud_get_events(db, skip=skip, limit=limit)
     return events
 
+# todo MENTOR ASSISTANCE WITH KATE 
+# todo ********************************************************
+
 # * get /events/{event_type} 
 # * returns all events that match query by type, dates and city and/or state
 
 @router.get("/events/{type}", response_model=list[EventBase])
-def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+
+async def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+
+# async def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db), current_user: models.User = Depends(get_and_validate_current_user(token=token, db=db))):
+    
+# async def get_events(user: Annotated[dict, Depends(get_and_validate_current_user)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+
+# async def get_events(token: Annotated[str, Depends(oauth2_scheme)], user: Annotated[dict, Depends(get_and_validate_current_user)]):
+
+# async def get_events(token: Annotated[str, Depends(oauth2_scheme)]):
+
+# async def get_events():
+    
+    print("token in events!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", token)
+    
+    # ! i think this works for validation but then you have to put this in every route
+    #! it also is not ideal because you are hitting the route before you are validating it. 
+    # todo MENTOR ASSISTANCE WITH KATE 
+    # todo ********************************************************
+    user = await get_and_validate_current_user(db=db, token=token)
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    # print("user:", user)
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    # if not user: 
+    #     raise HTTPException(status_code=401, detail="token invalid")
     
     events = crud_get_events_by_type_date_location(db, type=type, city=city, state=state, zip_code=zip_code, start_date=start_date, end_date=end_date)
     
     print("events in get /events/{type} in main.py", events)
     return events
+
+# def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db), user: dict = Depends(get_and_validate_current_user)):
+
+# async def get_events(token: Annotated[str, Depends(oauth2_scheme)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db), current_user: User = Depends(get_and_validate_current_user(db, token))):
+
+# async def get_events(token: Annotated[str, Depends(get_and_validate_current_user)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+    
+
+# def get_events(token: Annotated[str, Depends(get_and_validate_current_user)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+
+# def get_events(current_user: Depends(get_and_validate_current_user), type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
 
 # * get /bouts/ 
 # * returns all bouts

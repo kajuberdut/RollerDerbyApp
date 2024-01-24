@@ -51,10 +51,10 @@ function NavBar({logout}) {
                 <NavLink to="/users">Users</NavLink>
             </NavItem>
             <NavItem className="Navbar-Bouts">
-                <NavLink to="/bouts">Bouts</NavLink>
+                <NavLink to="/events/bouts">Bouts</NavLink>
             </NavItem>
             <NavItem className="Navbar-Mixers">
-                <NavLink to="/mixers">Mixers</NavLink>
+                <NavLink to="/events/mixers">Mixers</NavLink>
             </NavItem>
             {/* <NavItem className="Navbar-Messages">
                 <NavLink to="/chats"><div><ChatIcon/></div></NavLink>

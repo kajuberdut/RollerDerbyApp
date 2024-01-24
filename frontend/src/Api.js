@@ -36,7 +36,13 @@ class FastApi {
             : {};
     
         try {
-            
+          console.log("******************************************************")
+          console.log("url:", url)
+          console.log("heaeders:", headers)
+          console.log("params:", params)
+              
+          console.log("******************************************************")
+       
           return (await axios({ url, method, data, params, headers })).data;
         // return (await axios({ url, method })).data;
         } catch (err) {
@@ -257,6 +263,7 @@ class FastApi {
     console.log("hitting the getBout in api.js")
     let res = await this.request(`bouts/${eventId}`);
     console.log("res:", res)
+
     return res
   }
 
@@ -394,8 +401,11 @@ class FastApi {
   static async getEvents(type, data) {
     console.log("getEvents in API.JS is running")
     console.log("data in getEvents:", data)
+    console.log("******************************************************")
+    console.log("How many times is EVENTS running???????")
+    console.log("******************************************************")
     let res = await this.request(`events/${type}`, data, "get");
-    console.log("res:", res)
+    console.log("res:", JSON.stringify(res))
   return res
   }
 
@@ -475,6 +485,9 @@ class FastApi {
 
     let res = await this.request(`users/image/${userId}`);
     console.log("res:", res)
+    if(!res) {
+      return ""
+    }
   return res
   
   }

@@ -14,7 +14,7 @@ class UserBase(BaseModel):
     """Pydantic class for user."""
     user_id: int = Field(default_factory=lambda: 0)
     username: str
-    email: str   
+    email: str
 
 class UserList(BaseModel): 
     """Pydantic class for users list."""

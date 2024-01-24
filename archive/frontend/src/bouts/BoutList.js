@@ -15,6 +15,7 @@ function BoutList() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [bouts, setBouts] = useState([]);
+    
 
   /** API get request for bouts */
 
@@ -52,6 +53,7 @@ function BoutList() {
     const renderCards = () => {
       return (
         <div className="BoutList-RenderCards">
+          {/* <div style={{fontSize: '40px'}}>fake redering to find error</div> */}
             <ul>
                 {bouts.map(bout => (
                   <CardComponent bout={bout} key={"Bout-" + bout.boutId} />
@@ -67,7 +69,7 @@ function BoutList() {
         <div className="BoutList">
         <SearchComponent setBouts={setBouts}/>
           <h1>Bouts</h1>
-          <a href="/bouts/add">
+          <a href="/events/bouts/add">
             <button className="BoutList-Button">
               Create Bout
             </button>

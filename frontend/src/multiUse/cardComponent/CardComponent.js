@@ -16,7 +16,10 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
     const [isLoading, setIsLoading] = useState(true);
 
     let info = bout !== undefined ? bout : mixer;
+    console.log("info:", info)
     let type = bout !== undefined ? "bouts" : "mixers";
+    console.log("*****************************************")
+    console.log("type", type)
 
     let key = info.eventId
     
@@ -51,7 +54,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
           <section key={"CardComponent-" + key}>
             <Card className="CardComponent"> 
               <CardBody>
-                <NavLink to={`/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
+                <NavLink to={`/events/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
                   <CardTitle className="text-center CardComponent-Title">
                     <h3>{info.theme}</h3>
                   </CardTitle>

@@ -16,6 +16,7 @@ load_dotenv()
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
+EXPIRE_MINS= os.environ.get("EXPIRE_MINS")
 
 
 
@@ -60,37 +61,11 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=60)
+        expire = datetime.utcnow() + timedelta(minutes=int(EXPIRE_MINS))
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     
     return encoded_jwt
-
-# ! this is for the ws routes but may may need to be added to other routes to get tokens to time out 
-
-# def validate_token(token: str = Depends(oauth2_scheme)):
-#     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-#     print("HITTING VALIDATE TOKEN IN DEPENDENCIES.PY")
-#     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#     try:
-#         print("hitting IN DEPENDENCIES.PY")
-#         print("token, SECRET_KEY, algorithms=[ALGORITHM]", token, SECRET_KEY)
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         print("payload:", payload)
-#         user_id = payload.get("sub")
-#         print("user_id:", user_id)
-#         if user_id is None:
-#             raise credentials_exception
-#         token_data = payload
-#     except JWTError:
-#         raise credentials_exception
-
-#     return token_data
 
 
 async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2_scheme)]):
@@ -128,4 +103,14 @@ async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2
     if user is None:
         raise credentials_exception
     return user
-    
+
+
+
+# * this would be if you add isabled on a user to disable an account after no use.... 
+# https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
+# async def get_current_active_user(
+#     current_user: Annotated[User, Depends(get_and_validate_current_user)]
+# ):
+#     if current_user.disabled:
+#         raise HTTPException(status_code=400, detail="Inactive user")
+#     return current_user

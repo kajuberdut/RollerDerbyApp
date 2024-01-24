@@ -6,10 +6,11 @@ import SetupProfileForm from "../forms/SetupProfileForm";
 import SetupPrivateDetailsForm from "../forms/SetupPrivateDetailsForm";
 import BoutForm from "../forms/BoutForm";
 import MixerForm from "../forms/MixerForm";
-import BoutList from "../bouts/BoutList";
+// import BoutList from "../bouts/BoutList";
 import BoutDetails from "../bouts/BoutDetails"
-import MixerList from "../mixers/MixerList";
+// import MixerList from "../mixers/MixerList";
 import MixerDetails from "../mixers/MixerDetails"
+import EventList from "../events/EventList";
 import UserList from "../users/UserList";
 import UserDetails from "../users/UserDetails";
 import Home from "../home/Home"
@@ -52,12 +53,14 @@ return (
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />
         {/* <Route path="/users/:username" element={<UserDetails handleMessages={handleMessages} />} /> */}
         <Route path="/users/:userId" element={<UserDetails handleMessages={handleMessages} />} />
-        <Route path="/bouts" element={<BoutList getBouts={getBouts}/>} />
-        <Route path="/bouts/add" element={<BoutForm/>} />
-        <Route path="/bouts/:id" element={<BoutDetails />} />
-        <Route path="/mixers" element={<MixerList getMixers={getMixers}/>} />
-        <Route path="/mixers/add" element={<MixerForm/>} />
-        <Route path="/mixers/:id" element={<MixerDetails />} /> 
+        {/* <Route path="/events/bouts" element={<BoutList getBouts={getBouts}/>} /> */}
+        <Route path="/events/:type" element={<EventList getBouts={getBouts}/>} />
+        <Route path="/events/bouts/add" element={<BoutForm/>} />
+        <Route path="/events/bouts/:id" element={<BoutDetails />} />
+        {/* <Route path="events/mixers" element={<MixerList getMixers={getMixers}/>} /> */}
+
+        <Route path="/events/mixers/add" element={<MixerForm/>} />
+        <Route path="/events/mixers/:id" element={<MixerDetails />} /> 
         <Route path="/chats/:userId" element={<ChatList/>} /> 
         <Route path="*" element={<NotFound />} /> 
       ''

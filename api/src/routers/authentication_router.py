@@ -38,7 +38,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
                 )
     
     access_token = create_access_token(data={"sub": str(user.user_id)})
-    # ! not that I just adjusted the user.user_id to be a string instead of a number
+        
+    # access_token = create_access_token(data={"sub": user.user_id})
+    # ! note that I just adjusted the user.user_id to be a string instead of a number
 
     return {"access_token": access_token, "token_type": "bearer"}
 

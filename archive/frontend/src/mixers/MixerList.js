@@ -65,7 +65,7 @@ function MixerList({getMixers}) {
         <div className="MixerList">
           <SearchComponent setMixers={setMixers}/>
           <h1>Mixers</h1>
-          <a href="/mixers/add">
+          <a href="/events/mixers/add">
             <button className="MixerList-Button">
               Create Mixer
             </button>

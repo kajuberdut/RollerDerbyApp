@@ -8,11 +8,13 @@ import "./ChatComponent.css"
 
   function ChatComponent({handleChat, chat}) {
 
+    
     const [username, setUsername] = useState(); 
+
+    /** On mount, retrieve user from local storage and set username in state*/
 
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem('user'));
-      // setUserId(user.userId);
       setUsername(user.username)
  
     }, []);
@@ -23,13 +25,11 @@ import "./ChatComponent.css"
       return <></>
     }
 
-    console.log("**************************************")
-    console.log("Chat!!!!!", chat)
-    console.log("chat type of :", typeof chat.name)
-    console.log("**************************************")
+    /** Setup key  */
 
     let key = chat.chatId;
 
+    /** Format the name of chat to display accordingly  */
 
     function formatName() {
      

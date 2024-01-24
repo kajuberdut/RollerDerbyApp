@@ -67,7 +67,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
   
     let result = await FastApi.addMixer(formData);
     if(result) {
-      navigate('/mixers')
+      navigate('/events/mixers')
 
     } else {
       // let message = result.errors[0]

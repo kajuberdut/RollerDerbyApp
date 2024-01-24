@@ -62,7 +62,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
     let result = await FastApi.addBout(formData);
     if(result) {
-      navigate('/bouts')
+      navigate('/events/bouts')
 
     } else {
       // let message = result.errors[0]

@@ -66,7 +66,9 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 
                 # validate token and return user associated with tokem
                 user = await get_and_validate_current_user(db, data_dict["token"])
-                
+                print("*******************************************")
+                print("user:", user)
+                print("*******************************************")
                 if user:
                     
                     print("**************************************")
@@ -187,7 +189,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        authenticate = False
+        # authenticate = False
         # jsonMessage = json.dumps(f"User Id #{user_id} has left the chat")
         # * not you are not printing this on the frontend but could add in a green light if user is connected 
         await manager.broadcast({"disconnected":f"User Id #{user_id} has left the chat" })

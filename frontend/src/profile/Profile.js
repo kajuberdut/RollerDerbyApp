@@ -21,6 +21,8 @@ function Profile() {
     const [phoneNumber, setPhoneNumber] = useState();
     const [image, setImage] = useState();
     const [userState, setUserState] = useState({});
+    const [isMounted, setIsMounted] = useState(false);
+    
 
     /** On mount, retrieve user from local storage and set in state*/
 
@@ -28,29 +30,39 @@ function Profile() {
 
       const user = JSON.parse(localStorage.getItem('user'));
       setUserState(user);
+      setIsLoading(false);
     }, []);
 
     /** On change of image or on change of user state get image*/
 
     useEffect(() => {
 
+      if(isMounted) {
+
         async function getImage() {
 
           try {
+            console.log("***********************************")
+            console.log("userState:", userState)
+            console.log("userState.userId:", userState.userId)
+            console.log("typeof userState.userId:", typeof userState.userId)
+            console.log("***********************************")
             const imageData = await FastApi.getImage(userState.userId)
             if(imageData.image) {
               setImage(imageData.image)
             }
-            setIsLoading(false)
+            // setIsLoading(false)
           } catch (errors) {
             console.error("Get image failed", errors);
             return { success: false, errors };
           }
         }
 
-        getImage()
+        getImage();
+      }
+      setIsMounted(true);
 
-    }, [image, userState]); 
+    }, [image, userState, isMounted]); 
 
     /** Fetch data from ids from user state and call function to get data  */
     
@@ -155,7 +167,7 @@ function Profile() {
 
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
                   {image && <MDBCardImage src={image}
-                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
+                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', position: 'absolute', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   }
                   { !image && <MDBCardImage src="/skater_02.svg"
                       alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', zIndex: '1', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 

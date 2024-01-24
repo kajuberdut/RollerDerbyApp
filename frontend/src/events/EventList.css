@@ -1,0 +1,14 @@
+.EventList {
+    margin-top: 20px;
+}
+
+.EventList h1 {
+    margin-right: 30%;
+}
+.EventList-Button {
+    border-radius: 4px;
+}
+
+.EventList-Button:hover {
+    background-color: #d1d2d4;
+}
