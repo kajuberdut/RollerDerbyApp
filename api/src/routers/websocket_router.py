@@ -49,15 +49,9 @@ manager = ConnectionManager()
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
     print(" ^^^^^^^^^websocket is running /ws/{user_id} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     
-    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-    print("user_id", user_id)
-    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-
-    print("before await manager.connect")
+    #  connect to websocket
     await manager.connect(websocket, user_id)
-    print("after await manager.connect")
-    
-    
+     
     try: 
         while True:
 
@@ -65,15 +59,13 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
 
             # turn data into a dict 
             data_dict = json.loads(data)
-            print("data_dict ******************", data_dict)
 
             if "first_message" in data_dict:
                 
                 # validate token and return user associated with tokem
                 user = await get_and_validate_current_user(db, data_dict["token"])
-                print("*******************************************")
                 print("user:", user)
-                print("*******************************************")
+   
                 if user:
                     
                     print("**************************************")
@@ -84,40 +76,18 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     continue
                     
                 else:
-                    # Handle invalid token
-                    await websocket.close()
-                    raise HTTPException(401, detail="Invalid token provided")
+                    
+                    print("token invalidd")
+                    manager.disconnect(websocket)              
             
-            # print("data.dict.message_id:", data_dict.message_id)
             message_id = data_dict["messageId"]
             message = data_dict["message"]
-            print("************************************")
-            print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
             sender_id = data_dict["senderId"]
-            print("sender id in websocket_router.py ****", sender_id)
-            print("************************************")
             sender_username = data_dict["senderUsername"]
-            # participant_ids = data_dict["participant_ids"]
-            # if participant_ids:
             participant_ids = sorted(data_dict["participantIds"])
                 
             date_time = data_dict["dateTime"]
             chat_id = data_dict["chatId"]
-            
-            # type = data_dict["type"]
-            # print("type in websocket!!!!", type)
-            
-            print("message_id", message_id )
-            print("type message_id", type(message_id))
-            print("date_time: ******", date_time)
-            print("type date_time: ******", type(date_time))
-            print("message in main.py **** ", message)
-            print("sender id in websocket_router.py ****", sender_id)
-            print("sender id in websocket_router.py ****", type(sender_id))
-            print("sender username in websocket_router.py ****", sender_username)
-            print("participant_ids in websocket_router.py ****", participant_ids)
-            print("chat_id in websocket_router.py ****", chat_id)
-            print("type chat_id in websocket_router.py ****", type(chat_id))
             
             # ! not that this is to handle the two user chats
             participant_names = []
@@ -125,7 +95,6 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             for participant_id in participant_ids: 
                 participant = crud_get_user_by_id(db=db, user_id=participant_id)
                 participant_names.append(participant.username)
-            # *trying to handle name for a two person chat 
                 
             
             if chat_id == 0:
@@ -140,7 +109,6 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     }
                     
                     group_db = crud_create_group(db=db, group=group)
-                    # print("group_db in websocket_router", group_db)
                     
                     for participant_id in participant_ids: 
                         
@@ -190,21 +158,12 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                 # * if the participant is connected to active connections
                 if participant_connection:
                     
-                    print("************************************")
-                    print("user_id", user_id)
-                    print("sender_id", sender_id)
-
-                    print("************************************")
-                    
-                    # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
                     participantData = json.dumps({"message": f"{message}", "userId": f"{sender_id}", "senderUsername": f"{sender_username}", "messageId": f"{db_message_id}" })
-                    print("!!!!!!!!!!!!participantData !!!!!!!!!!!!!!!:", participantData)
                     
                     await manager.send_personal_message( participantData,  participant_connection)
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        # authenticate = False
-        # jsonMessage = json.dumps(f"User Id #{user_id} has left the chat")
+        
         # * not you are not printing this on the frontend but could add in a green light if user is connected 
         await manager.broadcast({"disconnected":f"User Id #{user_id} has left the chat" })

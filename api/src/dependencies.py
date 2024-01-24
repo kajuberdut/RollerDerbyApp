@@ -71,6 +71,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2_scheme)]):
     """Authenticates the token and the user associated with the token and retuns user."""
 
+    print("token in dependencies", token)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -80,7 +81,9 @@ async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2
     try:
         # returns user_id and expiration date from token
         payload = jwt.decode(token, SECRET_KEY)
-        print(payload)
+        
+        if not payload: 
+            raise credentials_exception
 
         user_id: int = payload.get("sub")
         
