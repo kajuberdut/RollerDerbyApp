@@ -176,6 +176,7 @@ function Chat({handleMessages, handleChat, chatId }) {
           /** Remove event event listener on unmount  */
           return () => {
             FastApi.socket.removeEventListener("message", handleIncomingMessages);
+            FastApi.socket.close();
           }
         }
       }, [isMounted, userId])

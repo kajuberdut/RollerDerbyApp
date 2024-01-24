@@ -65,7 +65,7 @@ const LoginForm = ({login}) => {
             <CardTitle className="LoginForm-CardTitle">
                 <h1>Login</h1>
                 <div>
-                  {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
+                {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
                 </div>
             </CardTitle>
             <CardBody>
@@ -80,6 +80,7 @@ const LoginForm = ({login}) => {
                             value={formData.username}
                             onChange={handleChange}
                             placeholder="Derby Name"
+                            autoComplete="username"
                             required
                             // invalid={invalid}
                         />
@@ -92,6 +93,7 @@ const LoginForm = ({login}) => {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Password"
+                            autoComplete="current-password"
                             required
                             // invalid={invalid}
                         />

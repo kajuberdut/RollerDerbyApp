@@ -48,10 +48,15 @@ manager = ConnectionManager()
 # @router.websocket("/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
     print(" ^^^^^^^^^websocket is running /ws/{user_id} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    
+    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    print("user_id", user_id)
+    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 
     print("before await manager.connect")
     await manager.connect(websocket, user_id)
     print("after await manager.connect")
+    
     
     try: 
         while True:
@@ -86,7 +91,11 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             # print("data.dict.message_id:", data_dict.message_id)
             message_id = data_dict["messageId"]
             message = data_dict["message"]
+            print("************************************")
+            print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
             sender_id = data_dict["senderId"]
+            print("sender id in websocket_router.py ****", sender_id)
+            print("************************************")
             sender_username = data_dict["senderUsername"]
             # participant_ids = data_dict["participant_ids"]
             # if participant_ids:
@@ -180,9 +189,15 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                             
                 # * if the participant is connected to active connections
                 if participant_connection:
+                    
+                    print("************************************")
+                    print("user_id", user_id)
+                    print("sender_id", sender_id)
 
+                    print("************************************")
+                    
                     # ! treat sender as a participant, that way you can search by participants (all users involved in chat)
-                    participantData = json.dumps({"message": f"{message}", "userId": f"{user_id}", "senderUsername": f"{sender_username}", "messageId": f"{db_message_id}" })
+                    participantData = json.dumps({"message": f"{message}", "userId": f"{sender_id}", "senderUsername": f"{sender_username}", "messageId": f"{db_message_id}" })
                     print("!!!!!!!!!!!!participantData !!!!!!!!!!!!!!!:", participantData)
                     
                     await manager.send_personal_message( participantData,  participant_connection)

@@ -32,53 +32,14 @@ function App() {
   const [displayChats, setDisplayChats] = useState(false);
   const [chatId, setChatId] = useState();
   const [chats, setChats] = useState([]);
-  // const [displayErr, setDisplayErr] = useState(); 
-
-
-
-  // useEffect(() => {
-  //   // get user from local storage  
-  //   const storedUser = localStorage.getItem('user');
-  //   console.log("storedUser *** ", storedUser)
-    
-  //   // if there is user in local starage set user in state 
-  //   if (storedUser) {
-  //     setUser(JSON.parse(storedUser));
-  //   }
-
-  //   // if there is a token we are going to get the user 
-  //   if (token) {
-  //     getUser();
-  //   }
-  // }, [token, getUser]);
-
-  // async function getUser() {
-  //   try {
-  //     const { sub } = jwtDecode(token);
-  //     FastApi.token = token;
-  //     const user = await FastApi.getUserById(sub);
-  //     setUser(user);
-  //     // useLocalStorage.setItem('user', JSON.stringify(user));
-  //   } catch (err) {
-  //     console.error("App loadUserInfo: problem loading", err);
-  //     setUser(null);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem('user'));
-  
-  //   if (user) {
-  //     setUser(user);
-  //   }
-  // }, []);
 
 
   useEffect(function loadUser() {
-    console.debug("App useEffect loadUserInfo", "token=", token);
+    // console.debug("App useEffect loadUserInfo", "token=", token);
     /** If token changes then API get request for user using user_id after decoding token if value of token changes rerun. */
 
     async function getUser() {
+
         if (token) {
           try {
             let { sub } = jwtDecode(token);
@@ -87,6 +48,9 @@ function App() {
             FastApi.token = token;
             let user = await FastApi.getUserById(sub);
             // !note that local storage is not what you imported this is a built in function!
+            if(!user) {
+              logout();
+            }
             localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
 
@@ -115,6 +79,7 @@ function App() {
     }
 
     async function login(userData) {
+
       console.log("userDat!!!", userData)
       try {
       let token = await FastApi.login(userData); 

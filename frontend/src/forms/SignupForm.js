@@ -79,7 +79,7 @@ const navigate = useNavigate();
             <CardTitle className="SignupForm-CardTitle">
             <h1>Create a profile</h1>
             <div>
-              {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
+            {errorMessage && (<div style={{color: 'red'}}>{errorMessage}</div>)}
             </div>
             </CardTitle>
             <CardBody>
@@ -108,6 +108,7 @@ const navigate = useNavigate();
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Email"
+                            autoComplete="username"
                             required
                             // valid={valid}
                             // invalid={invalid}
@@ -123,8 +124,8 @@ const navigate = useNavigate();
                             onChange={handleChange}
                             placeholder="Password"
                             id="password"
-  
-                            // invalid={invalid}
+                            autoComplete="new-password"
+                            required
                         />
 
                         {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>

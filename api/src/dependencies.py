@@ -87,9 +87,10 @@ async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2
         if user_id is None:
             raise credentials_exception
         
-        expiration_time = payload.get("exp")
-        if expiration_time is None:
-            raise credentials_exception
+        # ! getting rid of this for now. May come back to add it later.
+        # expiration_time = payload.get("exp")
+        # if expiration_time is None:
+        #     raise credentials_exception
         
         # ensures token data is correct schema 
         token_data = TokenData(user_id=user_id)
