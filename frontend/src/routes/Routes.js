@@ -17,6 +17,8 @@ import Home from "../home/Home"
 import NotFound from "../404/404";
 import Profile from "../profile/Profile";
 import ChatList from "../chats/ChatList"
+import ProfilePrivateDetails from "../profile/ProfilePrivateDetails";
+import About from "../about/About";
 // import SetupTesting from "../test/SetupTesting"
 
 
@@ -26,21 +28,23 @@ import ChatList from "../chats/ChatList"
  * Display routes
  */
 
-function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList}) {
+function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList, setIsSignupVis, setIsLoginVis, setIsHomeVis}) {
  console.log(" ^^^^^^ getAllChats in routes:", typeof getAllChats)
 /** Render routes */
 
 return (
     <Routes>
 
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignupForm signup={signup} />} />
-        <Route path="/login" element={<LoginForm login={login} />} />
-        <Route path="/setup/profile" element={<SetupProfileForm update={update} />} />
+        <Route path="/" element={<Home setIsHomeVis={setIsHomeVis} />} />
+        <Route path="/signup" element={<SignupForm signup={signup} setIsSignupVis={setIsSignupVis} />} />
+        <Route path="/login" element={<LoginForm login={login} setIsLoginVis={setIsLoginVis} />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/setup/profile" element={<SetupProfileForm update={update} setIsSignupVis={setIsSignupVis}/>} />
         <Route path="/setup/private" element={<SetupPrivateDetailsForm update={update}/>} />
         {/* <Route path="/setup" element={<SetupTesting update={update}/>} /> */}
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
         <Route path="/profile" element={<Profile displayChatList={displayChatList} />} />
+        <Route path="/profile/private" element={<ProfilePrivateDetails displayChatList={displayChatList} />} />
         <Route path="/update/:username" element={<SignupForm update={update}/>} />
         <Route path="/events" element={<SignupForm />} />
         <Route path="/users" element={<UserList getUsers={getUsers}/>} />

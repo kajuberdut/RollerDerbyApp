@@ -20,12 +20,12 @@ body {
   background-position: right top; 
   background-attachment: fixed;
   overflow-x: hidden;
+  /* overflow-y: hidden; */
   /** note that this was working but you want overflow hidden left and right I think not up and down for lists?  */
 
 }
 
 .track-out {
-  /* width: 3800px; */
   width: 4400px;
   height: 5400px;
   border: 5px solid black;
@@ -33,11 +33,13 @@ body {
   background-color: transparent;
   position: absolute; 
   top: 130%; 
-  /* left: 60%;  */
   left: -25%; 
   transform: translate(-50%, -50%);
   z-index: -1; 
 }
+
+/* .track-out {
+  clip-path: circle(50% at 45% 45%); /* Example: Clip to a circle centered at 45% from the top and left */
 
 .track-in {
   width: 2200px;

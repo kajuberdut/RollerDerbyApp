@@ -32,6 +32,39 @@ function App() {
   const [displayChats, setDisplayChats] = useState(false);
   const [chatId, setChatId] = useState();
   const [chats, setChats] = useState([]);
+  const [isLoginVis, setIsLoginVis] = useState(false);
+  const [isSignupVis, setIsSignupVis] = useState(false);
+  const [isHomeVis, setIsHomeVis] = useState(false);
+
+  useEffect(() => {
+    // todo insure it is scrolled to top
+    console.log("is login vis?", isLoginVis)
+    if(isLoginVis || isSignupVis || isHomeVis ) {
+    
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+
+    };
+  }, [isLoginVis, isHomeVis, isSignupVis]);
+
+  // useEffect(() => {
+  //   console.log("is login vis?", isLoginVis)
+  //   {
+  //   if(isSignupVis)
+  //     document.body.style.overflow = "hidden";
+  //   }
+  //   return () => {
+  //     setIsSignupVis(false);
+  //     document.body.style.overflow = "auto";
+  //   };
+  // }, [isLoginVis]);
 
 
   useEffect(function loadUser() {
@@ -133,8 +166,6 @@ function App() {
       }
     }
 
-   
-
     function handleMessages(userId) {
       console.log("!!!!!!!!!!!!!!!!! handleMessages is being clicked!!!!!!!!!!!!!")
       console.log("userId in App.js", userId)
@@ -168,26 +199,19 @@ function App() {
 
   return (
     <>
-    <div className="track-out">  </div>
-    <div className="track-in">  </div>
+    <div className="track-out" style={{overflowY: 'hidden !important'}} >  </div>
+    <div className="track-in">   </div>
     <div className="App">
    
       <BrowserRouter>
       <UserContext.Provider value={{user, setUser}}>
         <Fragment>
           <NavBar logout={logout}/>
-          {/* <main>
-            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getBouts={getBouts} getMixers={getMixers} getUsers={getUsers}/>
-          { user && displayMessages &&  <Messages handleMessages={handleMessages} /> }
-          </main> */}
           <main>
-            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} />
+            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} setIsLoginVis={setIsLoginVis} setIsSignupVis={setIsSignupVis} setIsHomeVis={setIsHomeVis} />
   
-          { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
+            { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
           </main>
-          {/* {user && <Link to={`/chats/${user.userId}`}>
-            <ChatIcon className="ChatIcon"/>
-          </Link> } */}
           {user && 
             <div onClick={handleChatList}><ChatIcon className="ChatIcon"/></div>
           }
@@ -199,7 +223,6 @@ function App() {
       </BrowserRouter>
       </div>
       </>
-    
   );
   }
 

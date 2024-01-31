@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
@@ -9,11 +9,13 @@ import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from
  * Form for creating a user or updating a logged in user.
  */
 
-const SignupForm = ({signup}) => {
+const SignupForm = ({signup, setIsSignupVis}) => {
+
+  console.log("setIsSignupVis !!!!", setIsSignupVis)
 
   /** Set user, history and initial state and set valid, invalid, and error message in state */
 
-  const { user, setUser } = useContext(UserContext);
+const { user, setUser } = useContext(UserContext);
 //   const history = useHistory();
 //   const [ valid, setValid ] = useState(false);
 const [ invalid, setInvalid ] = useState(false);
@@ -40,6 +42,15 @@ const navigate = useNavigate();
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
+
+
+  useEffect(() => {
+    console.log("isSignupVIs? ", setIsSignupVis)
+    setIsSignupVis(true);
+  return () => {
+    setIsSignupVis(false);
+  };
+  }, []);
   
   const handleSubmit = async evt => {
     evt.preventDefault();   

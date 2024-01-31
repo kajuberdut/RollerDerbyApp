@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FastApi from "../Api";
 import "./LoginForm.css";
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
-
 
 /** 
  * Login form 
  *
  */
 
-const LoginForm = ({login}) => {
+const LoginForm = ({ login, setIsLoginVis }) => {
     
    /** Set form data, history, valid, and errorMessage in State */
    
@@ -22,6 +21,13 @@ const LoginForm = ({login}) => {
   const navigate = useNavigate();
 
   // const user = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+      setIsLoginVis(true);
+    return () => {
+      setIsLoginVis(false);
+    };
+  }, []);
   
   /** Handle submit by either logging and redirecting in or returning an error message */
 

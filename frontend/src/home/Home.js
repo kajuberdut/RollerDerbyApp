@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import UserContext from "../multiUse/UserContext";
 import './Home.css'
 import { Link } from "react-router-dom";
@@ -15,11 +15,18 @@ import {
  *
  */
 
-function Home() {
+function Home({setIsHomeVis}) {
 
   /** Get user from context*/
 
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    setIsHomeVis(true);
+  return () => {
+    setIsHomeVis(false);
+  };
+  }, []);
 
   /** Render page */
 
@@ -27,11 +34,11 @@ function Home() {
       <section className="col-md-8 Home">
         <Card>
           <CardTitle>
-                <h1>A Roller Derby Communication Application</h1>
+                <h1>The block party begins when the star arrives.</h1>
           </CardTitle>
           <CardBody >
             <CardText></CardText>-
-            {user && <h2>Welcome back, {user.username}!</h2>}
+            {user && <h2>Welcome to the party, {user.username}!</h2>}
             {!user && <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>
               <Link className="Home-Link" to="/signup"><Button>Signup</Button></Link>

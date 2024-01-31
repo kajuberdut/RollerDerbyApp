@@ -181,6 +181,12 @@ function Profile({displayChatList}) {
                       Edit
                     </button>
                   </a>
+                  <a href="/profile/private">
+                    <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
+                      style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '80px', top: "20px", fontSize: '15px'}}>
+                      Private Info
+                    </button>
+                  </a>
                   <div className="ms-3" style={{ marginTop: '200px'}}>
                     <MDBTypography tag="h4">{userState.username} #{userState.primaryNumber}</MDBTypography>
                     {userState.locationId && city && state && <MDBCardText>{city}, {state}</MDBCardText>}

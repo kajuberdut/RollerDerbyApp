@@ -34,7 +34,7 @@ function NavBar({logout}) {
         <NavbarBrand href="/">React-Conteact</NavbarBrand> */}
       <div style={{ display: 'flex' }}>
         <Star />
-        <NavbarBrand href="/">Conteact</NavbarBrand>
+        <NavbarBrand href="/">Block Party</NavbarBrand>
       </div>
 
         <Nav className="ml-auto" navbar>
@@ -64,11 +64,14 @@ function NavBar({logout}) {
             </NavItem>
             </> }
             { !user && <>
-            <NavItem className="Navbar Signup">
+            <NavItem className="Navbar-Signup">
                 <NavLink to="/signup">Signup</NavLink>
             </NavItem>
-            <NavItem className="Navbar Admin">
+            <NavItem className="Navbar-Admin">
                 <NavLink to="/login">Login</NavLink>
+            </NavItem>
+            <NavItem className="Navbar-About">
+                <NavLink to="/about">About</NavLink>
             </NavItem>
             </>}
         </Nav>

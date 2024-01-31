@@ -1,0 +1,44 @@
+.About {
+    background-color: rgb(229, 224, 224);
+}
+
+.track-in {
+  background-size: auto !important;
+  background-image: none !important;
+  height: auto !important;
+}
+
+.track-out {
+  background-size: auto !important;
+  background-image: none !important;
+  height: auto !important;
+}
+
+
+/* .EventList h1 {
+    margin-right: 30%;
+}
+.EventList-Button {
+    border-radius: 4px;
+}
+
+.EventList-Button:hover {
+    background-color: #d1d2d4;
+} */
+
+/* .linkedin-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #0077b5;
+  color: #fff;
+}
+
+.linkedin-icon {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+} */
