@@ -35,10 +35,14 @@ function App() {
   const [isLoginVis, setIsLoginVis] = useState(false);
   const [isSignupVis, setIsSignupVis] = useState(false);
   const [isHomeVis, setIsHomeVis] = useState(false);
+  const [isAboutVis, setIsAboutVis] = useState(false);
 
   useEffect(() => {
     // todo insure it is scrolled to top
     console.log("is login vis?", isLoginVis)
+    console.log("isAboutVis?", isAboutVis)
+    console.log("isSignupVis?", isSignupVis)
+    console.log("isHomeVis?", isHomeVis)
     if(isLoginVis || isSignupVis || isHomeVis ) {
     
       window.scrollTo({
@@ -54,47 +58,35 @@ function App() {
     };
   }, [isLoginVis, isHomeVis, isSignupVis]);
 
-  // useEffect(() => {
-  //   console.log("is login vis?", isLoginVis)
-  //   {
-  //   if(isSignupVis)
-  //     document.body.style.overflow = "hidden";
-  //   }
-  //   return () => {
-  //     setIsSignupVis(false);
-  //     document.body.style.overflow = "auto";
-  //   };
-  // }, [isLoginVis]);
+  async function getUser() {
+
+    if (token) {
+      try {
+        let { sub } = jwtDecode(token);
+
+        // storing the token in static token in FastApi 
+        FastApi.token = token;
+        let user = await FastApi.getUserById(sub);
+        // !note that local storage is not what you imported this is a built in function!
+        if(!user) {
+          logout();
+        }
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+
+      } catch (err) {
+        console.error("App loadUserInfo: problem loading", err);
+        setUser(null);
+      }
+    }
+    setIsLoading(false);
+    console.log("setinfoloaded true")
+  }
 
 
   useEffect(function loadUser() {
     // console.debug("App useEffect loadUserInfo", "token=", token);
     /** If token changes then API get request for user using user_id after decoding token if value of token changes rerun. */
-
-    async function getUser() {
-
-        if (token) {
-          try {
-            let { sub } = jwtDecode(token);
- 
-            // storing the token in static token in FastApi 
-            FastApi.token = token;
-            let user = await FastApi.getUserById(sub);
-            // !note that local storage is not what you imported this is a built in function!
-            if(!user) {
-              logout();
-            }
-            localStorage.setItem('user', JSON.stringify(user));
-            setUser(user);
-
-          } catch (err) {
-            console.error("App loadUserInfo: problem loading", err);
-            setUser(null);
-          }
-        }
-        setIsLoading(false);
-        console.log("setinfoloaded true")
-      }
       getUser();
     }, [token]);
 
@@ -196,11 +188,16 @@ function App() {
     )
   }
 
-
+// ! check overflow hiddne on body. You did something weird 
   return (
     <>
-    <div className="track-out" style={{overflowY: 'hidden !important'}} >  </div>
-    <div className="track-in">   </div>
+
+  <div className="track-out"  style={{
+      maxHeight: isAboutVis ? '0px' : '',
+      overflowX: isAboutVis ? 'hidden' : ''
+    }}>  </div>
+
+    <div className={isAboutVis ? '' : 'track-in'}>   </div>
     <div className="App">
    
       <BrowserRouter>
@@ -208,7 +205,7 @@ function App() {
         <Fragment>
           <NavBar logout={logout}/>
           <main>
-            <AllRoutes handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} setIsLoginVis={setIsLoginVis} setIsSignupVis={setIsSignupVis} setIsHomeVis={setIsHomeVis} />
+            <AllRoutes setIsAboutVis={setIsAboutVis} getUser={getUser} handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} setIsLoginVis={setIsLoginVis} setIsSignupVis={setIsSignupVis} setIsHomeVis={setIsHomeVis} />
   
             { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }
           </main>

@@ -19,10 +19,9 @@ import {
  * Form for creating a user or updating a logged in user.
  */
 
-function SetupProfileForm({update}) {
+function SetupProfileForm({ update, getUser}) {
 
 /** Retrieve user from local storage */
-
 
 const user = JSON.parse(localStorage.getItem('user'));
 // console.log("user !!! in setup profile form", user)
@@ -98,48 +97,22 @@ let INITIAL_STATE = { username: user.username, city: user.city, state: user.stat
       console.log("formPositions:", formPositions);
   }, [formRulesets, formPositions]);
 
-
-
-  async function getUser() {
-    try {
-      let user = await FastApi.getUserById(user.userId);
-    console.log("user:", user)
-  
-    return { success: true};
-    } catch (err) {
-      console.log("get user failed", err);
-      return {success: false, err};
-    }
-  }
-
-
-
-  
-
   /** Handle Submit by either creating user, updating profile, or returning an error message */
   const handleSubmit = async evt => {
     evt.preventDefault();   
     console.log("FormData in SetupProfileForm.js", formData)
     setFormData(INITIAL_STATE);
    
-    console.log("update!!!!!:", update)
     let formattedData = format(formData);
-    // let result = await update(formData);
-    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
-    console.log(" &&&& updateProfile:", updateProfile) 
-    console.log("!!!!!!!!!!!! image:", updateProfile.image) 
-    
-    
 
-    //   setValid(true)
+    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
+  
     if(updateProfile) {
+      await getUser();
       navigate('/profile')
 
     } else {
-      // let message = result.errors[0]
-      // let message = result
-      // setErrorMessage(message)
-      // setInvalid(true)
+
       console.log("fake form has failed to submit")
     }
    }
@@ -163,7 +136,6 @@ let INITIAL_STATE = { username: user.username, city: user.city, state: user.stat
           .filter((rulesetName) => !prevRulesets.includes(rulesetName)); // Filter for unique names
         return [...prevRulesets, ...newRulesets];
       });
-    console.log("!!!!!!!!!!!!!! formRulesets:", formRulesets)
 
 };
 
@@ -173,7 +145,8 @@ const handlePositionsChange = evt => {
   setFormPositions((prevPositions) => {
     const newPositions = Array.from(evt.target.selectedOptions)
       .map((option) => ({ positionId: 0, position: option.value }))
-      .filter((position) => !prevPositions.some((p) => p.name === position.name)); // Filter for unique names
+      .filter((position) => !prevPositions.includes((p) => p.name === position.name));
+
     return [...prevPositions, ...newPositions];
   });
 
@@ -183,7 +156,6 @@ const handlePositionsChange = evt => {
       .filter((positionName) => !prevPositions.includes(positionName)); // Filter for unique names
     return [...prevPositions, ...newPositions];
   });
-console.log("!!!!!!!!!!!!!! formPositions:", formPositions)
 
 };
 

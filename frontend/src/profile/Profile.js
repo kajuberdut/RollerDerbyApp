@@ -8,7 +8,6 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
  * User profile
  */
 
-
 function Profile({displayChatList}) {
 
    /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
@@ -235,7 +234,7 @@ function Profile({displayChatList}) {
                 </MDBCardBody>
 
 
-                <MDBContainer style={{paddingBottom: '100px'}}>
+                {/* <MDBContainer style={{paddingBottom: '100px'}}>
                           <MDBRow className="justify-content-center align-items-center h-100"> 
                             <MDBCol lg="9" xl="10">
                               <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
@@ -336,7 +335,7 @@ function Profile({displayChatList}) {
                               </MDBCard>
                             </MDBCol>
                           </MDBRow>
-                        </MDBContainer>
+                        </MDBContainer> */}
 
 
               </MDBCard>

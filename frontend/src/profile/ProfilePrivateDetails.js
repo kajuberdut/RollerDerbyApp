@@ -8,7 +8,6 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBTypography } fro
  * User profile private details
  */
 
-
 function ProfilePrivateDetails({displayChatList}) {
 
    /** Set isLoading, rulsets, positions, insurances, city, state phoneNumber, and image in state*/
@@ -18,6 +17,8 @@ function ProfilePrivateDetails({displayChatList}) {
     const [image, setImage] = useState();
     const [userState, setUserState] = useState({});
     const [isMounted, setIsMounted] = useState(false);
+
+    console.log("userState:", userState)
     
 
     /** On mount, retrieve user from local storage and set in state*/

@@ -21,7 +21,6 @@ body {
   background-attachment: fixed;
   overflow-x: hidden;
   /* overflow-y: hidden; */
-  /** note that this was working but you want overflow hidden left and right I think not up and down for lists?  */
 
 }
 

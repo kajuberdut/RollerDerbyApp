@@ -19,13 +19,12 @@ import {
  * Form for creating a user or updating a logged in user.
  */
 
-function SetupPrivateDetailsForm({update}) {
+function SetupPrivateDetailsForm({ update, getUser }) {
 
 /** Retrieve user from local storage */
 
-
 const user = JSON.parse(localStorage.getItem('user'));
-// console.log("user !!! in setup profile form", user)
+
 
  /** Set user, history and initial state and set valid, invalid, and error message in state */
 //   const history = useHistory();
@@ -41,17 +40,6 @@ const [formRulesets, setFormRulesets] = useState([]);
 const [displayRulesets, setDisplayRulesets] = useState([]);
 const [primIns, setPrimIns] = useState([]);
 const [secIns, setSecIns] = useState([]);
-
-
-// if(!user) {
-//   navigate('/')
-// }
-
-console.log("USER IN EDIT PROFILE PAGE", user)
-
-// if(user.insurance) {
-//   getUserInsurance()
-// }
 
 let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum };
 
@@ -108,29 +96,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
     return data;
 
   }
-
-  // { 
-  //   "user": {	
-  //     "email": "slashher@gmail.com",
-  //     "phone_number": "5553354566",
-  //     "first_name": "Billy",
-  //     "last_name": "Slash", 
-  //     "additional_info": "Epi pen in bag",
-  //     "secondary_number": 180
-  //     },
-  //     "insurance": [
-  //   {
-  //     "insurance_id": 0, 
-  //     "type": "WFTDA",
-  //     "insurance_number": "67890"
-  //    }, 
-  //   {
-  //     "insurance_id": 0, 
-  //     "type": "USARS",
-  //     "insurance_number": "00000"
-  //    }
-  //   ]
-  // }
   
     /** Get user insurance information if it exists */
 
@@ -167,17 +132,12 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
   console.log("formattedData!!!! in PRIVATE ", formattedData)
 
   let updateProfile = await FastApi.updateUserPrivate(user.userId, formattedData);
-  console.log(" &&&& updateProfile:", updateProfile)  
   
-  //   setValid(true)
   if(updateProfile) {
-    navigate('/profile')
-
+    await getUser();
+    navigate('/profile/private')
   } else {
-    // let message = result.errors[0]
-    // let message = result
-    // setErrorMessage(message)
-    // setInvalid(true)
+
     console.log("fake form has failed to submit")
   }
  }

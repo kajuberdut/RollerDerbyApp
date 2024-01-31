@@ -28,7 +28,7 @@ import About from "../about/About";
  * Display routes
  */
 
-function AllRoutes({login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList, setIsSignupVis, setIsLoginVis, setIsHomeVis}) {
+function AllRoutes({getUser, login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList, setIsSignupVis, setIsLoginVis, setIsHomeVis, setIsAboutVis }) {
  console.log(" ^^^^^^ getAllChats in routes:", typeof getAllChats)
 /** Render routes */
 
@@ -38,9 +38,9 @@ return (
         <Route path="/" element={<Home setIsHomeVis={setIsHomeVis} />} />
         <Route path="/signup" element={<SignupForm signup={signup} setIsSignupVis={setIsSignupVis} />} />
         <Route path="/login" element={<LoginForm login={login} setIsLoginVis={setIsLoginVis} />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/setup/profile" element={<SetupProfileForm update={update} setIsSignupVis={setIsSignupVis}/>} />
-        <Route path="/setup/private" element={<SetupPrivateDetailsForm update={update}/>} />
+        <Route path="/about" element={<About setIsAboutVis={setIsAboutVis} />} />
+        <Route path="/setup/profile" element={<SetupProfileForm getUser={getUser} update={update} setIsSignupVis={setIsSignupVis}/>} />
+        <Route path="/setup/private" element={<SetupPrivateDetailsForm getUser={getUser} update={update}/>} />
         {/* <Route path="/setup" element={<SetupTesting update={update}/>} /> */}
         {/* <Route path="/users/:derbyName" element={<UserDetails />} /> */}
         <Route path="/profile" element={<Profile displayChatList={displayChatList} />} />
