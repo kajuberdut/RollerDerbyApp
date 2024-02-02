@@ -46,6 +46,19 @@ def crud_get_user_by_id(db: Session, user_id: int):
   
     return user
 
+def crud_get_user_details_by_username(db: Session, username: str):
+    """Retrieves user details by username."""
+    user = (
+        db.query(models.User)
+        .filter(models.User.username == username)
+        .first()
+    ) 
+    print("user in crud get user details by username", user)
+    print("user.username", username)
+    print("user.ruleset", user.ruleset)
+  
+    return user
+
 def crud_get_user_by_email(db: Session, email: str):
     """Retrieves user by email."""
     return db.query(models.User).filter(models.User.email == email).first()
@@ -60,6 +73,14 @@ def crud_get_user_by_username(db: Session, username: str):
     # print("user.user_id in crud.py", user.username)
     # print("user.user_id in crud.py", user.email)
     return user_login_data
+
+def crud_get_user_id_by_username(db: Session, username: str):
+    """Retrieves user id by username."""
+    print("username in get_user_id_by_username in crud.py", username)
+    
+    db_user = db.query(models.User).filter(models.User.username == username).first()
+
+    return db_user.user_id
 
 # def crud_get_participant_usernames_by_ids(db: Session, user_ids: list[int]): 
     

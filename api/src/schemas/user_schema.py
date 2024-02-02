@@ -129,3 +129,18 @@ class UserDelete(BaseModel):
     user_id: int
     password: str
     
+class UserDetailsTeam(BaseModel):
+    email: str
+    phone_number: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    facebook_name: Optional[str] = None
+    additional_info:Optional[str] = None
+    primary_number: Optional[int] = None
+    secondary_number: Optional[int] = None
+    level: Optional[str] = None
+    ruleset: Optional[list[UserRuleset]] = None
+    position: Optional[list[UserPosition]] = None
+    insurance: Optional[list[UserInsurance]] = None
+
+    

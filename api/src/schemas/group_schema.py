@@ -10,6 +10,14 @@ class UserGroup(BaseModel):
 
     class ConfigDict:
         from_attributes = True 
+        
+class DeleteUserGroup(BaseModel):
+    """Pydantic class for deleting a user group."""
+    username: str
+    group_id: int
+
+    class ConfigDict:
+        from_attributes = True 
     
 class Group(BaseModel): 
     """Pydantic class for group."""

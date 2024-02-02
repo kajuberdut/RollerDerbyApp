@@ -124,3 +124,18 @@ def get_group_by_group_id(token: Annotated[str, Depends(oauth2_scheme)], group_i
     print("**********************************************")
     
     return group
+
+# * delete /groups
+# * deletes user from a group
+
+@router.delete("/groups/", response_model=UserGroup)
+def delete_user_from_group(token: Annotated[str, Depends(oauth2_scheme)], user_group: DeleteUserGroup, db: Session = Depends(get_db)):
+    print("delete_user_group in groups in group_router.py :", user_group)
+    # formatted_user_group = {
+    #                         "username": user_group.username,
+    #                         "group_id": user_group.group_id
+    #                     }
+    
+    user_group = crud_delete_user_from_group(db=db, user_group=user_group)
+    
+    return user_group 

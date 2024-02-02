@@ -66,7 +66,7 @@ function TeamsList() {
       <div className="Teams">
       <div>
         <a href='/teams/add'>
-        <button>Create Team</button>
+        <button style={{borderRadius: '4px'}}>Create Team</button>
         </a>
       </div>
 
@@ -79,7 +79,7 @@ function TeamsList() {
         </CardBody>
       </Card>
 
-        <InvitesList />
+      <InvitesList />
 
       </div>
       </div>

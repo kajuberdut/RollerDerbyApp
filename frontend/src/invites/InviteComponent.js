@@ -1,6 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import UserContext from "../multiUse/UserContext";
 import "./InviteComponent.css";
 import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading";
@@ -121,7 +119,7 @@ import {
                 { sender && <p>Invited By: {sender.username}</p> }
             </div>  
             <div style={{paddingTop: '30px', paddingLeft: '10%'}}>
-                <button onClick={handleClick} style={{height: '30px'}}>Accept</button>    
+                <button onClick={handleClick} style={{height: '30px', borderRadius: '4px'}}>Accept</button>    
             </div>     
         </div>
         {/* </NavLink> */}

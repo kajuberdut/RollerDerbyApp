@@ -119,14 +119,23 @@ class FastApi {
   }
 
  /** Get one user by username */
-
+// * may not need the "get" on here
   static async getUser(username) {
-      let res = await this.request(`users/${username}`);
-      if(res.ruleset === null) {
-        res.ruleset = 0; 
-      }
+      console.log("hitting get User in API.js")
+      let res = await this.request(`users/${username}/details`);
       return res
   }
+
+//    /** Get one user by username */
+// * I dont think this is getting used but commented it out just in case for now
+
+//    static async getUser(username) {
+//     let res = await this.request(`users/${username}`);
+//     if(res.ruleset === null) {
+//       res.ruleset = 0; 
+//     }
+//     return res
+// }
 
   /** Get user by id */
 
@@ -349,6 +358,17 @@ class FastApi {
     return res
   }
 
+  /** Deletes user from user group*/
+
+  static async removeUserFromGroup(data) {
+    console.log("***********************************")
+    console.log("data in removeUSerfromGroup", data)
+    console.log("***********************************")
+    let res = await this.request(`groups/`, data, "delete");
+    return res;
+  } 
+  
+
   /** Get image by user id*/
 
   static async getImage(userId) {
@@ -388,9 +408,6 @@ class FastApi {
    /** Get group by group id*/
 
    static async getGroup(groupId) {
-    console.log("*********************************************")
-    console.log("hitting api in getGroup")
-    console.log("*********************************************")
     let res = await this.request(`groups/${groupId}`);
 
     console.log("res!!!!!", res)
@@ -429,6 +446,7 @@ class FastApi {
     return res;
     // return "testing"
   }
+
 
 }
 

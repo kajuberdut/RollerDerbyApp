@@ -1,3 +1,17 @@
 .TeamDetails {
     margin-top: 20px;
 }
+
+.TeamDetails-NavLink {
+    text-decoration: none;
+    color: #555555;
+}
+
+.TeamDetails-NavLink:hover {
+    color: black;
+}
+
+.TeamDetails-Button:hover {
+    background-color: #d1d2d4;
+}
+

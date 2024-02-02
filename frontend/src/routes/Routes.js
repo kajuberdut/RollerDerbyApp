@@ -23,6 +23,7 @@ import About from "../about/About";
 import TeamsList from "../teams/TeamsList";
 import TeamForm from "../forms/TeamForm";
 import TeamDetails from "../teams/TeamDetails";
+import TeamParticipant from "../teams/TeamParticipant";
 
 
 
@@ -62,6 +63,7 @@ return (
         <Route path="/teams" element={<TeamsList />} /> 
         <Route path="/teams/add" element={<TeamForm />} /> 
         <Route path="/teams/:id" element={<TeamDetails />} /> 
+        <Route path="/teams/:groupId/:participant" element={<TeamParticipant />} /> 
         <Route path="*" element={<NotFound />} /> 
   </Routes>
 )

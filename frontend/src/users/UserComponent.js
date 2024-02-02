@@ -112,7 +112,7 @@ import {
             }
             </div>           
             <h4 style={{paddingTop: '30px'}}>{indUser.username}</h4>
-            {pathname !== "/users" && <div style={{paddingLeft: '60%', paddingTop: '7%',position: 'absolute'}}> <button onClick={handleClick} style={{borderRadius: '5px', height: '33px', top: '10px', right: '20px' }}>Add</button> </div>}
+            {pathname !== "/users" && <div style={{paddingLeft: '60%', paddingTop: '7%',position: 'absolute'}}> <button onClick={handleClick} style={{borderRadius: '5px', height: '33px', top: '10px', right: '20px' }}>Invite</button> </div>}
         </div>
         </NavLink>
       </div>

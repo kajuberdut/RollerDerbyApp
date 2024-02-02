@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .. import models
 from ..schemas.group_schema import * 
+from ..crud.user_crud import *
+from ..crud.team_invite_crud import *
 
 # * Create, Read, Update, Delete Groups in Database 
 
@@ -175,4 +177,24 @@ def crud_get_group_by_name_and_admin(db: Session, user_id: int, name: str):
     group_db = db.query(models.Group).filter(models.Group.admin == user_id).filter(models.Group.name == name).first() 
     
     return group_db
+
+def crud_get_user_group_by_user_id_group_id(db: Session, group_id: int, user_id: int):
+    """Retrieve a specific user group by group id and user id."""
+    print("group_id", group_id)
     
+    return db.query(models.UserGroup).filter(models.UserGroup.group_id == group_id).filter(models.UserGroup.user_id == user_id).first()
+    
+def crud_delete_user_from_group(db: Session, user_group: DeleteUserGroup): 
+    """Delete a specific bout by event_id."""
+    print("user_group in crud_Deleete_user_from_group", user_group)
+
+    db_user_id = crud_get_user_id_by_username(db, username=user_group.username)    
+    
+    db_team_invite = crud_delete_team_invite_by_recipient_id_group_id(db=db, team_id=user_group.group_id, recipient_id=db_user_id)
+    
+    db_user_group = crud_get_user_group_by_user_id_group_id(db, group_id=user_group.group_id, user_id=db_user_id)
+        
+    db.delete(db_user_group)
+    db.commit()
+    
+    return db_user_group

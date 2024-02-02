@@ -308,3 +308,23 @@ def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserDelete,
     crud_delete_user(db=db, user=user, user_id=user.user_id)
     return { "user_id": 0, "password": "deleted"}
 
+# * get /users/{username}/details 
+# * returns one specific user
+
+@router.get("/users/{username}/details", response_model=UserDetailsTeam)
+# @router.get("/users/{username}/details")
+# Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: Session = Depends(get_db)):
+    print("YOU ARE HITTING THE /users/{username}/details ROUTE")
+    
+    user = crud_get_user_details_by_username(db, username=username)
+    
+    if username is None: 
+        raise HTTPException(status_code=404, detail=f"User with derby name {username} not found.")
+    
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("user", user)
+    print("user.username:", user.username)
+    print("user.ruleset", user.ruleset)
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    return user
