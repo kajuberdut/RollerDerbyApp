@@ -40,7 +40,6 @@ class UserGroup(SQLAlchemyBase):
     user = relationship("User", back_populates="group")
     group = relationship("Group", back_populates="user") 
     
-    
 # class UserMessage(SQLAlchemyBase): 
 #     __tablename__ = "user_message"
 #     sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
@@ -108,17 +107,7 @@ class Group(SQLAlchemyBase):
     group_id = Column(Integer, primary_key=True)
     name = Column(String)
     user = relationship("UserGroup", back_populates="group")  
-    type = Column(String)
-    admin = Column(Integer)
-    # ! will need type on group for teams  
-    
-class TeamInvite(SQLAlchemyBase):
-    __tablename__ = "team_invite"
-    invite_id = Column(Integer, primary_key=True)
-    team_id = Column(Integer, ForeignKey("group.group_id"))  # Links to the Team
-    sender_id = Column(Integer)
-    recipient_id = Column(Integer)
-    status = Column(String, default="pending")  # Pending, accepted, rejected
+    # ! will need type on group for teams   
     
 class Message(SQLAlchemyBase):
     __tablename__ = "message"  

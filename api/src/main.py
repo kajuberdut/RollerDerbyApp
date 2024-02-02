@@ -12,6 +12,7 @@ from .schemas.location_schema import *
 from .schemas.message_schema import *
 from .schemas.position_schema import *
 from .schemas.ruleset_schema import *
+from .schemas.team_invite_schema import *
 from .schemas.token_schema import *
 from .schemas.user_schema import *
 
@@ -24,6 +25,7 @@ from .crud.location_crud import *
 from .crud.message_crud import *
 from .crud.position_crud import *
 from .crud.ruleset_crud import *
+from .crud.team_invite_crud import *
 from .crud.user_crud import *
 
 from .routers import address_router
@@ -36,6 +38,7 @@ from .routers import location_router
 from .routers import message_router
 from .routers import position_router
 from .routers import ruleset_router
+from .routers import team_invite_router
 from .routers import user_router
 from .routers import websocket_router
 
@@ -73,6 +76,7 @@ api_app.include_router(location_router.router)
 api_app.include_router(message_router.router)
 api_app.include_router(position_router.router)
 api_app.include_router(ruleset_router.router)
+api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)
 api_app.include_router(websocket_router.router)
 

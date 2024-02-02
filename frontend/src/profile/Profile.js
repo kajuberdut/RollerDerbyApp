@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading";
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
+import "./Profile.css"
 
 
 /**  
@@ -41,11 +42,6 @@ function Profile({displayChatList}) {
         async function getImage() {
 
           try {
-            console.log("***********************************")
-            console.log("userState:", userState)
-            console.log("userState.userId:", userState.userId)
-            console.log("typeof userState.userId:", typeof userState.userId)
-            console.log("***********************************")
             const imageData = await FastApi.getImage(userState.userId)
             if(imageData.image) {
               setImage(imageData.image)
@@ -158,7 +154,7 @@ function Profile({displayChatList}) {
     /** Render cards */
 
     return (
-      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
+      <div className="Profile" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
         <MDBContainer>
           <MDBRow className="justify-content-center align-items-center h-100"> 

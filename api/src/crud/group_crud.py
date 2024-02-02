@@ -5,10 +5,10 @@ from ..schemas.group_schema import *
 
 # * Create, Read, Update, Delete Groups in Database 
 
-
+# ! need to check this for creating a group and having type
 def crud_create_group(db: Session, group: CreateGroup):
     """Create a specific group."""
-    print("crud_create_group is running in group_crud.py")
+    print("crud_create_group is running in group_crud.py", group)
 
     db_group = models.Group(name=group['name'])
    
@@ -18,8 +18,25 @@ def crud_create_group(db: Session, group: CreateGroup):
     
     return db_group
 
+
+# todo note that you can refactor this one and the one above later.
+def crud_create_team(db: Session, group: Group):
+    """Create a specific group."""
+    print("crud_create_group is running in group_crud.py", group)
+
+    # db_team = models.Group(name=group['name'], admin=group['admin'], type=group['type'], participant_ids=group['admin'])
+    
+    db_team = models.Group(name=group['name'], admin=group['admin'], type=group['type'])
+   
+    db.add(db_team)
+    db.commit()
+    db.refresh(db_team)
+    
+    return db_team
+
 def crud_get_group_by_group_id(db: Session, group_id: int):
     """Retrieve a specific group by group_id."""
+    print("group_id", group_id)
     return db.query(models.Group).filter(models.Group.group_id == group_id).first()
 
 def crud_get_group_id_by_participants(db: Session, participant_ids: list[int]):
@@ -135,3 +152,27 @@ def crud_get_group_name_by_chat_id(db: Session, chat_id: int):
     print("group_name in get_group_name__by_chat_id")
         
     return group_name
+
+def crud_get_group_teams_by_user_id(db: Session, user_id: int):
+    """Retrieve multiple group teams by one participant_id ."""
+    print("get_group_teams_by_user_id in group_crud.py:", user_id)
+    
+    team_names_db = db.query(models.Group.name, models.Group.group_id).join(models.UserGroup).filter(models.UserGroup.user_id == user_id).filter(models.Group.type == "team").all()
+    # ! note you want the group name so will have to configure that 
+    # chat_db = db.query(models.Chat).filter(models.Chat.chat_id == chat_id).first()
+    # print("chat_db", chat_db)
+    # print("group_id", chat_db.group_id)
+    
+    # group_db = crud_get_group_by_group_id(db=db, group_id=chat_db.group_id)
+    
+    # group_name = group_db.name
+    # print("group_name in get_group_name__by_chat_id")
+        
+    return team_names_db
+
+def crud_get_group_by_name_and_admin(db: Session, user_id: int, name: str):
+    """Retrieves one group by admin and name."""
+    group_db = db.query(models.Group).filter(models.Group.admin == user_id).filter(models.Group.name == name).first() 
+    
+    return group_db
+    

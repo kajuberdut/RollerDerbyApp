@@ -344,6 +344,7 @@ class FastApi {
   /** Add user to group*/
 
   static async addUserToGroup(data) {
+    console.log("hitting add user to group")
     let res = await this.request(`groups/`, data, "post");
     return res
   }
@@ -359,7 +360,75 @@ class FastApi {
   
   }
 
- 
+  /** Get teams by user id*/
+
+  static async addTeam(data) {
+    console.log("data in api addteam", data)
+    let res = await this.request(`groups/teams`, data, "post");;
+    console.log("res!!!!!", res)
+    if(!res) {
+      return ""
+    }
+    return res
+  
+  }
+
+  /** Get teams by user id*/
+
+  static async getTeams(userId) {
+    let res = await this.request(`groups/teams/${userId}`);
+    console.log("res!!!!!", res)
+    if(!res) {
+      return ""
+    }
+    return res
+  
+  }
+  
+   /** Get group by group id*/
+
+   static async getGroup(groupId) {
+    console.log("*********************************************")
+    console.log("hitting api in getGroup")
+    console.log("*********************************************")
+    let res = await this.request(`groups/${groupId}`);
+
+    console.log("res!!!!!", res)
+    if(!res) {
+      return ""
+    }
+    return res
+  
+  }
+
+  /** Add team invite*/
+
+  static async addTeamInvite(data) {
+    console.log("hitting addTeamInvite")
+    let res = await this.request(`invites/`, data, "post");
+    return res
+  }
+
+   /** Get invites by user id*/
+
+   static async getInvites(userId) {
+    let res = await this.request(`invites/user/${userId}`);
+    console.log("res!!!!!", res)
+    if(!res) {
+      return ""
+    }
+    return res
+  
+  }
+
+  /** Updates a team invite*/
+
+  static async updateTeamInvite(inviteId, data) {
+    console.log("hitting updateTeamInvite")
+    let res = await this.request(`invites/${inviteId}`, data, "put");
+    return res;
+    // return "testing"
+  }
 
 }
 

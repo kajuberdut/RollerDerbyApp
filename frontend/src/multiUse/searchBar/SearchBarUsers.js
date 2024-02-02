@@ -13,6 +13,9 @@ import {
 
 function SearchBarUsers({formData, setFormData}) {
 
+  const pathname = window.location.pathname;
+  console.log("*********************************")
+  console.log("pathname", pathname)
     /** Update local state with current state of input element */
 
     const handleChange = evt => {
@@ -29,7 +32,8 @@ function SearchBarUsers({formData, setFormData}) {
 
     return (
         <div className='SearchBarUsers' >
-          <div className='SearchBarUsers-City'>
+
+         {pathname == '/users' && <div className='SearchBarUsers-City'>
           {/* <Label htmlFor="city" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
@@ -41,8 +45,9 @@ function SearchBarUsers({formData, setFormData}) {
               className='SearchBarInput'
               />
           </div>
+          }
           
-          <div className='SearchBarUsers-State'>
+          {pathname == '/users' && <div className='SearchBarUsers-State'>
           {/* <Label htmlFor="state" sm={2} className="mb3"> </Label> */}
               <Input
                   type="select"
@@ -108,6 +113,7 @@ function SearchBarUsers({formData, setFormData}) {
                   <option value="WY">WY</option>
                   </Input>
               </div>
+            }
 
           <div className='SearchBarUsers-Username'>
           {/* <Label htmlFor="zipCode" sm={2} className="mb3"> </Label> */}

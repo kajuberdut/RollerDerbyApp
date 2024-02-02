@@ -105,8 +105,10 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     
                     group = {
                         "participant_ids": participant_ids,
-                        "name": f"{participant_names[0]} & {participant_names[1]}"
+                        "name": f"{participant_names[0]} & {participant_names[1]}",
+                        "type": "users"
                     }
+                    # ! added group type
                     
                     group_db = crud_create_group(db=db, group=group)
                     

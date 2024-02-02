@@ -20,7 +20,7 @@ function SearchComponentUsers({getUsers, setUsers}) {
 
     /** Handle submit, get API result for companies or jobs, set formData to initial state*/
     
-        const handleSubmit = evt => {
+    const handleSubmit = evt => {
         evt.preventDefault();
 
         for (const key in formData) {
@@ -28,7 +28,6 @@ function SearchComponentUsers({getUsers, setUsers}) {
             delete formData[key];
             }
         }
-       
         
         // *note setting form data is taking time so I am using useEffect to run when formData has been changed 
         getData(formData)

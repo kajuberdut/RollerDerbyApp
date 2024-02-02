@@ -14,12 +14,12 @@ function About({ setIsAboutVis }) {
 
     return (
        
-        <div className="About" style={{paddingTop: '100px', paddingLeft: '10%', paddingBottom: '200px'}}>
+        <div className="About" style={{paddingTop: '100px', justifyContent: 'center', paddingBottom: '200px'}}>
         <div>
             <span style={{fontSize: '30px'}}>About the Creator:</span>
             <h1> Set Goals, Achieve Dreams, Seek Adventure</h1>
         </div>
-        <CardGroup className="About-Cards scroll" style={{width: '88%', marginTop: '50px'}}>
+        <CardGroup className="About-Cards scroll" style={{width: '88%', marginTop: '50px', paddingLeft: '10.5%'}}>
             <Card className="Work" style={{width: '200px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)'}}> 
             <img
             alt="Roller Derby Player SockHer Blue"

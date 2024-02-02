@@ -194,7 +194,7 @@ function App() {
 
   <div className="track-out"  style={{
       maxHeight: isAboutVis ? '0px' : '',
-      overflowX: isAboutVis ? 'hidden' : ''
+      maxWidth: isAboutVis ? '0px' : ''
     }}>  </div>
 
     <div className={isAboutVis ? '' : 'track-in'}>   </div>

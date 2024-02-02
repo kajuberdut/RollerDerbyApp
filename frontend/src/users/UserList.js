@@ -66,7 +66,9 @@ function UserList() {
 
     return (
       <>
-      <SearchComponentUsers getUsers={getUsers} setUsers={setUsers}/>
+      <div style={{marginTop: '80px'}}>
+          <SearchComponentUsers getUsers={getUsers} setUsers={setUsers}/>
+      </div>
       <Card className="UserList">
         <CardBody>
         <CardTitle><h1>Users</h1></CardTitle>

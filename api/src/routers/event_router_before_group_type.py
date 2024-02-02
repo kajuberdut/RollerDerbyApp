@@ -140,8 +140,7 @@ def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: Bout, addre
     
     group = {
         "participant_ids": [],
-        "name": bout.theme,
-        "type": "event"
+        "name": bout.theme
     }
     
     group = crud_create_group(db=db, group=group)
@@ -180,8 +179,7 @@ def create_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: Mixer, ad
       
     group = {
         "participant_ids": [],
-        "name": mixer.theme,
-        "type": "event"
+        "name": mixer.theme
     }
     
     group = crud_create_group(db=db, group=group)

@@ -20,6 +20,9 @@ import ChatList from "../chats/ChatList"
 import ProfilePrivateDetails from "../profile/ProfilePrivateDetails";
 import About from "../about/About";
 // import SetupTesting from "../test/SetupTesting"
+import TeamsList from "../teams/TeamsList";
+import TeamForm from "../forms/TeamForm";
+import TeamDetails from "../teams/TeamDetails";
 
 
 
@@ -29,7 +32,7 @@ import About from "../about/About";
  */
 
 function AllRoutes({getUser, login, signup, update, getBouts, getMixers, getUsers, handleMessages, getAllChats, displayChatList, setIsSignupVis, setIsLoginVis, setIsHomeVis, setIsAboutVis }) {
- console.log(" ^^^^^^ getAllChats in routes:", typeof getAllChats)
+
 /** Render routes */
 
 return (
@@ -54,10 +57,11 @@ return (
         <Route path="/events/:type" element={<EventList getBouts={getBouts}/>} />
         <Route path="/events/bouts/add" element={<BoutForm/>} />
         <Route path="/events/bouts/:id" element={<BoutDetails getAllChats={getAllChats} />} />
-        {/* <Route path="events/mixers" element={<MixerList getMixers={getMixers}/>} /> */}
-
         <Route path="/events/mixers/add" element={<MixerForm/>} />
         <Route path="/events/mixers/:id" element={<MixerDetails getAllChats={getAllChats} />} /> 
+        <Route path="/teams" element={<TeamsList />} /> 
+        <Route path="/teams/add" element={<TeamForm />} /> 
+        <Route path="/teams/:id" element={<TeamDetails />} /> 
         <Route path="*" element={<NotFound />} /> 
   </Routes>
 )
