@@ -1,51 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import FastApi from "../Api";
-import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./MixerForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 
 /** 
- * Form for creating a user or updating a logged in user.
+ * Displayform for creating a mixer.
  */
 
 const MixerForm = () => {
 
-  /** Set user, history and initial state and set valid, invalid, and error message in state */
+  const navigate = useNavigate();
 
-const { user, setUser } = useContext(UserContext);
+  /** Sets initial state of form   */
 
-//   const history = useHistory();
-//   const [ valid, setValid ] = useState(false);
-//   const [ invalid, setInvalid ] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState([]);
-// const [file, setFile] = useState<File | undefined>();
-// const [preview, setPreview] = useState<string | undefined>();
-const navigate = useNavigate();
+  let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", signupLink: ""};
 
-// let user = "SockHer Blue"  
-
-  /** 
-   * Sets Initial State of Form
-  */
-
-if(!user) {
-  navigate('/')
-}
-
-let INITIAL_STATE = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", signupLink: ""};
-
-let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
+  let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
   /** Sets formData in initial state */
 
@@ -57,24 +29,21 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
   const handleSubmit = async evt => {
     evt.preventDefault();   
 
-
     setFormDataAddress(INITIAL_STATE_ADDRESS)
     setFormDataMixer(INITIAL_STATE);
    
     formDataMixer.addressId = 0
 
     const formData = {mixer: formDataMixer, address: formDataAddress}
-  
-    let result = await FastApi.addMixer(formData);
-    if(result) {
-      navigate('/events/mixers')
-
-    } else {
-      // let message = result.errors[0]
-      let message = result
-      // setErrorMessage(message)
-      // setInvalid(true)
+    try {
+      let result = await FastApi.addMixer(formData);
+      if(result) {
+        navigate('/events/mixers')
+      }
+    } catch(errors) {
+      return { success: false, errors };
     }
+
    }
 
   /** Update local state with current state of input element */
@@ -101,7 +70,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
     }
   };
 
-  /** render form */
+  /** render mixer form */
 
   return (
     <section className="col-md-4 MixerForm" style={{marginTop: "150px"}}>
@@ -110,7 +79,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
             <h1>Create a Mixer</h1>
             </CardTitle>
             <CardBody>
-                {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                        
@@ -121,8 +89,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                           name="date"
                           value={formDataMixer.date}
                           onChange={handleChange}
-                          // valid={valid}
-                          // invalid={invalid}
+                          required
                       />
 
                        <Label htmlFor="time">Time: </Label>
@@ -135,8 +102,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            onChange={handleChange}
                            placeholder="Time"
                            required
-                           // valid={valid}
-                           // invalid={invalid}
                        />
 
                         <Label htmlFor="timeZone">Time Zone: </Label>
@@ -149,9 +114,8 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Time Zone"
                             id="timeZone"
-  
-                            // invalid={invalid}
-                            >
+                            required
+                        >
                               <option
                               value={"Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)"}
                               >
@@ -195,8 +159,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataAddress.streetAddress}
                            onChange={handleChange}
                            placeholder="Street Address"
-                           // valid={valid}
-                           // invalid={invalid}
+                           required
                        />
 
                     <Label htmlFor="city">City: </Label>
@@ -208,22 +171,10 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataAddress.city}
                            onChange={handleChange}
                            placeholder="City"
-                           // valid={valid}
-                           // invalid={invalid}
+                           required
                        />
 
                       <Label htmlFor="state">State: </Label>
-                       
-                       {/* <Input
-                           type="text"
-                           id="state"
-                           name="state"
-                           value={formDataAddress.state}
-                           onChange={handleChange}
-                           placeholder="State"
-                           // valid={valid}
-                           // invalid={invalid}
-                       />         */}
 
                       <Input
                         type="select"
@@ -298,13 +249,12 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataAddress.zipCode}
                            onChange={handleChange}
                            placeholder="Zip Code"
-                           // valid={valid}
-                           // invalid={invalid}
+                           required
                        />      
               
                   
 
-                        <Label htmlFor="firstName">Theme: </Label>
+                        <Label htmlFor="theme">Theme: </Label>
                        
                         <Input
                             type="text"
@@ -312,9 +262,8 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             name="theme"
                             value={formDataMixer.theme}
                             onChange={handleChange}
-                            placeholder="Theme"
-                            // valid={valid}
-                            // invalid={invalid}
+                            placeholder="Theme or Title"
+                            required
                         />
 
                         <Label htmlFor="about">Description: </Label>
@@ -326,8 +275,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
-  
-                            // invalid={invalid}
                         />
 
                         <Label htmlFor="level">Level: </Label>
@@ -339,8 +286,8 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="level"
                             id="level"
-  
-                            // invalid={invalid}
+                            required
+
                             >
                               <option
                               value={"All Levels"}
@@ -390,13 +337,11 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             type="select"
                             name="coEd"
                             className="coEd"
-                            // value={formData.coEd}
                             onChange={handleChange}
                             placeholder="coEd"
                             id="coEd"
-  
-                            // invalid={invalid}
-                            >
+                            required
+                        >
                               <option
                               value={"False"}
                               >
@@ -418,9 +363,8 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Ruleset"
                             id="ruleset"
-  
-                            // invalid={invalid}
-                            >
+                            required
+                        >
                               <option
                               value={"WFTDA"}
                               >
@@ -452,8 +396,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                               value={formDataMixer.floorType}
                               onChange={handleChange}
                               placeholder="Floor Type"
-                              // valid={valid}
-                              // invalid={invalid}
                           />
 
                       <Label htmlFor="jerseyColors">Jersey Colors: </Label>
@@ -465,8 +407,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataMixer.jerseyColors}
                            onChange={handleChange}
                            placeholder="Both Teams Jersey Colors"
-                           // valid={valid}
-                           // invalid={invalid}
+                           required
                        />
 
                         <Label htmlFor="opposingTeam">Signup Link: </Label>
@@ -479,23 +420,15 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             placeholder="Signup Link"
                             id="signupLink"
   
-                            // invalid={invalid}
                         />
 
-                        {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
-                        <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
-
                     </FormGroup>
-
-                    {/* { user && <Button >Save Changes</Button> }
-                    { !user && <Button >Create Profile</Button> } */}
-                    <Button >Add Mixer</Button>
+                  <Button >Add Mixer</Button>
                 </Form>
             </CardBody>
         </Card>
-    </section>
-  
-);
+    </section> 
+  );
 };
 
 export default MixerForm;

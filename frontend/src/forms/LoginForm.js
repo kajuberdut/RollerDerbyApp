@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import FastApi from "../Api";
 import "./LoginForm.css";
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Login form 
+ * Display login form page
  *
  */
 
 const LoginForm = ({ login, setIsLoginVis }) => {
-    
-   /** Set form data, history, valid, and errorMessage in State */
+
+  /** Set initial state in form */
    
   let INITIAL_STATE = { username: "", password: ""};
-  const [formData, setFormData] = useState(INITIAL_STATE);
 
-  // const [ invalid, setInvalid ] = useState(false);
+  /** Set form data, history, valid, and errorMessage in State */
+
+  const [formData, setFormData] = useState(INITIAL_STATE);
   const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
 
-  // const user = JSON.parse(localStorage.getItem('user'));
+  /** When login page is mounted setIsloginVis to true - false when unmounted */
 
   useEffect(() => {
       setIsLoginVis(true);
@@ -34,19 +34,13 @@ const LoginForm = ({ login, setIsLoginVis }) => {
   const  handleSubmit = async evt => {
     evt.preventDefault();
     setFormData(INITIAL_STATE);
-    console.log("formdata in login form !!!", formData)
     
     let result = await login(formData); 
-    // !note using this to test real fast 
-    // let result = await FastApi.testing(); 
     
     if(result.success) {
         navigate('/');
-
     } else {
-    //   let message = result.errors[0]
       setErrorMessage(result.err);
-    //   setInvalid(true);
   }
 
   };
@@ -76,7 +70,6 @@ const LoginForm = ({ login, setIsLoginVis }) => {
             </CardTitle>
             <CardBody>
                 <Form onSubmit={handleSubmit}>
-                {/* <Form > */}
                   <FormGroup>
 
                         <Label htmlFor="username" sm={10}>Derby Name: </Label>
@@ -88,7 +81,6 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                             placeholder="Derby Name"
                             autoComplete="username"
                             required
-                            // invalid={invalid}
                         />
 
                         <Label htmlFor="password">Password: </Label>
@@ -101,10 +93,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                             placeholder="Password"
                             autoComplete="current-password"
                             required
-                            // invalid={invalid}
                         />
-{/* 
-                    <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
 
                     </FormGroup>
   
@@ -116,6 +105,5 @@ const LoginForm = ({ login, setIsLoginVis }) => {
     </section>
   );
 };
-
 
 export default LoginForm;

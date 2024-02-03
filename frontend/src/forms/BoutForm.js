@@ -5,7 +5,7 @@ import "./BoutForm.css"
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Form for creating a bout.
+ * Display form for creating a bout.
  */
 
 const BoutForm = () => {
