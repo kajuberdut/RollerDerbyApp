@@ -46,6 +46,16 @@ def crud_get_user_by_id(db: Session, user_id: int):
   
     return user
 
+def crud_get_username_by_id(db: Session, user_id: int):
+    """Retrieves username by user_id."""
+    username = (
+        db.query(models.User.username)
+        .filter(models.User.user_id == user_id)
+        .first()
+    ) 
+  
+    return username
+
 def crud_get_user_details_by_username(db: Session, username: str):
     """Retrieves user details by username."""
     user = (

@@ -31,6 +31,16 @@ def get_team_invites_by_user_id(token: Annotated[str, Depends(oauth2_scheme)], u
 
     return team_invites
 
+# * get /invites/pending{group_id}
+# * get pending invites by group_id
+
+@router.get("/invites/pending/{group_id}")
+def get_pending_team_invites_by_group_id(token: Annotated[str, Depends(oauth2_scheme)], group_id: int, db: Session = Depends(get_db)):
+        
+    pending_team_invites = crud_get_pending_team_invites_by_group_id(db=db, group_id=group_id)
+
+    return pending_team_invites
+
 # * put /invites/{team_id} 
 # * updates an team invite 
 

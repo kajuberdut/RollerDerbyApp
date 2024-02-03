@@ -37,12 +37,11 @@ function TeamsList() {
     }
   }
 
-   /** Reloads teams when changes request for teams */
+  /** Reloads teams when changes request for teams */
 
-    useEffect(() => {
-        getTeams();
-    }, []);
-
+  useEffect(() => {
+      getTeams();
+  }, []);
 
   /** Display loading if API call is has not returned */
 

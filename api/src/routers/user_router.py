@@ -47,6 +47,20 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
     
     return user
 
+# * get /users/username/{user_id} 
+# * returns username by use_id
+
+@router.get("/users/username/{user_id}")
+def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    
+    username = crud_get_username_by_id(db, user_id=user_id)
+    
+    if username is None: 
+        raise HTTPException(status_code=404, detail=f"User with user id {user_id} not found.")
+    
+    return username
+
 # * get /users/image/{userId} 
 # * returns one image from specific user
 

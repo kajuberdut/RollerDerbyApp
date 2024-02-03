@@ -17,32 +17,60 @@ import './TeamDetails.css'
 
   function TeamDetails() {
 
-    /** Get user from context, set button, and disable in state, and determine if dealing with bout or mixer*/
+    /** Get group id from url, set team, is loading and users in state*/
 
     const [team, setTeam] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const groupId = useParams(); 
     const [users, setUsers] = useState([]);
+    const [invites, setInvites] = useState([]);
     
-  
     const user = JSON.parse(localStorage.getItem('user'));
+
+  /** API get request for team */
     
     async function getTeam() {
 
         try {
           let teamDet = await FastApi.getGroup(groupId.id);
-          setTeam(teamDet)
-          setIsLoading(false)
+          setTeam(teamDet);
+          setIsLoading(false);
+  
         } catch (errors) {
           return { success: false, errors };
         }
-      }
+    }
+
+    /** API get pending invites for team */
+    // ! note if you want invites to update on click of invite in invite list, you need to raise this function but it has to go in app because the teamDetails is navigated through a route and you cant pass a function
+    
+    async function getPendingInvites() {
+
+        try {
+          let inviteUsernames = [];
+          let inviteDets = await FastApi.getPendingInvites(groupId.id);
+      
+          for(const invite of inviteDets) {
+
+            let user = await FastApi.getUsernameById(invite.recipientId);
+            inviteUsernames.push(user.username)
+          }
+
+          console.log("invitesUsernames!!!!!!!!", inviteUsernames)
+          setInvites(inviteUsernames);
+          console.log("invites!!!!!!!!", invites)
+
+        } catch (errors) {
+          return { success: false, errors };
+        }
+    }
 
 
-    /** Reloads teams when changes request for teams */
+    /** Reloads teams when changes request for teams and pending invites */
 
     useEffect(() => {
         getTeam();
+        getPendingInvites();
     }, []);
 
     /** Display isLoading if API call is has not returned */
@@ -53,7 +81,7 @@ import './TeamDetails.css'
         )
       }
 
-        /** Handle click of button  */
+    /** Handle click of button  */
 
     async function handleClick(username) {
       // e.preventDefault(); 
@@ -63,9 +91,8 @@ import './TeamDetails.css'
           groupId: groupId.id,
           username: username
         }
-        let removedUser = await FastApi.removeUserFromGroup(data);
+        await FastApi.removeUserFromGroup(data);
    
-        // ! trigger a remount? 
       } catch (errors) {
         return { success: false, errors };
       }
@@ -101,10 +128,7 @@ import './TeamDetails.css'
                             
                             { team && user.userId === team.admin &&  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
                             <a href="/setup/private">
-                                    {/* <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-                                      style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "20px", fontSize: '15px'}}>
-                                      Team Info
-                                    </button> */}
+                         
                                       <button type="button" className="TeamDetails-Button"
                                       style={{ height: '40px', position: 'absolute', right: '20px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
                                       Team Info
@@ -144,6 +168,30 @@ import './TeamDetails.css'
                               </div>
 
                           <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                              <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                              </div>
+                          </div>
+
+                          <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa', marginTop: '150px' }}>
+                              <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                              </div>
+                          </div>
+                          
+
+                          { invites &&  <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px' }}>Pending Invites:
+                          </div>    
+                          }
+                              { invites && user.userId == team.admin && <MDBCardText style={{ marginLeft: '150px', marginTop: '5px' }} tag="h4">
+                               {invites.map((invite) => (
+                                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <p key={"TeamDetails-Invites " + invite} style={{paddingRight: '30px'}}>{invite}</p>
+                                  
+                                    </div>
+                                ))}
+                              </MDBCardText>
+                              }
+
+                          <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa', marginTop: '150px' }}>
                               <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
                               </div>
                           </div>

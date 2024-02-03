@@ -144,6 +144,13 @@ class FastApi {
     return res
   }
 
+  /** Get username by user id */
+
+  static async getUsernameById(user_id) {
+    let res = await this.request(`users/username/${user_id}`);
+    return res
+  }
+
   /** Get Not logged in user by id */
 
   static async getOtherUser(userId) {
@@ -361,9 +368,6 @@ class FastApi {
   /** Deletes user from user group*/
 
   static async removeUserFromGroup(data) {
-    console.log("***********************************")
-    console.log("data in removeUSerfromGroup", data)
-    console.log("***********************************")
     let res = await this.request(`groups/`, data, "delete");
     return res;
   } 
@@ -426,10 +430,21 @@ class FastApi {
     return res
   }
 
-   /** Get invites by user id*/
+  /** Get invites by user id*/
 
-   static async getInvites(userId) {
+  static async getInvites(userId) {
     let res = await this.request(`invites/user/${userId}`);
+    console.log("res!!!!!", res)
+    if(!res) {
+      return ""
+    }
+    return res
+  }
+
+  /** Get pending invites by group id*/
+
+  static async getPendingInvites(groupId) {
+    let res = await this.request(`invites/pending/${groupId}`);
     console.log("res!!!!!", res)
     if(!res) {
       return ""

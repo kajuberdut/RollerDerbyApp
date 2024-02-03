@@ -16,7 +16,6 @@ function NavBar({logout}) {
 
   const user = JSON.parse(localStorage.getItem('user'));
 
-
     /** Render nav bar */
 
   return (

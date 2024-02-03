@@ -35,9 +35,17 @@ def crud_get_team_invites_by_user_id(db: Session, user_id: int):
    
     return team_invites_db
 
+def crud_get_pending_team_invites_by_group_id(db: Session, group_id: int):
+    """Retrieve all pending team invites by group_id ."""
+    print("get_pending_team_invites_by_group_id in team_invites_crud.py:", group_id)
+    
+    pending_team_invites_db = db.query(models.TeamInvite.team_id, models.TeamInvite.recipient_id, models.TeamInvite.status).filter(models.TeamInvite.team_id == group_id).filter(models.TeamInvite.status == "pending").all()
+   
+    return pending_team_invites_db
+
 def crud_update_team_invite_status(db: Session, team_invite: UpdateTeamInvite, invite_id): 
     """Update a specific bout by event_id."""
-    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
     db_team_invite = crud_get_team_invite_by_invite_id(db, invite_id)
     
     team_invite = {
