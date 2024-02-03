@@ -20,31 +20,29 @@ function EventList() {
 
   /** API get request for events */
 
-  console.log("event:", event)
-
   async function getAllEvents() {
 
       if(event.type === 'bouts') {
+
         try {
+
           let events =  await FastApi.getBouts();
-          setEvents(events)
-          setIsLoading(false)
-          // return { success: true };
-          return events
+          setEvents(events);
+          setIsLoading(false);
+ 
         } catch (errors) {
-          console.error("Get Bouts failed", errors);
+
           return { success: false, errors };
         }
       } else {
 
           try {
+
             let events =  await FastApi.getMixers();
-            setEvents(events)
-            setIsLoading(false)
-            // return { success: true };
-            return events
+            setEvents(events);
+            setIsLoading(false);
+  
           } catch (errors) {
-            console.error("Get Bouts failed", errors);
             return { success: false, errors };
           }
       }
@@ -72,7 +70,6 @@ function EventList() {
     const renderCards = () => {
       return (
         <div className="EventList-RenderCards">
-          {/* <div style={{fontSize: '40px'}}>fake redering to find error</div> */}
             { event.type == "bouts" && <ul>
                 {events.map(event => (
                   <CardComponent bout={event} key={"Event-" + event.eventId} />

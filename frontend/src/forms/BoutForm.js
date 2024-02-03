@@ -1,54 +1,28 @@
 import React, { useContext, useState } from "react";
 import FastApi from "../Api";
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import UserContext from "../multiUse/UserContext";
-// import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
 import "./BoutForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
-  import PropTypes from 'prop-types';
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Form for creating a user or updating a logged in user.
+ * Form for creating a bout.
  */
 
 const BoutForm = () => {
 
-  /** Set user, history and initial state and set valid, invalid, and error message in state */
+  /**  Sets Initial State of Form */
 
-const { user, setUser } = useContext(UserContext);
-//   const [ valid, setValid ] = useState(false);
-//   const [ invalid, setInvalid ] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState([]);
-const navigate = useNavigate();
+  let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", opposingTeam: "", team: ""};
 
-  /** 
-   * Sets Initial State of Form
-  */
+  let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
 
-if(!user) {
-  navigate('/')
-}
-
-let INITIAL_STATE_BOUT = { date: "", time: "", timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)", theme: "", description: "", level: "All Levels", coEd: "False", ruleset: "WFTDA", floorType: "", jerseyColors: "", opposingTeam: "", team: ""};
-
-let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "" };
-
-
-  /** Sets formData in initial state */
+  /** Sets formData in state state */
 
   const [formDataBout, setFormDataBout] = useState(INITIAL_STATE_BOUT);
   const [formDataAddress, setFormDataAddress] = useState(INITIAL_STATE_ADDRESS);
+  const navigate = useNavigate();
   
+  /** Handle submit of form. */
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
@@ -60,15 +34,17 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
     const formData = {bout: formDataBout, address: formDataAddress}
 
-    let result = await FastApi.addBout(formData);
-    if(result) {
-      navigate('/events/bouts')
+    try {
 
-    } else {
-      // let message = result.errors[0]
-      let message = result
-      // setErrorMessage(message)
-      // setInvalid(true)
+      let result = await FastApi.addBout(formData);
+
+      if(result) {
+        navigate('/events/bouts')
+      } 
+
+    } catch(errors) {
+
+      return { success: false, errors };
     }
    }
 
@@ -94,23 +70,17 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
         
       }));
     }
-
-    console.log(" &&&&&&&&&&&&&&&&&&&&&&&&& formDataBout in BoutForm:", formDataBout)
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&formDataAddress in BoutForm:", formDataAddress)
   };
 
-  /** render form */
+  /** render bout form */
 
   return (
     <section className="col-md-4 BoutForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="BoutForm-CardTitle">
-            {/* { !user && ( <h1>Create a Profile</h1> )}
-            { user && (<h1>{user.username}'s Profile</h1>)} */}
-            <h1>Create a Bout</h1>
+              <h1>Create a Bout</h1>
             </CardTitle>
             <CardBody>
-                {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                        
@@ -121,8 +91,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                           name="date"
                           value={formDataBout.date}
                           onChange={handleChange}
-                          // valid={valid}
-                          // invalid={invalid}
+                          required
                       />
 
                        <Label htmlFor="time">Time: </Label>
@@ -135,8 +104,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            onChange={handleChange}
                            placeholder="Time"
                            required
-                           // valid={valid}
-                           // invalid={invalid}
                        />
 
                         <Label htmlFor="timeZone">Time Zone: </Label>
@@ -149,8 +116,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Time Zone"
                             id="timeZone"
-  
-                            // invalid={invalid}
+                            required
                             >
                               <option
                               value={"Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)"}
@@ -189,27 +155,26 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                         <Label htmlFor="streetAddress">Street Address: </Label>
                        
                        <Input
-                           type="text"
-                           id="streetAddress"
-                           name="streetAddress"
-                           value={formDataAddress.streetAddress}
-                           onChange={handleChange}
-                           placeholder="Street Address"
-                           // valid={valid}
-                           // invalid={invalid}
+                          type="text"
+                          id="streetAddress"
+                          name="streetAddress"
+                          value={formDataAddress.streetAddress}
+                          onChange={handleChange}
+                          placeholder="Street Address"
+                          required
                        />
 
                     <Label htmlFor="city">City: </Label>
                        
                        <Input
-                           type="text"
-                           id="city"
-                           name="city"
-                           value={formDataAddress.city}
-                           onChange={handleChange}
-                           placeholder="City"
-                           // valid={valid}
-                           // invalid={invalid}
+                          type="text"
+                          id="city"
+                          name="city"
+                          value={formDataAddress.city}
+                          onChange={handleChange}
+                          placeholder="City"
+                          required
+                          
                        />
 
                       <Label htmlFor="state">State: </Label>
@@ -220,9 +185,9 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                         onChange={handleChange}
                         id="state" 
                         name="state"
-                        // className='SearchBarInput'
                         value={formDataAddress.state}
                         maxLength={2}
+                        required
                         >
                         <option value="">State</option>
                         <option value="AL">AL</option>
@@ -280,18 +245,17 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
 
                       <Label htmlFor="zipCode">Zip Code: </Label>
                        
-                       <Input
-                           type="number"
-                           id="zipCode"
-                           name="zipCode"
-                           value={formDataAddress.zipCode}
-                           onChange={handleChange}
-                           placeholder="Zip Code"
-                           // valid={valid}
-                           // invalid={invalid}
-                       />      
+                      <Input
+                          type="number"
+                          id="zipCode"
+                          name="zipCode"
+                          value={formDataAddress.zipCode}
+                          onChange={handleChange}
+                          placeholder="Zip Code"
+                          required
+                      />      
                   
-                        <Label htmlFor="theme">Theme: </Label>
+                        <Label htmlFor="theme">Theme or Title: </Label>
                        
                         <Input
                             type="text"
@@ -300,8 +264,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             value={formDataBout.theme}
                             onChange={handleChange}
                             placeholder="Theme"
-                            // valid={valid}
-                            // invalid={invalid}
+                            required
                         />
 
                         <Label htmlFor="description">Description: </Label>
@@ -313,8 +276,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
-  
-                            // invalid={invalid}
                         />
 
                         <Label htmlFor="level">Level: </Label>
@@ -326,8 +287,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="level"
                             id="level"
-  
-                            // invalid={invalid}
+                            required
                             >
                               <option
                               value={"All Levels"}
@@ -369,20 +329,17 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                               >
                                 AA
                               </option>
-                            {/* </Col> */}
-                             </Input> 
+                          </Input> 
            
                         <Label htmlFor="coEd">Is the bout co-ed? </Label>
                         <Input
                             type="select"
                             name="coEd"
                             className="coEd"
-                            // value={formData.coEd}
                             onChange={handleChange}
                             placeholder="coEd"
                             id="coEd"
-  
-                            // invalid={invalid}
+                            required
                             >
                               <option
                               value={"False"}
@@ -405,8 +362,7 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Ruleset"
                             id="ruleset"
-  
-                            // invalid={invalid}
+                            required
                             >
                               <option
                               value={"WFTDA"}
@@ -439,8 +395,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataBout.floorType}
                            onChange={handleChange}
                            placeholder="Floor Type"
-                           // valid={valid}
-                           // invalid={invalid}
                        />
 
                       <Label htmlFor="jerseyColors">Jersey Colors: </Label>
@@ -452,8 +406,6 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                            value={formDataBout.jerseyColors}
                            onChange={handleChange}
                            placeholder="Both Teams Jersey Colors"
-                           // valid={valid}
-                           // invalid={invalid}
                        />
 
                         <Label htmlFor="opposingTeam">Opposing Team: </Label>
@@ -465,8 +417,8 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="Opposing Team"
                             id="OpposingTeam"
-  
-                            // invalid={invalid}
+                            required
+
                         />
 
                         <Label htmlFor="team">Team: </Label>
@@ -478,25 +430,18 @@ let INITIAL_STATE_ADDRESS = { streetAddress: "", city: "", state: "", zipCode: "
                             onChange={handleChange}
                             placeholder="team"
                             id="team"
-  
-                            // invalid={invalid}
+                            required
                         /> 
-
-                      
-                        {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
-                        <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
 
                     </FormGroup>
 
-                    {/* { user && <Button >Save Changes</Button> }
-                    { !user && <Button >Create Profile</Button> } */}
                     <Button >Add Bout</Button>
                 </Form>
             </CardBody>
         </Card>
     </section>
   
-);
+  );
 };
 
 export default BoutForm;

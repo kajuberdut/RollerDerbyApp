@@ -2,51 +2,33 @@ import React, { useState, useEffect } from "react";
 import ChatComponent from "./ChatComponent";
 import Loading from "../multiUse/loading/Loading"
 import "./ChatList.css";
-
-import {
-  Card,
-  CardBody,
-  Button,
-  CardHeader, 
-  CardFooter
-} from "reactstrap";
+import { Card, CardBody, Button, CardHeader } from "reactstrap";
 
 /** 
  * List Chats of logged in user
  */
 
-const ChatList = ({handleChatList, handleChat, getAllChats, chats, setChats}) => {
+const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
 
-  /** render form */
+  /** Set is loading in state*/
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem('user'));
-
-/** API get request for bouts */
+  /** API get request for chats */
 
   async function getChats() {
-    console.log("getChats is running in ChatList.js")
-    // let chats = await FastApi.getChats(user.userId);
+
     let chats = await getAllChats();
     console.log("chats in chatList!!!!", chats)
 
-  //   try{
-  //     let bouts = await JoblyApi.getJobs(title);
-  //     setBouts(bouts);
-  //   } catch (errors) {
-  //   console.log("signup failed", errors);
-  //   return {success: false, errors};
-  // }
-    // setChats(chats);
     setIsLoading(false); 
   }
 
- /** Reloading bouts when it changes request for bouts */
+ /** Reloading chats when it changes request for bouts */
 
   useEffect(() => {
+
       getChats();
-      console.log("chats!!!!!!!!!!!!!!!!!!!!!!!!!!!!", chats)
   }, []);
 
 
@@ -73,27 +55,23 @@ const ChatList = ({handleChatList, handleChat, getAllChats, chats, setChats}) =>
       );
   }
 
-/** Render search bar and cards */
+/** Rendr chat list */
 
   return (
     <>
 
-    {/* <SearchComponent setBouts={setBouts}/> */}
-    <div className="ChatList">
+      <div className="ChatList">
 
-    <Card className="ChatList"  style={{height: '85%', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
+        <Card className="ChatList"  style={{height: '85%', width: '350px', position: 'fixed', bottom: '0px', right: '95px', borderRadius: '20px'}}>
           <CardHeader style={{height: '40px'}}>
             <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>Chats</p>
             <Button onClick={handleChatList} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
           </CardHeader>
           <CardBody>
-          {renderCards()}
-             
+            {renderCards()}         
           </CardBody>
-          <CardFooter>
-          </CardFooter>
         </Card>
-        </div>
+      </div>
     </>
   );
 
