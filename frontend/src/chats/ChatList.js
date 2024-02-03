@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import FastApi from "../Api";
+import React, { useState, useEffect } from "react";
 import ChatComponent from "./ChatComponent";
-// import SearchBar from "../repeated/searchBar/SearchBar";
 import Loading from "../multiUse/loading/Loading"
 import "./ChatList.css";
 
@@ -12,7 +10,6 @@ import {
   CardHeader, 
   CardFooter
 } from "reactstrap";
-import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
 
 /** 
  * List Chats of logged in user
@@ -20,19 +17,11 @@ import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
 
 const ChatList = ({handleChatList, handleChat, getAllChats, chats, setChats}) => {
 
-  console.log("************************************")
-  console.log("************ chats:", chats)
-  console.log("setChats:", setChats)
-
   /** render form */
 
   const [isLoading, setIsLoading] = useState(true);
-  // const [chats, setChats] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log("user in MessageList.js", user)
-  console.log("user.userId in MessageList.js", user.userId)
-  console.log("user['userId'] in MessageList.js", user["user_id"])
 
 /** API get request for bouts */
 

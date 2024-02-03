@@ -66,23 +66,23 @@ function Profile({displayChatList}) {
       function fetchData() {
       
           if (userState.ruleset) {
-            getUserRulesets()
+            getUserRulesets();
           }
 
           if (userState.position) {
-            getUserPosition()
+            getUserPosition();
           }
   
           if (userState.locationId) {
-   
-            getUserLocation()
+            console.log("userState.lcoationId is running")
+            getUserLocation();
           }
           if (userState.insurance) {
-            getUserInsurance()
+            getUserInsurance();
           }
 
           if(userState.phoneNumber){
-            formatPhoneNumber()
+            formatPhoneNumber();
           }
         }
   
@@ -134,6 +134,9 @@ function Profile({displayChatList}) {
 
   async function getUserLocation() {
     let userLocation = await FastApi.getLocation(userState.locationId);
+    console.log("********************************")
+    console.log("userLocation", userLocation)
+    console.log("********************************")
     setCity(userLocation.city)
     setState(userLocation.state)
   }
@@ -228,111 +231,6 @@ function Profile({displayChatList}) {
                   </div>
                   }
                 </MDBCardBody>
-
-
-                {/* <MDBContainer style={{paddingBottom: '100px'}}>
-                          <MDBRow className="justify-content-center align-items-center h-100"> 
-                            <MDBCol lg="9" xl="10">
-                              <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
-                                <div>
-                                  <h2>Private Information </h2>
-                                  <h3>Will be shared with team admin only.</h3>
-                                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
-                                      <a href="/setup/private">
-                                          <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-                                             style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "20px", fontSize: '15px'}}>
-                                            Edit
-                                          </button>
-                                      </a>
-                                  </div>
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style= {{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Name:
-                                    </div>
-                                    {userState.firstName && userState.lastName && <MDBCardText style={{marginLeft: '150px', marginTop: '5px'}} tag="h4">{userState.firstName} {userState.lastName}</MDBCardText>}
-                                    </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Email:
-                                    </div>
-                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px'}} tag="h4">{userState.email} </MDBCardText>
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Phone #:
-                                    </div>
-                                    {userState.phoneNumber && <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Insurances:
-                                    </div>
-
-                                    { insurances &&
-                                          <MDBTypography style={{marginLeft: '100px', marginTop: '5px'}} tag="h4">{insurances}</MDBTypography>
-                                    }
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Additional Info:
-                                    </div>
-
-                                    {userState.additionalInfo && 
-                                        <MDBTypography style={{marginLeft: '56px', marginTop: '5px'}} tag="h4">{userState.additionalInfo}</MDBTypography>
-                                    }
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-
-                                <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Secondary #:
-                                    </div>
-
-                                    {userState.secondaryNumber != null && 
-                                        <MDBTypography style={{marginLeft: '90px', marginTop: '5px'}} tag="h4">{userState.secondaryNumber}</MDBTypography>
-                                    }
-                                </div>
-
-                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                                    </div>
-                                </div>
-                    
-                              </MDBCard>
-                            </MDBCol>
-                          </MDBRow>
-                        </MDBContainer> */}
-
 
               </MDBCard>
             </MDBCol>

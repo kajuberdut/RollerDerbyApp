@@ -9,7 +9,9 @@ import {
     CardText,
     Button
   } from "reactstrap";
-  // import {  MDBCardImage } from 'mdb-react-ui-kit';
+  // import {  MDBCardImage } from 'mdb-react-ui-kit';4
+
+//   todo upload invites when invite is accepted 
 
   
   /**  

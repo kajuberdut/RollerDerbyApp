@@ -33,11 +33,10 @@ function Home({setIsHomeVis}) {
     return (
       <section className="col-md-8 Home">
         <Card>
-          <CardTitle>
-                <h1>The block party begins when the star arrives.</h1>
+          <CardTitle className="Home-Title">
+              <h1>The block party begins when the star arrives.</h1>
           </CardTitle>
           <CardBody >
-            <CardText></CardText>-
             {user && <h2>Welcome to the party, {user.username}!</h2>}
             {!user && <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>

@@ -118,7 +118,7 @@ class TeamInvite(SQLAlchemyBase):
     team_id = Column(Integer, ForeignKey("group.group_id"))  # Links to the Team
     sender_id = Column(Integer)
     recipient_id = Column(Integer)
-    status = Column(String, default="pending")  # Pending, accepted, rejected
+    status = Column(String, default="pending")  # Pending, accepted 
     
 class Message(SQLAlchemyBase):
     __tablename__ = "message"  

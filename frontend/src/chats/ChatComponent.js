@@ -8,7 +8,6 @@ import "./ChatComponent.css"
 
   function ChatComponent({handleChat, chat}) {
 
-    
     const [username, setUsername] = useState(); 
 
     /** On mount, retrieve user from local storage and set username in state*/

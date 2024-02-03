@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import { useParams} from "react-router-dom";
-// import CardComponent from "../multiUse/cardComponent/CardComponent";
 import Loading from "../multiUse/loading/Loading";
 import "./BoutDetails.css"
 
@@ -22,16 +21,13 @@ function BoutDetail({getAllChats}) {
     const [connected, setConnected] = useState(null)
     const [error, setError] = useState(null)
     
-    // const [button, setButton] = useState("Join Chat");
-    // const [disableButton, setDisableButton] = useState(false)
 
-  //   /** API get request for a specific bout using id  */ 
+    /** API get request for a specific bout using id  */ 
 
     async function getBout() {
       let bout = await FastApi.getBout(eventId.id);
-      console.log("bout in bout details!!!", bout)
       let address = await FastApi.getAddress(bout.addressId)
-      console.log("address:", address)
+
       setBout(bout);
       setAddress(address)
       setIsLoading(false)
@@ -61,7 +57,7 @@ function BoutDetail({getAllChats}) {
       const user = JSON.parse(localStorage.getItem('user'));
 
       let data = {userId: `${user.userId}`, groupId: `${bout.groupId}`}
-      console.log("data in BoutDetails.js", data)
+
       try {
         let result = await FastApi.addUserToGroup(data); 
           if(result) {
@@ -71,14 +67,12 @@ function BoutDetail({getAllChats}) {
         setConnected("Connected. Check your chats.")
         return { success: true};
         } catch (err) {
-          console.log("api request failed", err);
-          // return {success: false, err};
           setError("Unable to connect to chat.")
           return {success: false, description: "Unable to connect to chat."};
         }
     } 
 
-    // ! going to have to adjust this 
+    /** render bout details page */
 
     return (
 
