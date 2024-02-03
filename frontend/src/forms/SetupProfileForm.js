@@ -1,65 +1,40 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FastApi from "../Api";
 import { useNavigate } from "react-router-dom";
-
 import "./SetupProfileForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
-  import PropTypes from 'prop-types';
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Form for creating a user or updating a logged in user.
+ * Display setup profile form
  */
 
 function SetupProfileForm({ update, getUser}) {
 
-/** Retrieve user from local storage */
+  /** Retrieve user from local storage */
 
-const user = JSON.parse(localStorage.getItem('user'));
-// console.log("user !!! in setup profile form", user)
+  const user = JSON.parse(localStorage.getItem('user'));
 
- /** Set user, history and initial state and set valid, invalid, and error message in state */
-//   const history = useHistory();
-//   const [ valid, setValid ] = useState(false);
-//   const [ invalid, setInvalid ] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState([]);
-// const [file, setFile] = useState<File | undefined>();
-// const [preview, setPreview] = useState<string | undefined>();
-const navigate = useNavigate();
-const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
-const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
-const [formRulesets, setFormRulesets] = useState([]);
-const [formPositions, setFormPositions] = useState([]);
-const [displayRulesets, setDisplayRulesets] = useState([]);
-const [displayPositions, setDisplayPositions] = useState([]);
-const [primIns, setPrimIns] = useState([]);
-const [secIns, setSecIns] = useState([]);
+  const navigate = useNavigate();
+  const [formRulesets, setFormRulesets] = useState([]);
+  const [formPositions, setFormPositions] = useState([]);
+  const [displayRulesets, setDisplayRulesets] = useState([]);
+  const [displayPositions, setDisplayPositions] = useState([]);
 
-useEffect(() => {
-  if(!user) {
-    navigate('/')
-  }
-});
+  useEffect(() => {
+    if(!user) {
+      navigate('/')
+    }
+  });
 
-console.log("USER IN EDIT PROFILE PAGE", user)
+  /** Sets initial state of form   */
 
-let INITIAL_STATE = { username: user.username, city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
+  let INITIAL_STATE = { username: user.username, city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
 
   /** Sets formData in initial state */
 
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   function format(formData) {
-    console.log("formData.image:", formData.image)
-    console.log("formData.city:", formData.city)
 
       let userData = {
         username: formData.username, image: formData.image, facebookName: formData.facebookName, about: formData.about, primaryNumber: formData.primNum, level: formData.level, positionId: 0, locationId: 0, associatedLeagues: formData.assocLeagues
@@ -71,9 +46,7 @@ let INITIAL_STATE = { username: user.username, city: user.city, state: user.stat
         if (userData[key] === null) {
           delete userData[key];
         }
-      }
-      console.log("!!!!!!! userData:", userData);
-      
+      }      
 
       let data = {
         user: userData, 
@@ -85,44 +58,33 @@ let INITIAL_STATE = { username: user.username, city: user.city, state: user.stat
       }
       data["ruleset"] = formRulesets;
       data["position"] = formPositions;
-      console.log("***** data:", data);
       
       return data;
   }
 
-  // debugging purposes only 
-
-    useEffect(() => {
-      console.log("formRulesets:", formRulesets);
-      console.log("formPositions:", formPositions);
-  }, [formRulesets, formPositions]);
-
   /** Handle Submit by either creating user, updating profile, or returning an error message */
   const handleSubmit = async evt => {
     evt.preventDefault();   
-    console.log("FormData in SetupProfileForm.js", formData)
     setFormData(INITIAL_STATE);
    
     let formattedData = format(formData);
+    try{
+      let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
+    
+      if(updateProfile) {
+        await getUser();
+        navigate('/profile')
+      } 
 
-    let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
-  
-    if(updateProfile) {
-      await getUser();
-      navigate('/profile')
-
-    } else {
-
-      console.log("fake form has failed to submit")
+    } catch(errors) {
+      return { success: false, errors };
     }
-   }
+  }
 
   /** Update local state with current state of input element */
 
   const handleRulesetsChange = evt => {
-    console.log("you are hitting handleRulesetsChange")
 
-// ! note should be able to refactor this so that I am only using one state and then altering the data from the state in the new data and not submitting to state 
       setFormRulesets((prevRulesets) => {
         const newRulesets = Array.from(evt.target.selectedOptions)
           .map((option) => ({ rulesetId: 0, name: option.value }))
@@ -137,106 +99,96 @@ let INITIAL_STATE = { username: user.username, city: user.city, state: user.stat
         return [...prevRulesets, ...newRulesets];
       });
 
-};
+  };
 
-const handlePositionsChange = evt => {
-  console.log("you are hitting handlePositionsChange")
+  /** Update local state with current state of input element */
 
-  setFormPositions((prevPositions) => {
-    const newPositions = Array.from(evt.target.selectedOptions)
-      .map((option) => ({ positionId: 0, position: option.value }))
-      .filter((position) => !prevPositions.includes((p) => p.name === position.name));
+  const handlePositionsChange = evt => {
 
-    return [...prevPositions, ...newPositions];
-  });
+    setFormPositions((prevPositions) => {
+      const newPositions = Array.from(evt.target.selectedOptions)
+        .map((option) => ({ positionId: 0, position: option.value }))
+        .filter((position) => !prevPositions.includes((p) => p.name === position.name));
 
-  setDisplayPositions((prevPositions) => {
-    const newPositions = Array.from(evt.target.selectedOptions)
-      .map((option) => option.value)
-      .filter((positionName) => !prevPositions.includes(positionName)); // Filter for unique names
-    return [...prevPositions, ...newPositions];
-  });
+      return [...prevPositions, ...newPositions];
+    });
 
-};
+    setDisplayPositions((prevPositions) => {
+      const newPositions = Array.from(evt.target.selectedOptions)
+        .map((option) => option.value)
+        .filter((positionName) => !prevPositions.includes(positionName)); 
+      return [...prevPositions, ...newPositions];
+    });
 
-const handleChange = evt => {
-  console.log('handleChange is running')
-  const { name, value }= evt.target;
+  };
 
-  if (name === "image") {
-    const imageFile = evt.target.files[0];
+  /** Update local state with current state of input element */
 
-    const reader = new FileReader()
+  const handleChange = evt => {
 
-    reader.onload = () => {
-      const imageDataUrl = reader.result; // Get the base64-encoded data URL
+    const { name, value }= evt.target;
 
-      setFormData(fData => ({
+    if (name === "image") {
+      const imageFile = evt.target.files[0];
+
+      const reader = new FileReader()
+
+      reader.onload = () => {
+        const imageDataUrl = reader.result; // Get the base64-encoded data URL
+
+        setFormData(fData => ({
+          ...fData,
+          image: imageDataUrl, // Store the data URL in the form data
+        }));
+      };
+
+      reader.readAsDataURL(imageFile)
+
+    } else {
+
+    setFormData(fData => ({
         ...fData,
-        image: imageDataUrl, // Store the data URL in the form data
+        [name]: value,
       }));
-    };
+    }
 
-    reader.readAsDataURL(imageFile)
+  }
 
-  } else {
-
-  setFormData(fData => ({
-    ...fData,
-    [name]: value,
-  }));
-}
-
-  console.log("formData in setupProfileForm:", formData)
-}
-
-  /** toggle dropdown */
-
-// const toggle = () => setDropdownOpen((prevState) => !prevState);
-
-  /** render form */
+  /** render setup profile form */
 
   return (
 
     <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="SetupProfileForm-CardTitle">
-            {/* { !user && ( <h1>Create a Profile</h1> )}
-            { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Setup Public Profile</h1>
             </CardTitle>
             <CardBody>
-                {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
 
-                    <Label htmlFor="username">Derby Name: </Label>
-                       <Input
-                           type="text"
-                           id="username"
-                           name="username"
-                           value={formData.username}
-                           onChange={handleChange}
-                           placeholder="Derby Name"
-                           required
-                           // valid={valid}
-                           // invalid={invalid}
-                       />
+                      <Label htmlFor="username">Derby Name: </Label>
+                      <Input
+                          type="text"
+                          id="username"
+                          name="username"
+                          value={formData.username}
+                          onChange={handleChange}
+                          placeholder="Derby Name"
+                          required
+                      />
 
                       <Label htmlFor="image">Profile Image: </Label>
-                        <Input
-                            type="file"
-                            id="image"
-                            name="image"
-                            // value={formData.image}
-                            onChange={handleChange}
-                            accept="image/png image/jpg"
-                            // valid={valid}
-                            // invalid={invalid}
-                        /> 
-                                 <Label htmlFor="city">City: </Label>
-                       
-                       <Input
+                      <Input
+                          type="file"
+                          id="image"
+                          name="image"
+                          onChange={handleChange}
+                          accept="image/png image/jpg"
+                      /> 
+
+                      <Label htmlFor="city">City: </Label>
+                      <Input
                            type="text"
                            id="city"
                            name="city"
@@ -245,31 +197,18 @@ const handleChange = evt => {
                            placeholder="City"
                            // valid={valid}
                            // invalid={invalid}
-                       />
+                      />
 
                       <Label htmlFor="state">State: </Label>
-                       
-                       {/* <Input
-                           type="text"
-                           id="state"
-                           name="state"
-                           value={formDataAddress.state}
-                           onChange={handleChange}
-                           placeholder="State"
-                           // valid={valid}
-                           // invalid={invalid}
-                       />         */}
-
                       <Input
                         type="select"
                         placeholder="State"
                         onChange={handleChange}
                         id="state" 
                         name="state"
-                        // className='SearchBarInput'
                         value={formData.state}
                         maxLength={2}
-                        >
+                      >
                         <option value="">State</option>
                         <option value="AL">AL</option>
                         <option value="AK">AK</option>
@@ -322,64 +261,57 @@ const handleChange = evt => {
                         <option value="WV">WV</option>
                         <option value="WI">WI</option>
                         <option value="WY">WY</option>
-                        </Input>                     
+                      </Input>                     
 
 
-                        <Label htmlFor="about">About: </Label>
-                        <Input
-                            type="textarea"
-                            name="about"
-                            className="form-control"
-                            value={formData.about}
-                            onChange={handleChange}
-                            placeholder="Write your story..."
-                            id="about"
-  
-                            // invalid={invalid}
-                        />
+                      <Label htmlFor="about">About: </Label>
+                      <Input
+                          type="textarea"
+                          name="about"
+                          className="form-control"
+                          value={formData.about}
+                          onChange={handleChange}
+                          placeholder="Write your story..."
+                          id="about"
+                      />
 
-                        <Label htmlFor="primNum">Primary Number: </Label>
-                        <Input
-                            type="number"
-                            name="primNum"
-                            className="form-control"
-                            value={formData.primNum}
-                            onChange={handleChange}
-                            placeholder="Primary Number"
-                            id="primaryNumber"
-  
-                            // invalid={invalid}
-                        />
+                      <Label htmlFor="primNum">Primary Number: </Label>
+                      <Input
+                          type="number"
+                          name="primNum"
+                          className="form-control"
+                          value={formData.primNum}
+                          onChange={handleChange}
+                          placeholder="Primary Number"
+                          id="primaryNumber"
+                      />
       
-                        <Label htmlFor="level">Skill Level: </Label>
-                        <Input
-                            type="select"
-                            name="level"
-                            className="form-control"
-                            value={formData.level}
-                            onChange={handleChange}
-                            placeholder="level"
-                            id="level"
-  
-                            // invalid={invalid}
-                            >
-                              <option value={""}>
-                                Prefer not to say.
-                              </option>
-                              <option value={"C"}>
-                                C
-                              </option>
-                              <option value={"B"}>
-                                B
-                              </option>
-                              <option value={"A"}>
-                                A
-                              </option>
-                              <option value={"AA"}>
-                                AA
-                              </option>
-                            {/* </Col> */}
-                            </Input>
+                      <Label htmlFor="level">Skill Level: </Label>
+                      <Input
+                          type="select"
+                          name="level"
+                          className="form-control"
+                          value={formData.level}
+                          onChange={handleChange}
+                          placeholder="level"
+                          id="level"
+                      >
+                            <option value={""}>
+                              Prefer not to say.
+                            </option>
+                            <option value={"C"}>
+                              C
+                            </option>
+                            <option value={"B"}>
+                              B
+                            </option>
+                            <option value={"A"}>
+                              A
+                            </option>
+                            <option value={"AA"}>
+                              AA
+                            </option>
+                          </Input>
 
                         <Label htmlFor="assocLeagues">Associated Leagues: </Label>
                         <Input
@@ -390,9 +322,6 @@ const handleChange = evt => {
                             onChange={handleChange}
                             placeholder="Associated Leagues"
                             id="assocLeagues"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
                         />
 
                         <Label htmlFor="rulesets">Positions: </Label>
@@ -427,8 +356,7 @@ const handleChange = evt => {
                             onChange={handleRulesetsChange}
                             placeholder="Played Rulesets"
                             id="rulesets"
-                            multiple
-                            
+                            multiple        
                         >     
                         <option value={"WFTDA"}>
                         WFTDA
@@ -454,24 +382,14 @@ const handleChange = evt => {
                             onChange={handleChange}
                             placeholder="Facebook Name"
                             id="facebookName"
-  
-                            // invalid={invalid}
-
                         />      
-                        {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
-                        <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
-
                     </FormGroup>
-
-                    {/* { user && <Button >Save Changes</Button> }
-                    { !user && <Button >Create Profile</Button> } */}
                     <Button >Save Profile</Button>
                 </Form>
             </CardBody>
         </Card>
     </section>
-  
-);
+  );
 };
 
 export default SetupProfileForm;

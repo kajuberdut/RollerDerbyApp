@@ -1,50 +1,33 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import FastApi from "../Api";
 import { useNavigate } from "react-router-dom";
-
-import "./SetupProfileForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
-  import PropTypes from 'prop-types';
+import "./SetupProfileForm.css" 
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Form for creating a user or updating a logged in user.
+ * Display form for updating private details pofile
  */
 
 function SetupPrivateDetailsForm({ update, getUser }) {
 
-/** Retrieve user from local storage */
+  /** Retrieve user from local storage */
 
-const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
 
+  /** Sets primary and secondary insurance number disbled in state */
 
- /** Set user, history and initial state and set valid, invalid, and error message in state */
-//   const history = useHistory();
-//   const [ valid, setValid ] = useState(false);
-//   const [ invalid, setInvalid ] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState([]);
-// const [file, setFile] = useState<File | undefined>();
-// const [preview, setPreview] = useState<string | undefined>();
-const navigate = useNavigate();
-const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
-const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
-const [formRulesets, setFormRulesets] = useState([]);
-const [displayRulesets, setDisplayRulesets] = useState([]);
-const [primIns, setPrimIns] = useState([]);
-const [secIns, setSecIns] = useState([]);
+  const [primInsNumDisabled, setPrimInsNumDisabled] = useState(true);
+  const [secInsNumDisabled, setSecInsNumDisabled] = useState(true);
 
-let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum };
+  /** Sets initial state of form   */
+
+  let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstName: user.firstName, lastName: user.lastName, additionalInfo: user.additionalInfo, secNum: user.secondaryNumber, level: user.level, primIns: user.primaryInsurance, primInsNum: user.primInsNum, secIns: user.secIns, secInsNum: user.secInsNum };
 
   /** Sets formData in initial state */
   const [formData, setFormData] = useState(INITIAL_STATE);
+
+  /** Formats form data */
 
   function format(formData) {
     console.log("formData.secIns", formData.secIns)
@@ -52,13 +35,12 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
     let val1 = formData.primInsNum
     let type2 = formData.secIns
     let val2 = formData.secInsNum
-    // ! will have to prefill rulesets - primary insurance, secondary, insurance, 
 
     let userData = {
       email: formData.email, phoneNumber: formData.phoneNumber, firstName: formData.firstName, lastName: formData.lastName, additionalInfo: formData.additionalInfo, secondaryNumber: formData.secNum
     }
 
-      /** Delete all null fields */
+    /** Delete all null fields */
 
     for (const key in userData) {
       if (userData[key] === null) {
@@ -66,7 +48,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
       }
     }
 
-    console.log("userData:", userData)
     let primaryInsurance;
     let secondaryInsurance;
 
@@ -97,98 +78,68 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
 
   }
   
-    /** Get user insurance information if it exists */
-
-  async function getUserInsurance() {
-    if(user.insurance[0]) {
-      let primIns = await FastApi.getInsurance(user.insurance[0].insurance_id)
-      console.log("primIns:", primIns)
-      setPrimIns(primIns)
-    }
-  
-    let insArr = []
-    // for(let ins of user.insurance) {
-    //   let insurance = await FastApi.getInsurance(ins.insurance_id);
-    //   insArr.push(insurance.type + ":")
-    //   insArr.push(ins.insurance_number)
-    // }
-    // if(insArr.length > 2){
-    //   insArr[1] += ","
-    // }    
-    // let userInsurances = insArr.join(" ")
-    // setInsurances(userInsurances)
-  }
-
-
  /** Handle Submit by either updating profile, or returning an error message */
- const handleSubmit = async evt => {
-  evt.preventDefault();   
-  console.log("FormData in SetupPrivateDetailsForm.js", formData)
-  setFormData(INITIAL_STATE);
- 
-  console.log("update!!!!!:", update)
-  let formattedData = format(formData);
-  // ! this is returning undefined
-  console.log("formattedData!!!! in PRIVATE ", formattedData)
 
-  let updateProfile = await FastApi.updateUserPrivate(user.userId, formattedData);
+  const handleSubmit = async evt => {
+    evt.preventDefault();   
+
+    setFormData(INITIAL_STATE);
   
-  if(updateProfile) {
-    await getUser();
-    navigate('/profile/private')
-  } else {
-
-    console.log("fake form has failed to submit")
+    let formattedData = format(formData);
+    try {
+      let updateProfile = await FastApi.updateUserPrivate(user.userId, formattedData);
+      
+      if(updateProfile) {
+        await getUser();
+        navigate('/profile/private')
+      }
+    } catch(errors) {
+      return { success: false, errors };
+    }
   }
- }
+
+  /** Update local state with current state of input element */
 
   const handleChange = evt => {
     console.log('handleChange is running')
     const { name, value }= evt.target;
 
-    setFormData(fData => ({
-      ...fData,
-      [name]: value,
-    }));
+      setFormData(fData => ({
+        ...fData,
+        [name]: value,
+      }));
 
-    if (name === "primIns") {
-      if (value === "") {
-        setFormData((prevData) => ({
-          ...prevData,
-          primInsNum: "",
-        })); // Clear the insurance number field
-        setPrimInsNumDisabled(true); // Disable the insurance number field
-      } else {
-        setPrimInsNumDisabled(false); // Enable the insurance number field
-        // If needed, prompt for insurance number if it's still empty
+      if (name === "primIns") {
+        if (value === "") {
+          setFormData((prevData) => ({
+            ...prevData,
+            primInsNum: "",
+          })); 
+          setPrimInsNumDisabled(true); 
+        } else {
+          setPrimInsNumDisabled(false); 
+        }
+      };
+      if (name === "secIns") {
+        if (value === "") {
+          setFormData((prevData) => ({
+            ...prevData,
+            secInsNum: "",
+          })); 
+          setSecInsNumDisabled(true);
+        } else {
+          setSecInsNumDisabled(false); 
       }
-    };
-    if (name === "secIns") {
-      if (value === "") {
-        setFormData((prevData) => ({
-          ...prevData,
-          secInsNum: "",
-        })); // Clear the insurance number field
-        setSecInsNumDisabled(true); // Disable the insurance number field
-      } else {
-        setSecInsNumDisabled(false); // Enable the insurance number field
-        // If needed, prompt for insurance number if it's still empty
+    }
   }
 
-  }
 
-    console.log("formData in setupPrivateeForm:", formData)
-}
-
-
-  /** render form */
+  /** render setup private details form */
 
   return (
     <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
         <Card>
             <CardTitle className="SetupProfileForm-CardTitle">
-            {/* { !user && ( <h1>Create a Profile</h1> )}
-            { user && (<h1>{user.username}'s Profile</h1>)} */}
             <h1>Private Details</h1>
             </CardTitle>
             <CardBody>
@@ -204,8 +155,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                            value={formData.email}
                            onChange={handleChange}
                            placeholder="Email"
-                           // valid={valid}
-                           // invalid={invalid}
                        />
 
                       <Label htmlFor="phoneNumber">Phone Number: </Label>
@@ -218,10 +167,7 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             onChange={handleChange}
                             placeholder="Phone Number"
                             pattern="[0-9]*"
-                            // pattern="/^-?\d+\.?\d*$/"
                             maxLength="10"
-                            // valid={valid}
-                            // invalid={invalid}
                         />
                        
 
@@ -234,8 +180,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             value={formData.firstName}
                             onChange={handleChange}
                             placeholder="First Name"
-                            // valid={valid}
-                            // invalid={invalid}
                         />
                         
            
@@ -247,8 +191,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Last Name"
-                            // valid={valid}
-                            // invalid={invalid}
                         />
 
                         
@@ -260,8 +202,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             value={formData.additionalInfo}
                             onChange={handleChange}
                             placeholder="Additional Private Information"
-                            // valid={valid}
-                            // invalid={invalid}
                         />
 
                         <Label htmlFor="secNum">Secondary Number: </Label>
@@ -273,9 +213,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             onChange={handleChange}
                             placeholder="Secondary Number"
                             id="secondaryNumber"
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
                         />
 
                         <Label htmlFor="primIns">Primary Insurance: </Label>
@@ -287,9 +224,7 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             onChange={handleChange}
                             placeholder="Primary Insurance"
                             id="primIns"
-  
-                            // invalid={invalid}
-                            >
+                        >
                               <option value={""}>
                                 N/A 
                               </option>
@@ -315,9 +250,6 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             placeholder="Primary Insurance Number"
                             id="primInsNum"
                             disabled={primInsNumDisabled}
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
                         />
 
                         <Label htmlFor="secIns">Secondary Insurance: </Label>
@@ -329,9 +261,7 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             onChange={handleChange}
                             placeholder="Secondary Insurance"
                             id="secIns"
-  
-                            // invalid={invalid}
-                            >
+                        >
                               <option value={""}>
                                 N/A 
                               </option>
@@ -356,25 +286,16 @@ let INITIAL_STATE = { email: user.email, phoneNumber: user.phoneNumber, firstNam
                             placeholder="Secondary Insurance Number"
                             id="secInsNum"
                             disabled={secInsNumDisabled}
-  
-                            // invalid={invalid}
-                            // note will have to restrict this to numbers only
                         />                    
-                            
-                        {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
-                        <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
 
                     </FormGroup>
-
-                    {/* { user && <Button >Save Changes</Button> }
-                    { !user && <Button >Create Profile</Button> } */}
                     <Button >Save Profile</Button>
                 </Form>
             </CardBody>
         </Card>
     </section>
   
-);
+  );
 };
 
 export default SetupPrivateDetailsForm;

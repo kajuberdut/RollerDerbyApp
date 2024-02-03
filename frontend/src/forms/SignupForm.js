@@ -1,74 +1,50 @@
-import React, { useContext, useState, useEffect } from "react";
-import UserContext from "../multiUse/UserContext";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
-
 /** 
- * Form for creating a user or updating a logged in user.
+ * Display signup form 
  */
 
 const SignupForm = ({signup, setIsSignupVis}) => {
 
-  console.log("setIsSignupVis !!!!", setIsSignupVis)
+  /** Set error message in state */
+  const [errorMessage, setErrorMessage] = useState([]);
+  const navigate = useNavigate();
+  
+  /** Sets initial state of form   */
 
-  /** Set user, history and initial state and set valid, invalid, and error message in state */
-
-const { user, setUser } = useContext(UserContext);
-//   const history = useHistory();
-//   const [ valid, setValid ] = useState(false);
-const [ invalid, setInvalid ] = useState(false);
-const [errorMessage, setErrorMessage] = useState([]);
-const navigate = useNavigate();
-
-  // let INITIAL_STATE; 
-
- 
-  /** If user, set initial state and the then set the formdata as initial state. 
-   * Sets info for user so that info can be updated. 
-   * Gives value to InitialState
-  */
-
-  // if(user) {
-  //   INITIAL_STATE = { username: user.username, email: user.email };
-
-  // } else {
-  //   INITIAL_STATE = { username: "", email: "" };
-  // }
-
- let INITIAL_STATE = { username: "",  email: "", password: ""};
-// let INITIAL_STATE = { derbyName: "Sockher",  email: "Sockher@gmail.com", password: "pass"};
+  let INITIAL_STATE = { username: "",  email: "", password: ""};
 
   /** Sets formData in initial state */
+
   const [formData, setFormData] = useState(INITIAL_STATE);
 
+  /** When login page is mounted setIsloginVis to true - false when unmounted */
 
   useEffect(() => {
-    console.log("isSignupVIs? ", setIsSignupVis)
     setIsSignupVis(true);
   return () => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     setIsSignupVis(false);
   };
   }, []);
-  
+
+
+  /** Handle Submit by either creating user or returning an error message */
+
   const handleSubmit = async evt => {
     evt.preventDefault();   
     setFormData(INITIAL_STATE);
-    console.log("formData:", formData)
-    // let result = await FastApi.signup(formData);
-     let result = await signup(formData);
+
+    let result = await signup(formData);
 
     if(result.success) {
         navigate('/login')
     } else {
       setErrorMessage(result.err)
-      // setInvalid(true)
-      console.log("Signup broke")
     }
   }
-
 
   /** Update local state with current state of input element */
 
@@ -83,7 +59,7 @@ const navigate = useNavigate();
 
   };
 
-  /** render form */
+  /** render signup form form */
 
   return (
     <section className="col-md-4 SignupForm">
@@ -95,7 +71,6 @@ const navigate = useNavigate();
             </div>
             </CardTitle>
             <CardBody>
-                {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                         <Label htmlFor="username" sm={10}>Derby Name: </Label>
@@ -107,11 +82,8 @@ const navigate = useNavigate();
                             onChange={handleChange}
                             placeholder="Derby Name"
                             required
-                            // invalid={invalid}
                         />
                   
-                    {/* )} */}                  
-
                         <Label htmlFor="email">Email: </Label>
                         <Input
                             type="email"
@@ -122,16 +94,12 @@ const navigate = useNavigate();
                             placeholder="Email"
                             autoComplete="username"
                             required
-                            // valid={valid}
-                            // invalid={invalid}
                         />
 
-                        {/* { !user && ( <><Label>Password:</Label>  */}
                         <Label htmlFor="password">Password: </Label>
                         <Input
                             type="password"
                             name="password"
-                            // className="form-control"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Password"
@@ -139,12 +107,7 @@ const navigate = useNavigate();
                             autoComplete="new-password"
                             required
                         />
-
-                        {/* <FormFeedback valid>Profile updated successfully!</FormFeedback>
-                        <FormFeedback tooltip>{errorMessage} </FormFeedback> */}
-
                     </FormGroup>
-
                     <Button >Create Profile</Button>
                 </Form>
             </CardBody>
@@ -152,6 +115,5 @@ const navigate = useNavigate();
     </section>
   );
 };
-
 
 export default SignupForm;

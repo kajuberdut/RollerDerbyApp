@@ -1,69 +1,48 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import FastApi from "../Api";
-import UserContext from "../multiUse/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./TeamForm.css"
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button,
-  } from "reactstrap";
-
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 /** 
- * Form for creating a user or updating a logged in user.
+ * Form for creating a new team
  */
 
 const TeamForm = () => {
 
-  /** Set user, history and initial state and set valid, invalid, and error message in state */
+  /** Retrieve user from local storage and set in state*/
 
-const { user, setUser } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  /** Sets Initial State of Form  */
 
-  /** 
-   * Sets Initial State of Form
-  */
-
-if(!user) {
-  navigate('/')
-}
-
-let INITIAL_STATE = { name: ""};
+  let INITIAL_STATE = { name: ""};
 
   /** Sets formData in initial state */
 
   const [formData, setFormData] = useState(INITIAL_STATE);
   
-  /** Handle Submit by either creating user, updating profile, or returning an error message */
+  /** Handle Submit by creating a team returning an error message */
 
   const handleSubmit = async evt => {
     evt.preventDefault();   
 
     setFormData(INITIAL_STATE);
-  
-    let result = await FastApi.addTeam(formData);
-    if(result) {
-      navigate('/teams')
+    try {
+      let result = await FastApi.addTeam(formData);
 
-    } else {
-      // let message = result.errors[0]
-      let message = result
-      // setErrorMessage(message)
-      // setInvalid(true)
+      if(result) {
+        navigate('/teams')
+      }
+    } catch(errors) {
+      return { success: false, errors };
     }
-   }
+  }
 
   /** Update local state with current state of input element */
 
   const handleChange = evt => {
-    console.log('handleChange is running')
 
     const { name, value }= evt.target;
 
@@ -74,10 +53,9 @@ let INITIAL_STATE = { name: ""};
         type: "team"
         
       }));
-      console.log("formData", formData)
   };
 
-  /** render form */
+  /** render team form */
 
   return (
     <section className="col-md-4 TeamForm" style={{marginTop: "150px"}}>
@@ -87,7 +65,6 @@ let INITIAL_STATE = { name: ""};
             <p><b>Note: When you create a team you become the admin of that team.</b></p>
             </CardTitle>
             <CardBody>
-                {/* <Form> */}
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                        
@@ -98,17 +75,15 @@ let INITIAL_STATE = { name: ""};
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                      />
+                    />
                     
                     </FormGroup>
-
                     <Button >Add Team</Button>
                 </Form>
             </CardBody>
         </Card>
-    </section>
-  
-);
+    </section> 
+  );
 };
 
 export default TeamForm;
