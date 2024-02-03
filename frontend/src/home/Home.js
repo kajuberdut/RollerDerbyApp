@@ -1,25 +1,19 @@
-import React, { useContext, useEffect } from "react";
-import UserContext from "../multiUse/UserContext";
+import React, { useEffect } from "react";
 import './Home.css'
 import { Link } from "react-router-dom";
-import { 
-  Card, 
-  CardBody, 
-  CardText, 
-  CardTitle,
-  Button
-} from "reactstrap";
+import { Card, CardBody, CardText, CardTitle, Button } from "reactstrap";
 
 /**
  * Display home page
- *
  */
 
 function Home({setIsHomeVis}) {
 
   /** Get user from context*/
 
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  /** When home page is mounted setIsloginVis to true - false when unmounted */
 
   useEffect(() => {
     setIsHomeVis(true);
@@ -28,7 +22,7 @@ function Home({setIsHomeVis}) {
   };
   }, []);
 
-  /** Render page */
+  /** Render home page */
 
     return (
       <section className="col-md-8 Home">

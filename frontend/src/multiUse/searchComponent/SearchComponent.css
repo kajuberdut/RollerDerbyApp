@@ -1,6 +1,7 @@
 .SearchComponent {
     display: flex;
     position: sticky;
+    margin-top: 80px;
 }
 
 .SearchComponentForm {

@@ -10,7 +10,7 @@ import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from
 
 const TeamForm = () => {
 
-  /** Retrieve user from local storage and set in state*/
+  /** Retrieve user from local storage*/
 
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
@@ -68,15 +68,15 @@ const TeamForm = () => {
                 <Form onSubmit={handleSubmit}>
                     <FormGroup>
                        
-                    <Label htmlFor="name">Name: </Label>
-                      <Input
-                          type="input"
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                    />
-                    
+                        <Label htmlFor="name">Name: </Label>
+                        <Input
+                            type="input"
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                
                     </FormGroup>
                     <Button >Add Team</Button>
                 </Form>

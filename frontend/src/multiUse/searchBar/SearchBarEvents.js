@@ -1,14 +1,10 @@
 import './SearchBarEvents.css'
-import React, { useState } from 'react'
-import {
-  Form,
-  Label, 
-  Input
-} from "reactstrap";
+import React from 'react'
+import { Input } from "reactstrap";
 
 
 /**
- * Display search bar
+ * Display search bar events page
  */
 
 function SearchBar({formDataSB, setFormDataSB}) {
@@ -17,12 +13,10 @@ function SearchBar({formDataSB, setFormDataSB}) {
 
     const handleChange = evt => {
         const { name, value }= evt.target;
-        // setFormData(fData => ({
           setFormDataSB(fData => ({
           ...fData,
           [name]: value,
         }));
-        console.log("formDataSB in SearchBar:", formDataSB)
       };
 
     /** Render search bar */
@@ -30,7 +24,6 @@ function SearchBar({formDataSB, setFormDataSB}) {
     return (
         <div className='SearchBar' >
           <div className='SearchBar-City'>
-          {/* <Label htmlFor="city" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
               placeholder="City"
@@ -43,7 +36,6 @@ function SearchBar({formDataSB, setFormDataSB}) {
           </div>
           
           <div className='SearchBar-State'>
-          {/* <Label htmlFor="state" sm={2} className="mb3"> </Label> */}
               <Input
                   type="select"
                   placeholder="State"
@@ -106,12 +98,10 @@ function SearchBar({formDataSB, setFormDataSB}) {
                   <option value="WV">WV</option>
                   <option value="WI">WI</option>
                   <option value="WY">WY</option>
-                  {/* </Col> */}
                   </Input>
               </div>
 
           <div className='SearchBar-ZipCode'>
-          {/* <Label htmlFor="zipCode" sm={2} className="mb3"> </Label> */}
           <Input 
               type="number"
               placeholder="Zip Code"

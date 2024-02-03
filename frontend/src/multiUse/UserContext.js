@@ -1,6 +1,8 @@
 import React from "react";
 import { createContext } from 'react'; 
 
+// ! note I think this is not necessary now because you put user in local storage.
+
 /** Create user context */
 
 // let user = {derbyName: "happyJack", email: "happyJack@gmail.com"}

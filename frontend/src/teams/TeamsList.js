@@ -13,22 +13,26 @@ import InvitesList from "../invites/InvitesList";
 
 function TeamsList() {
 
-    /** Set Teams and is loading in state*/
+  /** Set Teams and is loading in state*/
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [teams, setTeams] = useState([]);
-    const user = JSON.parse(localStorage.getItem('user'));
+  const [isLoading, setIsLoading] = useState(true);
+  const [teams, setTeams] = useState([]);
+
+   /** Retrieve user from local storage */
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   /** API get request for teams */
 
   async function getTeams() {
 
     try {
+
       let teams = await FastApi.getTeams(user.userId);
-      console.log("users in teamslist !!!!!!!!!!!!!!!  ", teams)
       setTeams(teams)
       setIsLoading(false)
     } catch (errors) {
+
       return { success: false, errors };
     }
   }
@@ -62,29 +66,28 @@ function TeamsList() {
   
   /** Render search bar and cards */
 
-    return (
+  return (
       <div className="Teams">
-      <div>
-        <a href='/teams/add'>
-        <button style={{borderRadius: '4px'}}>Create Team</button>
-        </a>
+        <div>
+          <a href='/teams/add'>
+            <button style={{borderRadius: '4px'}}>Create Team</button>
+          </a>
+        </div>
+
+        <div style={{display: 'flex'}}>
+        <Card className="TeamsList">
+            <CardBody>
+              <CardTitle><h1>Teams</h1></CardTitle>
+              {teams && <div> {renderCards()} </div> }
+              {teams.length === 0 && <div>Sorry, you are not on any teams.</div>}
+            </CardBody>
+        </Card>
+
+        <InvitesList getTeams={getTeams}/>
+
+        </div>
       </div>
-
-      <div style={{display: 'flex'}}>
-      <Card className="TeamsList">
-        <CardBody>
-        <CardTitle><h1>Teams</h1></CardTitle>
-        {teams && <div> {renderCards()} </div> }
-        {teams.length === 0 && <div>Sorry, you are not on any teams.</div>}
-        </CardBody>
-      </Card>
-
-      <InvitesList />
-
-      </div>
-      </div>
-    );
-
+  );
 }
 
 export default TeamsList;

@@ -1,31 +1,23 @@
 import './SearchBarUsers.css'
-import React, { useState } from 'react'
-import {
-  Form,
-  Label, 
-  Input
-} from "reactstrap";
-
+import React from 'react'
+import { Input } from "reactstrap";
 
 /**
- * Display search bar
+ * Display search bar users
  */
 
 function SearchBarUsers({formData, setFormData}) {
 
   const pathname = window.location.pathname;
-  console.log("*********************************")
-  console.log("pathname", pathname)
+
     /** Update local state with current state of input element */
 
     const handleChange = evt => {
         const { name, value }= evt.target;
-        // setFormData(fData => ({
           setFormData(fData => ({
           ...fData,
           [name]: value,
         }));
-        console.log("formData in SearchBarUsers:", formData)
       };
 
     /** Render search bar */
@@ -34,7 +26,6 @@ function SearchBarUsers({formData, setFormData}) {
         <div className='SearchBarUsers' >
 
          {pathname == '/users' && <div className='SearchBarUsers-City'>
-          {/* <Label htmlFor="city" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
               placeholder="City"
@@ -48,7 +39,6 @@ function SearchBarUsers({formData, setFormData}) {
           }
           
           {pathname == '/users' && <div className='SearchBarUsers-State'>
-          {/* <Label htmlFor="state" sm={2} className="mb3"> </Label> */}
               <Input
                   type="select"
                   placeholder="State"
@@ -116,7 +106,6 @@ function SearchBarUsers({formData, setFormData}) {
             }
 
           <div className='SearchBarUsers-Username'>
-          {/* <Label htmlFor="zipCode" sm={2} className="mb3"> </Label> */}
           <Input 
               type="text"
               placeholder="Derby Name"

@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
-import { useParams} from "react-router-dom";
-// import CardComponent from "../multiUse/cardComponent/CardComponent";
+import { useParams } from "react-router-dom";
 import Loading from "../multiUse/loading/Loading";
 import "./MixerDetails.css"
-
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody } from 'mdb-react-ui-kit';
 
 /**  
- * Mixer detail form
+ * Display mixer detail page
  */
 
-function MixerDetail({getAllChats}) {
+function MixerDetail({ getAllChats }) {
 
-   /** Get url handle and set jobs and is loading in state*/
+   /** Get eventId from url, set mixer, address and is loading in state*/
 
     const eventId = useParams(); 
     const [mixer, setMixer ] = useState([]);
     const [address, setAddress ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    /** Retrieve user from local storage*/
+
     const user = JSON.parse(localStorage.getItem('user'));
 
-  //   /** API get request for a specific mixer */ 
+    /** API get request for a specific mixer */ 
 
     async function getMixer() {
-      let mixer = await FastApi.getMixer(eventId.id);
-      let address = await FastApi.getAddress(mixer.addressId)
-      console.log("address:", address)
-      console.log("!!!!mixer!!!!:", mixer)
-      setMixer(mixer);
-      setAddress(address)
-      setIsLoading(false)
+
+      try {
+
+        let mixer = await FastApi.getMixer(eventId.id);
+        let address = await FastApi.getAddress(mixer.addressId)
+        setMixer(mixer);
+        setAddress(address);
+        setIsLoading(false);
+      } catch(errors) {
+
+        return { success: false, errors };
+      }
     }
    
-
     /** Reloading mixers when it changes request for mixers */
    
     useEffect(() => {
@@ -49,31 +53,26 @@ function MixerDetail({getAllChats}) {
       )
     }
 
-       /** Handle click of button  */
+    /** Handle click of button  */
 
-       async function handleClick(e) {
-        e.preventDefault(); 
+    async function handleClick(e) {
+      e.preventDefault(); 
+
+      try {
         getAllChats();
-  
+
         let data = {userId: `${user.userId}`, groupId: `${mixer.groupId}`}
-        console.log("data in BoutDetails.js", data)
-  
-        let result = await FastApi.addUserToGroup(data); 
-  
-        if(result.success) {
-          // setButton("Joined");
-          // setDisableButton(true);
-          // user.applications.push(job.id);
-        } 
-  
+        await FastApi.addUserToGroup(data); 
+
+      } catch(errors) {
+
+        return { success: false, errors };
       }
+    }
 
     return (
 
-      // <section key={"BoutDetail" + event_id}>
     <section>
-
-
         <div className="MixerDetails" style={{marginRight: '35%', marginTop: '150px'}} >
           <MDBContainer>
             <MDBRow className="justify-content-center align-items-center h-100"> 
@@ -120,7 +119,6 @@ function MixerDetail({getAllChats}) {
                       <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>co-ed</MDBCardText>
                     </div>
                     }   
-                    
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">
@@ -162,9 +160,7 @@ function MixerDetail({getAllChats}) {
         </MDBContainer>
         </div>
    </section>
-    );
-  
-
+  );
 }
 
 export default MixerDetail

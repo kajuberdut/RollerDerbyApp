@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 
-  /** Create local storage for token and user*/
+  /** 
+ * Create local storage for token and user
+ */
 
 function useLocalStorage(key, firstValue = null) {
 
   const initialValue = localStorage.getItem(key) || firstValue;
-
   const [item, setItem] = useState(initialValue);
 
   useEffect(function setKeyInLocalStorage() {

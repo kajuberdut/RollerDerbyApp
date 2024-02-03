@@ -40,7 +40,7 @@ function EventList() {
 
             let events =  await FastApi.getMixers();
             setEvents(events);
-            setIsLoading(false);
+            // setIsLoading(false);
   
           } catch (errors) {
             return { success: false, errors };
@@ -92,8 +92,8 @@ function EventList() {
         <div className="EventList">
           { event.type == "bouts" && <SearchComponent setBouts={setEvents}/> }
           { event.type == "mixers" && <SearchComponent setMixers={setEvents}/> }
-          { event.type == "bouts" && <h1>Bouts</h1> }
-          { event.type == "mixers" && <h1>Mixers</h1> }
+          { event.type == "bouts" && <h1 style={{paddingTop: '120px'}}>Bouts</h1> }
+          { event.type == "mixers" && <h1 style={{paddingTop: '120px'}}>Mixers</h1> }
           { event.type == "bouts" && <a href="/events/bouts/add">
             <button className="EventList-Button">
               Create Bout

@@ -1,11 +1,8 @@
 import './SearchComponent.css'
-import React, { startTransition, useState, useEffect } from 'react'
-import {
-Form
-} from "reactstrap";
+import React, { useState, useEffect } from 'react'
+import { Form } from "reactstrap";
 import DatePick from '../datePicker/DatePicker';
 import SearchBar from '../searchBar/SearchBarEvents';
-import { getDefaultLocale } from 'react-datepicker';
 import FastApi from '../../Api';
 
 /**
@@ -14,50 +11,40 @@ import FastApi from '../../Api';
 
 function SearchComponent({setBouts, setMixers}) {
 
-    /** Set initial state, set for data as initial state*/
+    /** Sets initial state of component */
   
-    const INITIAL_STATE = {city: "", state: "", zip_code: "", start_date: null, end_date: null};
-    // const INITIAL_STATE = {city: "", state: ""};
+    const INITIAL_STATE = {city: "", state: "", zipCode: "", startDate: null, endDate: null};
+    const INITIAL_STATE_DP = {startDate: null, endDate: null};
+    const INITIAL_STATE_SB = {city: "", state: "", zipCode: ""};
+
+    /** Sets formData in initial state */
+
     const [formData, setFormData] = useState(INITIAL_STATE);
-
-    const INITIAL_STATE_DP = {start_date: null, end_date: null};
-
-    const [formDataDP, setFormDataDP] = useState(INITIAL_STATE_DP); 
-
-    const INITIAL_STATE_SB = {city: "", state: "", zip_code: ""};
-
+    const [formDataDP, setFormDataDP] = useState(INITIAL_STATE_DP);
     const [formDataSB, setFormDataSB] = useState(INITIAL_STATE_SB); 
 
-    // let getEvents = getBouts !== undefined ? getBouts : getMixers; 
+
+    /** Determines if searching bouts or mixers */
+
     let type = setBouts !== undefined ? "bout" : "mixer";
     let setData = setBouts !== undefined ? setBouts : setMixers;
 
-    /** Handle submit, get API result for companies or jobs, set formData to initial state*/
+    /** Handle submit formating date picker data*/
     
-
-    // useEffect(() => {
-    //     const combinedFormData = { ...formDataDP, ...formDataSB };
-    //     getData(combinedFormData);
-    //   }, [formDataDP, formDataSB]);
-
-    // const handleSubmit = async evt => {
-        const handleSubmit = evt => {
+    const handleSubmit = evt => {
         evt.preventDefault();
-        if(formDataDP.start_date !== null && formDataDP.end_date !== null) {
-            let forStartDate = new Date(formDataDP.start_date).toISOString().slice(0, 10);
-            formDataDP.start_date = forStartDate
-            let forEndDate = new Date(formDataDP.end_date).toISOString().slice(0, 10);
-            formDataDP.end_date = forEndDate
+        if(formDataDP.startDate !== null && formDataDP.endDate !== null) {
+            let forStartDate = new Date(formDataDP.startDate).toISOString().slice(0, 10);
+            formDataDP.startDate = forStartDate
+            let forEndDate = new Date(formDataDP.endDate).toISOString().slice(0, 10);
+            formDataDP.endDate = forEndDate
         }
-        
-        // *note setting form data is taking time so I am using useEffect to run when formData has been changed 
+    
         setFormData({ ...formDataDP, ...formDataSB })
-
-        console.log(" $$$$$$$$$$ formData $$$$$$$$$$$$$:", formData)
-        
-        // ? reseting form to inital state is causing an issue so not reseting form currently
-    //   setFormData(INITIAL_STATE);
     };
+
+
+    /** Deletes item if key is null and calls getData */
 
     useEffect(() => {
         for (const key in formData) {
@@ -65,16 +52,20 @@ function SearchComponent({setBouts, setMixers}) {
             delete formData[key];
             }
         }
-        console.log("Form Data IN USE EFFECT", formData)
-        getData(formData)
+        getData(formData);
     }, [formData]);
 
+    /** API get request for events */
+
     async function getData(formData) {
-        console.log("formData ^^^^^^^^^^^^^^^^^^^", formData)
-        let events = await FastApi.getEvents(type, formData)
-        setData(events)
-        console.log("events:", events)
-        // * get all bouts or mixers search by location and date if provided 
+
+        try{
+            let events = await FastApi.getEvents(type, formData)
+            setData(events);
+        } catch(errors) {
+            return { success: false, errors };
+        }
+
     } 
 
     /** Render search component */

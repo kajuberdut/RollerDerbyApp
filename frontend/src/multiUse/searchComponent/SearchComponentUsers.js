@@ -1,16 +1,14 @@
 import './SearchComponentUsers.css'
-import React, { startTransition, useState, useEffect } from 'react'
-import {
-Form
-} from "reactstrap";
+import React, { useState } from 'react'
+import { Form } from "reactstrap";
 import SearchBarUsers from '../searchBar/SearchBarUsers';
 import FastApi from '../../Api';
 
 /**
- * Display search component 
+ * Display search component users
  */
 
-function SearchComponentUsers({getUsers, setUsers}) {
+function SearchComponentUsers({ setUsers }) {
 
     /** Set initial state, set for data as initial state*/
   
@@ -29,19 +27,19 @@ function SearchComponentUsers({getUsers, setUsers}) {
             }
         }
         
-        // *note setting form data is taking time so I am using useEffect to run when formData has been changed 
-        getData(formData)
-
-        console.log(" $$$$$$$$$$ formData $$$$$$$$$$$$$:", formData)
+        getData(formData);
         setFormData(INITIAL_STATE);
     };
 
+    /** API get request for users */
 
     async function getData(formData) {
-        console.log("formData ^^^^^^^^^^^^^^^^^^^", formData)
-        let users = await FastApi.getUsers(formData)
-        setUsers(users)
-        console.log("users:", users)
+        try{
+            let users = await FastApi.getUsers(formData)
+            setUsers(users);
+        } catch(errors) {
+            return { success: false, errors };
+        }
     } 
 
     /** Render search component */

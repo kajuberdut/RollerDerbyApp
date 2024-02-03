@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import FastApi from "../../Api";
 import "./CardComponent.css";
@@ -6,45 +6,46 @@ import Loading from "../loading/Loading"
 import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
   /**  
-  * Card component for bouts and mixers. 
+  * Display ard component for bouts and mixers. 
   */
 
   function CardComponent({mixer, bout}) {
 
-  /** Set address and is loading in state */ 
+    /** Set address and is loading in state */ 
+
     const [address, setAddress ] = useState([]); 
     const [isLoading, setIsLoading] = useState(true);
 
     let info = bout !== undefined ? bout : mixer;
-    console.log("info:", info)
     let type = bout !== undefined ? "bouts" : "mixers";
-    console.log("*****************************************")
-    console.log("type", type)
 
     let key = info.eventId
     
-  /** API get request for a specific address */ 
+    /** API get request for a specific address */ 
 
     async function getAddress() {
-   
-      let address = await FastApi.getAddress(info.addressId)
-      console.log("address:", address)
-      setAddress(address)
-      setIsLoading(false)
+      
+      try {
+        let address = await FastApi.getAddress(info.addressId)
+        setAddress(address);
+        setIsLoading(false);
+      } catch(errors) {
+        return { success: false, errors };
+      }
     }
     
-  /** If bout or mixer changes call get address again */ 
+    /** Reloads address when changes request for bout or mixer */
 
     useEffect(() => {
       getAddress();
     }, [bout, mixer]);
 
 
-      /** Display loading if API call is has not returned */
+    /** Display empty component if API call is has not returned */
 
     if (isLoading) {
       return (
-          <Loading />
+          <></>
       )
     }   
   
@@ -71,7 +72,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
               </CardBody>
             </Card>
          </section>
-        );
+      );
   }
   
   export default CardComponent

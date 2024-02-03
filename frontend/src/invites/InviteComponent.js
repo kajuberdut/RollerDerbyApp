@@ -1,96 +1,82 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./InviteComponent.css";
 import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading";
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    CardText,
-    Button
-  } from "reactstrap";
-  // import {  MDBCardImage } from 'mdb-react-ui-kit';4
-
-//   todo upload invites when invite is accepted 
-
   
-  /**  
-  * Card component for teams
-  */
+/**  
+ * Display invite component
+ */
 
-  function InviteComponent({ invite }) {
+function InviteComponent({ invite, getInvites, getTeams }) {
 
-    /** Get user from context, set button, and disable in state, and determine if dealing with bout or mixer*/
+    /** Sets sender, team and is loading in state */
 
     const [ sender, setSender ] = useState();
     const [ team, setTeam ] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
+    /** Retrieve user from local storage*/
+
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log("invite in inviteComponent", invite)
-    
+
+    /** API get request for team */
+
     async function getTeam() {
 
         try {
+
           let team = await FastApi.getGroup(invite.teamId);
-          console.log("teamDet !!!!!!!!!!!!!!!  ", team)
-          setTeam(team)
-          setIsLoading(false)
+          setTeam(team);
         } catch (errors) {
+
           return { success: false, errors };
         }
     }
 
+    /** API get request for sender*/
+
     async function getSender() {
 
-    try {
-        let user = await FastApi.getUserById(invite.senderId);
-        console.log("user !!!!!!!!!!!!!!!  ", user)
-        setSender(user)
-        setIsLoading(false)
-    } catch (errors) {
-        return { success: false, errors };
+        try {
+            let user = await FastApi.getUserById(invite.senderId);
+            setSender(user);
+        } catch (errors) {
+
+            return { success: false, errors };
+        }
     }
-    }
+
+    /** API post request for user group */
 
     async function acceptInvite() {
 
         try {
+
             let data = {
                 userId: user.userId,
                 groupId: invite.teamId
             }
 
-            let userGroup = await FastApi.addUserToGroup(data);
-
-            console.log("userGroup !!!!!!!!!!!!!!!  ", userGroup)
-
-            // console.log("try is running")
-            // let inviteData = {
-            //     status: "accepted"
-            // }
-            // console.log("data", data)
-
-            // let invite = await FastApi.updateTeamInvite(invite.inviteId, inviteData);
-            // console.log("invite !!!!!!!!!!!!!!!  ", invite)
-
+            await FastApi.addUserToGroup(data);
         } catch (errors) {
+
             return { success: false, errors };
         }
     }
 
+    /** API put request for team invite*/
 
     async function changeStatusInvite() {
  
         try {
+
             let data = {
                 status: "accepted"
             }
 
-            let inviteStatus = await FastApi.updateTeamInvite(invite.inviteId, data);
-            console.log("invite_status !!!!!!!!!!!!!!!  ", inviteStatus)
-
+            await FastApi.updateTeamInvite(invite.inviteId, data);
         } catch (errors) {
+
             return { success: false, errors };
         }
     }
@@ -100,7 +86,17 @@ import {
     useEffect(() => {
         getTeam();
         getSender();
+        setIsLoading(false);
     }, []);
+
+    
+    /** Display loading if API call is has not returned */
+
+    if (isLoading) {
+        return (
+            <Loading />
+        )
+    }
 
     /** Handle click of button  */
 
@@ -108,26 +104,27 @@ import {
         e.preventDefault(); 
         acceptInvite(); 
         changeStatusInvite(); 
+        getInvites();
+        getTeams();
     }
 
-     /** Render the card component */
+    /** Render the invite component */
       
-      return (
+    return (
       <div key={"InviteComponent-" + invite.inviteId } className="InviteComponent" style={{width: '77%', height: '90px', borderRadius: '5px'}}> 
-       {/* <NavLink to={`/teams/${team.groupId}`} className="TeamComponent-Link" style={{color: '#555555', textDecoration: 'none'}}> */}
         <div style={{display: 'flex'}}> 
             <div>
                 {team && team.name && <h6 style={{paddingTop: '10px', paddingLeft: '10px'}}>Join Team {team.name}</h6> }
                 { sender && <p>Invited By: {sender.username}</p> }
             </div>  
             <div style={{paddingTop: '30px', paddingLeft: '10%'}}>
-                <button onClick={handleClick} style={{height: '30px', borderRadius: '4px'}}>Accept</button>    
+                <button onClick={handleClick} style={{height: '30px', borderRadius: '4px'}}>Accept
+                </button>    
             </div>     
         </div>
-        {/* </NavLink> */}
       </div>
-    // <div>{team.name}</div>
-        );
-  }
+
+    );
+}
   
-  export default InviteComponent
+export default InviteComponent

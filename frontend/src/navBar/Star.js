@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
-// import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-// import { star} from "@fortawesome/free-solid-svg-icons"
-// import "./Star.css";
+
+/**
+ * Display star page
+ *
+ */
 
 function Star() {
+
+  /** Render star */
+
     return (
     <div className='star'>
       <FontAwesomeIcon icon={faStar} style={{fontSize: '40px', marginRight: '7px'}}/>
-      {/* <FontAwesomeIcon icon={Star} style={{fontSize: '50px'}}/> */}
-
     </div>
     ) 
   }

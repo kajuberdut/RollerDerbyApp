@@ -41,7 +41,9 @@ function About({ setIsAboutVis }) {
                             I created Block Party because I realized there was a need for better networking and communication within the roller derby community. My goal is to assist people coming together and playing one of the greatest games on earth.
                             </p>
 
-                            <p style={{paddingBottom: '20px'}}>I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate Block Party and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn.
+                            <p style={{paddingBottom: '20px'}}>I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate Block Party and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn or gmail.
+
+                            kicamSMM@gmail.com
                             </p> 
 
                             <div style={{position: 'absolute', marginTop: '10px', bottom: '15px'}}>
@@ -92,7 +94,9 @@ function About({ setIsAboutVis }) {
                         <CardText>
 
                             <p>
-                            Hey there! My name is SockHer Blue I have been actively playing WFTDA roller derby in Wyoming since 2016. I am a dedicated jammer and love to assist other teams and players when possible. I have a goal to bout in all 50 states. To date I have bouted in 18 states. I actively work on bettering myself as a derby player. In 2023, I attended rollercon for the first time, went to USARS Summer Nationals with the Colorado USARS Team, and I skated 64 miles on my quads from Athens to Atlanta in October where I received the skate or die award. In 2024, I attended Winter USARS Nationals with Team Bada**. I am always looking to bout in new places and at a high level. I practice and speed skate each week. If you have an event you are interested in having me attend or just want to connect on facebook please reach out. 
+                            Hey there! My name is SockHer Blue I have been actively playing WFTDA roller derby in Wyoming since 2016. I am a dedicated jammer and love to assist other teams and players when possible. I have a goal to bout in all 50 states. To date I have bouted in 18 states. I actively work on bettering myself as a derby player. In 2023, I attended rollercon for the first time, went to USARS Summer Nationals with the Colorado USARS Team, and I skated 64 miles on my quads from Athens to Atlanta in October where I received the skate or die award. In 2024, I attended Winter USARS Nationals with Team Bada**. I am always looking to bout in new places and at a high level. I practice and speed skate each week. If you have an event you are interested in having me attend or just want to connect on facebook or gmail please reach out.
+
+                            sockherblue@gmail.com 
                             </p>
 
                             {/* <br></br>
@@ -115,6 +119,12 @@ function About({ setIsAboutVis }) {
                             Sioux Falls Roller Dollz out of Sioux Falls, SD (2023)
                             Team Bada** satelite skaters. (2024)
                             Arizona Skate Club out of AZ (2024) */}
+{/* 
+                            <div style={{position: 'absolute', bottom: '15px'}}>
+                                <a href="https://www.facebook.com/sophia.macik">
+                                    <img src="	https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"></img>
+                                </a>
+                            </div> */}
                             
                             <div style={{position: 'absolute', bottom: '15px'}}>
                                 <a href="https://www.facebook.com/sophia.macik">

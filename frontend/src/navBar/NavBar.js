@@ -1,26 +1,20 @@
 import { NavLink } from "react-router-dom";
-import React, { useContext } from "react";
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./NavBar.css";
 import Star from "./Star"
-import UserContext from "../multiUse/UserContext";
-import { 
-  Navbar, 
-  NavbarBrand,
-  Nav, 
-  NavItem,
-} from "reactstrap";
+import { Navbar, NavbarBrand, Nav, NavItem } from "reactstrap";
 
 /**
- * Display nav bar
+ * Display nav bar page
  *
  */
 
 function NavBar({logout}) {
 
-   /** Get user from context*/
+  /** Get user from local storage*/
 
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem('user'));
 
 
     /** Render nav bar */
@@ -28,10 +22,7 @@ function NavBar({logout}) {
   return (
     <div> 
       <Navbar expand="md" className="NavBar-Top">
-        {/* <NavLink exact to="/" className="navbar-brand">Yodlr
-        </NavLink> */}
-        {/* <Star href="/"></Star>
-        <NavbarBrand href="/">React-Conteact</NavbarBrand> */}
+
       <div style={{ display: 'flex' }}>
         <Star />
         <NavbarBrand href="/">Block Party</NavbarBrand>
@@ -40,9 +31,7 @@ function NavBar({logout}) {
         <Nav className="ml-auto" navbar>
           {user && <>
             <NavItem className="Navbar-Profile">
-                {/* <NavLink to='/users/{user.derbyName}'>{ user.derbyName }</NavLink> */}
                 <NavLink to='/profile' style={{whiteSpace: 'nowrap'}}>{ user.username }</NavLink>
-                {/* <NavLink to="/user/:{user.id}">{ user.derbyName }</NavLink> */}
             </NavItem>
             <NavItem className="Navbar-Teams">
                 <NavLink to="/teams">Teams</NavLink>
@@ -56,9 +45,6 @@ function NavBar({logout}) {
             <NavItem className="Navbar-Mixers">
                 <NavLink to="/events/mixers">Mixers</NavLink>
             </NavItem>
-            {/* <NavItem className="Navbar-Messages">
-                <NavLink to="/chats"><div><ChatIcon/></div></NavLink>
-            </NavItem> */}
             <NavItem className="Navbar-Logout">
                 <NavLink to="/" onClick={logout}>Logout</NavLink>
             </NavItem>
