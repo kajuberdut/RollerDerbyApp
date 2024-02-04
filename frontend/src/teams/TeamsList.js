@@ -11,7 +11,7 @@ import InvitesList from "../invites/InvitesList";
  * Display teams page
  */
 
-function TeamsList() {
+function TeamsList({ getPendingInvites }) {
 
   /** Set Teams and is loading in state*/
 
@@ -82,7 +82,7 @@ function TeamsList() {
             </CardBody>
         </Card>
 
-        <InvitesList getTeams={getTeams}/>
+        <InvitesList getTeams={getTeams} getPendingInvites={getPendingInvites}/>
 
         </div>
       </div>

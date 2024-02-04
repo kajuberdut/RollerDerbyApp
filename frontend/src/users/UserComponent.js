@@ -1,69 +1,25 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import UserContext from "../multiUse/UserContext";
 import "./UserComponent.css";
 import { useParams } from "react-router-dom";
 import FastApi from "../Api";
-import {
-    Card,
-    CardBody,
-    CardTitle,
-    CardText,
-    Button
-  } from "reactstrap";
-  // import {  MDBCardImage } from 'mdb-react-ui-kit';
-  
 
-  
   /**  
   * Card component for users
   */
 
-  // function CardComponent({mixer, bout, event, user}) {
-  function UserComponent({indUser}) {
-    console.log("*******************indUser:", indUser)
+  function UserComponent({indUser, getPendingInvites}) {
+
     const pathname = window.location.pathname;
     const teamId = useParams(); 
 
-
-    /** Get user from context, set button, and disable in state, and determine if dealing with bout or mixer*/
-
-    // const [ button, setButton ] = useState("Apply");
-    // const [ disable, setDisable ] = useState(false);
-    // let info = bout !== undefined ? bout : mixer;
-    // let type = bout !== undefined ? "bouts" : "mixers";
-    // console.log("info:", info)
-    // let key = bout !== undefined ? bout.eventId : mixer.eventId;
-    // let key = info.eventId
-
-    // let id = "Card-Component-";
-    // let key = id + keyInfo;
+    /** Retrieve user from local storage*/
   
-    // const { user } = useContext(UserContext);  
     const user = JSON.parse(localStorage.getItem('user'));
     
-    // let timeObj = new Time(info.time)
-    // let hours = timeObj.getHours()
-    // console.log("hours:", hours)
-    
-    // let userTime = 
-
-    
-    /** Reloading jobs when it changes request for users applications */
-
-    // useEffect(() => {
-
-    //   if(job) {
-    //     const isApplied = user.applications.includes(job.id);
-    //     setButton(isApplied ? "Applied" : "Apply");
-    //     setDisable(isApplied);
-    //   }
-    // }, [user.applications]);
-
     /** API get request for teams */
 
     async function sendInvite() {
-      console.log("sendInvite is running")
 
       try {
         let data = {
@@ -74,15 +30,13 @@ import {
           status: 'pending'
         }
 
-        let invite = await FastApi.addTeamInvite(data);
-        console.log("invite:", invite)
+        await FastApi.addTeamInvite(data);
         
-   
       } catch (errors) {
+
         return { success: false, errors };
       }
     }
-
 
     /** Handle click of button  */
 
@@ -90,14 +44,11 @@ import {
       e.preventDefault(); 
       console.log("button has been clicked")
       sendInvite(); 
-      // let result = await apply; 
-
-      // if(result.success) {
-      //   setButton("Applied");
-      //   setDisable(true);
-      //   user.applications.push(job.id);
-      // } 
-
+      console.log("*****************************")
+      console.log("before calling getPending invites")
+      getPendingInvites(); 
+      console.log("after calling getPending invites")
+      console.log("*****************************")
     }
 
      /** Render the card component */

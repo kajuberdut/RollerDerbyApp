@@ -24,10 +24,13 @@ import './TeamDetails.css'
     const groupId = useParams(); 
     const [users, setUsers] = useState([]);
     const [invites, setInvites] = useState([]);
-    
+
+    /** Retrieve user from local storage */
+
     const user = JSON.parse(localStorage.getItem('user'));
 
-  /** API get request for team */
+
+    /** API get request for team */
     
     async function getTeam() {
 
@@ -42,7 +45,6 @@ import './TeamDetails.css'
     }
 
     /** API get pending invites for team */
-    // ! note if you want invites to update on click of invite in invite list, you need to raise this function but it has to go in app because the teamDetails is navigated through a route and you cant pass a function
     
     async function getPendingInvites() {
 
@@ -64,7 +66,6 @@ import './TeamDetails.css'
           return { success: false, errors };
         }
     }
-
 
     /** Reloads teams when changes request for teams and pending invites */
 
@@ -106,7 +107,7 @@ import './TeamDetails.css'
         <div className="UserList-RenderCards">
                 {users.map(indUser => (
                   indUser.username !== user.username ? (
-                  <UserComponent indUser={indUser} key={"User-" + indUser.userId} />
+                  <UserComponent getPendingInvites={getPendingInvites} indUser={indUser} key={"User-" + indUser.userId} />
                   ) : null 
                 ))}
           </div>

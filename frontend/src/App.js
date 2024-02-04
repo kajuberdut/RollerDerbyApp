@@ -167,6 +167,8 @@ function App() {
       }
     }
 
+    /** Handle chat display */
+
     function handleChat(chatId) {
       console.log("!!!!!!!!!!!!!!!!! handleChat is being clicked!!!!!!!!!!!!!")
       console.log("chatId in App.js", chatId)
@@ -174,19 +176,20 @@ function App() {
       displayChats ? setDisplayChats(false) : setDisplayChats(true)
     }
 
+    /** Handle chat list display */
 
     function handleChatList() {
       console.log("!!!!!!!!!!!!!!!!! handleChatList is being clicked!!!!!!!!!!!!!")
       displayChatList ? setDisplayChatList(false) : setDisplayChatList(true)
     }
 
-     /** Display isLoading if API call is has not returned */
+    /** Display isLoading if API call is has not returned */
 
-  if (isLoading) {
-    return (
-        <Loading />
-    )
-  }
+    if (isLoading) {
+      return (
+          <Loading />
+      )
+    }
 
 // ! check overflow hiddne on body. You did something weird 
   return (
