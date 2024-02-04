@@ -1,28 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
 import FastApi from "../Api";
 import { useParams} from "react-router-dom";
-// import skateImg from "../public/logo512.png"
-// import defaultImg from "./images/skater_02"
 import Loading from "../multiUse/loading/Loading";
 
 // todo YOU NEED TO FIND A WAY TO GET THE USER ID OF THE USERDETAILS PAGE AND PASS IT TO THE MESSAGES SO THAT YOU CAN CREATE A ROOM FOR A CHAT 
 
 // ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
 
-import UserContext from "../multiUse/UserContext";
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
-import { Button } from "reactstrap";
 
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
 
 /**  
- * User detail form
+ * Display user detail page
  */
 
 function UserDetails({ handleMessages, displayChatList }) {
 
 
-   /** Get url handle and set jobs and is loading in state*/
-    // console.log("company:", company)
+   /** Get params set is loading, derby user, user id, rulesets, positions, location image, in state*/
+   
     const params = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     const [derbyUser, setDerbyUser] = useState("");
@@ -31,40 +27,18 @@ function UserDetails({ handleMessages, displayChatList }) {
     const [positions, setPositions] = useState("");
     const [location, setLocation] = useState("");
     const [image, setImage] = useState("");
-    const { user } = useContext(UserContext);
 
-    // console.log("user in profile.js:", user)
-
-    // let pos = []; 
-
-    // if (user.position.jammer) {
-    //   pos.push("Jammer ");
-    // }
-    // if (user.position.blocker) {
-    //   pos.push("Blocker ");
-    // }
-    // if (user.position.pivot) {
-    //   pos.push("Pivot ")
-    // }
-
-    // let positions = pos.join(", ")
-    
-    // console.log("user.image in profile.js", user.image)
-    // console.log("!!! username in userDetails.js !!!!", username)
-    
-    // console.log(require('./images/skater_02.svg'))
+    /** API get request for user and all details */
 
     async function getUser() {
- 
 
       try {
-        // let indUser = await FastApi.getUser(username.username);1
+
         let indUser = await FastApi.getOtherUser(params.userId);
-        console.log("indUser!!!!!!!!!:", indUser)
         setUserId(indUser.userId)
 
         let imageData = await FastApi.getImage(params.userId);
-        console.log("imageData!!!! ", imageData)
+ 
         if(imageData.image) {
           setImage(imageData.image)
         }
@@ -116,14 +90,14 @@ function UserDetails({ handleMessages, displayChatList }) {
         if(indUser.locationId){
           let location = await FastApi.getLocation(indUser.locationId)
           setLocation(location)
-          // console.log("!!!!! location !!!!!", location)
+
         }
         setDerbyUser(indUser); 
 
         setIsLoading(false)
         return indUser
       } catch (errors) {
-        console.error("Get Users failed", errors);
+
         return { success: false, errors };
       }
     }
@@ -142,16 +116,8 @@ function UserDetails({ handleMessages, displayChatList }) {
           )
         }
 
-
-        // console.log("******* derbyUser.primaryNumber:", derbyUser.primaryNumber)
-    // ! will need to rework this
-
     return (
-      // <div><h1>user profile details</h1></div>
-      
-      // <div className="PROFILE" style={{backgroundColor: 'red', boxShadow: '100px 100px 100px black'}} >
-      // <div className="PROFILE" style={{backgroundColor: 'red', border: '100px solid black'}} >
-      // <div className="PROFILE" style={{backgroundColor: 'red'}} >
+  
       <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
         <MDBContainer>

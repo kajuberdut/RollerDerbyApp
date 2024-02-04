@@ -42,13 +42,8 @@ import FastApi from "../Api";
 
     async function handleClick(e) {
       e.preventDefault(); 
-      console.log("button has been clicked")
       sendInvite(); 
-      console.log("*****************************")
-      console.log("before calling getPending invites")
       getPendingInvites(); 
-      console.log("after calling getPending invites")
-      console.log("*****************************")
     }
 
      /** Render the card component */
