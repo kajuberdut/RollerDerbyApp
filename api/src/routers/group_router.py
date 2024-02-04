@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from typing import Annotated
 from ..dependencies import get_and_validate_current_user, get_db
 
 from ..crud.chat_crud import *

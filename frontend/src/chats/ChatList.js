@@ -67,7 +67,7 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
             <p style={{position: 'absolute', left: '10px', fontWeight: 'bold', fontSize: '18px'}}>Chats</p>
             <Button onClick={handleChatList} style={{ position: 'absolute', right: '4px', top: '0',  backgroundColor: 'transparent', color: 'black', border: 'none', fontSize: '18px'  }}>X</Button>
           </CardHeader>
-          <CardBody>
+          <CardBody style={{ overflowY: 'auto', maxHeight: 'calc(100% - 54px)' }}>
             {renderCards()}         
           </CardBody>
         </Card>

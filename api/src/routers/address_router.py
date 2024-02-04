@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
 from ..dependencies import get_db, get_and_validate_current_user
 
 from ..crud.address_crud import *
