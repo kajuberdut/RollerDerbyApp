@@ -41,7 +41,7 @@ function About({ setIsAboutVis }) {
                             I created Block Party because I realized there was a need for better networking and communication within the roller derby community. My goal is to assist people coming together and playing one of the greatest games on earth.
                             </p>
 
-                            <p style={{paddingBottom: '20px'}}>I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate Block Party and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn or gmail.
+                            <p style={{paddingBottom: '45px'}}>I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate Block Party and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn or gmail.
 
                             kicamSMM@gmail.com
                             </p> 

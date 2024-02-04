@@ -56,7 +56,7 @@ function App() {
     if (token) {
       try {
         let { sub } = jwtDecode(token);
-
+        console.log("token", token)
         FastApi.token = token;
         let user = await FastApi.getUserById(sub);
     

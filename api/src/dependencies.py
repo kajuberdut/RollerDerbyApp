@@ -68,7 +68,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
+# async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2_scheme)]):
     """Authenticates the token and the user associated with the token and retuns user."""
 
     print("token in dependencies", token)
@@ -91,17 +92,24 @@ async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2
             raise credentials_exception
         
         # ! getting rid of this for now. May come back to add it later.
-        # expiration_time = payload.get("exp")
-        # if expiration_time is None:
-        #     raise credentials_exception
+        expiration_time = payload.get("exp")
         
-        # ensures token data is correct schema 
+        if expiration_time is None: 
+            raise credentials_exception
+            
+
+        # ! this is necessary 
         token_data = TokenData(user_id=user_id)
-        
+                
+    # ! I think this is catching the expired token so you dont need the above information 
     except JWTError:
         raise credentials_exception
+        # raise HTTPException(
+        #         status_code=status.HTTP_401_UNAUTHORIZED,
+        #         detail="Issue with IDK note for debugging only",
+        #         headers={"WWW-Authenticate": "Bearer"},
+        #     )
     
-    # retrieves user from database using user_id on token 
     user = crud_get_user_by_id(db, user_id=token_data.user_id)
     
     if user is None:
@@ -110,7 +118,7 @@ async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2
 
 
 
-# * this would be if you add isabled on a user to disable an account after no use.... 
+# * this would be if you add disabled on a user to disable an account after no use.... 
 # https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
 # async def get_current_active_user(
 #     current_user: Annotated[User, Depends(get_and_validate_current_user)]

@@ -20,4 +20,6 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     """Pydantic class for token data."""
     user_id: int | None = None
+    # expiration_time: str
+    
 #    
