@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect
 from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db, hash_password, get_and_validate_current_user
+from ..dependencies import oauth2_scheme, get_db, hash_password, get_and_validate_current_user_websocket
 import json
 
 from ..crud.chat_crud import *
@@ -45,7 +45,7 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 @router.websocket("/ws/{user_id}")
-# @router.websocket("/{user_id}")
+
 async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
     print(" ^^^^^^^^^websocket is running /ws/{user_id} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     
@@ -61,9 +61,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
             data_dict = json.loads(data)
 
             if "first_message" in data_dict:
-                
-                # validate token and return user associated with tokem
-                user = await get_and_validate_current_user(db, data_dict["token"])
+           
+                user = await get_and_validate_current_user_websocket(db, data_dict["token"])
                 print("user:", user)
    
                 if user:
@@ -77,7 +76,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, db: Session = D
                     
                 else:
                     
-                    print("token invalidd")
+                    print("token invalid")
                     manager.disconnect(websocket)              
             
             message_id = data_dict["messageId"]

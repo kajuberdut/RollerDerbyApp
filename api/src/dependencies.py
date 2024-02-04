@@ -80,8 +80,10 @@ async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_sch
     )
 
     try:
+       
         # returns user_id and expiration date from token
         payload = jwt.decode(token, SECRET_KEY)
+        print("payload", payload)
         
         if not payload: 
             raise credentials_exception
@@ -100,6 +102,7 @@ async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_sch
 
         # ! this is necessary 
         token_data = TokenData(user_id=user_id)
+        print("token_data", token_data)
                 
     # ! I think this is catching the expired token so you dont need the above information 
     except JWTError:
@@ -111,12 +114,51 @@ async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_sch
         #     )
     
     user = crud_get_user_by_id(db, user_id=token_data.user_id)
-    
+    print("**********************************")
+    print("user", user)
+    print("**********************************")
     if user is None:
         raise credentials_exception
+
     return user
 
+async def get_and_validate_current_user_websocket(db, token: Annotated[str, Depends(oauth2_scheme)]):
 
+    """Authenticates the token and the user associated with the token and retuns user for websockets only ."""
+   
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials for websockets",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY)
+ 
+        if not payload: 
+            raise credentials_exception
+
+        user_id: int = payload.get("sub")
+        
+        if user_id is None:
+            raise credentials_exception
+        
+        expiration_time = payload.get("exp")
+        
+        if expiration_time is None: 
+            raise credentials_exception
+
+        token_data = TokenData(user_id=user_id)
+                
+    except JWTError:
+        raise credentials_exception
+ 
+    user = crud_get_user_by_id(db, user_id=token_data.user_id)
+
+    if user is None:
+        raise credentials_exception
+
+    return user
 
 # * this would be if you add disabled on a user to disable an account after no use.... 
 # https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
