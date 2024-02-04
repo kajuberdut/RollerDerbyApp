@@ -15,50 +15,44 @@ from ..schemas.user_schema import *
 
 router = APIRouter()
 
+router = APIRouter(
+    prefix="/events",
+    tags=["events"],
+    dependencies=[Depends(get_and_validate_current_user)]
+)
+
 
 # * get /events/ 
 # * returns all events 
 
-@router.get("/events/", response_model=list[EventBase])
-def get_events(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/", response_model=list[EventBase])
+def get_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     events = crud_get_events(db, skip=skip, limit=limit)
     return events
 
-# ! TESTING TESTING TESTING FAKE ROUTE
-# * THIS IS WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# ? NOTE: user comes from get_and_validate_current_user
-# ? NOTE: database comes from get_and_validate_current_user
-
-@router.get("/users/me")
-async def read_own_items(
-
-    current_user: Annotated[UserBase, Depends(get_and_validate_current_user)]
-):
-    return [{"item_id": "Foo", "owner": "Sophia"}]
-
-# todo VERIFY ROUTE 
-# todo ********************************************************
 
 # * get /events/{event_type} 
 # * returns all events that match query by type, dates and city and/or state
-#  ! I believe this route is now authenticated correctly
 
-@router.get("/events/{type}", response_model=list[EventBase])
+@router.get("/{type}", response_model=list[EventBase])
 
-async def get_events(current_user: Annotated[UserBase, Depends(get_and_validate_current_user)], type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
+async def get_events(type: str, city: str = Query(None), state: str = Query(None), zip_code: str = Query(None), start_date: str = Query(None), end_date: str = Query(None), db: Session = Depends(get_db)):
     
+    print("hitting events/bout")
     
     events = crud_get_events_by_type_date_location(db, type=type, city=city, state=state, zip_code=zip_code, start_date=start_date, end_date=end_date)
     
     print("events in get /events/{type} in main.py", events)
     return events
 
-# * get /bouts/ 
+# * get /events/bouts
 # * returns all bouts
 # ! moved this one over to routers 
 
-@router.get("/bouts/", response_model=list[Bout])
-def get_bouts(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/all/bouts", response_model=list[Bout])
+def get_bouts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    
+    print("hitting events/bouts PLURAL")
     bouts = crud_get_bouts(db, skip=skip, limit=limit)
     return bouts
 
@@ -67,7 +61,7 @@ def get_bouts(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limi
 # ! moved this one over to routers 
 
 @router.get("/bouts/{event_id}", response_model=Bout)
-def get_bout(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: Session = Depends(get_db)):
+def get_bout(event_id: int, db: Session = Depends(get_db)):
     
     bout = crud_get_bout_by_id(db, event_id=event_id)
     
@@ -79,8 +73,8 @@ def get_bout(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: S
 # * get /mixers/ 
 # * returns all mixers
 
-@router.get("/mixers/", response_model=list[Mixer])
-def get_mixers(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/all/mixers", response_model=list[Mixer])
+def get_mixers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     mixers = crud_get_mixers(db, skip=skip, limit=limit)
     return mixers
 
@@ -89,7 +83,7 @@ def get_mixers(token: Annotated[str, Depends(oauth2_scheme)], skip: int = 0, lim
 # ! moved this one over to routers 
 
 @router.get("/mixers/{event_id}", response_model=Mixer)
-def get_mixer(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: Session = Depends(get_db)):
+def get_mixer(event_id: int, db: Session = Depends(get_db)):
     
     mixer = crud_get_mixer_by_id(db, event_id=event_id)
     
@@ -103,8 +97,8 @@ def get_mixer(token: Annotated[str, Depends(oauth2_scheme)], event_id: int, db: 
 # * creates a new bout 
 # ! moved this one over to routers
 
-@router.post("/bouts/", response_model=EventBase)
-def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: Bout, address: Address, db: Session = Depends(get_db)):
+@router.post("/bouts", response_model=EventBase)
+def create_bout(bout: Bout, address: Address, db: Session = Depends(get_db)):
     print("bout in event_router", bout)
 
     existing_address = crud_get_address(db=db, address=address)
@@ -143,8 +137,8 @@ def create_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: Bout, addre
 # * creates a new mixer with address 
 # ! moved this one over to routers
 
-@router.post("/mixers/", response_model=EventBase)
-def create_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: Mixer, address: Address, db: Session = Depends(get_db)):
+@router.post("/mixers", response_model=EventBase)
+def create_mixer(mixer: Mixer, address: Address, db: Session = Depends(get_db)):
     print("post mixer in event_router.py:", mixer)
     
     existing_address = crud_get_address(db=db, address=address)
@@ -182,7 +176,7 @@ def create_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: Mixer, ad
 # * updates an existing bout 
 
 @router.put("/bouts/{event_id}", response_model=BoutUpdate)
-def update_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: BoutUpdate, event_id: int, db: Session = Depends(get_db)):
+def update_bout(bout: BoutUpdate, event_id: int, db: Session = Depends(get_db)):
     
     print('user in /bouts/{event_id}', bout)
     
@@ -197,7 +191,7 @@ def update_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: BoutUpdate,
 # * updates an existing mixer
 
 @router.put("/mixers/{event_id}", response_model=MixerUpdate)
-def update_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: MixerUpdate, event_id: int, db: Session = Depends(get_db)):
+def update_mixer(mixer: MixerUpdate, event_id: int, db: Session = Depends(get_db)):
     
     print('user in /mixers/{event_id}', mixer)
     
@@ -213,7 +207,7 @@ def update_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: MixerUpda
 # todo note you may have to add some security measures on this
 
 @router.delete("/bouts/{event_id}", response_model=EventDelete)
-def delete_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: EventDelete, event_id: int, db: Session = Depends(get_db)):
+def delete_bout(bout: EventDelete, event_id: int, db: Session = Depends(get_db)):
     
     print('bout in /bouts/{event_id}', bout)
      
@@ -229,7 +223,7 @@ def delete_bout(token: Annotated[str, Depends(oauth2_scheme)], bout: EventDelete
 # todo note you may have to add some security measures on this
 
 @router.delete("/mixers/{event_id}", response_model=EventDelete)
-def delete_mixer(token: Annotated[str, Depends(oauth2_scheme)], mixer: EventDelete, event_id: int, db: Session = Depends(get_db)):
+def delete_mixer(mixer: EventDelete, event_id: int, db: Session = Depends(get_db)):
     
     print('mixer in /mixers/{event_id}', mixer)
  

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import get_db, get_and_validate_current_user
 
 from ..crud.address_crud import *
 
 router = APIRouter(
     prefix="/address",
     tags=["address"],
-    dependencies=[Depends(oauth2_scheme)],
+    dependencies=[Depends(get_and_validate_current_user)]
 )
 
 # * post /address/ 
@@ -25,7 +25,7 @@ def create_address(address: Address, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[Address])
 def get_addresses(limit: int = 100, db: Session = Depends(get_db)):
-    
+
     return crud_get_addresses(db, limit=limit)
 
 # * get /address/{address_id} 

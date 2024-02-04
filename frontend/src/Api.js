@@ -186,7 +186,7 @@ class FastApi {
   /** Get all bouts*/
 
   static async getBouts(handle) {
-    let res = await this.request(`bouts`);
+    let res = await this.request(`events/all/bouts`);
     console.log("res:", res)
     return res
   }
@@ -194,7 +194,7 @@ class FastApi {
   /** Get a specific bout*/
 
   static async getBout(eventId) {
-    let res = await this.request(`bouts/${eventId}`);
+    let res = await this.request(`events/bouts/${eventId}`);
     return res
   }
 
@@ -205,7 +205,7 @@ class FastApi {
     data["bout"]["group_id"] = 0; 
     data["bout"]["chat_id"] = 0; 
 
-    let res = await this.request(`bouts/`, data, "post");
+    let res = await this.request(`events/bouts`, data, "post");
     return res
   }
 
@@ -213,7 +213,7 @@ class FastApi {
   /** Updates a specific bout*/
 
   static async updateBout(eventId, data) {
-    let res = await this.request(`bouts/${eventId}`, data, "put");
+    let res = await this.request(`events/bouts/${eventId}`, data, "put");
     return res;
   }
 
@@ -221,21 +221,21 @@ class FastApi {
   /** Delete bout */
 
   static async deleteBout(eventId) {
-    let res = await this.request(`bouts/${eventId}`, {}, "delete");
+    let res = await this.request(`events/bouts/${eventId}`, {}, "delete");
     return res;
   } 
 
   /** Get all mixers*/
 
-  static async getMixers(handle) {
-    let res = await this.request(`mixers`);
+  static async getMixers() {
+    let res = await this.request(`events/all/mixers`);
     return res
   }
 
   /** Get a specific mixer*/
 
   static async getMixer(mixerId) {
-    let res = await this.request(`mixers/${mixerId}`);
+    let res = await this.request(`events/mixers/${mixerId}`);
     return res
   }
 
@@ -245,7 +245,7 @@ class FastApi {
     data["mixer"]["type"] = "mixer";
     data["mixer"]["group_id"] = 0; 
     data["mixer"]["chat_id"] = 0; 
-    let res = await this.request(`mixers/`, data, "post");
+    let res = await this.request(`events/mixers`, data, "post");
     return res
   }
 
@@ -253,7 +253,7 @@ class FastApi {
   /** Updates a specific mixer*/
 
   static async updateMixer(eventId, data) {
-    let res = await this.request(`mixers/${eventId}`, data, "put");
+    let res = await this.request(`events/mixers/${eventId}`, data, "put");
     return res;
   }
 
@@ -261,7 +261,7 @@ class FastApi {
   /** Delete mixer */
 
   static async deleteMixer(eventId) {
-    let res = await this.request(`mixers/${eventId}`, {}, "delete");
+    let res = await this.request(`events/mixers/${eventId}`, {}, "delete");
     return res;
   } 
 
@@ -345,7 +345,7 @@ class FastApi {
   /** Get group name by chat id*/
 
   static async getGroupNameByChatId(chatId) {
-    let res = await this.request(`group/name/${chatId}`);
+    let res = await this.request(`groups/group/name/${chatId}`);
     return res
   }
 
