@@ -15,7 +15,7 @@ function TeamComponent({ team }) {
        <NavLink to={`/teams/${team.groupId}`} className="TeamComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
         <div style={{ display: 'flex'}}>
             <div style={{paddingTop: '8px', paddingLeft: '20px', paddingRight: '20px'}} >
-            <h4 style={{paddingTop: '30px'}}>{team.name}</h4>
+            <h4 style={{paddingTop: '15px'}}>{team.name}</h4>
             </div>           
         </div>
         </NavLink>

@@ -48,7 +48,7 @@ const toggle = () => setIsOpen(!isOpen);
       </div>
 
       {width < 768 ? (
-          <div style={{paddingRight: '40px'}}>
+          <div style={{paddingRight: '0px'}}>
           <NavbarToggler onClick={toggle} />
           <Collapse style={{width: '100px'}} isOpen={isOpen} navbar>
              {user && <>
