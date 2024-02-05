@@ -43,7 +43,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
     /** Delete all null fields */
 
     for (const key in userData) {
-      if (userData[key] === null) {
+      if (userData[key] === undefined) {
         delete userData[key];
       }
     }
@@ -62,18 +62,28 @@ function SetupPrivateDetailsForm({ update, getUser }) {
     }
 
     let ins = []
+    let data;
     if(primaryInsurance) {
       ins.push(primaryInsurance)
     }
     if(secondaryInsurance) {
       ins.push(secondaryInsurance)
     }
-   
-    let data = {
-      user: userData, 
-      insurance: ins
+
+    if(ins.length > 0) {
+
+      data = {
+        user: userData, 
+        insurance: ins
+      }  
+
+    } else {
+
+      data = {
+        user: userData
+      }
     }
-    console.log("data in setupprivatedetailsform", data)
+   
     return data;
 
   }
@@ -86,6 +96,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
     setFormData(INITIAL_STATE);
   
     let formattedData = format(formData);
+
     try {
       let updateProfile = await FastApi.updateUserPrivate(user.userId, formattedData);
       
@@ -138,7 +149,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
 
   return (
     <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
-        <Card>
+        <Card style={{minWidth: '400px'}}>
             <CardTitle className="SetupProfileForm-CardTitle">
             <h1>Private Details</h1>
             </CardTitle>

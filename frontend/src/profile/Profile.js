@@ -114,6 +114,7 @@ function Profile({displayChatList}) {
   }
 
   /** Fetch user insurance from api  */
+  
     // todo update this so it renders when you edit the profile page
   async function getUserInsurance() {
     let insArr = []

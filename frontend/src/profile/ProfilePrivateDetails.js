@@ -14,13 +14,8 @@ function ProfilePrivateDetails({displayChatList}) {
     const [isLoading, setIsLoading] = useState(true);
     const [insurances, setInsurances] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
-    const [image, setImage] = useState();
     const [userState, setUserState] = useState({});
-    const [isMounted, setIsMounted] = useState(false);
-
-    console.log("userState:", userState)
-    
-
+   
     /** On mount, retrieve user from local storage and set in state*/
 
     useEffect(() => {
@@ -65,7 +60,7 @@ function ProfilePrivateDetails({displayChatList}) {
   }
 
   /** Format phone number  */
-    // todo update this so it renders when you edit the profile page
+
   async function formatPhoneNumber() {
     let formPhoneNum = userState.phoneNumber.slice(0, 3) + '-' + userState.phoneNumber.slice(3, 6) + '-' + userState.phoneNumber.slice(6);
     setPhoneNumber(formPhoneNum)
@@ -80,16 +75,18 @@ function ProfilePrivateDetails({displayChatList}) {
     /** Render page */
 
     return (
-      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
+      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
 
                 <MDBContainer style={{paddingBottom: '100px'}}>
-                          <MDBRow className="justify-content-center align-items-center h-100"> 
+                          <MDBRow> 
                             <MDBCol lg="9" xl="10">
-                              <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                              <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                                 <div>
                                   <h2>Private Information </h2>
-                                  <h3>Will be shared with team admin only.</h3>
+                                  <br></br>
+                                  <h4>Will be shared with team admin only,</h4>
+                                  <h4>if you accept an invite.</h4>
                                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
                                       <a href="/setup/private">
                                           <button type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
@@ -119,7 +116,7 @@ function ProfilePrivateDetails({displayChatList}) {
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Email:
                                     </div>
-                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px'}} tag="h4">{userState.email} </MDBCardText>
+                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px', overflow: 'hidden'}} tag="h4">{userState.email} </MDBCardText>
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>

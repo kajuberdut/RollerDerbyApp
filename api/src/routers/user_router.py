@@ -263,41 +263,41 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdateP
 # * updates private details on profile by user_id 
 
 @router.put("/users/private/{user_id}", response_model=UserUpdatePrivateDetails)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdatePrivateDetails, insurance: list[Insurance], user_id: int, db: Session = Depends(get_db)):
+def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdatePrivateDetails, user_id: int, insurance: list[Insurance] = None, db: Session = Depends(get_db)):
     print("/users/private/{user_id} is running in user_router.py")
     print("************* USER IN USER ROUTER ************", user)
     print("************* INSURANCE IN USER ROUTER ************", insurance)
     
-    crud_delete_insurance_of_user(db=db, user_id=user_id)
+    if insurance is not None: 
+        crud_delete_insurance_of_user(db=db, user_id=user_id)
+        print("************* user_insurance deleted")
+            
+        for ins in insurance: 
+            print("****inside ins of insurance***")
+
+            existing_insurance = crud_get_insurance(db=db, insurance=ins)
+            print("existing_insurance ***", existing_insurance)
+        
+            if existing_insurance: 
+                insurance_id = existing_insurance.insurance_id
+                # ! this is the WFTDA USARS or other but you need to chang eth value of the insurance number 
+                # updated_insurance = crud_update_insurance_number
+                # ! if there is an existing insurance, then delete all insurance with that user id
+                # print("insurance_id because of existing insurance !!!", insurance_id)
+            
+            else: 
+                insurance_id = crud_create_insurance(db=db, insurance=ins)
+                print("insurance_id after creating insurance !!!", insurance_id)
+                
     
-    print("************* user_insurance deleted")
-            
-    for ins in insurance: 
-        print("****inside ins of insurance***")
+            # existing_user_insurance = crud_get_user_insurance_by_id(db, user_id=user_id, insurance_id=insurance_id)
 
-        existing_insurance = crud_get_insurance(db=db, insurance=ins)
-        print("existing_insurance ***", existing_insurance)
-      
-        if existing_insurance: 
-            insurance_id = existing_insurance.insurance_id
-            # ! this is the WFTDA USARS or other but you need to chang eth value of the insurance number 
-            # updated_insurance = crud_update_insurance_number
-            # ! if there is an existing insurance, then delete all insurance with that user id
-            # print("insurance_id because of existing insurance !!!", insurance_id)
-         
-        else: 
-            insurance_id = crud_create_insurance(db=db, insurance=ins)
-            print("insurance_id after creating insurance !!!", insurance_id)
-            
- 
-        # existing_user_insurance = crud_get_user_insurance_by_id(db, user_id=user_id, insurance_id=insurance_id)
-
-     
-        # if not existing_user_insurance:
-        # ! create new insurance of user 
-        new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
-  
-    print('user in /users/private/{user_id}', user)
+        
+            # if not existing_user_insurance:
+            # ! create new insurance of user 
+            new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
+    
+        print('user in /users/private/{user_id}', user)
     
     db_user = crud_get_user_by_id(db, user_id=user_id)    
     
