@@ -66,7 +66,7 @@ function UserList() {
 
     return (
       <>
-      <div style={{marginTop: '80px', minWidth: '400px'}}>
+      <div style={{marginTop: '80px', minWidth: '400px', marginLeft: '10%'}}>
           <SearchComponentUsers getUsers={getUsers} setUsers={setUsers}/>
       </div>
       <Card className="UserList" style={{minWidth: '400px'}}>

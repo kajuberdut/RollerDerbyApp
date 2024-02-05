@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import { useParams} from "react-router-dom";
 import Loading from "../multiUse/loading/Loading";
 
-// todo YOU NEED TO FIND A WAY TO GET THE USER ID OF THE USERDETAILS PAGE AND PASS IT TO THE MESSAGES SO THAT YOU CAN CREATE A ROOM FOR A CHAT 
-
 // ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
 
 
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
 
 /**  
  * Display user detail page
@@ -118,19 +116,19 @@ function UserDetails({ handleMessages, displayChatList }) {
 
     return (
   
-      <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
+      <div className="UserDetails" style={{backgroundColor: 'transparent', padding: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
-        <MDBContainer>
-          <MDBRow className="justify-content-center align-items-center h-100"> 
-            <MDBCol lg="9" xl="10">
-              <MDBCard style={{minWidth: '450px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
-                <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px'}}>
+        <MDBContainer style={{padding: '0px', margin: '0px' }}>
+          <MDBRow style={{padding: '0px', margin: '0px'}}> 
+              <MDBCard style={{minWidth: '612px', maxWidth: '1100px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px', marginTop: '15px'}}>
+
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}> 
                   {image && <MDBCardImage src={image}
-                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', position: 'absolute', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
+                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', position: 'relative', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   } 
                   {!image && <MDBCardImage src="/skater_02.svg"
-                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', position: 'absolute', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
+                      alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   }
                   </div>
 
@@ -141,7 +139,7 @@ function UserDetails({ handleMessages, displayChatList }) {
                     </div>
                     }
                       <button onClick={handleMessages} type="button" className="btn btn-outline-dark"  data-mdb-ripple-color="dark"
-                        style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', top: "250px", fontSize: '15px'}}>
+                        style={{ height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '30px', top: "250px", fontSize: '15px'}}>
                         Message
                       </button>
                 </div>
@@ -150,11 +148,13 @@ function UserDetails({ handleMessages, displayChatList }) {
               
                 <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                    {derbyUser.level && <div>
-                      <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{derbyUser.level}</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
+                    <div style={{ marginLeft: '600px'}}>
+                      {derbyUser.level && <div>
+                        <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{derbyUser.level}</MDBCardText>
+                        <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
+                      </div>
+                      }
                     </div>
-                    }
                     { positions && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
                       <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
@@ -188,7 +188,6 @@ function UserDetails({ handleMessages, displayChatList }) {
                     }
                 </MDBCardBody>
               </MDBCard>
-            </MDBCol>
           </MDBRow>
         </MDBContainer>
       </div>
