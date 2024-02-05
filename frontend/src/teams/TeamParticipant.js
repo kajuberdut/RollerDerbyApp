@@ -190,13 +190,13 @@ import { useNavigate } from "react-router-dom";
      /** Render the Team Details component */
       
         return (
-            <div className="TeamParticpant" style={{backgroundColor: 'transparent', padding: '100px'}} >
+            <div className="TeamParticpant" style={{backgroundColor: 'transparent', padding: '5%', paddingTop: '80px'}} >
       
       
                       <MDBContainer style={{paddingBottom: '100px'}}>
                                 <MDBRow className="justify-content-center align-items-center h-100"> 
                                   <MDBCol lg="9" xl="10">
-                                    <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                                    <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                                       <div>
                                         <h2>{teamParams.participant}</h2>
                                       </div>

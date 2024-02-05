@@ -74,7 +74,6 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
       </div>
     </>
   );
-
 }
 
 export default ChatList;

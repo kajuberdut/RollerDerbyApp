@@ -27,7 +27,7 @@ function About({ setIsAboutVis }) {
                 <h1> Set Goals, Achieve Dreams, Seek Adventure</h1>
             </div>
             <CardGroup className="About-Cards scroll" style={{width: '88%', marginTop: '50px', paddingLeft: '10.5%'}}>
-                <Card className="Work" style={{width: '200px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)'}}> 
+                <Card className="Work" style={{width: '200px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
                 <img
                 alt="Roller Derby Player SockHer Blue"
                 src="/work.jpg"/>
@@ -56,7 +56,7 @@ function About({ setIsAboutVis }) {
                     </CardBody>
                 </Card>
 
-                <Card className="Play" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)'}}> 
+                <Card className="Play" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
                 <img
                 alt="Roller Derby Player SockHer Blue"
                 src="/play.jpg"/>
@@ -82,7 +82,7 @@ function About({ setIsAboutVis }) {
                     </CardBody>
                 </Card>
 
-                <Card className="Derby" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)'}}> 
+                <Card className="Derby" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
                 <img
                 alt="Roller Derby Player SockHer Blue"
                 src="/SockHer_Blue1.jpg"/>

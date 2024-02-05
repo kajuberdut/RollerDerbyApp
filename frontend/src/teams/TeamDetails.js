@@ -118,12 +118,12 @@ import './TeamDetails.css'
       
       return (
 
-        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '100px', display: 'flex'}} >
+        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '50px', display: 'flex'}} >
           
-          <MDBContainer style={{paddingBottom: '100px'}}>
-                    <MDBRow className="justify-content-center align-items-center h-100"> 
+          <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', padding: '0px', marginRight: '20px', margin: '0px'}}>
+                    <MDBRow className="justify-content-center align-items-center h-100" style={{padding: '0px', margin: '0px'}}> 
                       <MDBCol lg="9" xl="10">
-                        <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                        <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
                             {team && <h2 style={{paddingTop: '60px'}}>{team.name}</h2> }
                             
@@ -145,13 +145,13 @@ import './TeamDetails.css'
                               </div>
                           </div>
 
-                          <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                              <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Participants:
+                          <div className="ms-0 text-start" style={{ marginTop: '0px'}}>
+                              <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px'}}>Participants:
                               </div>
 
-                              { team && user.userId == team.admin && <MDBCardText style={{ marginLeft: '150px', marginTop: '5px' }} tag="h4">
+                              { team && user.userId == team.admin && <MDBCardText style={{ marginTop: '40px', marginLeft: '150px' }} tag="h4">
                                {team.participants.map((participant) => (
-                                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                    <div style={{display: 'flex', justifyContent: 'center'}}>
                                     <NavLink className="TeamDetails-NavLink" key={"TeamDetails-Participant " + participant}  to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
                                     {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
                                     </div>

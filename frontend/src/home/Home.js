@@ -25,12 +25,12 @@ function Home({setIsHomeVis}) {
   /** Render home page */
 
     return (
-      <section className="col-md-8 Home">
+      <section className="col-md-8 Home" style={{minWidth: '400px'}}>
         <Card>
           <CardTitle className="Home-Title">
               <h1>The block party begins when the star arrives.</h1>
           </CardTitle>
-          <CardBody >
+          <CardBody>
             {user && <h2>Welcome to the party, {user.username}!</h2>}
             {!user && <CardText>
               <Link className="Home-Link" to="/login"><Button>Login</Button></Link>

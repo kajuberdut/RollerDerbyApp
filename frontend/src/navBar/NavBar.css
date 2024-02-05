@@ -44,10 +44,32 @@ nav {
     color: rgb(29, 27, 29);
   }
   
-  /* nav a.active.navbar-brand {
-    border-bottom: none;
-  }
-   */
+
   nav a:not(.navbar-brand):hover {
     font-weight: bold;
   }
+
+  .navbar-collapse {
+    display: flex; /* Default display mode */
+  }
+
+  /* * display flex on this container (interior styling) is causing this component to move */
+.navbar > .container-fluid {
+  align-items: start;
+  padding-top: 8px;
+}
+  
+
+.navbar {
+  display: block;
+}
+
+
+.collapse.show.navbar-collapse {
+  justify-content: center;
+  background: rgb(242, 240, 240);
+  border: 1px solid rgb(194, 192, 192);
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 #00000033;
+}

@@ -62,7 +62,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
   /** render signup form form */
 
   return (
-    <section className="col-md-4 SignupForm">
+    <section className="col-md-4 SignupForm" style={{minWidth: '400px'}}>
         <Card>
             <CardTitle className="SignupForm-CardTitle">
             <h1>Create a profile</h1>

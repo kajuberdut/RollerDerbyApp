@@ -53,7 +53,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
       
       return (
           <section key={"CardComponent-" + key}>
-            <Card className="CardComponent"> 
+            <Card className="CardComponent" style={{minWidth: '400px'}}> 
               <CardBody>
                 <NavLink to={`/events/${type}/${key}`} className="CardComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
                   <CardTitle className="text-center CardComponent-Title">

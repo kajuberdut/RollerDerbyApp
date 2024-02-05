@@ -66,10 +66,10 @@ function UserList() {
 
     return (
       <>
-      <div style={{marginTop: '80px'}}>
+      <div style={{marginTop: '80px', minWidth: '400px'}}>
           <SearchComponentUsers getUsers={getUsers} setUsers={setUsers}/>
       </div>
-      <Card className="UserList">
+      <Card className="UserList" style={{minWidth: '400px'}}>
         <CardBody>
         <CardTitle><h1>Users</h1></CardTitle>
         {users && <div> {renderCards()} </div> }
