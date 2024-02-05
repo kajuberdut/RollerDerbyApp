@@ -74,7 +74,7 @@ const MixerForm = () => {
 
   return (
     <section className="col-md-4 MixerForm" style={{marginTop: "150px"}}>
-        <Card>
+        <Card style={{minWidth: '400px'}}>
             <CardTitle className="MixerForm-CardTitle">
             <h1>Create a Mixer</h1>
             </CardTitle>

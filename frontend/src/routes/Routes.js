@@ -45,7 +45,7 @@ function AllRoutes({getUser, login, signup, update, getBouts, getMixers, getUser
         <Route path="/update/:username" element={<ProtectedRoute><SignupForm update={update}/></ProtectedRoute>} />
         <Route path="/users" element={<ProtectedRoute><UserList getUsers={getUsers}/></ProtectedRoute>} />
         <Route path="/users/:userId" element={<ProtectedRoute><UserDetails handleMessages={handleMessages} displayChatList={displayChatList}/></ProtectedRoute>} />
-        <Route path="/events/:type" element={<ProtectedRoute><EventList getBouts={getBouts}/></ProtectedRoute>} />
+        <Route path="/events/:type" element={<ProtectedRoute><EventList getBouts={getBouts} getMixers={getMixers}/></ProtectedRoute>} />
         <Route path="/events/bouts/add" element={<ProtectedRoute><BoutForm/></ProtectedRoute>} />
         <Route path="/events/bouts/:id" element={<ProtectedRoute><BoutDetails getAllChats={getAllChats} /></ProtectedRoute>} />
         <Route path="/events/mixers/add" element={<ProtectedRoute><MixerForm/></ProtectedRoute>} />

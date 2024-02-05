@@ -159,7 +159,7 @@ function SetupProfileForm({ update, getUser}) {
   return (
 
     <section className="col-md-4 SetupProfileForm" style={{marginTop: "150px"}}>
-        <Card>
+        <Card style={{minWidth: '400px'}}>
             <CardTitle className="SetupProfileForm-CardTitle">
             <h1>Setup Public Profile</h1>
             </CardTitle>

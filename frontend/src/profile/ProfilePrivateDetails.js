@@ -44,7 +44,7 @@ function ProfilePrivateDetails({displayChatList}) {
 
 
   /** Fetch user insurance from api  */
-    // todo update this so it renders when you edit the profile page
+
   async function getUserInsurance() {
     let insArr = []
     for(let ins of userState.insurance) {
@@ -78,7 +78,7 @@ function ProfilePrivateDetails({displayChatList}) {
       <div className="PROFILE" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', marginRight: displayChatList ? '400px' : '0px'}} >
 
 
-                <MDBContainer style={{paddingBottom: '100px'}}>
+                <MDBContainer style={{paddingBottom: '100px', padding: '0px', margin: '0px'}}>
                           <MDBRow> 
                             <MDBCol lg="9" xl="10">
                               <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>

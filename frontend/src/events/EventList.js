@@ -11,6 +11,7 @@ import { useParams} from "react-router-dom";
  */
 
 function EventList() {
+  console.log("is eventList running for mixers???????")
 
     /** Set Events and is loading in state*/
 
@@ -89,23 +90,26 @@ function EventList() {
   /** Render search bar and cards */
 
     return (   
-        <div className="EventList">
+        <div className="EventList" style={{paddingLeft: '8%', paddingTop: '0px', textAlign: 'center'}}>
           { event.type == "bouts" && <SearchComponent setBouts={setEvents}/> }
           { event.type == "mixers" && <SearchComponent setMixers={setEvents}/> }
-          { event.type == "bouts" && <h1 style={{paddingTop: '120px'}}>Bouts</h1> }
-          { event.type == "mixers" && <h1 style={{paddingTop: '120px'}}>Mixers</h1> }
-          { event.type == "bouts" && <a href="/events/bouts/add">
-            <button className="EventList-Button">
-              Create Bout
+          <div style={{display: 'flex', width: '50%'}}>
+          { event.type == "bouts" && <h1 style={{paddingTop: '120px', paddingLeft: '50%' }}>Bouts</h1> }
+          { event.type == "mixers" && <h1 style={{paddingTop: '120px', paddingLeft: '50%'}}>Mixers</h1> }
+          { event.type == "bouts" && <a href="/events/bouts/add"> 
+          <button className="EventList-Button" style={{marginTop: '120px', padding: '5px'}}>
+              Create
             </button>
           </a>
           }
-          { event.type == "mixers" && <a href="/events/mixers/add">
-            <button className="EventList-Button">
-              Create Mixer
+          { event.type == "mixers" && <a href="/events/mixers/add"> 
+            <button className="EventList-Button" style={{marginTop: '120px', padding: '5px'}}>
+              Create
             </button>
           </a>
           }
+          
+          </div>
           {renderCards()}
         </div>
     );

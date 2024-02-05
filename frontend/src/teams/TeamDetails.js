@@ -107,7 +107,7 @@ import './TeamDetails.css'
         <div className="UserList-RenderCards">
                 {users.map(indUser => (
                   indUser.username !== user.username ? (
-                  <UserComponent getPendingInvites={getPendingInvites} indUser={indUser} key={"User-" + indUser.userId} />
+                  <UserComponent style={{minWidth: '400px'}} getPendingInvites={getPendingInvites} indUser={indUser} key={"User-" + indUser.userId} />
                   ) : null 
                 ))}
           </div>
@@ -118,11 +118,11 @@ import './TeamDetails.css'
       
       return (
 
-        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '50px', display: 'flex'}} >
+        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', display: 'flex'}} >
           
-          <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', padding: '0px', marginRight: '20px', margin: '0px'}}>
-                    <MDBRow className="justify-content-center align-items-center h-100" style={{padding: '0px', margin: '0px'}}> 
-                      <MDBCol lg="9" xl="10">
+          <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', padding: '0px', margin: '0px'}}>
+                    <MDBRow style={{padding: '0px', margin: '0px'}}> 
+                      <MDBCol>
                         <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
                             {team && <h2 style={{paddingTop: '60px'}}>{team.name}</h2> }
@@ -202,10 +202,10 @@ import './TeamDetails.css'
                     </MDBRow>
                   </MDBContainer>
 
-                  { team && user.userId == team.admin && <MDBContainer style={{paddingBottom: '100px'}}>
-                    <MDBRow className="justify-content-center align-items-center h-100"> 
-                      <MDBCol lg="9" xl="10">
-                          <MDBCard style={{minWidth: '300px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
+                  { team && user.userId == team.admin && <MDBContainer style={{paddingBottom: '100px', marginLeft: '5%'}}>
+                    <MDBRow> 
+                      <MDBCol>
+                          <MDBCard style={{minWidth: '400px', maxWidth: '500px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
                               <h2>Add Player</h2>
                               <SearchComponentUsers setUsers={setUsers}/>
