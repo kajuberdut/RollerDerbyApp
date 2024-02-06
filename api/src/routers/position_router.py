@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import get_and_validate_current_user, get_db
 
 from ..crud.position_crud import *
 
 router = APIRouter(
     prefix="/positions",
     tags=["positions"],
-    dependencies=[Depends(oauth2_scheme)],
+    dependencies=[Depends(get_and_validate_current_user)],
 )
 
 
-# * get /positions/ 
+# * get /positions
 # * gets all positions 
 
 @router.get("/", response_model=list[Position])

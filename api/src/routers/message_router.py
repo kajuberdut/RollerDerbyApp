@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import get_and_validate_current_user, get_db
 
 from ..crud.chat_crud import *
 from ..crud.group_crud import *
@@ -9,15 +8,12 @@ from ..crud.message_crud import *
 router = APIRouter(
     prefix="/messages",
     tags=["messages"],
-    dependencies=[Depends(oauth2_scheme)],
+      dependencies=[Depends(get_and_validate_current_user)],
 )
-
-# router = APIRouter()
 
 
 # * get /messages/{participant_ids}
 # * gets messages of chat 
-# ? this might be testing as well
 
 @router.get("/{participant_ids}")
 def get_messages(participant_ids: str, db: Session = Depends(get_db)):
@@ -39,9 +35,9 @@ def get_messages(participant_ids: str, db: Session = Depends(get_db)):
     return db_messages
 
 
-# # * get /messages 
-# # * gets all messages 
-# ? testing only 
+# * get /messages 
+# * gets all messages 
+# * testing only 
 
 # @router.get("/", response_model=list[Message])
 # def get_messages(limit: int = 100, db: Session = Depends(get_db)):
@@ -50,7 +46,7 @@ def get_messages(participant_ids: str, db: Session = Depends(get_db)):
 
 # * get /messages/users
 # * gets all messages and users
-# ? testing only 
+# * testing only 
 
 # @router.get("/users", response_model=list[Message])
 # def get_messages_with_users(limit: int = 100, db: Session = Depends(get_db)):

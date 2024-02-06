@@ -9,6 +9,11 @@ function useLocalStorage(key, firstValue = null) {
   const initialValue = localStorage.getItem(key) || firstValue;
   const [item, setItem] = useState(initialValue);
 
+  // * Note I used this in clear local storage when I was getting a bunch of errors regarding 
+  //   const user = JSON.parse(localStorage.getItem('user'));
+  // localStorage.clear();
+
+
   useEffect(function setKeyInLocalStorage() {
 
     if (item === null) {

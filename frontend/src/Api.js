@@ -286,24 +286,18 @@ class FastApi {
     return res
   }
 
-  /** Get specific positions by ID*/
+  /** Get specific location by ID*/
   
   static async getLocation(locationId) {
     let res = await this.request(`locations/${locationId}`);
     return res
   }
 
-  /** Get specific positions by ID*/
-  
-  static async getInsurance(insuranceId) {
-    let res = await this.request(`insurances/${insuranceId}`);
-    return res
-  }
 
-   /** Get specific positions by ID*/
+   /** Get specific insurance by ID*/
   
   static async getInsurance(insuranceId) {
-    let res = await this.request(`insurances/${insuranceId}`);
+    let res = await this.request(`insurance/${insuranceId}`);
     return res
   }
  
@@ -426,7 +420,7 @@ class FastApi {
 
   static async addTeamInvite(data) {
     console.log("hitting addTeamInvite")
-    let res = await this.request(`invites/`, data, "post");
+    let res = await this.request(`invites`, data, "post");
     return res
   }
 
@@ -458,6 +452,19 @@ class FastApi {
   static async updateTeamInvite(inviteId, data) {
     console.log("hitting updateTeamInvite")
     let res = await this.request(`invites/${inviteId}`, data, "put");
+    return res;
+    // return "testing"
+  }
+
+  /** Get team form*/
+
+  static async getTeamForm(groupId, adminId) {
+    console.log("hitting updateTeamInvite")
+    let res = await this.request(`teams/${groupId}/form/${adminId}`);
+    console.log("*************************************")
+    console.log("res in API", res)
+    console.log("res.headers in API", res.headers)
+    console.log("*************************************")
     return res;
     // return "testing"
   }

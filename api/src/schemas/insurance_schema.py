@@ -29,6 +29,23 @@ class Insurance(BaseModel):
     class ConfigDict:
         from_attributes = True
         
+class InsuranceOnly(BaseModel): 
+    """Pydantic class for insurance."""
+    insurance_id: int = Field(default_factory=lambda: 0)
+    type: str
+    
+    @field_validator('type')
+    def validate_insurance(cls, v):
+        insurance_list = [
+        'WFTDA', 'USARS', 'other'
+        ]
+        if v not in insurance_list:
+            raise ValueError("Invalid insurance")
+        return v  
+
+    class ConfigDict:
+        from_attributes = True
+        
 class InsuranceOutput(BaseModel): 
     """Pydantic class for insurance output."""
     insurance_id: int = Field(default_factory=lambda: 0)

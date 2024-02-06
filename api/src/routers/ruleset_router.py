@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import get_and_validate_current_user, get_db
 
 from ..crud.ruleset_crud import *
 
 router = APIRouter(
     prefix="/rulesets",
     tags=["rulesets"],
-    dependencies=[Depends(oauth2_scheme)],
+    dependencies=[Depends(get_and_validate_current_user)],
 )
 
  
-# * get /rulesets/ 
+# * get /rulesets
 # * gets all rulesets 
 
 @router.get("/", response_model=list[Ruleset])

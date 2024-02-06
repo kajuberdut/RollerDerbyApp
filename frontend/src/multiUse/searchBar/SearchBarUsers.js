@@ -111,7 +111,7 @@ function SearchBarUsers({formData, setFormData}) {
               placeholder="Derby Name"
               onChange={handleChange}
               value={formData.username} 
-              id="username" 
+              id="searchbar-username" 
               name="username"
               className='SearchBarInput'
               />

@@ -87,9 +87,10 @@ class UserUpdatePrivateDetails(BaseModel):
     @field_validator('phone_number', mode="before")
     @classmethod
     def phone_number_must_be_valid(cls, value):
-        phone_regex = r"^\d{10}$"  
-        if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format. Please enter a 10-digit number")
+        if value is not None:
+            phone_regex = r"^\d{10}$"  
+            if not re.match(phone_regex, value):
+                raise ValueError("Invalid phone number format. Please enter a 10-digit number")
         return value
     
 class UserImage(BaseModel): 

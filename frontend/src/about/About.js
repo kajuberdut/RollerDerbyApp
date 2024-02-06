@@ -27,10 +27,8 @@ function About({ setIsAboutVis }) {
                 <h1> Set Goals, Achieve Dreams, Seek Adventure</h1>
             </div>
             <CardGroup className="About-Cards scroll" style={{width: '88%', marginTop: '50px', paddingLeft: '10.5%'}}>
-                <Card className="Work" style={{width: '200px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
-                <img
-                alt="Roller Derby Player SockHer Blue"
-                src="/work.jpg"/>
+                <Card className="Work" style={{minWidth: '260px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
+                <img alt="Roller Derby Player SockHer Blue" src="/work.jpg"/>
             
                     <CardBody >
                         <CardTitle>
@@ -56,7 +54,7 @@ function About({ setIsAboutVis }) {
                     </CardBody>
                 </Card>
 
-                <Card className="Play" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
+                <Card className="Play" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '260px'}}> 
                 <img
                 alt="Roller Derby Player SockHer Blue"
                 src="/play.jpg"/>
@@ -82,7 +80,7 @@ function About({ setIsAboutVis }) {
                     </CardBody>
                 </Card>
 
-                <Card className="Derby" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 
+                <Card className="Derby" style={{margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '260px'}}> 
                 <img
                 alt="Roller Derby Player SockHer Blue"
                 src="/SockHer_Blue1.jpg"/>
@@ -93,7 +91,7 @@ function About({ setIsAboutVis }) {
                         </CardTitle>
                         <CardText>
 
-                            <p>
+                            <p style={{marginBottom: '30px'}}>
                             Hey there! My name is SockHer Blue I have been actively playing WFTDA roller derby in Wyoming since 2016. I am a dedicated jammer and love to assist other teams and players when possible. I have a goal to bout in all 50 states. To date I have bouted in 18 states. I actively work on bettering myself as a derby player. In 2023, I attended rollercon for the first time, went to USARS Summer Nationals with the Colorado USARS Team, and I skated 64 miles on my quads from Athens to Atlanta in October where I received the skate or die award. In 2024, I attended Winter USARS Nationals with Team Bada**. I am always looking to bout in new places and at a high level. I practice and speed skate each week. If you have an event you are interested in having me attend or just want to connect on facebook or gmail please reach out.
 
                             sockherblue@gmail.com 

@@ -97,13 +97,13 @@ function EventList() {
           { event.type == "bouts" && <h1 style={{paddingTop: '120px', paddingLeft: '50%' }}>Bouts</h1> }
           { event.type == "mixers" && <h1 style={{paddingTop: '120px', paddingLeft: '50%'}}>Mixers</h1> }
           { event.type == "bouts" && <a href="/events/bouts/add"> 
-          <button className="EventList-Button" style={{marginTop: '120px', padding: '5px'}}>
+          <button className="EventList-Button" style={{marginTop: '120px', padding: '5px', paddingLeft: '7px', paddingRight: '7px'}}>
               Create
             </button>
           </a>
           }
           { event.type == "mixers" && <a href="/events/mixers/add"> 
-            <button className="EventList-Button" style={{marginTop: '120px', padding: '5px'}}>
+            <button className="EventList-Button" style={{marginTop: '120px', padding: '3px', paddingLeft: '7px', paddingRight: '7px'}}>
               Create
             </button>
           </a>

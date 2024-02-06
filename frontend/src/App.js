@@ -54,6 +54,7 @@ function App() {
   async function getUser() {
 
     if (token) {
+      console.log("TOKEN EXISTS")
       try {
         let { sub } = jwtDecode(token);
         console.log("token", token)
@@ -69,6 +70,8 @@ function App() {
       } catch (err) {
         setUser(null);
       }
+    } else {
+      logout();
     }
     setIsLoading(false);
   }

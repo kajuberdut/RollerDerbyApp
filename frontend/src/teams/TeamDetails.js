@@ -24,6 +24,9 @@ import './TeamDetails.css'
     const groupId = useParams(); 
     const [users, setUsers] = useState([]);
     const [invites, setInvites] = useState([]);
+    const [enable, setEnable] = useState(false);
+    const [link, setLink] = useState();
+
 
     /** Retrieve user from local storage */
 
@@ -36,6 +39,7 @@ import './TeamDetails.css'
 
         try {
           let teamDet = await FastApi.getGroup(groupId.id);
+          console.log("teamDet !!!!!!!!!!!!!!!!!!!!", teamDet)
           setTeam(teamDet);
           setIsLoading(false);
   
@@ -100,6 +104,41 @@ import './TeamDetails.css'
 
     }
 
+    async function handleCreateExcel() {
+
+      try {
+    
+        const res = await FastApi.getTeamForm(team.groupId, user.userId);
+        console.log("res typeof", typeof res)
+        console.log("*****************************************")
+        console.log("res:", res)
+        // const blob = await Blob(res);
+        // const blob = new Blob([res], { type: 'text/plain' });
+        // const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        // console.log("blob", blob)
+
+        setEnable(true);
+        setLink(res.url)
+
+        // console.log("enable", enable)
+
+        // downloadButton.download = 'team_form.xlsx'
+
+
+          // Initiate download
+          // const url = window.URL.createObjectURL(blob);
+          // button.href = url;
+          // button.download = 'team_form.xlsx';
+          // button.click();
+          // Revoke object URL after download
+          // link.remove();
+   
+      } catch (errors) {
+        return { success: false, errors };
+      }
+
+    }
+
     /** Render the cards for users*/
 
     const renderCards = () => {
@@ -128,13 +167,20 @@ import './TeamDetails.css'
                             {team && <h2 style={{paddingTop: '60px'}}>{team.name}</h2> }
                             
                             { team && user.userId === team.admin &&  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
-                            <a href="/setup/private">
+                            {/* <a href="/setup/private"> */}
                          
-                                      <button type="button" className="TeamDetails-Button"
-                                      style={{ height: '40px', position: 'absolute', right: '20px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
-                                      Team Info
+                                      <button type="button" className="TeamDetails-Button" onClick={handleCreateExcel}
+                                      style={{ height: '40px', position: 'absolute', right: '120px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
+                                      Create Excel
                                     </button>
-                                </a>
+
+                                  <a href={link} download>
+                                    <button type="button"  className="TeamDetails-Download-Button" h disabled={!enable}
+                                      style={{ height: '40px', position: 'absolute', right: '20px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
+                                      Download
+                                    </button>
+                                  </a>
+                                {/* </a> */}
                               
                             </div>
                             }

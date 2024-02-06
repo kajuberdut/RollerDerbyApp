@@ -60,7 +60,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
   /** render form */
 
   return (
-    <section className="col-md-4 LoginForm" style={{minWidth: '400px'}}>
+    <section className="LoginForm" style={{minWidth: '400px'}}>
         <Card>
             <CardTitle className="LoginForm-CardTitle">
                 <h1>Login</h1>

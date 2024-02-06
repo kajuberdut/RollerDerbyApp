@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+import os
+from os import path
+import logging
 
 from . import models
 
@@ -25,6 +30,7 @@ from .crud.location_crud import *
 from .crud.message_crud import *
 from .crud.position_crud import *
 from .crud.ruleset_crud import *
+# from .crud.team_crud import *
 from .crud.team_invite_crud import *
 from .crud.user_crud import *
 
@@ -38,9 +44,12 @@ from .routers import location_router
 from .routers import message_router
 from .routers import position_router
 from .routers import ruleset_router
+from .routers import team_router
 from .routers import team_invite_router
 from .routers import user_router
 from .routers import websocket_router
+
+from fastapi.staticfiles import StaticFiles
 
 from .database import engine, create_all_tables
 
@@ -76,11 +85,31 @@ api_app.include_router(location_router.router)
 api_app.include_router(message_router.router)
 api_app.include_router(position_router.router)
 api_app.include_router(ruleset_router.router)
+api_app.include_router(team_router.router)
 api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)
 api_app.include_router(websocket_router.router)
 
+# api_app.mount("/static", StaticFiles(directory="static_files"))
+# api_app.mount("/static_files", StaticFiles(directory="./static_files"))
+# BASE_DIR = Path().resolve().parent
+
+# api_app.mount("/static", StaticFiles(directory="static"), name="static")
+# api_app.mount('/static', StaticFiles(directory=os.path.join('../src', 'static')), name='static')
+
 # print("api_app,routes", api_app.routes)
+
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+
+# path_str = path.dirname(path.realpath(__file__))
+# print("***********************************************************")
+# logger.info("relative path of static folder: %s", path_str)
+# print("logger.info('relative path of static folder: %s', path_str)", path_str)
+# print("*****************************************************")
+
+api_app.mount("/static", StaticFiles(directory="/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static"), name="static")
+
 
 origins = [
     "http://localhost/3000",

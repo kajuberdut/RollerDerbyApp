@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db
+from ..dependencies import get_and_validate_current_user, get_db
 
 from ..crud.location_crud import *
 
 router = APIRouter(
     prefix="/locations",
     tags=["locations"],
-    dependencies=[Depends(oauth2_scheme)],
+    dependencies=[Depends(get_and_validate_current_user)],
     # responses={404: {"description": "Not found"}}
 )
 

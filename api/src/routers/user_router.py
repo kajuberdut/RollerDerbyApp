@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db, hash_password
+from ..dependencies import get_and_validate_current_user, get_db, hash_password
 
 from ..schemas.user_schema import *
 from ..schemas.location_schema import *
@@ -11,14 +11,17 @@ from ..crud.location_crud import *
 from ..crud.position_crud import *
 from ..crud.ruleset_crud import *
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/users",
+    tags=["users"],
+    dependencies=[Depends(get_and_validate_current_user)],
+)
 
 # * get /users/ 
 # * returns all users  
 
-# @router.get("/users/", response_model=list[UserBase])
-@router.get("/users/", response_model=list[UserList])
-def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(None), state: str = Query(None), username: str = Query(None), skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/", response_model=list[UserList])
+def get_users(city: str = Query(None), state: str = Query(None), username: str = Query(None), skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     
     print("you are hitting users route in user_router.py !!!!!!!!!! ")
     
@@ -34,9 +37,9 @@ def get_users(token: Annotated[str, Depends(oauth2_scheme)], city: str = Query(N
 # * get /users/{userId} 
 # * returns one specific user
 
-@router.get("/users/{user_id}", response_model=UserDetailsPublic)
+@router.get("/{user_id}", response_model=UserDetailsPublic)
 # Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
-def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{user_id} ROUTE")
     print("user_id in USER ROUTER!!! ERROR:", user_id)
     
@@ -50,8 +53,8 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
 # * get /users/username/{user_id} 
 # * returns username by use_id
 
-@router.get("/users/username/{user_id}")
-def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+@router.get("/username/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     
     username = crud_get_username_by_id(db, user_id=user_id)
@@ -64,8 +67,8 @@ def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Se
 # * get /users/image/{userId} 
 # * returns one image from specific user
 
-@router.get("/users/image/{user_id}", response_model=UserImage)
-def get_user_image(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
+@router.get("/image/{user_id}", response_model=UserImage)
+def get_user_image(user_id: int, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{user_id} ROUTE")
     
     user = crud_get_user_by_id(db=db, user_id=user_id)
@@ -81,10 +84,10 @@ def get_user_image(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, 
     
     return imageData
 
-# * post /users/ 
+# * post /users
 # * creates a new user 
 
-@router.post("/users/", response_model=UserBase)
+@router.post("/", response_model=UserBase)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     print("you are hitting the users/post route!!!")
     
@@ -108,8 +111,8 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 # ! NEED TO VERIFY THAT THE TOKEN MATCHES THE USER WE ARE TRYING TO UPDATE
 
-@router.put("/users/{user_id}", response_model=UserUpdate)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdate, ruleset: list[Ruleset], position: list[Position], insurance: list[Insurance], location: Location, user_id: int, db: Session = Depends(get_db)):
+@router.put("/{user_id}", response_model=UserUpdate)
+def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Position], insurance: list[Insurance], location: Location, user_id: int, db: Session = Depends(get_db)):
     print("/users/{user_id} is running in user_router.py")
     # ! location_id is 0 here 
     
@@ -185,8 +188,8 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdate,
 # * put /users/profile/{user_id} 
 # * updates public details on profile by user_id 
 
-@router.put("/users/profile/{user_id}", response_model=UserUpdateProfile)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdateProfile, ruleset: list[Ruleset], position: list[Position], location: Location, user_id: int, db: Session = Depends(get_db)):
+@router.put("/profile/{user_id}", response_model=UserUpdateProfile)
+def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[Position], location: Location, user_id: int, db: Session = Depends(get_db)):
     print("/users/profile/{user_id} is running in user_router.py")
     # ! location_id is 0 here 
     
@@ -262,8 +265,8 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdateP
 # * put /users/private/{user_id} 
 # * updates private details on profile by user_id 
 
-@router.put("/users/private/{user_id}", response_model=UserUpdatePrivateDetails)
-def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdatePrivateDetails, user_id: int, insurance: list[Insurance] = None, db: Session = Depends(get_db)):
+@router.put("/private/{user_id}", response_model=UserUpdatePrivateDetails)
+def update_user(user: UserUpdatePrivateDetails, user_id: int, insurance: list[Insurance] = None, db: Session = Depends(get_db)):
     print("/users/private/{user_id} is running in user_router.py")
     print("************* USER IN USER ROUTER ************", user)
     print("************* INSURANCE IN USER ROUTER ************", insurance)
@@ -311,8 +314,8 @@ def update_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserUpdateP
 
 # ! WILL HAVE TO VERIFY THAT THE TOKEN MATCHES THE USER THAT YOU ARE TRYING TO DELETE 
 # ! WILL ALSO NEED A FORM TO SUBMIT PASSWORD AND WILL HAVE TO CHECK THAT AGAINST THE db_user
-@router.delete("/users/{user_id}", response_model=UserDelete)
-def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserDelete, user_id: int, db: Session = Depends(get_db)):
+@router.delete("/{user_id}", response_model=UserDelete)
+def delete_user(user: UserDelete, user_id: int, db: Session = Depends(get_db)):
     
     db_user = crud_get_user_by_id(db, user_id=user.user_id)      
     
@@ -325,10 +328,10 @@ def delete_user(token: Annotated[str, Depends(oauth2_scheme)], user: UserDelete,
 # * get /users/{username}/details 
 # * returns one specific user
 
-@router.get("/users/{username}/details", response_model=UserDetailsTeam)
+@router.get("/{username}/details", response_model=UserDetailsTeam)
 # @router.get("/users/{username}/details")
 # Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
-def get_user(token: Annotated[str, Depends(oauth2_scheme)], username: str, db: Session = Depends(get_db)):
+def get_user(username: str, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{username}/details ROUTE")
     
     user = crud_get_user_details_by_username(db, username=username)
