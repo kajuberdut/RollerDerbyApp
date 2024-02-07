@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 import os
-from os import path
-import logging
 
 from . import models
 
@@ -90,25 +87,10 @@ api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)
 api_app.include_router(websocket_router.router)
 
-# api_app.mount("/static", StaticFiles(directory="static_files"))
-# api_app.mount("/static_files", StaticFiles(directory="./static_files"))
-# BASE_DIR = Path().resolve().parent
+FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
 
-# api_app.mount("/static", StaticFiles(directory="static"), name="static")
-# api_app.mount('/static', StaticFiles(directory=os.path.join('../src', 'static')), name='static')
-
-# print("api_app,routes", api_app.routes)
-
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger(__name__)
-
-# path_str = path.dirname(path.realpath(__file__))
-# print("***********************************************************")
-# logger.info("relative path of static folder: %s", path_str)
-# print("logger.info('relative path of static folder: %s', path_str)", path_str)
-# print("*****************************************************")
-
-api_app.mount("/static", StaticFiles(directory="/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static"), name="static")
+# api_app.mount("/static", StaticFiles(directory="/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static"), name="static")
+api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
 
 
 origins = [

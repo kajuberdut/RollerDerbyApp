@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
-from starlette.responses import FileResponse 
+from fastapi import APIRouter, Depends, HTTPException
 from ..dependencies import get_and_validate_current_user, get_db
 
 import os
-from os import path
 
 from ..crud.group_crud import *
 from ..crud.insurance_crud import *
 
 import xlsxwriter
+
+FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
 
 
 router = APIRouter(
@@ -34,7 +34,8 @@ def get_team_form_by_admin_id_team_id(admin_id: int, group_id: int,  db: Session
     # ! note need absolute path here.
     
     file_name = f"{group.name}.xlsx"
-    file_path = os.path.join('/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static', file_name)
+    # file_path = os.path.join('/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static', file_name)
+    file_path = os.path.join(FILE_STORAGE_PATH, file_name)
     
     workbook = xlsxwriter.Workbook(file_path)
     worksheet = workbook.add_worksheet()
@@ -66,7 +67,6 @@ def get_team_form_by_admin_id_team_id(admin_id: int, group_id: int,  db: Session
     worksheet.set_column('G:G', 30)
     worksheet.set_column('H:H', 30)    
 
-    # Write some numbers, with row/column notation.
     skate_fields_format = workbook.add_format(
         {
             "bold": 1,
@@ -125,8 +125,5 @@ def get_team_form_by_admin_id_team_id(admin_id: int, group_id: int,  db: Session
     workbook.close()
     
     file_url = f"http://localhost:8000/static/{file_name}"
-    
-    # file_url = f"api/src/static/demo.xlsx"
-    # file_url = f"/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static/demo.xlsx"
     
     return {"url": file_url}
