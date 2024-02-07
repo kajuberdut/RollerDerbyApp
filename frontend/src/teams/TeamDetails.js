@@ -138,14 +138,14 @@ import './TeamDetails.css'
         <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', display: 'flex', maxWidth: '1400px'}} >
           
           { team && user.userId == team.admin && 
-              <div style={{position: "absolute", top: '100px', left: '36%'}}>
+              <div style={{position: "absolute", top: '100px', left: '30%'}}>
                  <button type="button" className="TeamDetails-Button" onClick={handleCreateExcel}
-                    style={{ height: '40px', width: '80px', fontSize: '12px', borderRadius: '4px'}}>
+                    style={{ height: '40px', width: '100px', fontSize: '14px', borderRadius: '4px'}}>
                     Create Excel
                   </button>
 
                   <a href={link} download>
-                    <button type="button"  className="TeamDetails-Download-Button" h disabled={!enable}
+                    <button type="button"  className="TeamDetails-Download-Button" disabled={!enable}
                       style={{ height: '40px', fontSize: '14px', borderRadius: '4px', paddingRight: '10px', marginLeft: '20px'}}>
                       Download
                     </button>
@@ -179,8 +179,8 @@ import './TeamDetails.css'
                               { team && user.userId == team.admin && 
                                 <MDBCardText style={{ marginTop: '40px', marginLeft: '30px'}} tag="h4">
                                 {team.participants.map((participant) => (
-                                      <div style={{display: 'flex', justifyContent: 'space-between', paddingRight: '20px'}}>
-                                      <NavLink className="TeamDetails-NavLink" key={"TeamDetails-Participant " + participant}  to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
+                                      <div style={{display: 'flex', justifyContent: 'space-between', paddingRight: '20px'}} key={"TeamDetails-Participant " + participant} >
+                                      <NavLink className="TeamDetails-NavLink" to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
                                       {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
                                       </div>
                                   ))}
@@ -220,8 +220,8 @@ import './TeamDetails.css'
                           { invites && user.userId == team.admin && 
                             <MDBCardText style={{ marginLeft: '30px', marginTop: '5px' }} tag="h4">
                               {invites.map((invite) => (
-                                  <div style={{display: 'flex'}}>
-                                  <p key={"TeamDetails-Invites " + invite} style={{paddingRight: '30px'}}>{invite}</p>
+                                  <div style={{display: 'flex'}} key={"TeamDetails-Invites " + invite}>
+                                  <p style={{paddingRight: '30px'}}>{invite}</p>
                                 
                                   </div>
                               ))}

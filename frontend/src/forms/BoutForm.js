@@ -51,7 +51,6 @@ const BoutForm = () => {
   /** Update local state with current state of input element */
 
   const handleChange = evt => {
-    console.log('handleChange is running')
 
     const { name, value }= evt.target;
 

@@ -24,7 +24,13 @@ router = APIRouter()
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
  
     # authenticates user and then returns user 
-   
+    
+    print("*************************************")
+    print("form_data", form_data)
+    print("form_data.username", form_data.username)
+    print("form_data.password", form_data.password)
+    print("*************************************")
+    
     user = authenticate_user(db, form_data.username, form_data.password)
     print("user in main.py:", user)
     if not user:

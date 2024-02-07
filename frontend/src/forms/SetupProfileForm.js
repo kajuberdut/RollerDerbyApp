@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FastApi from "../Api";
 import { useNavigate } from "react-router-dom";
 import "./SetupProfileForm.css"
@@ -8,7 +8,7 @@ import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from
  * Display setup profile form
  */
 
-function SetupProfileForm({ update, getUser}) {
+function SetupProfileForm({ getUser }) {
 
   /** Retrieve user from local storage */
 
@@ -22,7 +22,7 @@ function SetupProfileForm({ update, getUser}) {
 
   /** Sets initial state of form   */
 
-  let INITIAL_STATE = { username: user.username, city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
+  let INITIAL_STATE = { username: user.username, city: '', state: '', about: user.about || '', primNum: user.primaryNumber || '', level: user.level || '', assocLeagues: user.associatedLeagues || '', facebookName: user.facebookName || '' };
 
   /** Sets formData in initial state */
 
@@ -53,10 +53,6 @@ function SetupProfileForm({ update, getUser}) {
       data["ruleset"] = formRulesets;
       data["position"] = formPositions;
       
-      console.log("***********************************")
-      console.log("data", data)
-      console.log("***********************************")
-      
       return data;
   }
 
@@ -71,11 +67,7 @@ function SetupProfileForm({ update, getUser}) {
     
       if(updateProfile) {
         await getUser();
-        console.log("***********************")
-        console.log("user", user)
-        console.log("user.primaryNumber", user.primaryNumber)
-        console.log("typeof user.primaryNumber", typeof user.primaryNumber)
-        console.log("***********************")
+
         navigate('/profile')
       } 
 
@@ -91,14 +83,14 @@ function SetupProfileForm({ update, getUser}) {
       setFormRulesets((prevRulesets) => {
         const newRulesets = Array.from(evt.target.selectedOptions)
           .map((option) => ({ rulesetId: 0, name: option.value }))
-          .filter((ruleset) => !prevRulesets.some((r) => r.name === ruleset.name)); // Filter for unique names
+          .filter((ruleset) => !prevRulesets.some((r) => r.name === ruleset.name)); 
         return [...prevRulesets, ...newRulesets];
       });
 
       setDisplayRulesets((prevRulesets) => {
         const newRulesets = Array.from(evt.target.selectedOptions)
           .map((option) => option.value)
-          .filter((rulesetName) => !prevRulesets.includes(rulesetName)); // Filter for unique names
+          .filter((rulesetName) => !prevRulesets.includes(rulesetName)); 
         return [...prevRulesets, ...newRulesets];
       });
 

@@ -11,7 +11,6 @@ import { useParams} from "react-router-dom";
  */
 
 function EventList() {
-  console.log("is eventList running for mixers???????")
 
     /** Set Events and is loading in state*/
 
@@ -41,7 +40,6 @@ function EventList() {
 
             let events =  await FastApi.getMixers();
             setEvents(events);
-            // setIsLoading(false);
   
           } catch (errors) {
             return { success: false, errors };

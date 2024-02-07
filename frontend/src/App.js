@@ -4,14 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import NavBar from "./navBar/NavBar";
 import AllRoutes from "./routes/Routes";
 import Loading from "./multiUse/loading/Loading";
-// import UserContext from "./multiUse/UserContext";
 import FastApi from "./Api";
 import useLocalStorage from "./hooks/useLocalStorage";
-// ! this will probably need to be moved 
-// import jwt from "jsonwebtoken";
-// import * as jwt_decode from 'jwt-decode';
-// import jwt_decode from 'jwt-decode'
-// import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { jwtDecode } from "jwt-decode"
 import ChatIcon from "./chats/ChatIcon"
 import ChatList from './chats/ChatList';
@@ -24,7 +18,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
   const [isLoading, setIsLoading] = useState(false);
-  const { default: jwt_decode } = require("jwt-decode");
+  // const { default: jwt_decode } = require("jwt-decode");
   const [displayMessages, setDisplayMessages] = useState(false);
   const [displayChatList, setDisplayChatList] = useState(false);
   const [displayChats, setDisplayChats] = useState(false);
@@ -35,6 +29,7 @@ function App() {
   const [isHomeVis, setIsHomeVis] = useState(false);
   const [isAboutVis, setIsAboutVis] = useState(false);
 
+  /** If login page, signup page, or home is visibile set page to non scrolling */
 
   useEffect(() => {
     if(isLoginVis || isSignupVis || isHomeVis ) {
@@ -52,11 +47,10 @@ function App() {
     };
   }, [isLoginVis, isHomeVis, isSignupVis]);
 
+  /** Logout user if token is expired*/
 
   useEffect(() => {
     if(token) {
-
-      // * not ideal but it does log the user out when token is expired 
 
       let { exp } = jwtDecode(token);
       let expiration = exp * 1000;
@@ -69,14 +63,15 @@ function App() {
     }
   }, []);
 
+  /** Retreive current user by token set user in storage */
+
   async function getUser() {
 
     if (token) {
-      console.log("TOKEN EXISTS")
       try {
+
         let { sub } = jwtDecode(token);
         FastApi.token = token;
-        console.log("attempting to get user")
         let user = await FastApi.getUserById(sub);
     
         localStorage.setItem('user', JSON.stringify(user));
@@ -93,14 +88,16 @@ function App() {
 
 
   useEffect(function loadUser() {
-    // console.debug("App useEffect loadUserInfo", "token=", token);
+
     /** If token changes then API get request for user using user_id after decoding token if value of token changes rerun. */
       getUser();
     }, [token]);
 
+    /** Signup new user */
+
     async function signup(userData) {
       try {
-      let token = await FastApi.signup(userData); 
+      await FastApi.signup(userData); 
 
       return { success: true};
       } catch (err) {
@@ -109,9 +106,9 @@ function App() {
       }
     }
 
-    async function login(userData) {
+    /** Login user and set token */
 
-      console.log("userDat!!!", userData)
+    async function login(userData) {
       try {
         let token = await FastApi.login(userData); 
         
@@ -127,12 +124,12 @@ function App() {
     /** Logout - clear token and user */
 
     function logout() {
+
       setDisplayMessages(false);
       setDisplayChatList(false);
       setDisplayChats(false);
       setUser(null);
       setToken(null);
-      // localStorage.setItem('user', null);\
       localStorage.clear()
     }
 
@@ -142,7 +139,6 @@ function App() {
         localStorage.setItem('user', JSON.stringify(user));
         return { success: true };
       } catch (errors) {
-        console.error("update failed", errors);
         return { success: false, errors };
       }
     }

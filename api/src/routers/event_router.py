@@ -45,7 +45,7 @@ async def get_events(type: str, city: str = Query(None), state: str = Query(None
     print("events in get /events/{type} in main.py", events)
     return events
 
-# * get /events/bouts
+# * get /events/all/bouts
 # * returns all bouts
 # ! moved this one over to routers 
 

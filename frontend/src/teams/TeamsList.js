@@ -3,7 +3,6 @@ import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading"
 import './TeamsList.css'
 import { Card, CardBody, CardTitle } from "reactstrap";
-import TeamForm from "../forms/TeamForm";
 import TeamComponent from "./TeamComponent";
 import InvitesList from "../invites/InvitesList";
 

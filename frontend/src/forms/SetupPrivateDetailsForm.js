@@ -258,7 +258,6 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             type="text"
                             name="primInsNum"
                             className="form-control"
-                            value={formData.primInsNum}
                             onChange={handleChange}
                             placeholder="Primary Insurance Number"
                             id="primInsNum"
@@ -294,7 +293,6 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             type="text"
                             name="secInsNum"
                             className="form-control"
-                            value={formData.secInsNum}
                             onChange={handleChange}
                             placeholder="Secondary Insurance Number"
                             id="secInsNum"

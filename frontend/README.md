@@ -17,9 +17,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/kicamSM/Capstone2">
-    <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
-  </a>
+  <div style="background-color: lightgray; border: 2px solid #ccc; padding: 10px; text-align: center;"> 
+    <a href="https://github.com/kicamSM/Capstone2">
+        <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
+    </a>
+  </div>
 
   <h2 align="center" style="text-decoration: underline;">Block Party</h2>
 

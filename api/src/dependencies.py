@@ -41,12 +41,8 @@ def hash_password(password):
 def authenticate_user(db, username: str, password: str):
     # gets user from database by using the username that was submitted on the frontend
     user = crud_get_user_by_username(db, username)
-    # print("***********************************************************")
-    # print("user in authenticate user in dependencies.py:", user)
-    # print("user in authenticate user.username in dependencies.py:", user.username)
-    # print("user in authenticate user.password in dependencies.py:", user.password)
-    # print("***********************************************************")
-    # print("password in authenticate user", user.hashed_password)
+
+    print("password in authenticate user", user.hashed_password)
     
     if not user:
         return False

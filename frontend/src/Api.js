@@ -20,48 +20,27 @@ class FastApi {
     
     static async request(endpoint = "", data = {}, method = "get") {
 
-        console.debug("API Call:", endpoint, data, method);
-        console.debug("API CALL endpoint", endpoint)
-        console.debug("API CALL data", data)
-        console.debug("API CALL method", method)
-
         const url = `${BASE_URL}/${endpoint}`;
-        console.log("URL URL URL", url)
         const headers = { Authorization: `Bearer ${FastApi.token}` };
-        // *This is our authorization for our request
-        // console.log("header in api:", headers)
+ 
         const params = (method === "get")
             ? data
             : {};
     
         try {
           
-          console.log("Is this running")
           return (await axios({ url, method, data, params, headers })).data;
 
+
         } catch (err) {
-          console.error("API Error:", err);
+          console.log("err", err)
         //   let message = err.response.data.error.message;
         // let message = err.response.message;
         if(err.response) {
-          console.log("************************************")
-          console.log("err.response")
-          console.log("************************************")
+
           let message = err.response.data.detail; 
 
-          if(err.response.status === 401) {
-            console.log("************************************")
-            console.log("hitting the 401 error")
-            console.log("************************************")
-            // ! need to get the logout function and put it here 
-            localStorage.clear();
-
-
-
-          }
-
           if(err.response.data) {
-            console.log("HOW ABOUT THIS")
           throw Array.isArray(message) ? message : [message];
           }
         }
@@ -139,9 +118,8 @@ class FastApi {
   }
 
  /** Get one user by username */
-// * may not need the "get" on here
+
   static async getUser(username) {
-      console.log("hitting get User in API.js")
       let res = await this.request(`users/${username}/details`);
       return res
   }
@@ -205,9 +183,8 @@ class FastApi {
   
   /** Get all bouts*/
 
-  static async getBouts(handle) {
+  static async getBouts() {
     let res = await this.request(`events/all/bouts`);
-    console.log("res:", res)
     return res
   }
 
@@ -374,7 +351,6 @@ class FastApi {
   /** Add user to group*/
 
   static async addUserToGroup(data) {
-    console.log("hitting add user to group")
     let res = await this.request(`groups/`, data, "post");
     return res
   }
@@ -401,9 +377,7 @@ class FastApi {
   /** Get teams by user id*/
 
   static async addTeam(data) {
-    console.log("data in api addteam", data)
     let res = await this.request(`groups/teams`, data, "post");;
-    console.log("res!!!!!", res)
     if(!res) {
       return ""
     }
@@ -415,7 +389,6 @@ class FastApi {
 
   static async getTeams(userId) {
     let res = await this.request(`groups/teams/${userId}`);
-    console.log("res!!!!!", res)
     if(!res) {
       return ""
     }
@@ -427,8 +400,6 @@ class FastApi {
 
    static async getGroup(groupId) {
     let res = await this.request(`groups/${groupId}`);
-
-    console.log("res!!!!!", res)
     if(!res) {
       return ""
     }
@@ -439,7 +410,6 @@ class FastApi {
   /** Add team invite*/
 
   static async addTeamInvite(data) {
-    console.log("hitting addTeamInvite")
     let res = await this.request(`invites`, data, "post");
     return res
   }
@@ -448,7 +418,6 @@ class FastApi {
 
   static async getInvites(userId) {
     let res = await this.request(`invites/user/${userId}`);
-    console.log("res!!!!!", res)
     if(!res) {
       return ""
     }
@@ -459,7 +428,6 @@ class FastApi {
 
   static async getPendingInvites(groupId) {
     let res = await this.request(`invites/pending/${groupId}`);
-    console.log("res!!!!!", res)
     if(!res) {
       return ""
     }
@@ -470,23 +438,15 @@ class FastApi {
   /** Updates a team invite*/
 
   static async updateTeamInvite(inviteId, data) {
-    console.log("hitting updateTeamInvite")
     let res = await this.request(`invites/${inviteId}`, data, "put");
     return res;
-    // return "testing"
   }
 
   /** Get team form*/
 
   static async getTeamForm(groupId, adminId) {
-    console.log("hitting updateTeamInvite")
     let res = await this.request(`teams/${groupId}/form/${adminId}`);
-    console.log("*************************************")
-    console.log("res in API", res)
-    console.log("res.headers in API", res.headers)
-    console.log("*************************************")
     return res;
-    // return "testing"
   }
 
 
