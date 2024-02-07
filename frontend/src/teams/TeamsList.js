@@ -76,7 +76,7 @@ function TeamsList({ getPendingInvites }) {
         <div style={{display: 'flex'}}>
         <Card className="TeamsList" style={{minWidth: '400px'}}>
             <CardBody>
-              <CardTitle><h1>Teams</h1></CardTitle>
+              <CardTitle><h1 style={{paddingBottom: '30px'}}>Teams</h1></CardTitle>
               {teams && <div> {renderCards()} </div> }
               {teams.length === 0 && <div>Sorry, you are not on any teams.</div>}
             </CardBody>

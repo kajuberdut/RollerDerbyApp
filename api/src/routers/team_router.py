@@ -34,7 +34,7 @@ def get_team_form_by_admin_id_team_id(admin_id: int, group_id: int,  db: Session
     # ! note need absolute path here.
     
     file_name = f"{group.name}.xlsx"
-    # file_path = os.path.join('/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static', file_name)
+
     file_path = os.path.join(FILE_STORAGE_PATH, file_name)
     
     workbook = xlsxwriter.Workbook(file_path)

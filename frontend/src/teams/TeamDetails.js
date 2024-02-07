@@ -157,31 +157,34 @@ import './TeamDetails.css'
       
       return (
 
-        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', display: 'flex'}} >
+        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', display: 'flex', maxWidth: '1400px'}} >
+          
+          { team && user.userId == team.admin && 
+              <div style={{position: "absolute", top: '100px', left: '36%'}}>
+                 <button type="button" className="TeamDetails-Button" onClick={handleCreateExcel}
+                    style={{ height: '40px', width: '80px', fontSize: '12px', borderRadius: '4px'}}>
+                    Create Excel
+                  </button>
+
+                  <a href={link} download>
+                    <button type="button"  className="TeamDetails-Download-Button" h disabled={!enable}
+                      style={{ height: '40px', fontSize: '14px', borderRadius: '4px', paddingRight: '10px', marginLeft: '20px'}}>
+                      Download
+                    </button>
+                  </a>
+
+               </div>
+              }
           
           <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', padding: '0px', margin: '0px'}}>
                     <MDBRow style={{padding: '0px', margin: '0px'}}> 
                       <MDBCol>
                         <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
-                            {team && <h2 style={{paddingTop: '60px'}}>{team.name}</h2> }
+                            {team && <h2 style={{paddingTop: '20px'}}>{team.name}</h2> }
                             
-                            { team && user.userId === team.admin &&  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>    
-                            {/* <a href="/setup/private"> */}
-                         
-                                      <button type="button" className="TeamDetails-Button" onClick={handleCreateExcel}
-                                      style={{ height: '40px', position: 'absolute', right: '120px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
-                                      Create Excel
-                                    </button>
-
-                                  <a href={link} download>
-                                    <button type="button"  className="TeamDetails-Download-Button" h disabled={!enable}
-                                      style={{ height: '40px', position: 'absolute', right: '20px', top: "20px", fontSize: '15px', borderRadius: '4px'}}>
-                                      Download
-                                    </button>
-                                  </a>
-                                {/* </a> */}
-                              
+                            { team && user.userId === team.admin &&  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>  
+                                                       
                             </div>
                             }
                           </div>
@@ -195,17 +198,18 @@ import './TeamDetails.css'
                               <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px'}}>Participants:
                               </div>
 
-                              { team && user.userId == team.admin && <MDBCardText style={{ marginTop: '40px', marginLeft: '150px' }} tag="h4">
-                               {team.participants.map((participant) => (
-                                    <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <NavLink className="TeamDetails-NavLink" key={"TeamDetails-Participant " + participant}  to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
-                                    {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
-                                    </div>
-                                ))}
-                              </MDBCardText>
+                              { team && user.userId == team.admin && 
+                                <MDBCardText style={{ marginTop: '40px', marginLeft: '30px'}} tag="h4">
+                                {team.participants.map((participant) => (
+                                      <div style={{display: 'flex', justifyContent: 'space-between', paddingRight: '20px'}}>
+                                      <NavLink className="TeamDetails-NavLink" key={"TeamDetails-Participant " + participant}  to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
+                                      {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
+                                      </div>
+                                  ))}
+                                </MDBCardText>
                               }
 
-                                { team && user.userId !== team.admin && <MDBCardText style={{ marginLeft: '150px', marginTop: '5px' }} tag="h4">
+                                { team && user.userId !== team.admin && <MDBCardText style={{ marginLeft: '160px', marginTop: '5px' }} tag="h4">
                                 {team.participants.map((participant) => (
                                         
                                       <p key={participant}>{participant}</p>
@@ -214,29 +218,37 @@ import './TeamDetails.css'
                                 }
                               </div>
 
-                          <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                              <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                          { invites && user.userId == team.admin &&
+                            <>
+                              <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                                  <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                                  </div>
                               </div>
-                          </div>
 
-                          <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa', marginTop: '150px' }}>
-                              <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
-                              </div>
-                          </div>
+                            
+                                <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa', marginTop: '150px' }}>
+                                    <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
+                                    </div>
+                                </div>
+                              </>
+                            }
                           
 
-                          { invites &&  <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px' }}>Pending Invites:
-                          </div>    
+                          { invites && user.userId == team.admin && 
+                            <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px' }}>Pending Invites:
+                            </div>    
                           }
-                              { invites && user.userId == team.admin && <MDBCardText style={{ marginLeft: '150px', marginTop: '5px' }} tag="h4">
-                               {invites.map((invite) => (
-                                    <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <p key={"TeamDetails-Invites " + invite} style={{paddingRight: '30px'}}>{invite}</p>
-                                  
-                                    </div>
-                                ))}
-                              </MDBCardText>
-                              }
+
+                          { invites && user.userId == team.admin && 
+                            <MDBCardText style={{ marginLeft: '30px', marginTop: '5px' }} tag="h4">
+                              {invites.map((invite) => (
+                                  <div style={{display: 'flex'}}>
+                                  <p key={"TeamDetails-Invites " + invite} style={{paddingRight: '30px'}}>{invite}</p>
+                                
+                                  </div>
+                              ))}
+                            </MDBCardText>
+                          }
 
                           <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa', marginTop: '150px' }}>
                               <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
@@ -253,7 +265,7 @@ import './TeamDetails.css'
                       <MDBCol>
                           <MDBCard style={{minWidth: '400px', maxWidth: '500px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
-                              <h2>Add Player</h2>
+                              <h2 style={{marginTop: '20px'}}>Add Player</h2>
                               <SearchComponentUsers setUsers={setUsers}/>
                           </div>
                           <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>

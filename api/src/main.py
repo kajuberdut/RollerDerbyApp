@@ -89,7 +89,6 @@ api_app.include_router(websocket_router.router)
 
 FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
 
-# api_app.mount("/static", StaticFiles(directory="/home/kicamsmm/Springboard_Recent/Springboard/Capstone2/api/src/static"), name="static")
 api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
 
 
