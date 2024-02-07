@@ -21,10 +21,17 @@ function About({ setIsAboutVis }) {
 
     return (
        
-        <div className="About" style={{paddingTop: '100px', justifyContent: 'center', paddingBottom: '200px'}}>
+        <div className="About" style={{paddingTop: '150px', justifyContent: 'center', paddingBottom: '200px'}}>
             <div>
                 <span style={{fontSize: '30px'}}>About the Creator:</span>
                 <h1> Set Goals, Achieve Dreams, Seek Adventure</h1>
+            </div>
+            <div style={{position: 'absolute', top: '80px', right: '20px'}}>
+                <p style={{marginBottom: '0px'}}><b>Vector Image Credit:</b></p> 
+                <p style={{marginBottom: '0px'}}><b>WiK's Pix</b></p>
+                <a href="https://www.facebook.com/wikpix">
+                    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" style={{height: '25px'}}></img>
+                </a>
             </div>
             <CardGroup className="About-Cards scroll" style={{width: '88%', marginTop: '50px', paddingLeft: '10.5%'}}>
                 <Card className="Work" style={{minWidth: '260px', margin: '1rem', border: '3px solid rgb(221, 221, 221)', borderRadius: '10px', boxShadow: '0 0 2px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3)', minWidth: '230px'}}> 

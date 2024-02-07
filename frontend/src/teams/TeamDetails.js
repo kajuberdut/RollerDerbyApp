@@ -39,7 +39,6 @@ import './TeamDetails.css'
 
         try {
           let teamDet = await FastApi.getGroup(groupId.id);
-          console.log("teamDet !!!!!!!!!!!!!!!!!!!!", teamDet)
           setTeam(teamDet);
           setIsLoading(false);
   
@@ -62,11 +61,10 @@ import './TeamDetails.css'
             inviteUsernames.push(user.username)
           }
 
-          console.log("invitesUsernames!!!!!!!!", inviteUsernames)
           setInvites(inviteUsernames);
-          console.log("invites!!!!!!!!", invites)
 
         } catch (errors) {
+
           return { success: false, errors };
         }
     }
@@ -109,30 +107,10 @@ import './TeamDetails.css'
       try {
     
         const res = await FastApi.getTeamForm(team.groupId, user.userId);
-        console.log("res typeof", typeof res)
-        console.log("*****************************************")
-        console.log("res:", res)
-        // const blob = await Blob(res);
-        // const blob = new Blob([res], { type: 'text/plain' });
-        // const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        // console.log("blob", blob)
 
         setEnable(true);
         setLink(res.url)
 
-        // console.log("enable", enable)
-
-        // downloadButton.download = 'team_form.xlsx'
-
-
-          // Initiate download
-          // const url = window.URL.createObjectURL(blob);
-          // button.href = url;
-          // button.download = 'team_form.xlsx';
-          // button.click();
-          // Revoke object URL after download
-          // link.remove();
-   
       } catch (errors) {
         return { success: false, errors };
       }

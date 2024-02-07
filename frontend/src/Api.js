@@ -2,6 +2,8 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
 
+
+
 /** API Class.
  *
  * Static class tying together methods used to get/send to to the API.
@@ -24,6 +26,7 @@ class FastApi {
         console.debug("API CALL method", method)
 
         const url = `${BASE_URL}/${endpoint}`;
+        console.log("URL URL URL", url)
         const headers = { Authorization: `Bearer ${FastApi.token}` };
         // *This is our authorization for our request
         // console.log("header in api:", headers)
@@ -32,7 +35,8 @@ class FastApi {
             : {};
     
         try {
-       
+          
+          console.log("Is this running")
           return (await axios({ url, method, data, params, headers })).data;
 
         } catch (err) {
@@ -40,8 +44,24 @@ class FastApi {
         //   let message = err.response.data.error.message;
         // let message = err.response.message;
         if(err.response) {
+          console.log("************************************")
+          console.log("err.response")
+          console.log("************************************")
           let message = err.response.data.detail; 
+
+          if(err.response.status === 401) {
+            console.log("************************************")
+            console.log("hitting the 401 error")
+            console.log("************************************")
+            // ! need to get the logout function and put it here 
+            localStorage.clear();
+
+
+
+          }
+
           if(err.response.data) {
+            console.log("HOW ABOUT THIS")
           throw Array.isArray(message) ? message : [message];
           }
         }

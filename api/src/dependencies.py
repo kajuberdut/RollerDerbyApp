@@ -58,27 +58,32 @@ def authenticate_user(db, username: str, password: str):
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     """Creates an access token when a user logs in with the user_id inside of it."""
+    print("*******************************************")
+    print("data in createa access token", data)
+    print("*******************************************")
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=int(EXPIRE_MINS))
+    # if expires_delta:
+    #     expire = datetime.utcnow() + expires_delta
+    # else:
+    expire = datetime.utcnow() + timedelta(minutes=int(EXPIRE_MINS))
+    print("*******************************************")
+    print("expire", expire)
+    print("*******************************************")
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     
     return encoded_jwt
 
-def create_refresh_token(data: dict, expires_delta: timedelta | None = None):
+def create_refresh_token(user_id: int, expires_delta: timedelta | None = None):
     """Creates a refresh access token when a user logs in with the user_id inside of it."""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=int(REFRESH_EXPIRE_MINS))
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    data = {
+        "sub": user_id,
+        "token_type": "refresh_token",
+        "exp": datetime.utcnow() + timedelta(minutes=int(REFRESH_EXPIRE_MINS))
+    }
+    refresh_encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     
-    return encoded_jwt
+    return refresh_encoded_jwt
 
 
 async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):

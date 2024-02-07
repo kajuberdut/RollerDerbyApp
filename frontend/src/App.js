@@ -52,24 +52,35 @@ function App() {
     };
   }, [isLoginVis, isHomeVis, isSignupVis]);
 
+
+  useEffect(() => {
+    if(token) {
+
+      // * not ideal but it does log the user out when token is expired 
+
+      let { exp } = jwtDecode(token);
+      let expiration = exp * 1000;
+      let currentTime = Date.now();
+
+      if(currentTime >= expiration) {
+        logout(); 
+      }
+
+    }
+  }, []);
+
   async function getUser() {
 
     if (token) {
       console.log("TOKEN EXISTS")
       try {
         let { sub } = jwtDecode(token);
-        console.log("token", token)
         FastApi.token = token;
         console.log("attempting to get user")
         let user = await FastApi.getUserById(sub);
     
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
-
-        
-        if(!user) {
-          logout();
-        }
 
       } catch (err) {
         setUser(null);
@@ -90,11 +101,10 @@ function App() {
     async function signup(userData) {
       try {
       let token = await FastApi.signup(userData); 
-      console.log("******** signup *********************")
 
       return { success: true};
       } catch (err) {
-
+        logout()
         return {success: false, err};
       }
     }
@@ -109,7 +119,7 @@ function App() {
     
         return { success: true};
       } catch (err) {
-    
+        logout()
         return {success: false, err};
       }
     }
@@ -122,7 +132,8 @@ function App() {
       setDisplayChats(false);
       setUser(null);
       setToken(null);
-      localStorage.setItem('user', null);
+      // localStorage.setItem('user', null);\
+      localStorage.clear()
     }
 
     async function updateUser(user_id, data) {
@@ -144,6 +155,7 @@ function App() {
         setChats(chats);
         return chats;
       } catch (errors) {
+        logout()
         return { success: false, errors };
       }
     }

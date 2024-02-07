@@ -6,19 +6,15 @@ from ..dependencies import get_db, oauth2_scheme, get_and_validate_current_user,
 from fastapi.security import OAuth2PasswordRequestForm
 
 from ..schemas.token_schema import *
-# from ..schemas.location_schema import *
-
-# from ..crud.address_crud import *
 from ..crud.chat_crud import *
-# from ..crud.event_crud import *
 from ..crud.group_crud import *
-# from ..crud.insurance_crud import *
-# from ..crud.location_crud import *
 from ..crud.message_crud import *
-# from ..crud.position_crud import *
 from ..crud.user_crud import *
 
 router = APIRouter()
+
+# todo down the road you can add scopes to my authentication routes for profiles and teams
+# https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/
 
 
 # # * get /token 
@@ -52,10 +48,10 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
 @router.post("/refresh",  response_model=Token)
 async def refresh(refresh_token: Annotated[get_and_validate_current_user, Depends()], db: Session = Depends(get_db)):
     
-    # * Not sure exactly what I am doing with this but if I can authenticate the refresh token then you can create a new access token???? 
-     
- 
-    # authenticates user and then returns user 
+    # todo validate access token I think? 
+    # todo validate refresh token 
+    
+    # todo provide new access token 
     
     new_access_token = create_access_token(data={"sub": str(user.user_id)})
 
