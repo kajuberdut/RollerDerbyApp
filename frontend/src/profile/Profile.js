@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading";
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
 import "./Profile.css"
 
 

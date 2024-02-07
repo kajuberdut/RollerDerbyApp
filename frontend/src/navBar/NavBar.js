@@ -13,11 +13,6 @@ import { Navbar, NavbarBrand, Nav, NavItem, NavbarToggler, Collapse } from "reac
 function NavBar({logout}) {
 
   /** Get user from local storage*/
-//   let user;  
-//   let userLocal = localStorage.getItem('user')
-//   if(userLocal) {
-//     user = JSON.parse(localStorage.getItem('user'));
-//   }
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -47,11 +42,10 @@ const toggle = () => setIsOpen(!isOpen);
 
     <div> 
       <Navbar expand="md" className="NavBar-Top">
-      {/* <Navbar className="NavBar-Top" sticky="top"> */}
 
       <div style={{ display: 'flex' }}>
-       <Star/>
-        <NavbarBrand href="/">Block Party</NavbarBrand>
+        <Star/>
+        <NavbarBrand href="/" style={{marginLeft: '70px'}}><b>Block Party</b></NavbarBrand>
       </div>
 
       {width < 768 ? (

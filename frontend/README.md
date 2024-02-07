@@ -1,70 +1,136 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Issues][issues-shield]][issues-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/kicamSM/Capstone2">
+    <img src="https://raw.githubusercontent.com/kicamSM/Board_Game_Mania/master/frontend/public/star.png" alt="star icon" width="160" height="160">
+  </a>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  <h2 align="center" style="text-decoration: underline;">Board Game Mania</h2>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  <p align="center">
+    A roller derby communication application. Create an account and join The Block Party. Update your profile. Join a team or create your own. Message another user or join a group chat. Find bouts and mixers or create your own. Welcome to Block Party.
+  </p>
+</p>
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#project-in-action">Project In Action</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-### `npm run eject`
+"Block Party" is a roller derby communication application. This application allows users to add their own board games to "My Board  Games list" after an account is created. This application can then be used to log plays of any board games in "My Board Games List". When logging a play, this application will automatically generate a score board based on the number of players the user selects. You can then track the scores of all players and save the match. 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+After saving the match, the user can view all his board games based on total wins, losses, and games played. He can then click on a specific game to view the match details which include  scores for each player, win for each player, date played and emails of players.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This web application is built with Python and Flask. It uses a free third party API (https://www.boardgameatlas.com/api/docs) that allows any user to search for board games. Board Game Mania uses the PostgreSQL database to store and save information.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+This application is functional and ready to use. However, there are more features that I would like to continue integrating. One of these features is I would like a user to be able to access the total wins and losses of every player in any match they have competed in. I would also like a player to be able to sign up for the application with the email he has used to play. This would then automatically preload any games that he has played into his "games list" as well as all of the match details from his previous played games.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+## Features 
+* Intuitive
+* Easy to use
+* Create an account
+* Update profile
+* Create Mixers and Bouts
+* Create or join a team
+* Message other users 
+* Join a mixer or bout chat  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<!-- GETTING STARTED -->
+## Getting Started
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To get a local copy up and running follow these simple steps.
 
-### Analyzing the Bundle Size
+### Installing with pip
+***
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  ```sh
+  pip install https://github.com/kicamSM/Capstone2
+  ```
 
-### Making a Progressive Web App
+For information about cloning and dev setup see: [Contributing](#Contributing)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<!-- CONTRIBUTING -->
+## Contributing
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-### Deployment
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Add tests, we aim for 100% test coverage [Using Coverage](https://coverage.readthedocs.io/en/coverage-5.3.1/#using-coverage-py)
+4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Cloning / Development setup
+***
+1. Clone the repo and install
+    ```sh
+    git clone https://github.com/kicamSM/Capstone2
+    cd Block Party
+    pip install -r requirements.txt
+    ```
+2. Run tests
+    ```sh
+    python -m coverage run -m unittest discover -s tests
+    ```
 
-### `npm run build` fails to minify
+## Project In Action 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<!-- [https://board-game-mania.onrender.com](https://board-game-mania.onrender.com) -->
+
+<!-- CONTACT -->
+## Contact
+
+
+Sophia Macik - kicamSMM@gmail.com
+
+Project Link: [https://github.com/kicamSM/Capstone2](https://github.com/kicamSM/Capstone2)
+
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/kicamSM/Capstone2?style=for-the-badge
+[contributors-url]: https://github.com/kicamSM/Capstone2/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/kicamSM/Capstone2?style=for-the-badge
+[forks-url]: https://github.com/kicamSM/Capstone2/forks
+[issues-shield]: https://img.shields.io/github/issues/kicamSM/Capstone2?style=for-the-badge
+[issues-url]: https://github.com/kicamSM/Capstone2/issues
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/sophiamacik/

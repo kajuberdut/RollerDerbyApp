@@ -1,9 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 /**
- * Display star page
+ * Display star image
  *
  */
 
@@ -12,9 +10,9 @@ function Star() {
   /** Render star */
 
     return (
-    <div className='star'>
-      <FontAwesomeIcon icon={faStar} style={{fontSize: '40px', marginRight: '7px'}}/>
-    </div>
+      <div className='star'>
+      <img src="/star.png" alt="Star Icon" style={{zIndex: '100', marginRight: '7px', height: '60px', position: 'absolute', top: '5px'}}/>
+      </div>
     ) 
   }
 
