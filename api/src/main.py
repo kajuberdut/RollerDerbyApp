@@ -41,6 +41,7 @@ from .routers import location_router
 from .routers import message_router
 from .routers import position_router
 from .routers import ruleset_router
+from .routers import signup_router
 from .routers import team_router
 from .routers import team_invite_router
 from .routers import user_router
@@ -82,6 +83,7 @@ api_app.include_router(location_router.router)
 api_app.include_router(message_router.router)
 api_app.include_router(position_router.router)
 api_app.include_router(ruleset_router.router)
+api_app.include_router(signup_router.router)
 api_app.include_router(team_router.router)
 api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)

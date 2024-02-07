@@ -13,8 +13,15 @@ import { Navbar, NavbarBrand, Nav, NavItem, NavbarToggler, Collapse } from "reac
 function NavBar({logout}) {
 
   /** Get user from local storage*/
+//   let user;  
+//   let userLocal = localStorage.getItem('user')
+//   if(userLocal) {
+//     user = JSON.parse(localStorage.getItem('user'));
+//   }
 
   const user = JSON.parse(localStorage.getItem('user'));
+
+
 
   
   const [isOpen, setIsOpen] = useState(false);

@@ -35,6 +35,7 @@ function App() {
   const [isHomeVis, setIsHomeVis] = useState(false);
   const [isAboutVis, setIsAboutVis] = useState(false);
 
+
   useEffect(() => {
     if(isLoginVis || isSignupVis || isHomeVis ) {
     
@@ -59,13 +60,16 @@ function App() {
         let { sub } = jwtDecode(token);
         console.log("token", token)
         FastApi.token = token;
+        console.log("attempting to get user")
         let user = await FastApi.getUserById(sub);
     
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+
+        
         if(!user) {
           logout();
         }
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
 
       } catch (err) {
         setUser(null);
@@ -86,6 +90,7 @@ function App() {
     async function signup(userData) {
       try {
       let token = await FastApi.signup(userData); 
+      console.log("******** signup *********************")
 
       return { success: true};
       } catch (err) {

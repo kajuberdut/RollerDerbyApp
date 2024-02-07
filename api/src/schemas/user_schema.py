@@ -40,8 +40,8 @@ class UserUpdate(UserBase):
     facebook_name: str
     additional_info: str
     about: str
-    primary_number: int
-    secondary_number: int
+    primary_number: str
+    secondary_number: str
     level: str
     ruleset: Ruleset = None
     position: Position = None
@@ -56,8 +56,27 @@ class UserUpdate(UserBase):
     @classmethod
     def phone_number_must_be_valid(cls, value):
         phone_regex = r"^\d{10}$"  
-        if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format. Please enter a 10-digit number")
+        if value is not None: 
+            if not re.match(phone_regex, value):
+                raise ValueError("Invalid phone number format. Please enter a 10-digit number")
+        return value
+    
+    @field_validator('primary_number', mode="before")
+    @classmethod
+    def primary_number_must_be_valid(cls, value):
+        primary_regex = r"^\d+$"  
+        if value is not None: 
+            if not re.match(primary_regex, value):
+                raise ValueError("Invalid primary number format. Digits can be from 0-9")
+        return value
+    
+    @field_validator('secondary_number', mode="before")
+    @classmethod
+    def secondary_number_must_be_valid(cls, value):
+        secondary_regex = r"^\d+$" 
+        if value is not None: 
+            if not re.match(secondary_regex, value):
+                raise ValueError("Invalid secondary number format. Digits can be from 0-9")
         return value
     
 class UserUpdateProfile(BaseModel):
@@ -66,7 +85,7 @@ class UserUpdateProfile(BaseModel):
     image: Optional[bytes] = None
     facebook_name: Optional[str] = None
     about: Optional[str] = None
-    primary_number: Optional[int] = None
+    primary_number: Optional[str] = None
     level: Optional[str] = None
     ruleset: Optional[Ruleset] = None
     position: Optional[Position] = None
@@ -81,7 +100,7 @@ class UserUpdatePrivateDetails(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     additional_info: Optional[str] = None
-    secondary_number: Optional[int] = None
+    secondary_number: Optional[str] = None
     # insurance: Optional[Insurance] = None
     
     @field_validator('phone_number', mode="before")
@@ -93,6 +112,15 @@ class UserUpdatePrivateDetails(BaseModel):
                 raise ValueError("Invalid phone number format. Please enter a 10-digit number")
         return value
     
+    @field_validator('secondary_number', mode="before")
+    @classmethod
+    def secondary_number_must_be_valid(cls, value):
+        secondary_regex = r"^\d+$" 
+        if value is not None: 
+            if not re.match(secondary_regex, value):
+                raise ValueError("Invalid secondary number format. Digits can be from 0-9")
+        return value
+    
 class UserImage(BaseModel): 
     image: Optional[bytes] = None
     
@@ -102,7 +130,7 @@ class UserDetailsPublic(UserBase):
     # cant store image on local storage it is too large
     facebook_name: Optional[str] = None 
     about: Optional[str] = None 
-    primary_number: Optional[int] = None
+    primary_number: Optional[str] = None
     level: Optional[str] = None 
     ruleset: Optional[list[UserRuleset]] = None
     position: Optional[list[UserPosition]] = None
@@ -117,13 +145,22 @@ class UserDetailsPublic(UserBase):
             raise ValueError('Invalid level')
         return value
     
+    @field_validator('primary_number', mode="before")
+    @classmethod
+    def primary_number_must_be_valid(cls, value):
+        primary_regex = r"^\d+$"
+        if value is not None: 
+            if not re.match(primary_regex, value):
+                raise ValueError("Invalid primary number format. Digits can be from 0-9")
+        return value
+    
 class UserDetailsPrivate(UserDetailsPublic): 
     """Pydantic class for user details private that inherits from user details public."""
     phone_number: Optional[str] = None
     first_name: Optional[str] = None 
     last_name: Optional[str] = None 
     additional_info: Optional[str] = None
-    secondary_number: Optional[int] = None
+    secondary_number: Optional[str] = None
     
 class UserDelete(BaseModel):
     """Pydantic class for delete user."""
@@ -137,8 +174,8 @@ class UserDetailsTeam(BaseModel):
     last_name: Optional[str] = None
     facebook_name: Optional[str] = None
     additional_info:Optional[str] = None
-    primary_number: Optional[int] = None
-    secondary_number: Optional[int] = None
+    primary_number: Optional[str] = None
+    secondary_number: Optional[str] = None
     level: Optional[str] = None
     ruleset: Optional[list[UserRuleset]] = None
     position: Optional[list[UserPosition]] = None

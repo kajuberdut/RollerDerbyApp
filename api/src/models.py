@@ -31,7 +31,6 @@ class UserInsurance(SQLAlchemyBase):
     user = relationship("User", back_populates="insurance")
     insurance = relationship("Insurance", back_populates="user") 
     
-    
 class UserGroup(SQLAlchemyBase): 
     __tablename__ = "user_group"
 
@@ -39,19 +38,6 @@ class UserGroup(SQLAlchemyBase):
     group_id = Column(Integer, ForeignKey("group.group_id"), primary_key=True)
     user = relationship("User", back_populates="group")
     group = relationship("Group", back_populates="user") 
-    
-    
-# class UserMessage(SQLAlchemyBase): 
-#     __tablename__ = "user_message"
-#     sender_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
-#     message_id = Column(Integer, ForeignKey("message.message_id"), primary_key=True)
-#     user = relationship("User", back_populates="message")
-#     message = relationship("Message", back_populates="user") 
-    # participant_ids = Column(ARRAY(Integer))
-     # user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
-    # ! remove participant ids to Chat
-    # ! note added recipeint ids and changed user_id to sender_id 
-    
 
 class User(SQLAlchemyBase):
     __tablename__ = "user"
@@ -67,8 +53,8 @@ class User(SQLAlchemyBase):
     additional_info = Column(String, nullable=True)
     facebook_name = Column(String, nullable=True)
     about = Column(String, nullable=True)
-    primary_number = Column(Integer, nullable=True)
-    secondary_number = Column(Integer, nullable=True)
+    primary_number = Column(String, nullable=True)
+    secondary_number = Column(String, nullable=True)
     level = Column(String, nullable=True)
     ruleset = relationship("UserRuleset", back_populates="user")
     position = relationship("UserPosition", back_populates="user")
@@ -109,8 +95,7 @@ class Group(SQLAlchemyBase):
     name = Column(String)
     user = relationship("UserGroup", back_populates="group")  
     type = Column(String)
-    admin = Column(Integer)
-    # ! will need type on group for teams  
+    admin = Column(Integer)  
     
 class TeamInvite(SQLAlchemyBase):
     __tablename__ = "team_invite"
@@ -128,15 +113,11 @@ class Message(SQLAlchemyBase):
     date_time = Column(String)
     sender_username = Column(String)
     sender_id = Column(Integer)
-    # user = relationship("UserMessage", back_populates="message")
-    # ! added chat_id for chatList 
     
 class Chat(SQLAlchemyBase): 
     __tablename__ = "chat"
     chat_id = Column(Integer, primary_key=True)
-    # participant_ids = Column(ARRAY(Integer))
     group_id = Column(Integer)
-    # name = Column(String)
     message = relationship("Message", backref="chat")
 
 class Location(SQLAlchemyBase):
@@ -166,8 +147,6 @@ class EventBase(SQLAlchemyBase):
     jersey_colors = Column(String, nullable=False)
     group_id = Column(Integer, nullable=False)
     chat_id = Column(Integer, nullable=False)
-    # address = relationship("Address", backref="events")
-    # detail = relationship("EventDetail", back_populates="events")
     
     __mapper_args__ = {
         "polymorphic_on": "type",
@@ -192,7 +171,6 @@ class Address(SQLAlchemyBase):
     __tablename__ = "address"
 
     address_id = Column(Integer, primary_key=True)
-    # name: Column(String, nullable=True)
     name: Column(String, nullable=False)
     street_address = Column(String, nullable=False)
     city = Column(String, nullable=False)

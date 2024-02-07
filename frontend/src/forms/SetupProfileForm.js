@@ -20,12 +20,6 @@ function SetupProfileForm({ update, getUser}) {
   const [displayRulesets, setDisplayRulesets] = useState([]);
   const [displayPositions, setDisplayPositions] = useState([]);
 
-  useEffect(() => {
-    if(!user) {
-      navigate('/')
-    }
-  });
-
   /** Sets initial state of form   */
 
   let INITIAL_STATE = { username: user.username, city: user.city, state: user.state,  about: user.about, primNum: user.primaryNumber, level: user.level, assocLeagues: user.associatedLeagues, facebookName: user.facebookName, };
@@ -59,6 +53,10 @@ function SetupProfileForm({ update, getUser}) {
       data["ruleset"] = formRulesets;
       data["position"] = formPositions;
       
+      console.log("***********************************")
+      console.log("data", data)
+      console.log("***********************************")
+      
       return data;
   }
 
@@ -73,6 +71,11 @@ function SetupProfileForm({ update, getUser}) {
     
       if(updateProfile) {
         await getUser();
+        console.log("***********************")
+        console.log("user", user)
+        console.log("user.primaryNumber", user.primaryNumber)
+        console.log("typeof user.primaryNumber", typeof user.primaryNumber)
+        console.log("***********************")
         navigate('/profile')
       } 
 
@@ -277,13 +280,15 @@ function SetupProfileForm({ update, getUser}) {
 
                       <Label htmlFor="primNum">Primary Number: </Label>
                       <Input
-                          type="number"
+                          type="text"
                           name="primNum"
                           className="form-control"
                           value={formData.primNum}
                           onChange={handleChange}
                           placeholder="Primary Number"
                           id="primaryNumber"
+                          pattern="[0-9]*"
+                          maxLength={4}
                       />
       
                       <Label htmlFor="level">Skill Level: </Label>

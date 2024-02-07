@@ -87,7 +87,7 @@ def get_user_image(user_id: int, db: Session = Depends(get_db)):
 # * post /users
 # * creates a new user 
 
-@router.post("/", response_model=UserBase)
+@router.post("/", response_model=UserBase, dependencies=[])
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     print("you are hitting the users/post route!!!")
     

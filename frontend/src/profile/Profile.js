@@ -73,7 +73,6 @@ function Profile({displayChatList}) {
           }
   
           if (userState.locationId) {
-            console.log("userState.lcoationId is running")
             getUserLocation();
           }
           if (userState.insurance) {
@@ -134,9 +133,6 @@ function Profile({displayChatList}) {
 
   async function getUserLocation() {
     let userLocation = await FastApi.getLocation(userState.locationId);
-    console.log("********************************")
-    console.log("userLocation", userLocation)
-    console.log("********************************")
     setCity(userLocation.city)
     setState(userLocation.state)
   }

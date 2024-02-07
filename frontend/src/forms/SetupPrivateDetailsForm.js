@@ -217,13 +217,15 @@ function SetupPrivateDetailsForm({ update, getUser }) {
 
                         <Label htmlFor="secNum">Secondary Number: </Label>
                         <Input
-                            type="number"
+                            type="text"
                             name="secNum"
                             className="form-control"
                             value={formData.secNum}
                             onChange={handleChange}
                             placeholder="Secondary Number"
                             id="secondaryNumber"
+                            pattern="[0-9]*"
+                            maxLength={4}
                         />
 
                         <Label htmlFor="primIns">Primary Insurance: </Label>
