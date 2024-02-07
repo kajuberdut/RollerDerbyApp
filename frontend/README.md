@@ -18,10 +18,10 @@
 <br />
 <p align="center">
   <a href="https://github.com/kicamSM/Capstone2">
-    <img src="https://raw.githubusercontent.com/kicamSM/Board_Game_Mania/master/frontend/public/star.png" alt="star icon" width="160" height="160">
+    <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
   </a>
 
-  <h2 align="center" style="text-decoration: underline;">Board Game Mania</h2>
+  <h2 align="center" style="text-decoration: underline;">Block Party</h2>
 
   <p align="center">
     A roller derby communication application. Create an account and join The Block Party. Update your profile. Join a team or create your own. Message another user or join a group chat. Find bouts and mixers or create your own. Welcome to Block Party.
@@ -48,14 +48,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-"Block Party" is a roller derby communication application. This application allows users to add their own board games to "My Board  Games list" after an account is created. This application can then be used to log plays of any board games in "My Board Games List". When logging a play, this application will automatically generate a score board based on the number of players the user selects. You can then track the scores of all players and save the match. 
+"Block Party" is a roller derby communication application. This application allows users to create a profile and update profile information with relevant derby information. 
 
-After saving the match, the user can view all his board games based on total wins, losses, and games played. He can then click on a specific game to view the match details which include  scores for each player, win for each player, date played and emails of players.
+After an account is created, a user is able to access all mixers and bouts by date or location. They are also able to create mixers and bouts and join the associated chats for those games.
 
-This web application is built with Python and Flask. It uses a free third party API (https://www.boardgameatlas.com/api/docs) that allows any user to search for board games. Board Game Mania uses the PostgreSQL database to store and save information.
+The user is also able to create a team which automatically creates a chat. If the user creates a team the user becomes the administrator for that team. If the user creates a team, the user can then invite other players to the team. After players accepts invites, the user can create a download an excel document with the team information. This will streamline information for events or tournaments. Users also can chat with other users. 
 
-This application is functional and ready to use. However, there are more features that I would like to continue integrating. One of these features is I would like a user to be able to access the total wins and losses of every player in any match they have competed in. I would also like a player to be able to sign up for the application with the email he has used to play. This would then automatically preload any games that he has played into his "games list" as well as all of the match details from his previous played games.
+This web application is built with Python, Flask, and FastApi. 
 
+This application is functional and ready to use. However, there are more features that I would like to continue integrating. I hope to make this the main platform for roller derby players. 
 
 ## Features 
 * Intuitive
@@ -64,6 +65,7 @@ This application is functional and ready to use. However, there are more feature
 * Update profile
 * Create Mixers and Bouts
 * Create or join a team
+* Download an excel document with team participant information
 * Message other users 
 * Join a mixer or bout chat  
 
