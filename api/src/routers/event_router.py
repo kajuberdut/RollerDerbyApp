@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Annotated
-from ..dependencies import oauth2_scheme, get_db, get_and_validate_current_user
+from ..dependencies import get_db, get_and_validate_current_user
 
 from ..crud.address_crud import *
 from ..crud.chat_crud import *
@@ -47,7 +46,6 @@ async def get_events(type: str, city: str = Query(None), state: str = Query(None
 
 # * get /events/all/bouts
 # * returns all bouts
-# ! moved this one over to routers 
 
 @router.get("/all/bouts", response_model=list[Bout])
 def get_bouts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -58,7 +56,6 @@ def get_bouts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 # * get /bouts/{event_id} 
 # * returns one bout 
-# ! moved this one over to routers 
 
 @router.get("/bouts/{event_id}", response_model=Bout)
 def get_bout(event_id: int, db: Session = Depends(get_db)):
@@ -80,7 +77,6 @@ def get_mixers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 # * get /mixers/{event_id} 
 # * returns one mixer 
-# ! moved this one over to routers 
 
 @router.get("/mixers/{event_id}", response_model=Mixer)
 def get_mixer(event_id: int, db: Session = Depends(get_db)):
@@ -95,7 +91,6 @@ def get_mixer(event_id: int, db: Session = Depends(get_db)):
 
 # * post /bouts/ 
 # * creates a new bout 
-# ! moved this one over to routers
 
 @router.post("/bouts", response_model=EventBase)
 def create_bout(bout: Bout, address: Address, db: Session = Depends(get_db)):
@@ -135,7 +130,6 @@ def create_bout(bout: Bout, address: Address, db: Session = Depends(get_db)):
 
 # * post /mixers/ 
 # * creates a new mixer with address 
-# ! moved this one over to routers
 
 @router.post("/mixers", response_model=EventBase)
 def create_mixer(mixer: Mixer, address: Address, db: Session = Depends(get_db)):
@@ -174,62 +168,64 @@ def create_mixer(mixer: Mixer, address: Address, db: Session = Depends(get_db)):
 
 # * put /bouts/{event_id} 
 # * updates an existing bout 
+# * Not currently being used
 
-@router.put("/bouts/{event_id}", response_model=BoutUpdate)
-def update_bout(bout: BoutUpdate, event_id: int, db: Session = Depends(get_db)):
+# @router.put("/bouts/{event_id}", response_model=BoutUpdate)
+# def update_bout(bout: BoutUpdate, event_id: int, db: Session = Depends(get_db)):
     
-    print('user in /bouts/{event_id}', bout)
+#     print('user in /bouts/{event_id}', bout)
     
-    db_bout = crud_get_bout_by_id(db, event_id=event_id)    
+#     db_bout = crud_get_bout_by_id(db, event_id=event_id)    
  
-    if not db_bout:
-        raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
+#     if not db_bout:
+#         raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
     
-    return crud_update_bout(db=db, bout=bout, event_id=event_id)
+#     return crud_update_bout(db=db, bout=bout, event_id=event_id)
 
 # * put /mixers/{event_id} 
 # * updates an existing mixer
+# * Not currently being used
 
-@router.put("/mixers/{event_id}", response_model=MixerUpdate)
-def update_mixer(mixer: MixerUpdate, event_id: int, db: Session = Depends(get_db)):
+# @router.put("/mixers/{event_id}", response_model=MixerUpdate)
+# def update_mixer(mixer: MixerUpdate, event_id: int, db: Session = Depends(get_db)):
     
-    print('user in /mixers/{event_id}', mixer)
+#     print('user in /mixers/{event_id}', mixer)
     
-    db_mixer = crud_get_mixer_by_id(db, event_id=event_id)    
+#     db_mixer = crud_get_mixer_by_id(db, event_id=event_id)    
  
-    if not db_mixer:
-        raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
+#     if not db_mixer:
+#         raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
     
-    return crud_update_mixer(db=db, mixer=mixer, event_id=event_id)
+#     return crud_update_mixer(db=db, mixer=mixer, event_id=event_id)
 
 # * delete /bouts/{event_id} 
 # * deletes an existing bout
-# todo note you may have to add some security measures on this
+# * Not currently being used
 
-@router.delete("/bouts/{event_id}", response_model=EventDelete)
-def delete_bout(bout: EventDelete, event_id: int, db: Session = Depends(get_db)):
+# @router.delete("/bouts/{event_id}", response_model=EventDelete)
+# def delete_bout(bout: EventDelete, event_id: int, db: Session = Depends(get_db)):
     
-    print('bout in /bouts/{event_id}', bout)
+#     print('bout in /bouts/{event_id}', bout)
      
-    db_bout = crud_get_bout_by_id(db, event_id=bout.event_id)      
+#     db_bout = crud_get_bout_by_id(db, event_id=bout.event_id)      
  
-    if not db_bout:
-        raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
+#     if not db_bout:
+#         raise HTTPException(status_code=400, detail=f"Bout with id {event_id} doesn't exist.")
     
-    return crud_delete_bout(db=db, bout=bout, event_id=bout.event_id)
+#     return crud_delete_bout(db=db, bout=bout, event_id=bout.event_id)
 
 # * delete /mixers/{event_id} 
 # * deletes an existing mixer
-# todo note you may have to add some security measures on this
+# * Not currently being used
 
-@router.delete("/mixers/{event_id}", response_model=EventDelete)
-def delete_mixer(mixer: EventDelete, event_id: int, db: Session = Depends(get_db)):
+# @router.delete("/mixers/{event_id}", response_model=EventDelete)
+# def delete_mixer(mixer: EventDelete, event_id: int, db: Session = Depends(get_db)):
     
-    print('mixer in /mixers/{event_id}', mixer)
+#     print('mixer in /mixers/{event_id}', mixer)
  
-    db_mixer = crud_get_mixer_by_id(db, event_id=mixer.event_id)      
+#     db_mixer = crud_get_mixer_by_id(db, event_id=mixer.event_id)      
  
-    if not db_mixer:
-        raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
+#     if not db_mixer:
+#         raise HTTPException(status_code=400, detail=f"Mixer with id {event_id} doesn't exist.")
     
-    return crud_delete_mixer(db=db, mixer=mixer, event_id=mixer.event_id)
+#     return crud_delete_mixer(db=db, mixer=mixer, event_id=mixer.event_id)

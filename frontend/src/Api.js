@@ -51,9 +51,11 @@ class FastApi {
   /** Post user by data*/
 
   static async signup(data) { 
+    console.log("hitting signup")
     
     data["user_id"] = 0
     let res = await this.request('users', data, "post");
+    console.log("result signup", res)
     return res;
   }
 

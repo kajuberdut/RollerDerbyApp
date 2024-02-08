@@ -4,7 +4,7 @@ from ...crud.user_crud import *
 from ..test_database import override_get_db, client, override_dependency
 
 # run file in venv
-# pytest api/src/tests/test_routers/test_user_router.py -vv
+# pytest api/src/tests/test_routers/test_user_router.py -vv -s
 
 api_app.dependency_overrides[get_db] = override_get_db
 api_app.dependency_overrides[get_and_validate_current_user] = override_dependency

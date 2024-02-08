@@ -38,6 +38,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
     setFormData(INITIAL_STATE);
 
     let result = await signup(formData);
+    console.log("result", result)
 
     if(result.success) {
         navigate('/login')
