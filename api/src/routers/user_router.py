@@ -84,40 +84,15 @@ def get_user_image(user_id: int, db: Session = Depends(get_db)):
     
     return imageData
 
-# # * post /users
-# # * creates a new user 
-
-# @router.post("/", response_model=UserBase, dependencies=[])
-# def create_user(user: UserCreate, db: Session = Depends(get_db)):
-#     print("you are hitting the users/post route!!!")
-    
-#     hashed_password = hash_password(user.password)
-
-#     user.password = hashed_password   
-
-#     db_user_email = crud_get_user_by_email(db, email=user.email)
-    
-#     if db_user_email:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-    
-#     db_user_username = crud_get_user_by_username(db, username=user.username)
-#     if db_user_username:
-#         raise HTTPException(status_code=400, detail="Derby name already registered")
-    
-#     return crud_create_user(db=db, user=user)
 
 # * put /users/{user_id} 
 # * updates an existing user with rulesets and location positions
+# * Note: this is not currently getting used as you broke it into two requests 
 
-# ! NEED TO VERIFY THAT THE TOKEN MATCHES THE USER WE ARE TRYING TO UPDATE
 
 @router.put("/{user_id}", response_model=UserUpdate)
 def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Position], insurance: list[Insurance], location: Location, user_id: int, db: Session = Depends(get_db)):
     print("/users/{user_id} is running in user_router.py")
-    # ! location_id is 0 here 
-    
-    
-    print("**** ruleset ****:", ruleset)
     
     existing_location = crud_get_location(db=db, location=location)
     
@@ -125,7 +100,6 @@ def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Positio
         location_id = existing_location.location_id 
     else: 
         location_id = crud_create_location(db=db, location=location)
-        print("**************** location_id in main.py***********", location_id)
     
     user.location_id = location_id
     
@@ -138,14 +112,10 @@ def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Positio
             position_id = crud_create_position(db=db, position=pos)
     
         existing_user_position = crud_get_user_position_by_id(db, user_id=user_id, position_id=position_id)
-        print("does existing_user_position exist?", existing_user_position)
+     
         if not existing_user_position:
-            print("crud existing_user_position does NOT exist")
             new_e_u_p = crud_create_user_position(db, user_id=user_id, position_id=position_id)
-            # print("new existing user position:", new_e_u_p)
  
-    
-    # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
     for rs in ruleset: 
         existing_ruleset = crud_get_ruleset(db=db, ruleset=rs) 
     
@@ -155,12 +125,11 @@ def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Positio
             ruleset_id = crud_create_ruleset(db=db, ruleset=rs)
 
         existing_user_ruleset = crud_get_user_ruleset_by_id(db, user_id=user_id, ruleset_id=ruleset_id)
-        print("does existing_user_ruleset exist?", existing_user_ruleset)
+
         if not existing_user_ruleset:
             print("crud existing_user_ruleset does NOT exist")
             new_e_u_r = crud_create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
-            # print("new existing user ruleset:", new_e_u_r)
-            
+   
     for ins in insurance: 
 
         existing_insurance = crud_get_insurance(db=db, insurance=ins)
@@ -175,9 +144,7 @@ def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Positio
      
         if not existing_user_insurance:
             new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
-  
-    print('user in /users/{user_id}', user)
-    
+
     db_user = crud_get_user_by_id(db, user_id=user_id)    
     
     if not db_user:
@@ -309,29 +276,12 @@ def update_user(user: UserUpdatePrivateDetails, user_id: int, insurance: list[In
     
     return crud_update_private_user(db=db, user=user, user_id=user_id)
 
-# * delete /users/{user_id} 
-# * deletes an existing user 
-
-# ! WILL HAVE TO VERIFY THAT THE TOKEN MATCHES THE USER THAT YOU ARE TRYING TO DELETE 
-# ! WILL ALSO NEED A FORM TO SUBMIT PASSWORD AND WILL HAVE TO CHECK THAT AGAINST THE db_user
-@router.delete("/{user_id}", response_model=UserDelete)
-def delete_user(user: UserDelete, user_id: int, db: Session = Depends(get_db)):
-    
-    db_user = crud_get_user_by_id(db, user_id=user.user_id)      
-    
-    if not db_user:
-        raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
-    
-    crud_delete_user(db=db, user=user, user_id=user.user_id)
-    return { "user_id": 0, "password": "deleted"}
 
 # * get /users/{username}/details 
 # * returns one specific user
 
 @router.get("/{username}/details", response_model=UserDetailsTeam)
-# @router.get("/users/{username}/details")
-# Note: this allows us to get user information that is public information not private information so private information is not being sent back and forth through the api.
-def get_user(username: str, db: Session = Depends(get_db)):
+def get_user_details(username: str, db: Session = Depends(get_db)):
     print("YOU ARE HITTING THE /users/{username}/details ROUTE")
     
     user = crud_get_user_details_by_username(db, username=username)
@@ -339,9 +289,21 @@ def get_user(username: str, db: Session = Depends(get_db)):
     if username is None: 
         raise HTTPException(status_code=404, detail=f"User with derby name {username} not found.")
     
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    print("user", user)
-    print("user.username:", user.username)
-    print("user.ruleset", user.ruleset)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     return user
+
+# ! Note this test is failing but not using this for the app. Will impliment later.
+# * delete /users/{user_id} 
+# * deletes an existing user 
+
+# # @router.delete("/{user_id}", response_model=UserDelete)
+# @router.delete("/{user_id}")
+# # def delete_user(user: UserDelete, user_id: int, db: Session = Depends(get_db)):
+# def delete_user(user_id: int, db: Session = Depends(get_db)):
+    
+#     db_user = crud_get_user_by_id(db, user_id=user_id)      
+    
+#     if not db_user:
+#         raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+#     res = crud_delete_user(db=db, user_id=user_id)
+#     return res

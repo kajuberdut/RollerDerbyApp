@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status 
 from typing import Annotated
-from ..dependencies import get_db, oauth2_scheme, get_and_validate_current_user, authenticate_user, create_access_token, create_refresh_token
-
+from ..dependencies import get_db, get_and_validate_current_user, authenticate_user, create_access_token, create_refresh_token
 
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -25,12 +24,6 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
  
     # authenticates user and then returns user 
     
-    print("*************************************")
-    print("form_data", form_data)
-    print("form_data.username", form_data.username)
-    print("form_data.password", form_data.password)
-    print("*************************************")
-    
     user = authenticate_user(db, form_data.username, form_data.password)
     print("user in main.py:", user)
     if not user:
@@ -42,11 +35,24 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
     
     access_token = create_access_token(data={"sub": str(user.user_id)})
     # refresh_token = create_refresh_token(data={"sub": str(user.user_id)})
-        
-    # access_token = create_access_token(data={"sub": user.user_id})
-    # ! note that I just adjusted the user.user_id to be a string instead of a number
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+# # * get /login/{user_id} 
+# # * returns one specific user by user_id
+
+@router.get("/login/{user_id}", response_model=UserDetailsPrivate)
+def get_user(token: Annotated[str, Depends(get_and_validate_current_user)], user_id: int, db: Session = Depends(get_db)):
+
+    print("users/user_id is running")
+    
+    user = crud_get_user_by_id(db, user_id=user_id)
+
+    if user is None: 
+        raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")  
+    
+    return user
 
 # # * get /refresh
 # # * login one user and provide token 
@@ -62,22 +68,3 @@ async def refresh(refresh_token: Annotated[get_and_validate_current_user, Depend
     new_access_token = create_access_token(data={"sub": str(user.user_id)})
 
     return {"access_token": new_access_token, "token_type": "bearer"}
-
-
-# # * get /login/{user_id} 
-# # * returns one specific user by user_id
-# ! unknown if this is the issue???? 
-
-# @router.get("/login/{user_id}", response_model=UserDetailsPrivate)
-# def get_user(token: Annotated[str, Depends(oauth2_scheme)], user_id: int, db: Session = Depends(get_db)):
-@router.get("/login/{user_id}", response_model=UserDetailsPrivate)
-def get_user(token: Annotated[str, Depends(get_and_validate_current_user)], user_id: int, db: Session = Depends(get_db)):
-
-    print("users/user_id is running")
-    
-    user = crud_get_user_by_id(db, user_id=user_id)
-
-    if user is None: 
-        raise HTTPException(status_code=404, detail=f"User with user id of {user_id} not found.")  
-    
-    return user

@@ -165,7 +165,8 @@ class UserDetailsPrivate(UserDetailsPublic):
 class UserDelete(BaseModel):
     """Pydantic class for delete user."""
     user_id: int
-    password: str
+    # password: str
+    status: str
     
 class UserDetailsTeam(BaseModel):
     email: str

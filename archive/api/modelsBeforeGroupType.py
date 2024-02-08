@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Identity, LargeBinary
 from sqlalchemy.orm import relationship
-from .database import SQLAlchemyBase
+from ...api.src.database import SQLAlchemyBase
 
 print("models.py is running")
 
@@ -106,7 +106,8 @@ class Group(SQLAlchemyBase):
     __tablename__ = "group"  
     group_id = Column(Integer, primary_key=True)
     name = Column(String)
-    user = relationship("UserGroup", back_populates="group")    
+    user = relationship("UserGroup", back_populates="group")  
+    # ! will need type on group for teams   
     
 class Message(SQLAlchemyBase):
     __tablename__ = "message"  

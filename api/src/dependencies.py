@@ -41,12 +41,10 @@ def hash_password(password):
 def authenticate_user(db, username: str, password: str):
     # gets user from database by using the username that was submitted on the frontend
     user = crud_get_user_by_username(db, username)
-
-    print("password in authenticate user", user.hashed_password)
     
     if not user:
         return False
-    # calls verify password to compare the password the user submitted on the frontend to the hashed password on the backend 
+
     if not verify_password(password, user.hashed_password):
         return False
     return user
@@ -54,17 +52,11 @@ def authenticate_user(db, username: str, password: str):
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     """Creates an access token when a user logs in with the user_id inside of it."""
-    print("*******************************************")
-    print("data in createa access token", data)
-    print("*******************************************")
+
     to_encode = data.copy()
-    # if expires_delta:
-    #     expire = datetime.utcnow() + expires_delta
-    # else:
+
     expire = datetime.utcnow() + timedelta(minutes=int(EXPIRE_MINS))
-    print("*******************************************")
-    print("expire", expire)
-    print("*******************************************")
+
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     
@@ -83,7 +75,7 @@ def create_refresh_token(user_id: int, expires_delta: timedelta | None = None):
 
 
 async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
-# async def get_and_validate_current_user(db, token: Annotated[str, Depends(oauth2_scheme)]):
+
     """Authenticates the token and the user associated with the token and retuns user."""
 
     print("token in dependencies", token)
@@ -128,9 +120,7 @@ async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_sch
         #     )
     
     user = crud_get_user_by_id(db, user_id=token_data.user_id)
-    print("**********************************")
-    print("user", user)
-    print("**********************************")
+  
     if user is None:
         raise credentials_exception
 
