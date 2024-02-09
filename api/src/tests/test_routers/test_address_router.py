@@ -14,48 +14,46 @@ def test_create_address():
     response = client.post(
         "/address",
         json={
-   
-            # "address": {
-                "address_id": 0,
-                "street_address": "000 this address", 
-                "city": "Test City", 
-                "state": "CO", 
-                "zip_code": "12345"
-            # }  
-              }
-    
+                "street_address": "555 Main St", 
+                "city": "Boise", 
+                "state": "ID", 
+                "zip_code": "55555"
+        }
     )
     
-    assert response.status_code == 422, response.text
+    assert response.status_code == 200, response.text
     data = response.json()
-    print("****************************************")
-    print("data", data)
-    print("****************************************")
     
-    # assert data["address"]["streetAddress"] == "000 this address"
-    # assert data["city"] == "Test City"
-    # assert data["state"] == "CO"
-    # assert data["zipCode"] == "12345"
-    
-    #    "data": {
-    #         "address": {
-    #             "streetAddress": "000 this address", 
-    #             "city": "Test City", 
-    #             "state": "CO", 
-    #             "zipCode": "12345"
-    #         }  
-    #           }
+    assert data == 1
     
     
-# def test_get_all_address():
-#     response = client.get(
-#         "/address",
-#     )
+def test_get_all_address():
+    response = client.get(
+        "/address",
+    )
     
-#     assert response.status_code == 200, response.text
-#     data = response.json()
-#     print("data", data)
-#     # currentyly no address data which is at least consistent 
-#     assert data[0] == {}
-#     # assert "userId" in data
-#     # assert data["userId"] == 2
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data[0] == {
+                "addressId": 1,
+                "streetAddress": "555 Main St", 
+                "city": "Boise", 
+                "state": "ID", 
+                "zipCode": "55555"
+            }
+
+def test_get_specific_address():
+    response = client.get(
+        "/address/1",
+    )
+    
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data == {
+                "addressId": 1,
+                "streetAddress": "555 Main St", 
+                "city": "Boise", 
+                "state": "ID", 
+                "zipCode": "55555"
+            }
+

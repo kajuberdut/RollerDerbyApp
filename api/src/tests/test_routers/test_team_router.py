@@ -10,24 +10,19 @@ from ..test_database import override_get_db, client, override_dependency
 api_app.dependency_overrides[get_db] = override_get_db
 api_app.dependency_overrides[get_and_validate_current_user] = override_dependency
 
-# def test_create_address():
-#     response = client.post(
-#         "/address",
-#         json={
-   
-#             # "address": {
-#                 "address_id": 0,
-#                 "street_address": "000 this address", 
-#                 "city": "Test City", 
-#                 "state": "CO", 
-#                 "zip_code": "12345"
-#             # }  
-#               }
+
+# ! not function as of yet. Will need to add a group with this
+
+def test_get_team_form_by_admin_id_team_id():
+    response = client.post(
+        "/group",
+        json={
+            
+        }
+    )
     
-#     )
-    
-#     assert response.status_code == 422, response.text
-#     data = response.json()
-#     print("****************************************")
-#     print("data", data)
-#     print("****************************************")
+    assert response.status_code == 422, response.text
+    data = response.json()
+    print("****************************************")
+    print("data", data)
+    print("****************************************")

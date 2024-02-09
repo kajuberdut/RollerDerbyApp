@@ -12,12 +12,14 @@ router = APIRouter(
 # * post /address/ 
 # * adds an address
 
-@router.post("/", response_model=Address)
+@router.post("/", response_model=int)
 def create_address(address: Address, db: Session = Depends(get_db)):
     
     print("address in address_router.py is getting hit:")
-    
-    return crud_create_address(db=db, address=address)
+    address_id = crud_create_address(db=db, address=address)
+    print("address_id", address_id)
+    return address_id
+    # return crud_create_address(db=db, address=address)
 
 # * get /address/ 
 # * gets all addresses 

@@ -28,7 +28,8 @@ services:
       db:
         condition: service_healthy
   db:
-    image: postgres
+    image: postgres:14
+    # image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

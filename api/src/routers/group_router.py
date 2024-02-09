@@ -27,7 +27,9 @@ def add_user_to_group(user_group: UserGroup, db: Session = Depends(get_db)):
     
     return user_group 
 
-# ! the return should not be CreateGroup I think it should be Group
+# * post /groups/teams
+# * create new team
+
 @router.post("/teams", response_model=Group)
 def create_team(group: Group, db: Session = Depends(get_db)):
     print(" in groups in group_router.py :", group)

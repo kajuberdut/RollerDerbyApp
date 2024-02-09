@@ -185,7 +185,7 @@ def crud_get_user_group_by_user_id_group_id(db: Session, group_id: int, user_id:
     return db.query(models.UserGroup).filter(models.UserGroup.group_id == group_id).filter(models.UserGroup.user_id == user_id).first()
     
 def crud_delete_user_from_group(db: Session, user_group: DeleteUserGroup): 
-    """Delete a specific bout by event_id."""
+    """Delete a specific user from a specific group."""
     print("user_group in crud_Deleete_user_from_group", user_group)
 
     db_user_id = crud_get_user_id_by_username(db, username=user_group.username)    
