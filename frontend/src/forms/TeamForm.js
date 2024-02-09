@@ -75,6 +75,7 @@ const TeamForm = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
+                            maxLength={50}
                         />
                 
                     </FormGroup>

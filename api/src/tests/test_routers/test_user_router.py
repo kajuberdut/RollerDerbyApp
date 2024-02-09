@@ -29,7 +29,7 @@ def test_create_user():
     
 def test_create_second_user():
     response = client.post(
-        "/users/",
+        "/users",
         json={
             "email": "test_user2@example.com", 
             "password": "test_password2",
@@ -49,7 +49,7 @@ def test_create_second_user():
 def test_get_users():
     # with client.application.dependency_overrides[get_and_validate_current_user]
     response = client.get(
-        "/users/",
+        "/users",
     )
     assert response.status_code == 200, response.text
     data = response.json()

@@ -81,6 +81,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                             placeholder="Derby Name"
                             autoComplete="username"
                             required
+                            maxLength={35}
                         />
 
                         <Label htmlFor="password">Password: </Label>
@@ -93,6 +94,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                             placeholder="Password"
                             autoComplete="current-password"
                             required
+                            maxLength={128}
                         />
 
                     </FormGroup>

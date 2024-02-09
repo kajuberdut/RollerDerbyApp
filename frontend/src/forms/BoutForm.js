@@ -161,6 +161,7 @@ const BoutForm = () => {
                           onChange={handleChange}
                           placeholder="Street Address"
                           required
+                          maxLength={40}
                        />
 
                     <Label htmlFor="city">City: </Label>
@@ -173,6 +174,7 @@ const BoutForm = () => {
                           onChange={handleChange}
                           placeholder="City"
                           required
+                          maxLength={28}
                           
                        />
 
@@ -252,6 +254,7 @@ const BoutForm = () => {
                           onChange={handleChange}
                           placeholder="Zip Code"
                           required
+                          maxLength={5}
                       />      
                   
                         <Label htmlFor="theme">Theme or Title: </Label>
@@ -264,6 +267,7 @@ const BoutForm = () => {
                             onChange={handleChange}
                             placeholder="Theme"
                             required
+                            maxLength={50}
                         />
 
                         <Label htmlFor="description">Description: </Label>
@@ -275,6 +279,8 @@ const BoutForm = () => {
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
+                            maxLength={300}
+
                         />
 
                         <Label htmlFor="level">Level: </Label>
@@ -394,6 +400,7 @@ const BoutForm = () => {
                            value={formDataBout.floorType}
                            onChange={handleChange}
                            placeholder="Floor Type"
+                           maxLength={50}
                        />
 
                       <Label htmlFor="jerseyColors">Jersey Colors: </Label>
@@ -405,6 +412,7 @@ const BoutForm = () => {
                            value={formDataBout.jerseyColors}
                            onChange={handleChange}
                            placeholder="Both Teams Jersey Colors"
+                           maxLength={50}
                        />
 
                         <Label htmlFor="opposingTeam">Opposing Team: </Label>
@@ -417,7 +425,7 @@ const BoutForm = () => {
                             placeholder="Opposing Team"
                             id="OpposingTeam"
                             required
-
+                            maxLength={40}
                         />
 
                         <Label htmlFor="team">Team: </Label>
@@ -430,6 +438,7 @@ const BoutForm = () => {
                             placeholder="team"
                             id="team"
                             required
+                            maxLength={40}
                         /> 
 
                     </FormGroup>

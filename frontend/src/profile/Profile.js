@@ -189,20 +189,20 @@ function Profile({displayChatList}) {
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}> 
                     <div style={{ marginLeft: '600px'}}>
                       { userState.level && <div>
-                        <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{userState.level}</MDBCardText>
-                        <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
+                        <MDBCardText className="mb-1 h5" style={{marginRight: '80px'}}>{userState.level}</MDBCardText>
+                        <MDBCardText className="small text-muted mb-0"style={{marginRight: '80px'}}>level</MDBCardText>
                       </div>
                       }
                     </div>
                     { userState.position && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginRight: '10px', marginTop: '7px'}}>positions</MDBCardText>
                     </div>
                     }
                     { userState.ruleset &&
                     <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
                     </div>
                     }
                   </div>

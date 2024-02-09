@@ -11,9 +11,9 @@ function TeamComponent({ team }) {
     /** Render the team component */
       
     return (
-      <div key={"TeamComponent-" + team.groupId } className="TeamComponent" style={{width: '77%', height: '90px', borderRadius: '5px', bakgroundColor: ''}}> 
+      <div key={"TeamComponent-" + team.groupId } className="TeamComponent" style={{width: '77%', height: 'auto', borderRadius: '5px', bakgroundColor: '', paddingBottom: '10px' }}> 
        <NavLink to={`/teams/${team.groupId}`} className="TeamComponent-Link" style={{color: '#555555', textDecoration: 'none'}}>
-        <div style={{ display: 'flex'}}>
+        <div>
             <div style={{paddingTop: '8px', paddingLeft: '20px', paddingRight: '20px'}} >
             <h4 style={{paddingTop: '15px'}}>{team.name}</h4>
             </div>           

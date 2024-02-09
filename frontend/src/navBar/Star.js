@@ -11,8 +11,10 @@ function Star() {
 
     return (
       <div className='star'>
-      <img src="/star.png" alt="Star Icon" style={{zIndex: '100', marginRight: '7px', height: '60px', position: 'absolute', top: '5px'}}/>
+      <img src="/star.png" alt="Star Icon" style={{zIndex: '3', marginRight: '7px', height: '60px'}}/>
+      {/* <div href="/" style={{marginLeft: '70px', fontSize: '20px', position: 'absolute'}}><b>Block Party</b></div> */}
       </div>
+
     ) 
   }
 

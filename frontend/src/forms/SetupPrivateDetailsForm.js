@@ -166,6 +166,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                            value={formData.email}
                            onChange={handleChange}
                            placeholder="Email"
+                           maxLength={128}
                        />
 
                       <Label htmlFor="phoneNumber">Phone Number: </Label>
@@ -191,6 +192,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             value={formData.firstName}
                             onChange={handleChange}
                             placeholder="First Name"
+                            maxLength={30}
                         />
                         
            
@@ -202,6 +204,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Last Name"
+                            maxLength={30}
                         />
 
                         
@@ -213,6 +216,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             value={formData.additionalInfo}
                             onChange={handleChange}
                             placeholder="Additional Private Information"
+                            maxLength={300}
                         />
 
                         <Label htmlFor="secNum">Secondary Number: </Label>
@@ -262,6 +266,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             placeholder="Primary Insurance Number"
                             id="primInsNum"
                             disabled={primInsNumDisabled}
+                            maxLength={50}
                         />
 
                         <Label htmlFor="secIns">Secondary Insurance: </Label>
@@ -297,6 +302,7 @@ function SetupPrivateDetailsForm({ update, getUser }) {
                             placeholder="Secondary Insurance Number"
                             id="secInsNum"
                             disabled={secInsNumDisabled}
+                            maxLength={50}
                         />                    
 
                     </FormGroup>

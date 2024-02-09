@@ -9,8 +9,6 @@
 
 .Nav {
     flex-direction: row;
-    /* min-width: 600px; */
-
   }
 
 nav {
@@ -20,9 +18,10 @@ nav {
   }
 
     .nav-item {
-    width: 100px;
+    /* min-width: 100px;  */
     text-align: center;
     flex-direction: row;
+
   }
   
   nav a {
@@ -50,26 +49,94 @@ nav {
   }
 
   .navbar-collapse {
-    display: flex; /* Default display mode */
+    display: flex;
+    flex-basis: 100px;
+    margin-top: 20px
   }
 
   /* * display flex on this container (interior styling) is causing this component to move */
 .navbar > .container-fluid {
-  align-items: start;
-  padding-top: 8px;
+  display: block;
+  text-align: right;
+  width: 100px;
+  float: right;
+  margin-left: auto;
 }
   
 
 .navbar {
   display: block;
+  --bs-navbar-padding-y: 0;
 }
 
 
 .collapse.show.navbar-collapse {
+  position: absolute;
+  right: 5px;
   justify-content: center;
   background:  #d1d2d4;
   border: 1px solid rgb(194, 192, 192);
   border-radius: 4px;
   padding: 5px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 #00000033;
+}
+
+.collapse.show.navbar-collapse{
+  display: block;
+  text-align: right;
+  font-size: 18px;
+  padding: 20px;
+}
+
+.navbar-toggler {
+
+  margin-top: 15px;
+
+}
+
+
+/* .collapse:not(.show) { */
+/* .collapse:not(.show) {
+  display: none;
+} */
+
+.collapse {
+  display: none;
+}
+
+  
+.New-Navbar {
+  background-color: #d1d2d4;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+  height: 70px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 10;
+}
+
+.New-Navbar-Body {
+  display: flex;
+  justify-content: flex-end;
+
+}
+
+
+.nav-link{
+  min-width: 100px;
+}
+
+a.active {
+  color: rgb(29, 27, 29);
+  font-weight: bold;
+}
+
+.NavLink {
+  text-decoration: none;
+  color: black;
+  min-width: 100px;
+}
+
+.NavLink:hover{
+  font-weight: bold;
 }

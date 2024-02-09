@@ -83,6 +83,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
                             onChange={handleChange}
                             placeholder="Derby Name"
                             required
+                            maxLength={35}
                         />
                   
                         <Label htmlFor="email">Email: </Label>
@@ -95,6 +96,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
                             placeholder="Email"
                             autoComplete="username"
                             required
+                            maxLength={128}
                         />
 
                         <Label htmlFor="password">Password: </Label>
@@ -107,6 +109,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
                             id="password"
                             autoComplete="new-password"
                             required
+                            maxLength={128}
                         />
                     </FormGroup>
                     <Button >Create Profile</Button>

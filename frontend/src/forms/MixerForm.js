@@ -160,6 +160,7 @@ const MixerForm = () => {
                            onChange={handleChange}
                            placeholder="Street Address"
                            required
+                           maxLength={40}
                        />
 
                     <Label htmlFor="city">City: </Label>
@@ -172,6 +173,7 @@ const MixerForm = () => {
                            onChange={handleChange}
                            placeholder="City"
                            required
+                           maxLength={28}
                        />
 
                       <Label htmlFor="state">State: </Label>
@@ -250,6 +252,7 @@ const MixerForm = () => {
                            onChange={handleChange}
                            placeholder="Zip Code"
                            required
+                           maxLength={5}
                        />      
               
                   
@@ -264,6 +267,7 @@ const MixerForm = () => {
                             onChange={handleChange}
                             placeholder="Theme or Title"
                             required
+                            maxLength={50}
                         />
 
                         <Label htmlFor="about">Description: </Label>
@@ -275,6 +279,7 @@ const MixerForm = () => {
                             onChange={handleChange}
                             placeholder="Additional information"
                             id="description"
+                            maxLength={300}
                         />
 
                         <Label htmlFor="level">Level: </Label>
@@ -396,6 +401,7 @@ const MixerForm = () => {
                               value={formDataMixer.floorType}
                               onChange={handleChange}
                               placeholder="Floor Type"
+                              maxLength={50}
                           />
 
                       <Label htmlFor="jerseyColors">Jersey Colors: </Label>
@@ -408,6 +414,7 @@ const MixerForm = () => {
                            onChange={handleChange}
                            placeholder="Both Teams Jersey Colors"
                            required
+                           maxLength={40}
                        />
 
                         <Label htmlFor="opposingTeam">Signup Link: </Label>
@@ -419,6 +426,7 @@ const MixerForm = () => {
                             onChange={handleChange}
                             placeholder="Signup Link"
                             id="signupLink"
+                            maxLength={40}
   
                         />
 

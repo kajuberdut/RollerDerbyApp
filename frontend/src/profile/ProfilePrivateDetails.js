@@ -103,9 +103,9 @@ function ProfilePrivateDetails({displayChatList}) {
                                 </div>
 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Name:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Name:
                                     </div>
-                                    {userState.firstName && userState.lastName && <MDBCardText style={{marginLeft: '150px', marginTop: '5px'}} tag="h4">{userState.firstName} {userState.lastName}</MDBCardText>}
+                                    {userState.firstName && userState.lastName && <MDBCardText style={{marginTop: '5px', overflow: 'hidden'}} tag="h4">{userState.firstName} {userState.lastName}</MDBCardText>}
                                     </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -114,9 +114,9 @@ function ProfilePrivateDetails({displayChatList}) {
                                 </div>
 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Email:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Email:
                                     </div>
-                                    <MDBCardText style={{marginLeft: '146px', marginTop: '5px', overflow: 'hidden'}} tag="h4">{userState.email} </MDBCardText>
+                                    <MDBCardText style={{ marginTop: '5px', overflow: 'hidden'}} tag="h4">{userState.email} </MDBCardText>
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -126,9 +126,9 @@ function ProfilePrivateDetails({displayChatList}) {
 
                                 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Phone #:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Phone #:
                                     </div>
-                                    {userState.phoneNumber && <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
+                                    {userState.phoneNumber && <MDBTypography style={{marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -137,11 +137,11 @@ function ProfilePrivateDetails({displayChatList}) {
                                 </div>
 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Insurances:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Insurances:
                                     </div>
 
                                     { insurances &&
-                                          <MDBTypography style={{marginLeft: '100px', marginTop: '5px'}} tag="h4">{insurances}</MDBTypography>
+                                          <MDBTypography style={{marginTop: '5px', width: '50%'}} tag="h4">{insurances}</MDBTypography>
                                     }
                                 </div>
 
@@ -151,11 +151,11 @@ function ProfilePrivateDetails({displayChatList}) {
                                 </div>
 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Additional Info:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Additional Info:
                                     </div>
 
                                     {userState.additionalInfo && 
-                                        <MDBTypography style={{marginLeft: '56px', marginTop: '5px'}} tag="h4">{userState.additionalInfo}</MDBTypography>
+                                        <MDBTypography style={{marginTop: '5px', width: '50%'}} tag="h4">{userState.additionalInfo}</MDBTypography>
                                     }
                                 </div>
 
@@ -165,11 +165,11 @@ function ProfilePrivateDetails({displayChatList}) {
                                 </div>
 
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Secondary #:
+                                    <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Alternate #:
                                     </div>
 
                                     {userState.secondaryNumber != null && 
-                                        <MDBTypography style={{marginLeft: '90px', marginTop: '5px'}} tag="h4">{userState.secondaryNumber}</MDBTypography>
+                                        <MDBTypography style={{marginTop: '5px'}} tag="h4">{userState.secondaryNumber}</MDBTypography>
                                     }
                                 </div>
 

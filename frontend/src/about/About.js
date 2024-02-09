@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./About.css"
 import { CardGroup, Card, CardBody, CardTitle } from "reactstrap";
+import Star from "../navBar/Star"
 
 /**  
  * Display about page
@@ -42,15 +43,17 @@ function About({ setIsAboutVis }) {
                             <h1>Work</h1>
                         </CardTitle>
                             <p style={{paddingBottom: '10px'}}>
-                                I created Block Party because I realized there was a need for better networking and communication within the roller derby community. My goal is to assist people coming together and playing one of the greatest games on earth.
+                                I created Block Party because I realized there was a need for better networking and communication within the roller derby community. My mission is to assist people coming together and playing one of the greatest sports on earth.
                             </p>
 
                             <p>
-                                I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate Block Party and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn or email.
+                                I am a passioniate software engineer who enjoys solving real world problems with creative solutions. I have spent the past 14 months developing and honing my skills in frontend web development, backend web development and databases. If you appreciate 
+                                <img src="/star.png" alt="Star Icon" style={{ margin: "0px 5px 5px 4px", height: '20px'}}/>
+                                <b>Block Party</b> and believe it has value, please consider sharing my name (Sophia Macik) and my LinkedIn with anyone you know that may be hiring. I am actively job searching. I would also love to connect with you via LinkedIn or email.
                             </p> 
 
                             <p style={{paddingBottom: '45px'}}>
-                            kicamSMM@gmail.com
+                            <b>kicamSMM@gmail.com</b>
                             </p> 
 
                             <div style={{position: 'absolute', marginTop: '100px', bottom: '15px', right: '20px'}}>
@@ -106,7 +109,7 @@ function About({ setIsAboutVis }) {
                             </p>
 
                             <p style={{marginBottom: '30px'}}>
-                            sockherblue@gmail.com 
+                                <b>sockherblue@gmail.com </b>
                             </p>
                             
                             <div style={{position: 'absolute', bottom: '15px', right: '20px'}}>

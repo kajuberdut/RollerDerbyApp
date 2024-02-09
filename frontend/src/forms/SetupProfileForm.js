@@ -171,6 +171,7 @@ function SetupProfileForm({ getUser }) {
                           onChange={handleChange}
                           placeholder="Derby Name"
                           required
+                          maxLength={35}
                       />
 
                       <Label htmlFor="image">Profile Image: </Label>
@@ -190,8 +191,7 @@ function SetupProfileForm({ getUser }) {
                            value={formData.city}
                            onChange={handleChange}
                            placeholder="City"
-                           // valid={valid}
-                           // invalid={invalid}
+                           maxLength={28}
                       />
 
                       <Label htmlFor="state">State: </Label>
@@ -268,6 +268,7 @@ function SetupProfileForm({ getUser }) {
                           onChange={handleChange}
                           placeholder="Write your story..."
                           id="about"
+                          maxLength={3000}
                       />
 
                       <Label htmlFor="primNum">Primary Number: </Label>
@@ -319,6 +320,7 @@ function SetupProfileForm({ getUser }) {
                             onChange={handleChange}
                             placeholder="Associated Leagues"
                             id="assocLeagues"
+                            maxLength={200}
                         />
 
                         <Label htmlFor="rulesets">Positions: </Label>
@@ -379,6 +381,7 @@ function SetupProfileForm({ getUser }) {
                             onChange={handleChange}
                             placeholder="Facebook Name"
                             id="facebookName"
+                            maxLength={50}
                         />      
                     </FormGroup>
                     <Button >Save Profile</Button>
