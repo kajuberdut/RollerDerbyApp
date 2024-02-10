@@ -117,7 +117,7 @@ function InviteComponent({ invite, getInvites, getTeams }) {
                 {team && team.name && <h6 style={{paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px'}}>Join Team {team.name}</h6> }
                 { sender && <p>Invited By: {sender.username}</p> }
             </div>  
-            <div style={{paddingRight: '10px', paddingLeft: '170px', paddingBottom: '10px'}}>
+            <div style={{paddingRight: '10px', paddingLeft: '170px', paddingBottom: '10px', margintop: '30px'}}>
                 <button onClick={handleClick} style={{height: '30px', borderRadius: '4px'}}>Accept
                 </button>    
             </div>     

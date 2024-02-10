@@ -218,7 +218,7 @@ import './TeamDetails.css'
                           }
 
                           { invites && user.userId == team.admin && 
-                            <MDBCardText style={{ marginLeft: '30px', marginTop: '5px' }} tag="h4">
+                            <MDBCardText style={{ marginLeft: '30px', marginTop: '5px', marginRight: '20px'}} tag="h4">
                               {invites.map((invite) => (
                                   <div style={{display: 'flex'}} key={"TeamDetails-Invites " + invite}>
                                   <p style={{paddingRight: '30px'}}>{invite}</p>
