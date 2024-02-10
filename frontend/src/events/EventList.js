@@ -40,6 +40,7 @@ function EventList() {
 
             let events =  await FastApi.getMixers();
             setEvents(events);
+            setIsLoading(false);
   
           } catch (errors) {
             return { success: false, errors };

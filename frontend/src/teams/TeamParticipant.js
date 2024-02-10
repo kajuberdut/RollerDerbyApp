@@ -216,10 +216,13 @@ import { useNavigate } from "react-router-dom";
                                           </div>
                                       </div>
       
-                                      <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Email:
-                                          </div>
-                                          <MDBCardText style={{marginLeft: '146px', marginTop: '5px'}} tag="h4">{participant.email} </MDBCardText>
+                                      <div className="ms-3 d-flex" style={{ marginTop: '0px', }}>
+                                            <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>
+                                                Email:
+                                            </div>
+                                            <MDBCardText style={{marginLeft: '146px', marginTop: '5px', overflow: 'hidden', marginRight: '10px'}} tag="h4">
+                                                {participant.email} 
+                                            </MDBCardText>
                                       </div>
       
                                       <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>

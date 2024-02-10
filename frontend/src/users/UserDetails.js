@@ -123,7 +123,7 @@ function UserDetails({ handleMessages, displayChatList }) {
               <MDBCard style={{minWidth: '612px', maxWidth: '1100px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '300px', marginTop: '15px'}}>
 
-                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}> 
+                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px', height: 'auto' }}> 
                   {image && <MDBCardImage src={image}
                       alt="Skater placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '250px', height: '330px', position: 'relative', backgroundColor: '#d1d2d4', border: '4px solid white', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}} /> 
                   } 
@@ -150,19 +150,19 @@ function UserDetails({ handleMessages, displayChatList }) {
                   <div className="d-flex justify-content-end text-center py-1" style={{marginTop: '2px'}}>
                     <div style={{ marginLeft: '600px'}}>
                       {derbyUser.level && <div>
-                        <MDBCardText className="mb-1 h5" style={{marginRight: '30px'}}>{derbyUser.level}</MDBCardText>
-                        <MDBCardText className="small text-muted mb-0"style={{marginRight: '30px'}}>level</MDBCardText>
+                        <MDBCardText className="mb-1 h5" style={{marginRight: '80px'}}>{derbyUser.level}</MDBCardText>
+                        <MDBCardText className="small text-muted mb-0"style={{marginRight: '80px'}}>level</MDBCardText>
                       </div>
                       }
                     </div>
                     { positions && <div>
                       <MDBCardText className="mb-1 h6">{positions}</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginRight: '30px', marginTop: '7px'}}>positions</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginRight: '10px', marginTop: '7px'}}>positions</MDBCardText>
                     </div> 
                     }
                      {rulesets &&  <div className="px-3">
                     <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>{rulesets}</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginLeght: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>known rulesets</MDBCardText>
                     </div>
                     }
                   </div>

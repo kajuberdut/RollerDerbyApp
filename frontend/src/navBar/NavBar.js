@@ -42,7 +42,7 @@ const toggle = () => setIsOpen(!isOpen);
             
             <div className="NavBar-Container">
 
-                { (width < 768) ? (
+                { (width < 1100) ? (
                     <>
                         { user && (   
                             <div> 
@@ -137,7 +137,7 @@ const toggle = () => setIsOpen(!isOpen);
                                         
                                         <div className="New-Navbar-Body" style={{maxWidth: '80%', justifyContent: "space-between", paddingTop: "25px"}} >
 
-                                            <NavLink to='/profile' className="NavLink" style={{whiteSpace: 'nowrap'}}>{ user.username }</NavLink>
+                                            <NavLink to='/profile' className="NavLink" style={{whiteSpace: 'nowrap', marginLeft: '10px', marginRight: '30px'}}>{ user.username }</NavLink>
                                             <NavLink to="/teams" className="NavLink" >Teams</NavLink>
                                             <NavLink to="/users" className="NavLink" >Users</NavLink>
                                             <NavLink to="/events/bouts" className="NavLink" >Bouts</NavLink>

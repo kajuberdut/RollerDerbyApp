@@ -111,13 +111,13 @@ function InviteComponent({ invite, getInvites, getTeams }) {
     /** Render the invite component */
       
     return (
-      <div key={"InviteComponent-" + invite.inviteId } className="InviteComponent" style={{width: '77%', height: '90px', borderRadius: '5px'}}> 
-        <div style={{display: 'flex', justifyContent: 'flex-end'}}> 
+      <div key={"InviteComponent-" + invite.inviteId } className="InviteComponent" style={{width: '77%', minHeight: '90px', height: 'auto', borderRadius: '5px'}}> 
+        <div style={{justifyContent: 'flex-end'}}> 
             <div>
                 {team && team.name && <h6 style={{paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px'}}>Join Team {team.name}</h6> }
                 { sender && <p>Invited By: {sender.username}</p> }
             </div>  
-            <div style={{paddingTop: '30px', paddingRight: '10px'}}>
+            <div style={{paddingRight: '10px', paddingLeft: '170px', paddingBottom: '10px'}}>
                 <button onClick={handleClick} style={{height: '30px', borderRadius: '4px'}}>Accept
                 </button>    
             </div>     

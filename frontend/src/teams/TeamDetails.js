@@ -135,10 +135,10 @@ import './TeamDetails.css'
       
       return (
 
-        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '10%', paddingTop: '100px', display: 'flex', maxWidth: '1400px'}} >
+        <div className="TeamDetails" style={{backgroundColor: 'transparent', padding: '5%', marginTop: '100px', display: 'flex', maxWidth: '1400px'}} >
           
           { team && user.userId == team.admin && 
-              <div style={{position: "absolute", top: '100px', left: '30%'}}>
+              <div style={{position: "absolute", top: '120px', left: '30%'}}>
                  <button type="button" className="TeamDetails-Button" onClick={handleCreateExcel}
                     style={{ height: '40px', width: '100px', fontSize: '14px', borderRadius: '4px'}}>
                     Create Excel
@@ -154,7 +154,7 @@ import './TeamDetails.css'
                </div>
               }
           
-          <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', padding: '0px', margin: '0px'}}>
+          <MDBContainer style={{paddingBottom: '100px', minWidth: '400px', width: '90%', padding: '0px', margin: '0px'}}>
                     <MDBRow style={{padding: '0px', margin: '0px'}}> 
                       <MDBCol>
                         <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
@@ -177,10 +177,10 @@ import './TeamDetails.css'
                               </div>
 
                               { team && user.userId == team.admin && 
-                                <MDBCardText style={{ marginTop: '40px', marginLeft: '30px'}} tag="h4">
+                                <MDBCardText style={{ marginTop: '40px', marginLeft: '30px', marginRight: '10px'}} tag="h4">
                                 {team.participants.map((participant) => (
-                                      <div style={{display: 'flex', justifyContent: 'space-between', paddingRight: '20px'}} key={"TeamDetails-Participant " + participant} >
-                                      <NavLink className="TeamDetails-NavLink" to={`/teams/${team.groupId}/${participant}`}><p style={{paddingRight: '30px'}}>{participant}</p></NavLink>
+                                      <div style={{justifyContent: 'space-between', paddingRight: '20px'}} key={"TeamDetails-Participant " + participant} >
+                                      <NavLink className="TeamDetails-NavLink" to={`/teams/${team.groupId}/${participant}`}><p style={{overflow: "hidden", maxWidth: '400px'}}>{participant}</p></NavLink>
                                       {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
                                       </div>
                                   ))}

@@ -73,7 +73,7 @@ function MixerDetail({ getAllChats }) {
     return (
 
     <section>
-        <div className="MixerDetails" style={{marginRight: '35%', marginTop: '150px'}} >
+        <div className="MixerDetails" style={{marginRight: '35%', marginTop: '150px', minWidth: '400px', marginLeft: '10%'}} >
           <MDBContainer>
             <MDBRow className="justify-content-center align-items-center h-100"> 
             <MDBCol lg="9" xl="10">
@@ -85,7 +85,7 @@ function MixerDetail({ getAllChats }) {
                       Join Chat 
                   </button>
 
-                  <div className="ms-3" style={{display: 'flex'}}>
+                  <div className="ms-3" style={{display: 'flex', overflow: 'hidden'}}>
                     <MDBCardText tag="h1" style={{ marginTop: '50px'}}>{mixer.theme}</MDBCardText>
                     <MDBCardText tag="h4" style={{position: 'absolute'}}>{mixer.date}</MDBCardText>
                   </div>

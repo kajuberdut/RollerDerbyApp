@@ -77,7 +77,7 @@ function BoutDetail({getAllChats}) {
     return (
 
       <section key={"BoutDetail" + bout.event_id}>
-        <div className="BoutDetails" style={{marginRight: '35%', marginTop: '150px'}} >
+        <div className="BoutDetails" style={{marginRight: '35%', marginTop: '150px', minWidth: '400px', marginLeft: '10%'}} >
           <MDBContainer>
             <MDBRow className="justify-content-center align-items-center h-100"> 
               <MDBCol lg="9" xl="10">
