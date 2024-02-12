@@ -16,8 +16,8 @@ router = APIRouter()
 # https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/
 
 
-# # * get /token 
-# # * login one user and provide token 
+# * get /token 
+# * login one user and provide token 
 
 @router.post("/token",  response_model=Token)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
@@ -39,8 +39,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# # * get /login/{user_id} 
-# # * returns one specific user by user_id
+# * get /login/{user_id} 
+# * returns one specific user by user_id
 
 @router.get("/login/{user_id}", response_model=UserDetailsPrivate)
 def get_user(token: Annotated[str, Depends(get_and_validate_current_user)], user_id: int, db: Session = Depends(get_db)):
@@ -54,17 +54,18 @@ def get_user(token: Annotated[str, Depends(get_and_validate_current_user)], user
     
     return user
 
-# # * get /refresh
-# # * login one user and provide token 
+# * get /refresh
+# * login one user and provide token 
+# * This is for building a refresh token  later
 
-@router.post("/refresh",  response_model=Token)
-async def refresh(refresh_token: Annotated[get_and_validate_current_user, Depends()], db: Session = Depends(get_db)):
+# @router.post("/refresh",  response_model=Token)
+# async def refresh(refresh_token: Annotated[get_and_validate_current_user, Depends()], db: Session = Depends(get_db)):
     
-    # todo validate access token I think? 
-    # todo validate refresh token 
+#     # todo validate access token I think? 
+#     # todo validate refresh token 
     
-    # todo provide new access token 
+#     # todo provide new access token 
     
-    new_access_token = create_access_token(data={"sub": str(user.user_id)})
+#     new_access_token = create_access_token(data={"sub": str(user.user_id)})
 
-    return {"access_token": new_access_token, "token_type": "bearer"}
+#     return {"access_token": new_access_token, "token_type": "bearer"}
