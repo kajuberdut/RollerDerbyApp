@@ -140,21 +140,21 @@ def test_update_user():
                     }
                 ],
                 "insurance": [
-                {
-                    "insuranceId": 0, 
-                    "type": "WFTDA",
-                    "insuranceNumber": "11111"
-                }, 
-                {
-                    "insuranceId": 0, 
-                    "type": "USARS",
-                    "insuranceNumber": "22222"
+                    {
+                        "insuranceId": 0, 
+                        "type": "WFTDA",
+                        "insuranceNumber": "11111"
+                    }, 
+                    {
+                        "insuranceId": 0, 
+                        "type": "USARS",
+                        "insuranceNumber": "22222"
+                    }
+                ],
+                "location": {
+                    "city": "Testing",
+                    "state": "WY"
                 }
-            ],
-            "location": {
-                "city": "Testing",
-                "state": "WY"
-            }
         }
     )
     assert response.status_code == 200, response.text
