@@ -196,7 +196,7 @@ import { useNavigate } from "react-router-dom";
                                 <MDBRow style={{padding: '0px', margin: '0px'}}> 
                                   <MDBCol>
                                     <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
-                                      <div>
+                                      <div style={{padding: '20px'}}>
                                         <h2>{teamParams.participant}</h2>
                                       </div>
       
@@ -206,9 +206,9 @@ import { useNavigate } from "react-router-dom";
                                       </div>
       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Legal Name:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Legal Name:
                                           </div>
-                                          {participant.firstName && participant.lastName && <MDBCardText style={{marginLeft: '85px', marginTop: '5px'}} tag="h4">{participant.firstName} {participant.lastName}</MDBCardText>}
+                                          {participant.firstName && participant.lastName && <MDBCardText style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{participant.firstName} {participant.lastName}</MDBCardText>}
                                           </div>
       
                                       <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -217,10 +217,10 @@ import { useNavigate } from "react-router-dom";
                                       </div>
       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px', }}>
-                                            <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>
+                                            <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>
                                                 Email:
                                             </div>
-                                            <MDBCardText style={{marginLeft: '146px', marginTop: '5px', overflow: 'hidden', marginRight: '10px'}} tag="h4">
+                                            <MDBCardText style={{marginTop: '5px', overflow: 'hidden', marginRight: '10px', width: '50%'}} tag="h4">
                                                 {participant.email} 
                                             </MDBCardText>
                                       </div>
@@ -231,9 +231,9 @@ import { useNavigate } from "react-router-dom";
                                       </div>
                                       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Phone #:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Phone #:
                                           </div>
-                                          {participant.phoneNumber && <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{phoneNumber}</MDBTypography>}
+                                          {participant.phoneNumber && <MDBTypography style={{ marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{phoneNumber}</MDBTypography>}
                                       </div>
       
                                       <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -242,11 +242,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Insurances:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Insurances:
                                           </div>
       
                                           { insurances &&
-                                                <MDBTypography style={{marginLeft: '95px', marginTop: '5px'}} tag="h4">{insurances}</MDBTypography>
+                                                <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{insurances}</MDBTypography>
                                           }
                                       </div>
       
@@ -256,11 +256,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
 
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Primary #:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Primary #:
                                           </div>
       
                                           {participant.primaryNumber != null && 
-                                              <MDBTypography style={{marginLeft: '105px', marginTop: '5px'}} tag="h4">{participant.primaryNumber}</MDBTypography>
+                                              <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{participant.primaryNumber}</MDBTypography>
                                           }
                                       </div>
       
@@ -270,11 +270,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Secondary #:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Secondary #:
                                           </div>
       
                                           {participant.secondaryNumber != null && 
-                                              <MDBTypography style={{marginLeft: '85px', marginTop: '5px'}} tag="h4">{participant.secondaryNumber}</MDBTypography>
+                                              <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{participant.secondaryNumber}</MDBTypography>
                                           }
                                       </div>
       
@@ -284,11 +284,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
       
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Additional Info:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Additional Info:
                                           </div>
       
                                           {participant.additionalInfo && 
-                                              <MDBTypography style={{marginLeft: '56px', marginTop: '5px'}} tag="h4">{participant.additionalInfo}</MDBTypography>
+                                              <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{participant.additionalInfo}</MDBTypography>
                                           }
                                       </div>
       
@@ -298,11 +298,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
 
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Facebook Name:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Facebook Name:
                                           </div>
       
                                           {participant.facebookName && 
-                                              <MDBTypography style={{marginLeft: '50px', marginTop: '5px'}} tag="h4">{participant.facebookName}</MDBTypography>
+                                              <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{participant.facebookName}</MDBTypography>
                                           }
                                       </div>
       
@@ -312,11 +312,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
 
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Positions:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Positions:
                                           </div>
       
                                           {positions && 
-                                              <MDBTypography style={{marginLeft: '120px', marginTop: '5px'}} tag="h4">{positions}</MDBTypography>
+                                              <MDBTypography style={{ marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{positions}</MDBTypography>
                                           }
                                       </div>
       
@@ -326,11 +326,11 @@ import { useNavigate } from "react-router-dom";
                                       </div>
 
                                       <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
-                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold'}}>Rulesets:
+                                          <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', width: '30%', minWidth: '130px'}}>Rulesets:
                                           </div>
       
                                           {rulesets && 
-                                              <MDBTypography style={{marginLeft: '126px', marginTop: '5px'}} tag="h4">{rulesets}</MDBTypography>
+                                              <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{rulesets}</MDBTypography>
                                           }
                                       </div>
       

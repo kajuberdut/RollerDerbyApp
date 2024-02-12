@@ -159,7 +159,7 @@ import './TeamDetails.css'
                       <MDBCol>
                         <MDBCard style={{minWidth: '400px', minHeight: '700px', marginTop: '50px', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)'}}>
                           <div>
-                            {team && <h2 style={{paddingTop: '20px'}}>{team.name}</h2> }
+                            {team && <h2 style={{padding: '20px 20px 20px 20px'}}>{team.name}</h2> }
                             
                             { team && user.userId === team.admin &&  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '250px' }}>  
                                                        
@@ -172,25 +172,40 @@ import './TeamDetails.css'
                               </div>
                           </div>
 
-                          <div className="ms-0 text-start" style={{ marginTop: '0px'}}>
+                          <div className="ms-0 text-start" style={{ marginTop: '0px' }}>
                               <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', paddingLeft: '15px'}}>Participants:
                               </div>
 
                               { team && user.userId == team.admin && 
                                 <MDBCardText style={{ marginTop: '40px', marginLeft: '30px', marginRight: '10px'}} tag="h4">
                                 {team.participants.map((participant) => (
-                                      <div style={{justifyContent: 'space-between', paddingRight: '20px'}} key={"TeamDetails-Participant " + participant} >
-                                      <NavLink className="TeamDetails-NavLink" to={`/teams/${team.groupId}/${participant}`}><p style={{overflow: "hidden", maxWidth: '400px'}}>{participant}</p></NavLink>
-                                      {user.username !== participant && <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px', left: '5px'}}>Remove</button> }
+                                      <div style={{display: 'flex', textAlign: 'right', justifyContent: 'space-between'}} key={"TeamDetails-Participant " + participant}>
+
+                                        <NavLink className="TeamDetails-NavLink" to={`/teams/${team.groupId}/${participant}`}>
+                                          <p style={{overflow: "hidden", maxWidth: '300px', paddingBottom: '5px', textAlign: 'left'}}>
+                                            {participant}
+                                          </p>
+                                        </NavLink>
+
+                                        {user.username !== participant && 
+                                          <div style={{width: '100px'}}>
+                                            <button onClick={() => handleClick(participant)} className="TeamDetails-Button" style={{width: '70px', fontSize: '14px', height: '30px', borderRadius: '4px'}}>
+                                              Remove
+                                            </button>
+                                          </div> 
+                                        }
+
                                       </div>
                                   ))}
                                 </MDBCardText>
                               }
 
-                                { team && user.userId !== team.admin && <MDBCardText style={{ marginLeft: '160px', marginTop: '5px' }} tag="h4">
+                                { team && user.userId !== team.admin && <MDBCardText style={{ marginLeft: '160px', marginTop: '5px', paddingRight: '5px' }} tag="h4">
                                 {team.participants.map((participant) => (
                                         
-                                      <p key={participant}>{participant}</p>
+                                      <p key={participant}>
+                                        {participant}
+                                      </p>
                                   ))}
                                 </MDBCardText>
                                 }
@@ -221,7 +236,9 @@ import './TeamDetails.css'
                             <MDBCardText style={{ marginLeft: '30px', marginTop: '5px', marginRight: '20px'}} tag="h4">
                               {invites.map((invite) => (
                                   <div style={{display: 'flex'}} key={"TeamDetails-Invites " + invite}>
-                                  <p style={{paddingRight: '30px'}}>{invite}</p>
+                                  <p style={{paddingRight: '30px', overflow: 'hidden', paddingBottom: '5px', textAlign: 'left'}}>
+                                    {invite}
+                                  </p>
                                 
                                   </div>
                               ))}

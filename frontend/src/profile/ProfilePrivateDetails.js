@@ -116,7 +116,7 @@ function ProfilePrivateDetails({displayChatList}) {
                                 <div className="ms-3 d-flex" style={{ marginTop: '0px'}}>
                                     <div className="m-0 text-start" style={{fontSize: '24px', fontFamily: 'initial', fontWeight: 'bold', minWidth: '130px', width: '30%'}}>Email:
                                     </div>
-                                    <MDBCardText style={{ marginTop: '5px', overflow: 'hidden'}} tag="h4">{userState.email} </MDBCardText>
+                                    <MDBCardText style={{ marginTop: '5px', overflow: 'hidden', width: '50%', textAlign: 'left', paddingBottom: '5px'}} tag="h4">{userState.email} </MDBCardText>
                                 </div>
 
                                 <div className="p-2 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -141,7 +141,7 @@ function ProfilePrivateDetails({displayChatList}) {
                                     </div>
 
                                     { insurances &&
-                                          <MDBTypography style={{marginTop: '5px', width: '50%'}} tag="h4">{insurances}</MDBTypography>
+                                          <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{insurances}</MDBTypography>
                                     }
                                 </div>
 
@@ -155,7 +155,7 @@ function ProfilePrivateDetails({displayChatList}) {
                                     </div>
 
                                     {userState.additionalInfo && 
-                                        <MDBTypography style={{marginTop: '5px', width: '50%'}} tag="h4">{userState.additionalInfo}</MDBTypography>
+                                        <MDBTypography style={{marginTop: '5px', width: '50%', textAlign: 'left'}} tag="h4">{userState.additionalInfo}</MDBTypography>
                                     }
                                 </div>
 

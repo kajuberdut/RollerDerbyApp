@@ -47,7 +47,8 @@ function App() {
     };
   }, [isLoginVis, isHomeVis, isSignupVis]);
 
-  /** Logout user if token is expired*/
+  /** Logout user if token is expired. Note that this only works if user refreshes*/
+  
 
   useEffect(() => {
     if(token) {
