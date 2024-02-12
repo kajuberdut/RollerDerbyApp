@@ -7,11 +7,10 @@ router = APIRouter(
     prefix="/locations",
     tags=["locations"],
     dependencies=[Depends(get_and_validate_current_user)],
-    # responses={404: {"description": "Not found"}}
 )
 
 
-# * get /locations/ 
+# * get /locations
 # * gets all locations 
 
 @router.get("/", response_model=list[Location])

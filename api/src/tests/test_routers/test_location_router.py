@@ -64,7 +64,7 @@ def test_get_locations():
     assert data[0] == {
                 "locationId": 1,
                 "city": "Testing", 
-                "state": "WY", 
+                "state": "WY"
             }
     
 def test_get_location():
@@ -78,8 +78,6 @@ def test_get_location():
     assert data == {
             "locationId": 1,
             "city": "Testing", 
-            "state": "WY", 
+            "state": "WY"
         }
-    
-     
     

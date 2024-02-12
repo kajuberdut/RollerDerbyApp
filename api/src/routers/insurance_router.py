@@ -21,7 +21,7 @@ def get_insurance(insurance_id:int, db: Session = Depends(get_db)):
 # * gets all user insurances
 # * debugging only 
 
-@router.get("/user", response_model=list[UserInsurance])
+@router.get("/user/all", response_model=list[UserInsurance])
 def get_users_insurance(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
      return crud_get_user_insurance(db, skip=skip, limit=limit)
