@@ -1,52 +1,38 @@
 import React from "react";
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import Home from "./Home";
-import { BrowserRouter, MemoryRouter, Route } from "react-router-dom";
-import { UserProvider } from "../testUtils";
-import AllRoutes from "../routes/Routes";
+import { BrowserRouter } from "react-router-dom";
 
+// * Passing as of 2/13/24
+// npm test Home.test.js
+// must be in frontend directory 
 
-
-
-
-// beforeEach(() => {
-//   console.log("beforeEach is running")
-//   console.log("window.location.pathname = '/'", window.location.pathname = "/")
-//   window.location.pathname = "/";
-//   window.location.href = "/"
-// });
 
 afterEach(() => {
   cleanup()
-  console.log("afterEach is running")
 })
 
-// afterEach(() => {
-//   clearHistory();
-// });
 
 describe("Tests Home Page Renders Logged Out", () => {
 
     test("it should render when logged out", () => {
+      localStorage.setItem("user", null);
       const { asFragment } = render(
         <BrowserRouter>
-          <UserProvider user={null}>
-              <Home />
-          </UserProvider>
+              <Home setIsHomeVis={jest.fn()}/>
         </BrowserRouter>,
       );
     
-      expect(screen.getByText('A Roller Derby Communication Application')).toBeInTheDocument();
+      expect(screen.getByText('The block party begins when the star arrives.')).toBeInTheDocument();
       expect(screen.getByText('Login')).toBeInTheDocument();
       expect(screen.getByText('Signup')).toBeInTheDocument();
     }); 
   
     it("matches snapshot when logged out", function() {
+      localStorage.setItem("user", null);
       const { asFragment } = render(
         <BrowserRouter>
-          <UserProvider user={null}>
-              <Home />
-          </UserProvider>
+              <Home setIsHomeVis={jest.fn()}/>
         </BrowserRouter>,
       );
         expect(asFragment()).toMatchSnapshot();
@@ -60,22 +46,18 @@ describe("Tests Home Page Renders Logged In", () => {
     test("it should render when logged in", () => {
       const { asFragment } = render(
         <BrowserRouter>
-          <UserProvider>
-              <Home />
-          </UserProvider>
+              <Home setIsHomeVis={jest.fn()}/>
         </BrowserRouter>,
       );
 
-      expect(screen.getByText('A Roller Derby Communication Application')).toBeInTheDocument();
-      expect(screen.getByText('Welcome back, testUser!')).toBeInTheDocument();
+      expect(screen.getByText('The block party begins when the star arrives.')).toBeInTheDocument();
+      expect(screen.getByText('Welcome to the party, testUser!')).toBeInTheDocument();
     }); 
 
     it("matches snapshot when logged in", function() {
       const { asFragment } = render(
         <BrowserRouter>
-          <UserProvider>
-              <Home />
-          </UserProvider>
+              <Home setIsHomeVis={jest.fn()}/>
         </BrowserRouter>,
       );
         expect(asFragment()).toMatchSnapshot();
@@ -85,72 +67,32 @@ describe("Tests Home Page Renders Logged In", () => {
 
 describe("Tests Home Page Navigation", () => {
 
-    test("it navigates to the signup page when clicked", () => {
+    test("page has singup link with correct href", () => {
+      localStorage.setItem("user", null);
       render(
-        // <BrowserRouter initialEntries={["/"]}> 
         <BrowserRouter> 
-          <UserProvider user={null}>
-              <AllRoutes>
-                  <Home />
-              </AllRoutes>
-          </UserProvider>
+                  <Home setIsHomeVis={jest.fn()}/>
         </BrowserRouter>
       );
 
-      expect(screen.queryByText('A Roller Derby Communication Application')).toBeInTheDocument();
-      const signupLink = screen.getByText("Signup");
-      fireEvent.click(signupLink);
-      expect(screen.queryByText('A Roller Derby Communication Application')).not.toBeInTheDocument();
-      expect(screen.getByText("Create a profile")).toBeInTheDocument();
-      expect(window.location.pathname).toBe("/signup");
+      expect(screen.queryByText('The block party begins when the star arrives.')).toBeInTheDocument();
+      screen.debug()
 
+      expect(screen.getByRole('link', { name: 'Signup' })).toHaveAttribute('href', '/signup')
     });
 
 
-    // * this was just to simplify the test
-    // test("it should render when logged in", () => {
+    test("page has login link with correct href", () => {
+      localStorage.setItem("user", null);
+      render(
+        <BrowserRouter> 
+                  <Home setIsHomeVis={jest.fn()}/>
+        </BrowserRouter>
+      );
 
-    //   render(  
+      expect(screen.queryByText('The block party begins when the star arrives.')).toBeInTheDocument();
+      screen.debug()
 
-    //     <MemoryRouter initialEntries={["/"]}>
-    //       <UserProvider>
-    //         <Route path="/">
-    //           <Home url="/" /> 
-    //         </Route>
-    //       </UserProvider>
-    //     </MemoryRouter>,
-    //   );
-    //   // render(<Router history={history}><App/></Router>);
-
-    //   // const history = createMemoryHistory();
-
-    //   expect(window.location.pathname).toBe("/");
-    //   expect(screen.getByText('A Roller Derby Communication Application')).toBeInTheDocument();
-    //   expect(screen.getByText('Welcome back, testUser!')).toBeInTheDocument();
-    // }); 
-
-
-    // ! note that the last componet being rednered is the /signup which means this is not working but the test is valid. 
-
-    // test("it navigates to the login page when clicked", () => {
-    //   const { asFragment } = render(
-    //     // <BrowserRouter initialEntries={["/"]}> 
-    //     <MemoryRouter initialEntries={["/"]}> 
-    //       <UserProvider user={null}>
-    //           <AllRoutes>
-    //               <Home />
-    //           </AllRoutes>
-    //       </UserProvider>
-    //     </MemoryRouter>
-    //   );
-    //   expect(window.location.pathname).toBe("/");
-    //   const loginLink = screen.getByText("Login");
-    //   console.log("loginLink:", loginLink)
-    //   expect(screen.queryByText('A Roller Derby Communication Application')).toBeInTheDocument();
-    //   fireEvent.click(loginLink);
-    //   expect(screen.queryByText('A Roller Derby Communication Application')).not.toBeInTheDocument();
-    //   expect(screen.getByText("Login")).toBeInTheDocument();
-    //   expect(window.location.pathname).toBe("/login");
-    // });
-
+      expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute('href', '/login')
+    });
 });

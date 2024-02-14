@@ -7,7 +7,7 @@ import "./Loading.css";
 
 function Loading() {
     return (
-        <div className="Loading"></div>
+        <div data-testid="loading-indicator" className="Loading"></div>
     );
   }
   

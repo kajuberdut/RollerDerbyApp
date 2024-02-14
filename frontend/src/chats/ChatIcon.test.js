@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import ChatIcon from './ChatIcon';
 
+// * Passing as of 2/13/24
 // npm test ChatIcon.test.js
 // must be in frontend directory 
 

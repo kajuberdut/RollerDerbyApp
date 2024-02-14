@@ -26,10 +26,6 @@ def test_login():
     
     assert response.status_code == 200, response.text
     data = response.json()
-    print('************************************')
-    print("data", data)
-    print('************************************')
-    
     assert data ==  {
                         "userId": 1, 
                         "username": "test_user1", 

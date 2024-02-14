@@ -4,26 +4,23 @@ exports[`Tests Home Page Renders Logged In matches snapshot when logged in 1`] =
 <DocumentFragment>
   <section
     class="col-md-8 Home"
+    style="min-width: 400px;"
   >
     <div
       class="card"
     >
       <div
-        class="card-title"
+        class="Home-Title card-title"
       >
         <h1>
-          A Roller Derby Communication Application
+          The block party begins when the star arrives.
         </h1>
       </div>
       <div
         class="card-body"
       >
-        <p
-          class="card-text"
-        />
-        -
         <h2>
-          Welcome back, testUser!
+          Welcome to the party, testUser!
         </h2>
       </div>
     </div>
@@ -35,24 +32,21 @@ exports[`Tests Home Page Renders Logged Out matches snapshot when logged out 1`]
 <DocumentFragment>
   <section
     class="col-md-8 Home"
+    style="min-width: 400px;"
   >
     <div
       class="card"
     >
       <div
-        class="card-title"
+        class="Home-Title card-title"
       >
         <h1>
-          A Roller Derby Communication Application
+          The block party begins when the star arrives.
         </h1>
       </div>
       <div
         class="card-body"
       >
-        <p
-          class="card-text"
-        />
-        -
         <p
           class="card-text"
         >

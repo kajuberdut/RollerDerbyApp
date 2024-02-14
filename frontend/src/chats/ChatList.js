@@ -19,7 +19,6 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
   async function getChats() {
 
     let chats = await getAllChats();
-    console.log("chats in chatList!!!!", chats)
 
     setIsLoading(false); 
   }

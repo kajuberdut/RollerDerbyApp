@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checks rendering of team form matches snapshot 1`] = `
+<DocumentFragment>
+  <section
+    class="col-md-4 TeamForm"
+    style="margin-top: 150px;"
+  >
+    <div
+      class="card"
+    >
+      <div
+        class="TeamForm-CardTitle card-title"
+      >
+        <h1>
+          Create a Team
+        </h1>
+        <p>
+          <b>
+            Note: When you create a team you become the admin of that team.
+          </b>
+        </p>
+      </div>
+      <div
+        class="card-body"
+      >
+        <form
+          class=""
+        >
+          <div
+            class="mb-3"
+          >
+            <label
+              class="form-label"
+              for="name"
+            >
+              Name: 
+            </label>
+            <input
+              class="form-control"
+              id="name"
+              maxlength="50"
+              name="name"
+              type="input"
+              value=""
+            />
+          </div>
+          <button
+            class="btn btn-secondary"
+          >
+            Add Team
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;

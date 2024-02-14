@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Chat Page Render matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="Messages card"
+    style="height: 500px; width: 350px; position: fixed; bottom: 0px; right: 480px; border-radius: 20px;"
+  >
+    <div
+      class="card-header"
+      style="height: 40px;"
+    >
+      <button
+        class="btn btn-secondary"
+        style="position: absolute; right: 4px; top: 0px; background-color: transparent; color: black; font-size: 18px;"
+      >
+        X
+      </button>
+    </div>
+    <div
+      class="card-body"
+    >
+      <div
+        style="overflow-y: auto; overflow-x: hidden; height: 300px;"
+      />
+    </div>
+    <div
+      class="card-footer"
+    >
+      <form
+        class=""
+        style="display: flex; justify-content: space-between; align-items: center; height: 50px;"
+      >
+        <textarea
+          class="form-control"
+          id="message"
+          name="message"
+          placeholder="Type a message.."
+          style="width: 240px; height: 40px; resize: none; bottom: 7px;"
+        />
+        <button
+          class="btn btn-secondary"
+          style="width: 63px; height: 36px;"
+          type="button"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="Messages card"
+    style="height: 500px; width: 350px; position: fixed; bottom: 0px; right: 480px; border-radius: 20px;"
+  >
+    <div
+      class="card-header"
+      style="height: 40px;"
+    >
+      <button
+        class="btn btn-secondary"
+        style="position: absolute; right: 4px; top: 0px; background-color: transparent; color: black; font-size: 18px;"
+      >
+        X
+      </button>
+    </div>
+    <div
+      class="card-body"
+    >
+      <div
+        style="overflow-y: auto; overflow-x: hidden; height: 300px;"
+      />
+    </div>
+    <div
+      class="card-footer"
+    >
+      <form
+        class=""
+        style="display: flex; justify-content: space-between; align-items: center; height: 50px;"
+      >
+        <textarea
+          class="form-control"
+          id="message"
+          name="message"
+          placeholder="Type a message.."
+          style="width: 240px; height: 40px; resize: none; bottom: 7px;"
+        />
+        <button
+          class="btn btn-secondary"
+          style="width: 63px; height: 36px;"
+          type="button"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;

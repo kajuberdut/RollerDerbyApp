@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import NotFound from './404';
 
+// * Passing as of 2/13/24
 // npm test 404.test.js
 // must be in frontend directory 
 

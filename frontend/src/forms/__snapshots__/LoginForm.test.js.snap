@@ -3,7 +3,8 @@
 exports[`checks rendering of login form matches snapshot 1`] = `
 <DocumentFragment>
   <section
-    class="col-md-4 LoginForm"
+    class="LoginForm"
+    style="min-width: 400px;"
   >
     <div
       class="card"
@@ -14,6 +15,7 @@ exports[`checks rendering of login form matches snapshot 1`] = `
         <h1>
           Login
         </h1>
+        <div />
       </div>
       <div
         class="card-body"
@@ -31,8 +33,10 @@ exports[`checks rendering of login form matches snapshot 1`] = `
               Derby Name: 
             </label>
             <input
+              autocomplete="username"
               class="form-control"
               id="username"
+              maxlength="35"
               name="username"
               placeholder="Derby Name"
               required=""
@@ -46,8 +50,10 @@ exports[`checks rendering of login form matches snapshot 1`] = `
               Password: 
             </label>
             <input
+              autocomplete="current-password"
               class="form-control"
               id="password"
+              maxlength="128"
               name="password"
               placeholder="Password"
               required=""

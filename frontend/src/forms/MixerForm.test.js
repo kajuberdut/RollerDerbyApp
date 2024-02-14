@@ -1,9 +1,9 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import MixerForm from './MixerForm';
-import { UserProvider } from "../testUtils";
 import { BrowserRouter } from "react-router-dom";
 import '../setupTests.js';
 
+// * Passing as of 2/13/24
 // npm test MixerForm.test.js
 // must be in frontend directory 
 
@@ -17,9 +17,7 @@ describe("checks rendering of mixer form", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
                 <MixerForm />
-            </UserProvider>
         </BrowserRouter>);
     });
 
@@ -27,9 +25,7 @@ describe("checks rendering of mixer form", () => {
     test('matches snapshot', function() {
     const { asFragment } = render(
         <BrowserRouter>
-            <UserProvider>
                 <MixerForm />
-            </UserProvider>
         </BrowserRouter>
     );
     expect(asFragment()).toMatchSnapshot(); 
@@ -43,9 +39,7 @@ describe("asserts mixer form text", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
                 <MixerForm />
-            </UserProvider>
         </BrowserRouter>
     )
 

@@ -70,18 +70,3 @@ def get_messages_by_chat_id(chat_id: int, skip: int = 0, limit: int = 100, db: S
 
     return db_messages
 
-
-# ! this was replaced to get the chats but return an ordered list 
-# @router.get("/{user_id}", response_model=list[ChatObject])
-# def get_chats(user_id: int, db: Session = Depends(get_db)):
-#     print("hitting /chats in chat_router.py")
-    
-#     groups_db = crud_get_groups_by_participant(db=db, user_id=user_id)
-#     print("groups db in chat_router.py:", groups_db)
-#     # for group_id in groups_db.group_id
-#     group_ids = [group.group_id for group in groups_db]
-#     print("group_ids in chat_router.py:", group_ids)
-    
-#     chats_db = crud_get_chats_by_group_ids(db=db, group_ids=group_ids)
-
-#     return chats_db

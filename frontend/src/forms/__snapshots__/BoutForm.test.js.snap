@@ -35,6 +35,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               class="form-control"
               id="date"
               name="date"
+              required=""
               type="date"
               value=""
             />
@@ -64,6 +65,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               id="timeZone"
               name="timeZone"
               placeholder="Time Zone"
+              required=""
             >
               <option
                 value="Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)"
@@ -105,8 +107,10 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control"
               id="streetAddress"
+              maxlength="40"
               name="streetAddress"
               placeholder="Street Address"
+              required=""
               type="text"
               value=""
             />
@@ -119,8 +123,10 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control"
               id="city"
+              maxlength="28"
               name="city"
               placeholder="City"
+              required=""
               type="text"
               value=""
             />
@@ -136,6 +142,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               maxlength="2"
               name="state"
               placeholder="State"
+              required=""
             >
               <option
                 value=""
@@ -407,8 +414,10 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control"
               id="zipCode"
+              maxlength="5"
               name="zipCode"
               placeholder="Zip Code"
+              required=""
               type="number"
               value=""
             />
@@ -416,13 +425,15 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               class="form-label"
               for="theme"
             >
-              Theme: 
+              Theme or Title: 
             </label>
             <input
               class="form-control"
               id="theme"
+              maxlength="50"
               name="theme"
               placeholder="Theme"
+              required=""
               type="text"
               value=""
             />
@@ -435,6 +446,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <textarea
               class="form-control form-control"
               id="description"
+              maxlength="300"
               name="description"
               placeholder="Additional information"
             />
@@ -449,6 +461,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               id="level"
               name="level"
               placeholder="level"
+              required=""
             >
               <option
                 value="All Levels"
@@ -502,6 +515,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               id="coEd"
               name="coEd"
               placeholder="coEd"
+              required=""
             >
               <option
                 value="False"
@@ -525,6 +539,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               id="ruleset"
               name="ruleset"
               placeholder="Ruleset"
+              required=""
             >
               <option
                 value="WFTDA"
@@ -556,6 +571,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control"
               id="floorType"
+              maxlength="50"
               name="floorType"
               placeholder="Floor Type"
               type="text"
@@ -570,6 +586,7 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control"
               id="jerseyColors"
+              maxlength="50"
               name="jerseyColors"
               placeholder="Both Teams Jersey Colors"
               type="text"
@@ -584,8 +601,10 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control form-control"
               id="OpposingTeam"
+              maxlength="40"
               name="opposingTeam"
               placeholder="Opposing Team"
+              required=""
               type="text"
               value=""
             />
@@ -598,8 +617,10 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
             <input
               class="form-control form-control"
               id="team"
+              maxlength="40"
               name="team"
               placeholder="team"
+              required=""
               type="text"
               value=""
             />

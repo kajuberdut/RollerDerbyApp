@@ -1,23 +1,23 @@
 import { render, screen, cleanup } from '@testing-library/react';
-import BoutForm from './BoutForm';
+import TeamForm from './TeamForm';
 import { BrowserRouter } from "react-router-dom";
 import '../setupTests.js';
 
 // * Passing as of 2/13/24
-// npm test BoutForm.test.js
+// npm test TeamForm.test.js
 // must be in frontend directory 
 
 afterEach(() => {
     cleanup()
   })
   
-describe("checks rendering of bout form", () => {  
+describe("checks rendering of team form", () => {  
 
-    test('renders bout form page', () => {
+    test('renders team form page', () => {
 
     render(
         <BrowserRouter>
-                <BoutForm />
+                <TeamForm />
         </BrowserRouter>);
     });
 
@@ -25,7 +25,7 @@ describe("checks rendering of bout form", () => {
     test('matches snapshot', function() {
     const { asFragment } = render(
         <BrowserRouter>
-                <BoutForm />
+                <TeamForm />
         </BrowserRouter>
     );
     expect(asFragment()).toMatchSnapshot(); 
@@ -33,17 +33,17 @@ describe("checks rendering of bout form", () => {
 
 });
 
-describe("asserts bout form text", () => {  
+describe("asserts team form text", () => {  
 
-    test('renders bout form page', () => {
+    test('renders team form page', () => {
 
     render(
         <BrowserRouter>
-                <BoutForm />
+                <TeamForm />
         </BrowserRouter>
     )
 
-        const text = screen.getByText('Create a Bout');
+        const text = screen.getByText('Create a Team');
         expect(text).toBeInTheDocument();
     });
 

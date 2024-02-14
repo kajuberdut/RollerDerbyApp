@@ -1,12 +1,11 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import SignupForm from './SignupForm';
-import { UserProvider } from "../testUtils";
 import { BrowserRouter } from "react-router-dom";
 import '../setupTests.js';
 
-// npm test LoginForm.test.js
+// * Passing as of 2/13/24
+// npm test SignupForm.test.js
 // must be in frontend directory 
-// ? note that this should be navigating away if the user is present. Not sure what the deal is. 
 
 afterEach(() => {
     cleanup()
@@ -18,9 +17,7 @@ describe("checks rendering of signup form", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
-                <SignupForm />
-            </UserProvider>
+                <SignupForm setIsSignupVis={jest.fn()} />
         </BrowserRouter>);
     });
 
@@ -28,9 +25,7 @@ describe("checks rendering of signup form", () => {
     test('matches snapshot', function() {
     const { asFragment } = render(
         <BrowserRouter>
-            <UserProvider>
-                <SignupForm />
-            </UserProvider>
+                <SignupForm setIsSignupVis={jest.fn()} />
         </BrowserRouter>
     );
     expect(asFragment()).toMatchSnapshot(); 
@@ -44,9 +39,7 @@ describe("asserts signup form text", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
-                <SignupForm />
-            </UserProvider>
+                <SignupForm setIsSignupVis={jest.fn()} />
         </BrowserRouter>
     )
 

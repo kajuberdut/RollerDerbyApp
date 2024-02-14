@@ -8,6 +8,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
   >
     <div
       class="card"
+      style="min-width: 400px;"
     >
       <div
         class="MixerForm-CardTitle card-title"
@@ -35,6 +36,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               class="form-control"
               id="date"
               name="date"
+              required=""
               type="date"
               value=""
             />
@@ -64,6 +66,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               id="timeZone"
               name="timeZone"
               placeholder="Time Zone"
+              required=""
             >
               <option
                 value="Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)"
@@ -105,8 +108,10 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control"
               id="streetAddress"
+              maxlength="40"
               name="streetAddress"
               placeholder="Street Address"
+              required=""
               type="text"
               value=""
             />
@@ -119,8 +124,10 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control"
               id="city"
+              maxlength="28"
               name="city"
               placeholder="City"
+              required=""
               type="text"
               value=""
             />
@@ -407,22 +414,26 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control"
               id="zipCode"
+              maxlength="5"
               name="zipCode"
               placeholder="Zip Code"
+              required=""
               type="number"
               value=""
             />
             <label
               class="form-label"
-              for="firstName"
+              for="theme"
             >
               Theme: 
             </label>
             <input
               class="form-control"
               id="theme"
+              maxlength="50"
               name="theme"
-              placeholder="Theme"
+              placeholder="Theme or Title"
+              required=""
               type="text"
               value=""
             />
@@ -435,6 +446,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <textarea
               class="form-control form-control"
               id="description"
+              maxlength="300"
               name="description"
               placeholder="Additional information"
             />
@@ -449,6 +461,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               id="level"
               name="level"
               placeholder="level"
+              required=""
             >
               <option
                 value="All Levels"
@@ -502,6 +515,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               id="coEd"
               name="coEd"
               placeholder="coEd"
+              required=""
             >
               <option
                 value="False"
@@ -525,6 +539,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               id="ruleset"
               name="ruleset"
               placeholder="Ruleset"
+              required=""
             >
               <option
                 value="WFTDA"
@@ -556,6 +571,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control"
               id="floorType"
+              maxlength="50"
               name="floorType"
               placeholder="Floor Type"
               type="text"
@@ -570,8 +586,10 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control"
               id="jerseyColors"
+              maxlength="40"
               name="jerseyColors"
               placeholder="Both Teams Jersey Colors"
+              required=""
               type="text"
               value=""
             />
@@ -584,6 +602,7 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             <input
               class="form-control form-control"
               id="signupLink"
+              maxlength="40"
               name="signupLink"
               placeholder="Signup Link"
               type="text"

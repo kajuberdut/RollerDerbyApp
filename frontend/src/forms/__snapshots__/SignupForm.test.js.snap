@@ -4,6 +4,7 @@ exports[`checks rendering of signup form matches snapshot 1`] = `
 <DocumentFragment>
   <section
     class="col-md-4 SignupForm"
+    style="min-width: 400px;"
   >
     <div
       class="card"
@@ -14,6 +15,11 @@ exports[`checks rendering of signup form matches snapshot 1`] = `
         <h1>
           Create a profile
         </h1>
+        <div>
+          <div
+            style="color: red;"
+          />
+        </div>
       </div>
       <div
         class="card-body"
@@ -33,6 +39,7 @@ exports[`checks rendering of signup form matches snapshot 1`] = `
             <input
               class="form-control"
               id="username"
+              maxlength="35"
               name="username"
               placeholder="Derby Name"
               required=""
@@ -46,8 +53,10 @@ exports[`checks rendering of signup form matches snapshot 1`] = `
               Email: 
             </label>
             <input
+              autocomplete="username"
               class="form-control"
               id="email"
+              maxlength="128"
               name="email"
               placeholder="Email"
               required=""
@@ -61,10 +70,13 @@ exports[`checks rendering of signup form matches snapshot 1`] = `
               Password: 
             </label>
             <input
+              autocomplete="new-password"
               class="form-control"
               id="password"
+              maxlength="128"
               name="password"
               placeholder="Password"
+              required=""
               type="password"
               value=""
             />

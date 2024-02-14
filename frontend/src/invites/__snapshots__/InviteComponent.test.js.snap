@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests Invite Component Page Renders matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="InviteComponent"
+    style="width: 77%; min-height: 90px; height: auto; border-radius: 5px;"
+  >
+    <div
+      style="justify-content: flex-end;"
+    >
+      <div />
+      <div
+        style="padding-right: 10px; padding-left: 170px; padding-bottom: 10px;"
+      >
+        <button
+          style="height: 30px; border-radius: 4px;"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

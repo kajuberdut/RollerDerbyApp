@@ -1,10 +1,9 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import SetupPrivateDetailsForm from './SetupPrivateDetailsForm.js';
-import { UserProvider } from "../testUtils";
 import { BrowserRouter } from "react-router-dom";
 import '../setupTests.js';
 
-// ! need to mock local storage for user I think
+// * Passing as of 2/13/24
 // npm test BoutForm.test.js
 // must be in frontend directory 
 
@@ -18,9 +17,7 @@ describe("checks rendering of private details form", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
                 <SetupPrivateDetailsForm/>
-            </UserProvider>
         </BrowserRouter>);
     });
 
@@ -28,9 +25,7 @@ describe("checks rendering of private details form", () => {
     test('matches snapshot', function() {
     const { asFragment } = render(
         <BrowserRouter>
-            <UserProvider>
                 <SetupPrivateDetailsForm />
-            </UserProvider>
         </BrowserRouter>
     );
     expect(asFragment()).toMatchSnapshot(); 
@@ -44,9 +39,7 @@ describe("asserts bout form text", () => {
 
     render(
         <BrowserRouter>
-            <UserProvider>
                 <SetupPrivateDetailsForm />
-            </UserProvider>
         </BrowserRouter>
     )
 

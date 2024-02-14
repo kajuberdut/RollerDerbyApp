@@ -5,10 +5,32 @@
 import '@testing-library/jest-dom';
 
 
-// https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests
-const localStorageMock = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    clear: jest.fn()
-  };
-  global.localStorage = localStorageMock;
+global.localStorage = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+};
+
+const user = {
+  userId: 1,
+  username: "testUser",
+  email: "testuser@gmail.com",
+  facebookName: "facebook test user",
+  about: "This is my story...",
+  primaryNumber: "01",
+  level: "A",
+  ruleset: [],
+  position: [],
+  insurance: [],
+  locationId: null,
+  associatedLeagues: "Testing League",
+  phoneNumber: "1111111111",
+  firstName: "Jane",
+  lastName: "Doe",
+  additionalInfo: "Epi pen in bag.",
+  secondaryNumber: "02"
+};
+
+beforeEach(() => {
+  localStorage.setItem("user", JSON.stringify(user));
+});
+
