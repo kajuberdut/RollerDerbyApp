@@ -17,6 +17,8 @@ function MixerDetail({ getAllChats }) {
     const [mixer, setMixer ] = useState([]);
     const [address, setAddress ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [connected, setConnected] = useState(null)
+    const [error, setError] = useState(null)
 
     /** Retrieve user from local storage*/
 
@@ -58,15 +60,24 @@ function MixerDetail({ getAllChats }) {
     async function handleClick(e) {
       e.preventDefault(); 
 
-      try {
-        getAllChats();
+      //   /** Retrieve user from local storage  */ 
+      const user = JSON.parse(localStorage.getItem('user'));
 
-        let data = {userId: `${user.userId}`, groupId: `${mixer.groupId}`}
-        await FastApi.addUserToGroup(data); 
+      let data = {userId: `${user.userId}`, groupId: `${mixer.groupId}`}
+
+      try {     
+        let result = await FastApi.addUserToGroup(data); 
+
+        if(result) {
+          getAllChats();
+        }
+
+        setConnected("Connected. Check your chats.")
+        return { success: true};
 
       } catch(errors) {
-
-        return { success: false, errors };
+        setError("Unable to connect to chat.")
+        return {success: false, description: "Unable to connect to chat."};
       }
     }
 
@@ -84,6 +95,13 @@ function MixerDetail({ getAllChats }) {
                       style={{zIndex: 1, height: '40px', backgroundColor: '#d1d2d4', position: 'absolute', right: '20px', marginTop: '10px', fontSize: '15px'}}>
                       Join Chat 
                   </button>
+
+                  {(error || connected) && (
+                      <div style={{ color: error ? 'red' : 'green',fontSize: '14px', position: 'absolute',right: '10px', top: '40px', marginTop: '10px'}}
+                      >
+                        {error || connected}
+                      </div>
+                    )}
 
                   <div className="ms-3" style={{display: 'flex', overflow: 'hidden'}}>
                     <MDBCardText tag="h1" style={{ marginTop: '50px'}}>{mixer.theme}</MDBCardText>

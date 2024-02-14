@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
 
-describe('BoutDetail Component', () => {
+describe('BoutDetails Component', () => {
   const mockBout = {
       eventId: 1,
       type: "bout",
