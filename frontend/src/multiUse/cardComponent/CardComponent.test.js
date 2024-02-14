@@ -1,34 +1,42 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import CardComponent from './CardComponent.js';
 import { BrowserRouter } from "react-router-dom";
-import '../../setupTests.js';
+import FastApi from '../../Api'; 
 
-// ! Last test isnt passing currently
+// * Passing as of 2/14/24
 // npm test CardComponent.test.js
 // must be in frontend directory 
 
-afterEach(() => {
-    cleanup()
-  })
+// Mock FastApi methods
+jest.mock('../../Api', () => ({
+    getAddress: jest.fn()
+  }));
+
+// Mock useParams
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'), 
+    useParams: jest.fn(),
+  }));
 
   let bout = {
-        "eventId": 1,
-        "type": "bout",
-        "date": "2024-01-25",
-        "addressId": 1,
-        "time": "19:10",
-        "timeZone": "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)",
-        "theme": "Theme Test 1",
-        "description": "Come have a blast and skate with us. It will be the ultimate skate party! ",
-        "level": "All Levels",
-        "coEd": false,
-        "ruleset": "WFTDA",
-        "floorType": "Slick",
-        "jerseyColors": "Black and White",
-        "groupId": 2,
-        "chatId": 2,
-        "opposingTeam": "Boulder",
-        "team": "Cheyenne Capidolls"
+    
+        eventId: 1,
+        type: "bout",
+        date: "2024-01-25",
+        addressId: 1,
+        time: "19:10",
+        timeZone: "Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)",
+        theme: "Theme Test 1",
+        description: "Come have a blast and skate with us. It will be the ultimate skate party! ",
+        level: "All Levels",
+        coEd: false,
+        ruleset: "WFTDA",
+        floorType: "Slick",
+        jerseyColors: "Black and White",
+        groupId: 2,
+        chatId: 2,
+        opposingTeam: "Boulder",
+        team: "Cheyenne Capidolls"
   }
   
 describe("checks rendering of card component", () => {  
@@ -51,23 +59,56 @@ describe("checks rendering of card component", () => {
         expect(asFragment()).toMatchSnapshot(); 
     })
 
+    screen.debug()
+
 });
 
-// describe("asserts card component text", () => {  
+describe("asserts card component text", () => {  
 
-//     test('renders card theme on page', () => {
+    const mockAddress = {
+        streetAddress: '123 Main St',
+        city: 'Anytown',
+        state: 'State',
+        zipCode: '12345',
+      };
 
-//         render(
-//             <BrowserRouter>
-//                     <CardComponent bout={bout} />
-//             </BrowserRouter>
-//         )
+      beforeEach(() => {
+        FastApi.getAddress.mockResolvedValue(mockAddress);
+      });
+    
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
+    
 
-//         screen.debug()
+    test('renders card theme on page', async () => {
 
+        render(
+            <BrowserRouter>
+                    <CardComponent bout={bout} mixer={{}} />
+            </BrowserRouter>
+        )
 
-//         const text = screen.getByText('Theme Test 1');
-//         expect(text).toBeInTheDocument();
-//     });
+        await waitFor(() => {
+            expect(screen.getByText('Theme Test 1')).toBeInTheDocument();
+            expect(screen.getByText('2024-01-25')).toBeInTheDocument();
+            
+        })
 
-// });
+    });
+
+    test('renders address on page', async () => {
+
+        render(
+            <BrowserRouter>
+                    <CardComponent bout={bout} mixer={{}} />
+            </BrowserRouter>
+        )
+
+        await waitFor(() => {
+            expect(screen.getByText('Anytown, State')).toBeInTheDocument();
+            expect(screen.getByText('Come have a blast and skate with us. It will be the ultimate skate party!')).toBeInTheDocument();
+        })
+    });
+
+});

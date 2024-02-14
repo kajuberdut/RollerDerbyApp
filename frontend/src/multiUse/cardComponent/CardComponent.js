@@ -15,6 +15,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
     const [address, setAddress ] = useState([]); 
     const [isLoading, setIsLoading] = useState(true);
+    console.log("bout", bout)
 
     let info = bout !== undefined ? bout : mixer;
     let type = bout !== undefined ? "bouts" : "mixers";

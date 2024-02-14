@@ -6,7 +6,7 @@ import FastApi from '../Api';
 import { useParams } from 'react-router-dom';
 
 
-//  Passing as of 2/13/24
+// * Passing as of 2/13/24
 // npm test MixerDetails.test.js
 // must be in frontend directory 
 

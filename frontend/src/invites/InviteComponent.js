@@ -13,7 +13,7 @@ function InviteComponent({ invite, getInvites, getTeams }) {
 
     const [ sender, setSender ] = useState();
     const [ team, setTeam ] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [ isLoading, setIsLoading ] = useState(true);
 
     /** Retrieve user from local storage*/
 
@@ -26,6 +26,7 @@ function InviteComponent({ invite, getInvites, getTeams }) {
         try {
 
           let team = await FastApi.getGroup(invite.teamId);
+          console.log("team get group!!!", team)
           setTeam(team);
         } catch (errors) {
 
@@ -38,7 +39,8 @@ function InviteComponent({ invite, getInvites, getTeams }) {
     async function getSender() {
 
         try {
-            let user = await FastApi.getUserById(invite.senderId);
+            let user = await FastApi.getUsernameById(invite.senderId);
+            console.log("getUserById", user)
             setSender(user);
         } catch (errors) {
 
@@ -114,7 +116,7 @@ function InviteComponent({ invite, getInvites, getTeams }) {
       <div key={"InviteComponent-" + invite.inviteId } className="InviteComponent" style={{width: '77%', minHeight: '90px', height: 'auto', borderRadius: '5px'}}> 
         <div style={{justifyContent: 'flex-end'}}> 
             <div>
-                {team && team.name && <h6 style={{paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px'}}>Join Team {team.name}</h6> }
+                {team && team.name && <h6 style={{paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px'}}>Join Team: {team.name}</h6> }
                 { sender && <p>Invited By: {sender.username}</p> }
             </div>  
             <div style={{paddingRight: '10px', paddingLeft: '170px', paddingBottom: '10px', margintop: '30px'}}>
