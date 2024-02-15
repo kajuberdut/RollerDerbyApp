@@ -58,7 +58,7 @@ import FastApi from "../Api";
                 alt="Skater placeholder image" className="img-thumbnail" style={{ width: '60px', borderRadius: '50%', backgroundColor: '#d1d2d4', border: '2px solid black', padding: '0px'}}/> 
               } */}
             </div>           
-            <h4 style={{paddingTop: '30px', paddingRight: '20px', overflow: 'hidden'}}>{indUser.username}</h4>
+            <h4 style={{paddingTop: '30px', paddingRight: '20px', overflow: 'hidden', maxWidth: '70%', paddingBottom: '5px'}}>{indUser.username}</h4>
             {pathname !== "/users" && <div style={{paddingLeft: '60%', paddingTop: '60px', position: 'absolute'}}> <button onClick={handleClick} style={{borderRadius: '5px', height: '33px', top: '10px', right: '20px' }}>Invite</button> </div>}
         </div>
         </NavLink>

@@ -51,8 +51,7 @@ class FastApi {
   /** Post user by data*/
 
   static async signup(data) { 
-    console.log("hitting signup")
-    
+      
     data["user_id"] = 0
     let res = await this.request('users', data, "post");
     console.log("result signup", res)
@@ -62,6 +61,7 @@ class FastApi {
   /** Post login user by data*/
 
   static async login(data) { 
+    
       let formData = new FormData();
       formData.append("username", data.username)
       formData.append("password", data.password)
