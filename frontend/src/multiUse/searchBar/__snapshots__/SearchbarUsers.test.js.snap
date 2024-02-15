@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="SearchBarUsers"
+  >
+    <div
+      class="SearchBarUsers-Username"
+    >
+      <input
+        class="SearchBarInput form-control"
+        id="searchbar-username"
+        name="username"
+        placeholder="Derby Name"
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
