@@ -1,6 +1,8 @@
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from .. import models
 from ..schemas.event_schema import * 
+import datetime
+from sqlalchemy.sql import func
 
 # * Create, Read, Update, Delete Events in Database 
 
@@ -32,7 +34,6 @@ def crud_get_events_by_type_date_location(db: Session, type: str, city: str = No
  
 def crud_create_bout(db: Session, bout: Bout):
     """Create a specific bout."""
-    print("^^^^ BOUT in crud.py ^^^^^", bout)
     
     db_bout = models.Bout(type=bout.type, date=bout.date, address_id=bout.address_id, time=bout.time, time_zone=bout.time_zone, theme=bout.theme, description=bout.description, level=bout.level, co_ed=bout.co_ed, ruleset=bout.ruleset, floor_type=bout.floor_type, jersey_colors=bout.jersey_colors, opposing_team=bout.opposing_team, team=bout.team, group_id=bout.group_id, chat_id=bout.chat_id)
        
@@ -63,12 +64,19 @@ def crud_get_mixer_by_id(db: Session, event_id: int):
     return db.query(models.Mixer).filter(models.Mixer.event_id == event_id).first()
 
 def crud_get_bouts(db: Session, skip: int = 0, limit: int = 100):
-    """Retrieve all bouts."""
-    return db.query(models.Bout).order_by(models.Bout.date).offset(skip).limit(limit).all()
+    """Retrieve all future bouts."""
+    today = datetime.datetime.now().date()
+    today_str = today.strftime("%Y-%m-%d")
+    
+    return db.query(models.Bout).filter(func.text(models.Bout.date) > today_str).order_by(models.Bout.date).offset(skip).limit(limit).all()
 
 def crud_get_mixers(db: Session, skip: int = 0, limit: int = 100):
-    """Retrieve all mixers."""
-    return db.query(models.Mixer).order_by(models.Mixer.date).offset(skip).limit(limit).all()
+    """Retrieve all future mixers."""
+   
+    today = datetime.datetime.now().date()
+    today_str = today.strftime("%Y-%m-%d")
+    
+    return db.query(models.Mixer).filter(func.text(models.Mixer.date) > today_str).order_by(models.Mixer.date).offset(skip).limit(limit).all()
 
 def crud_get_bout_by_address_date_time_team_opposing_team(db: Session, bout: Bout): 
     """Retrieve one bout by address, date, time and opposing team."""

@@ -171,7 +171,7 @@ class Address(SQLAlchemyBase):
     __tablename__ = "address"
 
     address_id = Column(Integer, primary_key=True)
-    name: Column(String, nullable=False)
+    # name: Column(String, nullable=False)
     street_address = Column(String, nullable=False)
     city = Column(String, nullable=False)
     state = Column(String, nullable=False)
