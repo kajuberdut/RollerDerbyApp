@@ -24,6 +24,7 @@ function UserList() {
 
     try {
       let users = await FastApi.getUsers();
+      console.log("users:", users)
       setUsers(users)
       setIsLoading(false)
     } catch (errors) {

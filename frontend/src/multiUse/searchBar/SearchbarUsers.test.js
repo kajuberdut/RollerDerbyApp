@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import SearchBarUsers from './SearchBarUsers';
 
+// * Passing as of 2/14/24
 // npm test SearchBarUsers.test.js
 // must be in frontend directory 
 

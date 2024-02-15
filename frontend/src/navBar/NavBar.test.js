@@ -4,7 +4,7 @@ import Navbar from './NavBar';
 import { BrowserRouter } from "react-router-dom";
 import '../setupTests.js';
 
-// * Passing as of 2/13/24
+// * Passing as of 2/14/24
 // npm test Navbar.test.js
 // must be in frontend directory 
 
@@ -84,7 +84,6 @@ describe("user logged out", () => {
 
     expect(screen.getByText('Block Party')).toBeInTheDocument();
   });
-
 
 });
 

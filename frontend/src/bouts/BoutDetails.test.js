@@ -56,7 +56,6 @@ describe('BoutDetails Component', () => {
     FastApi.getAddress.mockResolvedValue(mockAddress);
     FastApi.addUserToGroup.mockResolvedValue({ success: true });
     useParams.mockReturnValue({ id: '1' });
-    // localStorageMock.getItem.mockReturnValue(JSON.stringify({ userId: 'user1' }));
   });
 
   afterEach(() => {

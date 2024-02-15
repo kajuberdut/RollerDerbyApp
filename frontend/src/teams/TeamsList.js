@@ -28,6 +28,7 @@ function TeamsList({ getPendingInvites }) {
     try {
 
       let teams = await FastApi.getTeams(user.userId);
+      console.log("teams:", teams)
       setTeams(teams)
       setIsLoading(false)
     } catch (errors) {

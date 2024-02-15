@@ -8,8 +8,6 @@ import UserComponent from "../users/UserComponent";
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody } from 'mdb-react-ui-kit';
 import './TeamDetails.css'
 
-// todo: make each participant a link to their private details. 
-// todo: figure out a way to export those details in an excel page??? 
   
   /**  
   * Card component for teams
@@ -39,6 +37,7 @@ import './TeamDetails.css'
 
         try {
           let teamDet = await FastApi.getGroup(groupId.id);
+          console.log("teamDet", teamDet)
           setTeam(teamDet);
           setIsLoading(false);
   
@@ -54,10 +53,12 @@ import './TeamDetails.css'
         try {
           let inviteUsernames = [];
           let inviteDets = await FastApi.getPendingInvites(groupId.id);
+          console.log("inviteDets", inviteDets)
       
           for(const invite of inviteDets) {
 
             let user = await FastApi.getUsernameById(invite.recipientId);
+            console.log("user", user)
             inviteUsernames.push(user.username)
           }
 

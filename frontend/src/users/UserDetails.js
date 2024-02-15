@@ -3,7 +3,7 @@ import FastApi from "../Api";
 import { useParams} from "react-router-dom";
 import Loading from "../multiUse/loading/Loading";
 
-// ! are you going to make a distinction betweeen everyone elses profile and the users profile... and the answer is probably yes... so you may want to have a /profile and a /users/derbyName
+// ! Can come back and refactor this code at a later date with profile
 
 
 import { MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
@@ -46,6 +46,7 @@ function UserDetails({ handleMessages, displayChatList }) {
           for(const rule in indUser.ruleset) {
             
           let rulesets = await FastApi.getRuleset(indUser.ruleset[rule].rulesetId)
+          console.log("rulesets:", rulesets)
          
           if (rulesets.name === "WFTDA") {
             rs.push("WFTDA");

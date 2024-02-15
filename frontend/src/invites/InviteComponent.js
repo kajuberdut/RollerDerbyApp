@@ -26,7 +26,6 @@ function InviteComponent({ invite, getInvites, getTeams }) {
         try {
 
           let team = await FastApi.getGroup(invite.teamId);
-          console.log("team get group!!!", team)
           setTeam(team);
         } catch (errors) {
 
@@ -40,7 +39,6 @@ function InviteComponent({ invite, getInvites, getTeams }) {
 
         try {
             let user = await FastApi.getUsernameById(invite.senderId);
-            console.log("getUserById", user)
             setSender(user);
         } catch (errors) {
 

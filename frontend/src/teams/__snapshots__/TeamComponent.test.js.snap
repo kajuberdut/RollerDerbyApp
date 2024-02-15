@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests Team Component Page Renders matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="TeamComponent"
+    style="width: 77%; height: auto; border-radius: 5px; padding-bottom: 10px;"
+  >
+    <a
+      class="TeamComponent-Link"
+      href="/teams/1"
+      style="color: rgb(85, 85, 85); text-decoration: none;"
+    >
+      <div>
+        <div
+          style="padding-top: 8px; padding-left: 20px; padding-right: 20px;"
+        >
+          <h4
+            style="padding-top: 15px;"
+          >
+            Testing
+          </h4>
+        </div>
+      </div>
+    </a>
+  </div>
+</DocumentFragment>
+`;
