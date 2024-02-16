@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`checks rendering of mixer form matches snapshot 1`] = `
+exports[`checks rendering of profile form matches snapshot 1`] = `
 <DocumentFragment>
   <section
-    class="col-md-4 MixerForm"
+    class="col-md-4 SetupProfileForm"
     style="margin-top: 150px;"
   >
     <div
@@ -11,10 +11,10 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
       style="min-width: 400px;"
     >
       <div
-        class="MixerForm-CardTitle card-title"
+        class="SetupProfileForm-CardTitle card-title"
       >
         <h1>
-          Create a Mixer
+          Setup Public Profile
         </h1>
       </div>
       <div
@@ -28,92 +28,32 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
           >
             <label
               class="form-label"
-              for="date"
+              for="username"
             >
-              Date: 
+              Derby Name: 
             </label>
             <input
               class="form-control"
-              id="date"
-              name="date"
-              required=""
-              type="date"
-              value=""
-            />
-            <label
-              class="form-label"
-              for="time"
-            >
-              Time: 
-            </label>
-            <input
-              class="form-control"
-              id="time"
-              name="time"
-              placeholder="Time"
-              required=""
-              type="time"
-              value=""
-            />
-            <label
-              class="form-label"
-              for="timeZone"
-            >
-              Time Zone: 
-            </label>
-            <select
-              class="form-control form-select"
-              id="timeZone"
-              name="timeZone"
-              placeholder="Time Zone"
-              required=""
-            >
-              <option
-                value="Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)"
-              >
-                Mountain Time (MT): America/Denver (Denver, Phoenix, Salt Lake City)
-              </option>
-              <option
-                value="Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)"
-              >
-                Eastern Time (ET): America/New_York (New York City, Miami, Atlanta)
-              </option>
-              <option
-                value="Central Time (CT): America/Chicago (Chicago, Houston, New Orleans)"
-              >
-                Central Time (CT): America/Chicago (Chicago, Houston, New Orleans)
-              </option>
-              <option
-                value="Pacific Time (PT): America/Los_Angeles (Los Angeles, San Francisco, Seattle)"
-              >
-                Pacific Time (PT): America/Los_Angeles (Los Angeles, San Francisco, Seattle)
-              </option>
-              <option
-                value="Alaska Time (AKST): America/Anchorage (Anchorage)"
-              >
-                Alaska Time (AKST): America/Anchorage (Anchorage)
-              </option>
-              <option
-                value="Hawaii Time (HST): Pacific/Honolulu (Honolulu)"
-              >
-                Hawaii Time (HST): Pacific/Honolulu (Honolulu)
-              </option>
-            </select>
-            <label
-              class="form-label"
-              for="streetAddress"
-            >
-              Street Address: 
-            </label>
-            <input
-              class="form-control"
-              id="streetAddress"
-              maxlength="40"
-              name="streetAddress"
-              placeholder="Street Address"
+              id="username"
+              maxlength="35"
+              name="username"
+              placeholder="Derby Name"
               required=""
               type="text"
-              value=""
+              value="testUser"
+            />
+            <label
+              class="form-label"
+              for="image"
+            >
+              Profile Image: 
+            </label>
+            <input
+              accept="image/png image/jpg"
+              class="form-control"
+              id="image"
+              name="image"
+              type="file"
             />
             <label
               class="form-label"
@@ -127,7 +67,6 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
               maxlength="28"
               name="city"
               placeholder="City"
-              required=""
               type="text"
               value=""
             />
@@ -407,66 +346,51 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             </select>
             <label
               class="form-label"
-              for="zipCode"
-            >
-              Zip Code: 
-            </label>
-            <input
-              class="form-control"
-              id="zipCode"
-              maxlength="5"
-              name="zipCode"
-              placeholder="Zip Code"
-              required=""
-              type="number"
-              value=""
-            />
-            <label
-              class="form-label"
-              for="theme"
-            >
-              Theme: 
-            </label>
-            <input
-              class="form-control"
-              id="theme"
-              maxlength="50"
-              name="theme"
-              placeholder="Theme or Title"
-              required=""
-              type="text"
-              value=""
-            />
-            <label
-              class="form-label"
               for="about"
             >
-              Description: 
+              About: 
             </label>
             <textarea
               class="form-control form-control"
-              id="description"
-              maxlength="300"
-              name="description"
-              placeholder="Additional information"
+              id="about"
+              maxlength="3000"
+              name="about"
+              placeholder="Write your story..."
+            >
+              This is my story...
+            </textarea>
+            <label
+              class="form-label"
+              for="primNum"
+            >
+              Primary Number: 
+            </label>
+            <input
+              class="form-control form-control"
+              id="primaryNumber"
+              maxlength="4"
+              name="primNum"
+              pattern="[0-9]*"
+              placeholder="Primary Number"
+              type="text"
+              value="01"
             />
             <label
               class="form-label"
               for="level"
             >
-              Level: 
+              Skill Level: 
             </label>
             <select
               class="form-control form-select"
               id="level"
               name="level"
               placeholder="level"
-              required=""
             >
               <option
-                value="All Levels"
+                value=""
               >
-                All Levels
+                Prefer not to say.
               </option>
               <option
                 value="C"
@@ -474,29 +398,14 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
                 C
               </option>
               <option
-                value="B/C"
-              >
-                B/C
-              </option>
-              <option
                 value="B"
               >
                 B
               </option>
               <option
-                value="A/B"
-              >
-                A/B
-              </option>
-              <option
                 value="A"
               >
                 A
-              </option>
-              <option
-                value="AA/A"
-              >
-                AA/A
               </option>
               <option
                 value="AA"
@@ -506,40 +415,65 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
             </select>
             <label
               class="form-label"
-              for="level"
+              for="assocLeagues"
             >
-              Is the mixer open to all skaters? 
+              Associated Leagues: 
             </label>
-            <select
-              class="coEd form-select"
-              id="coEd"
-              name="coEd"
-              placeholder="open"
-              required=""
-            >
-              <option
-                value="False"
-              >
-                No
-              </option>
-              <option
-                value="True"
-              >
-                Yes
-              </option>
-            </select>
+            <input
+              class="form-control form-control"
+              id="assocLeagues"
+              maxlength="200"
+              name="assocLeagues"
+              placeholder="Associated Leagues"
+              type="text"
+              value="Testing League"
+            />
             <label
               class="form-label"
-              for="ruleset"
+              for="rulesets"
             >
-              Ruleset: 
+              Positions: 
             </label>
             <select
               class="form-control form-select"
-              id="ruleset"
-              name="ruleset"
-              placeholder="Ruleset"
-              required=""
+              id="positions"
+              multiple=""
+              name="positions"
+              placeholder="Played Positions"
+            >
+              <option
+                value="jammer"
+              >
+                jammer
+              </option>
+              <option
+                value="pivot"
+              >
+                pivot
+              </option>
+              <option
+                value="blocker"
+              >
+                blocker
+              </option>
+            </select>
+            <p>
+              <b>
+                Selected positions: 
+              </b>
+            </p>
+            <label
+              class="form-label"
+              for="rulesets"
+            >
+              Played Rulesets: 
+            </label>
+            <select
+              class="form-control form-select"
+              id="rulesets"
+              multiple=""
+              name="rulesets"
+              placeholder="Played Rulesets"
             >
               <option
                 value="WFTDA"
@@ -552,67 +486,41 @@ exports[`checks rendering of mixer form matches snapshot 1`] = `
                 USARS
               </option>
               <option
-                value="Banked Track"
+                value="banked track"
               >
                 Banked Track
               </option>
               <option
-                value="Short Track"
+                value="short track"
               >
                 Short Track
               </option>
             </select>
+            <p>
+              <b>
+                Selected rulesets: 
+              </b>
+            </p>
             <label
               class="form-label"
-              for="floorType"
+              for="facebookName"
             >
-              Type of Floor: 
-            </label>
-            <input
-              class="form-control"
-              id="floorType"
-              maxlength="50"
-              name="floorType"
-              placeholder="Floor Type"
-              type="text"
-              value=""
-            />
-            <label
-              class="form-label"
-              for="jerseyColors"
-            >
-              Jersey Colors: 
-            </label>
-            <input
-              class="form-control"
-              id="jerseyColors"
-              maxlength="40"
-              name="jerseyColors"
-              placeholder="Both Teams Jersey Colors"
-              required=""
-              type="text"
-              value=""
-            />
-            <label
-              class="form-label"
-              for="opposingTeam"
-            >
-              Signup Link: 
+              Facebook Name: 
             </label>
             <input
               class="form-control form-control"
-              id="signupLink"
-              maxlength="40"
-              name="signupLink"
-              placeholder="Signup Link"
+              id="facebookName"
+              maxlength="50"
+              name="facebookName"
+              placeholder="Facebook Name"
               type="text"
-              value=""
+              value="facebook test user"
             />
           </div>
           <button
             class="btn btn-secondary"
           >
-            Add Mixer
+            Save Profile
           </button>
         </form>
       </div>

@@ -1,0 +1,228 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checks rendering of private details form matches snapshot 1`] = `
+<DocumentFragment>
+  <section
+    class="col-md-4 SetupProfileForm"
+    style="margin-top: 150px;"
+  >
+    <div
+      class="card"
+      style="min-width: 400px;"
+    >
+      <div
+        class="SetupProfileForm-CardTitle card-title"
+      >
+        <h1>
+          Private Details
+        </h1>
+      </div>
+      <div
+        class="card-body"
+      >
+        <form
+          class=""
+        >
+          <div
+            class="mb-3"
+          >
+            <label
+              class="form-label"
+              for="email"
+            >
+              Email: 
+            </label>
+            <input
+              class="form-control"
+              id="email"
+              maxlength="128"
+              name="email"
+              placeholder="Email"
+              type="text"
+              value="testuser@gmail.com"
+            />
+            <label
+              class="form-label"
+              for="phoneNumber"
+            >
+              Phone Number: 
+            </label>
+            <input
+              class="form-control"
+              id="phoneNumber"
+              maxlength="10"
+              name="phoneNumber"
+              pattern="[0-9]*"
+              placeholder="Phone Number"
+              type="tel"
+              value="1111111111"
+            />
+            <label
+              class="form-label"
+              for="firstName"
+            >
+              First Name: 
+            </label>
+            <input
+              class="form-control"
+              id="firstName"
+              maxlength="30"
+              name="firstName"
+              placeholder="First Name"
+              type="text"
+              value="Jane"
+            />
+            <label
+              class="form-label"
+              for="lastName"
+            >
+              Last Name: 
+            </label>
+            <input
+              class="form-control"
+              id="lastName"
+              maxlength="30"
+              name="lastName"
+              placeholder="Last Name"
+              type="text"
+              value="Doe"
+            />
+            <label
+              class="form-label"
+              for="additionalInfo"
+            >
+              Additional Information: 
+            </label>
+            <input
+              class="form-control"
+              id="additionalInfo"
+              maxlength="300"
+              name="additionalInfo"
+              placeholder="Additional Private Information"
+              type="text"
+              value="Epi pen in bag."
+            />
+            <label
+              class="form-label"
+              for="secNum"
+            >
+              Secondary Number: 
+            </label>
+            <input
+              class="form-control form-control"
+              id="secondaryNumber"
+              maxlength="4"
+              name="secNum"
+              pattern="[0-9]*"
+              placeholder="Secondary Number"
+              type="text"
+              value="02"
+            />
+            <label
+              class="form-label"
+              for="primIns"
+            >
+              Primary Insurance: 
+            </label>
+            <select
+              class="form-control form-select"
+              id="primIns"
+              name="primIns"
+              placeholder="Primary Insurance"
+            >
+              <option
+                value=""
+              >
+                N/A
+              </option>
+              <option
+                value="WFTDA"
+              >
+                WFTDA
+              </option>
+              <option
+                value="USARS"
+              >
+                USARS
+              </option>
+              <option
+                value="other"
+              >
+                Other
+              </option>
+            </select>
+            <label
+              class="form-label"
+              for="primInsNum"
+            >
+              Primary Insurance Number: 
+            </label>
+            <input
+              class="form-control form-control"
+              disabled=""
+              id="primInsNum"
+              maxlength="50"
+              name="primInsNum"
+              placeholder="Primary Insurance Number"
+              type="text"
+            />
+            <label
+              class="form-label"
+              for="secIns"
+            >
+              Secondary Insurance: 
+            </label>
+            <select
+              class="form-control form-select"
+              id="secIns"
+              name="secIns"
+              placeholder="Secondary Insurance"
+            >
+              <option
+                value=""
+              >
+                N/A
+              </option>
+              <option
+                value="WFTDA"
+              >
+                WFTDA
+              </option>
+              <option
+                value="USARS"
+              >
+                USARS
+              </option>
+              <option
+                value="other"
+              >
+                Other
+              </option>
+            </select>
+            <label
+              class="form-label"
+              for="secInsNum"
+            >
+              Secondary Insurance Number: 
+            </label>
+            <input
+              class="form-control form-control"
+              disabled=""
+              id="secInsNum"
+              maxlength="50"
+              name="secInsNum"
+              placeholder="Secondary Insurance Number"
+              type="text"
+            />
+          </div>
+          <button
+            class="btn btn-secondary"
+          >
+            Save Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;

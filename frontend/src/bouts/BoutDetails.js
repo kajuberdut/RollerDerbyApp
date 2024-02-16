@@ -122,10 +122,14 @@ function BoutDetail({getAllChats}) {
                     </div>
                    { bout.coEd && <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px', fontSize: '18px' }}>Yes</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px', fontSize: '16px' }}>co-ed</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px', fontSize: '16px' }}>open</MDBCardText>
                     </div>
-                    }       
-                    
+                    } 
+                    { !bout.coEd && <div className="px-3">
+                      <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>No</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>open</MDBCardText>
+                    </div>
+                    }    
                   </div>
                 </div>
                 <MDBCardBody className="text-black p-4">

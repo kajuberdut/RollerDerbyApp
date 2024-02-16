@@ -337,13 +337,13 @@ const MixerForm = () => {
                             {/* </Col> */}
                             </Input>
            
-                        <Label htmlFor="level">Is the mixer co-ed? </Label>
+                        <Label htmlFor="level">Is the mixer open to all skaters? </Label>
                         <Input
                             type="select"
                             name="coEd"
                             className="coEd"
                             onChange={handleChange}
-                            placeholder="coEd"
+                            placeholder="open"
                             id="coEd"
                             required
                         >

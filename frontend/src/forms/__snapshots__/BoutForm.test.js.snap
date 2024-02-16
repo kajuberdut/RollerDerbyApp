@@ -508,13 +508,13 @@ exports[`checks rendering of bout form matches snapshot 1`] = `
               class="form-label"
               for="coEd"
             >
-              Is the bout co-ed? 
+              Is the bout or mixer open to all skaters? 
             </label>
             <select
               class="coEd form-select"
               id="coEd"
               name="coEd"
-              placeholder="coEd"
+              placeholder="open"
               required=""
             >
               <option

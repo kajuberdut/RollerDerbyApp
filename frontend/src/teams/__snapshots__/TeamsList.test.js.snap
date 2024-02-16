@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TeamDetails Component matches snapshot 1`] = `
-<DocumentFragment>
-  <div
-    class="Loading"
-    data-testid="loading-indicator"
-  />
-</DocumentFragment>
-`;
-
 exports[`TeamList Component matches snapshot 1`] = `
 <DocumentFragment>
   <div

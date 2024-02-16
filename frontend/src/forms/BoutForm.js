@@ -336,13 +336,13 @@ const BoutForm = () => {
                               </option>
                           </Input> 
            
-                        <Label htmlFor="coEd">Is the bout co-ed? </Label>
+                        <Label htmlFor="coEd">Is the bout open to all skaters? </Label>
                         <Input
                             type="select"
                             name="coEd"
                             className="coEd"
                             onChange={handleChange}
-                            placeholder="coEd"
+                            placeholder="open"
                             id="coEd"
                             required
                             >

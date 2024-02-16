@@ -129,12 +129,12 @@ function MixerDetail({ getAllChats }) {
                     </div>
                    { mixer.coEd && <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>Yes</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>co-ed</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>open</MDBCardText>
                     </div>
                     }       
                      { !mixer.coEd && <div className="px-3">
                       <MDBCardText className="mb-1 h6" style={{marginLeft: '30px'}}>No</MDBCardText>
-                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>co-ed</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0" style={{marginLeft: '30px', marginTop: '7px'}}>open</MDBCardText>
                     </div>
                     }   
                   </div>

@@ -23,10 +23,12 @@
     </a>
   </div>
 
-  <h2 align="center" style="text-decoration: underline;">Block Party</h2>
+  <h2 align="center" style="text-decoration: underline;">Block Party Roller Derby</h2>
+
+  <h3 align="center" style="text-decoration: underline;">The Block Party starts when the star arrives.</h3>
 
   <p align="center">
-    A roller derby communication application. Create an account and join The Block Party. Update your profile. Join a team or create your own. Message another user or join a group chat. Find bouts and mixers or create your own. Welcome to Block Party.
+    A roller derby communication application. Create an account and join the Block Party. Update your profile. Join a team or create your own. Message another user or join a group chat. Find bouts and mixers or create your own. Welcome to Block Party! 
   </p>
 </p>
 
@@ -50,7 +52,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-"Block Party" is a roller derby communication application. This application allows users to create a profile and update profile information with relevant derby information. 
+"Block Party" is a roller derby communication application. This application allows users to create a profile and update profile information with relevant roller derby information. 
 
 After an account is created, a user is able to access all mixers and bouts by date or location. They are also able to create mixers and bouts and join the associated chats for those games.
 
@@ -58,7 +60,9 @@ The user is also able to create a team which automatically creates a chat. If th
 
 This web application is built with Python, Flask, and FastApi. 
 
-This application is functional and ready to use. However, there are more features that I would like to continue integrating. I hope to make this the main platform for roller derby players. 
+This application is functional and ready to use. However, there are more features that I would like to continue integrating and this is my first step. I hope to make this the main platform for collaboration for roller derby players. 
+
+My mission is to assist people coming together and playing one of the greatest sports on earth.
 
 ## Features 
 * Intuitive
@@ -78,6 +82,32 @@ This application is functional and ready to use. However, there are more feature
 
 To get a local copy up and running follow these simple steps.
 
+### Prerequisities
+
+
+In order to run this container you'll need docker installed.
+
+* [Windows](https://docs.docker.com/windows/started)
+* [OS X](https://docs.docker.com/mac/started/)
+* [Linux](https://docs.docker.com/linux/started/)
+
+
+#### Environment Variables
+
+Set your environment variables. 
+
+* `DB_URL` - Postgres database url
+* `SECRET_KEY` - Token secret key  
+* `EXPIRE_MINS` - Token expiring minutes
+* `FILE_STORAGE_PATH` - Absolute path to storage directory
+
+#### Compose Up
+
+
+  ```sh
+  docker compose -f "docker-compose.yml" up -d --build 
+  ```
+
 ### Installing with pip
 ***
 
@@ -95,10 +125,9 @@ Contributions are what make the open source community such an amazing place to b
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Add tests, we aim for 100% test coverage [Using Coverage](https://coverage.readthedocs.io/en/coverage-5.3.1/#using-coverage-py)
-4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ### Cloning / Development setup
 ***
@@ -108,10 +137,15 @@ Contributions are what make the open source community such an amazing place to b
     cd Block Party
     pip install -r requirements.txt
     ```
-2. Run tests
+2. Run tests frontend (must be in frontend directory)
     ```sh
-    python -m coverage run -m unittest discover -s tests
+    npm test 
     ```
+3. Run tests api (must be in main directory)
+    ```sh
+    pytest api/src/tests/test_routers/name_of_file -vv -s
+    ```
+
 
 ## Project In Action 
 

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checks rendering of card component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="UserComponent"
+    style="width: 77%; height: auto; min-height: 100px; border-radius: 5px; overflow: hidden;"
+  >
+    <a
+      class="UserComponent-Link"
+      href="/users/2"
+      style="color: rgb(85, 85, 85); text-decoration: none;"
+    >
+      <div
+        style="display: flex;"
+      >
+        <div
+          style="padding-top: 8px; padding-left: 20px; padding-right: 0px;"
+        />
+        <h4
+          style="padding-top: 30px; padding-right: 20px; overflow: hidden; max-width: 70%; padding-bottom: 5px;"
+        >
+          User2
+        </h4>
+        <div
+          style="padding-left: 60%; padding-top: 40px; position: absolute;"
+        >
+           
+          <button
+            style="border-radius: 5px; height: 33px; top: 10px; right: 20px;"
+          >
+            Invite
+          </button>
+           
+        </div>
+      </div>
+    </a>
+  </div>
+</DocumentFragment>
+`;
