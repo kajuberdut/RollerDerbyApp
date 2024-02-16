@@ -17,11 +17,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <div style="text-align: center;"> 
+  <!-- <div style="text-align: center;">  -->
     <a href="https://github.com/kicamSM/Capstone2">
         <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
     </a>
-  </div>
+  <!-- </div> -->
 
   <h2 align="center" style="text-decoration: underline;">Block Party Roller Derby</h2>
 
