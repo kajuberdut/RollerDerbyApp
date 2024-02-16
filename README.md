@@ -17,7 +17,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <div class="logo-container"> 
+  <div style="display: flex; justify-content: center;"> 
     <a href="https://github.com/kicamSM/Capstone2">
         <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
     </a>
