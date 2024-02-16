@@ -17,7 +17,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <div style="background-color: lightgray; border: 2px solid #ccc; padding: 10px; text-align: center;"> 
+  <div class="logo-container"> 
     <a href="https://github.com/kicamSM/Capstone2">
         <img src="https://raw.githubusercontent.com/kicamSM/Capstone2/master/frontend/public/star.png" alt="star icon" width="160" height="160">
     </a>
@@ -121,7 +121,7 @@ For information about cloning and dev setup see: [Contributing](#Contributing)
 ## Contributing
 
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. If you are interested in collaborating on this project please contact me.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)

@@ -23,18 +23,10 @@ print("Engine", engine)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-print("SessionLocal", SessionLocal)
-
 SQLAlchemyBase = declarative_base()
-# Base = sqlalchemy.orm.declarative_base()
-# # Create all tables after models are defined
-
-print("SQLAlchemyBase", SQLAlchemyBase)
 
 # create all tables 
 def create_all_tables():
     SQLAlchemyBase.metadata.create_all(bind=engine)
 
-
-print("You have made it through the database file")
 
