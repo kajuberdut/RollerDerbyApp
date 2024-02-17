@@ -121,34 +121,34 @@ function SetupProfileForm({ getUser }) {
   /** Update local state with current state of input element */
 
   const handleChange = evt => {
-
-    const { name, value }= evt.target;
-
+    const { name, value } = evt.target;
+  
     if (name === "image") {
       const imageFile = evt.target.files[0];
-
-      const reader = new FileReader()
-
+  
+      const reader = new FileReader();
       reader.onload = () => {
-        const imageDataUrl = reader.result; // Get the base64-encoded data URL
+        const imageDataUrl = reader.result;
+        const img = new Image();
+        img.onload = () => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
 
-        setFormData(fData => ({
-          ...fData,
-          image: imageDataUrl, // Store the data URL in the form data
-        }));
+          if (width > 768 || height > 1024) {
+             /** Display an error message or handle invalid size */
+            alert("Image dimensions must be within 768x1024 pixels.");
+            return;
+          }
+  
+          setFormData(fData => ({ ...fData, image: imageDataUrl }));
+        };
+        img.src = imageDataUrl;
       };
-
-      reader.readAsDataURL(imageFile)
-
+      reader.readAsDataURL(imageFile);
     } else {
-
-    setFormData(fData => ({
-        ...fData,
-        [name]: value,
-      }));
+      setFormData(fData => ({ ...fData, [name]: value }));
     }
-
-  }
+  };
 
   /** render setup profile form */
 
@@ -182,6 +182,7 @@ function SetupProfileForm({ getUser }) {
                           name="image"
                           onChange={handleChange}
                           accept="image/png image/jpg"
+                          
                       /> 
 
                       <Label htmlFor="city">City: </Label>
