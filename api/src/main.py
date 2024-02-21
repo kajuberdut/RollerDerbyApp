@@ -89,8 +89,11 @@ api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)
 api_app.include_router(websocket_router.router)
 
-FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
+# Works for production environment but not for deployment environment 
+# FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
+# api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
 
+FILE_STORAGE_PATH = os.path.join(os.path.dirname(__file__), "static")
 api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
 
 
