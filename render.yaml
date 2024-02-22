@@ -1,20 +1,21 @@
 services:
   - type: web
-    name: blockparty
+    name: blockparty-api
     runtime: docker
     repo: https://github.com/kicamSM/Capstone2
     region: oregon
     plan: free # optional (defaults to starter instance type)
     branch: master
-    buildCommand:  docker build -t blockparty-api-image . -f api/Dockerfile docker build -t blockparty-frontend-image . -f frontend/Dockerfile
-    #  <<EOF
+    buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
+     <<EOF
     # Build API 
     # docker build -t blockparty-api-image . -f "api/Dockerfile"
     # Build frontend 
     # docker build -t blockparty-frontend-image . -f "frontend/Dockerfile"
     # EOF
     rootDir: webdis
-    dockerCommand: ./webdis.sh
+    # dockerCommand: ./webdis.sh
+    dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
     numInstances: 1
     envVars:
       - key: SECRET_KEY
@@ -23,3 +24,16 @@ services:
       - key: FILE_STORAGE_PATH
         fromService: 
           value: ../static
+
+     - type: web
+    name: blockparty-frontend
+    runtime: docker
+    repo: https://github.com/kicamSM/Capstone2
+    region: oregon
+    plan: free # optional (defaults to starter instance type)
+    branch: master
+    buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
+    rootDir: webdis
+    dockerCommand: npm start 
+    numInstances: 1
+    envVars:
