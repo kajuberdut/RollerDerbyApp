@@ -15,7 +15,7 @@ services:
     # EOF
     rootDir: webdis
     # dockerCommand: ./webdis.sh
-    dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
+    # dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
     numInstances: 1
     envVars:
       - key: SECRET_KEY
