@@ -6,7 +6,7 @@ services:
     region: oregon
     plan: free # optional (defaults to starter instance type)
     branch: master
-    buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
+    # buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
     #  <<EOF
     # Build API 
     # docker build -t blockparty-api-image . -f "api/Dockerfile"
