@@ -8,9 +8,9 @@ services:
     branch: master
     buildCommand: <<EOF
     # Build API 
-    docker build -t blockparty-api-image . -f api/Dockerfile
+    docker build -t blockparty-api-image . -f "api/Dockerfile"
     # Build frontend 
-    docker build -t blockparty-frontend-image . -f frontend/Dockerfile
+    docker build -t blockparty-frontend-image . -f "frontend/Dockerfile"
     EOF
     rootDir: webdis
     dockerCommand: ./webdis.sh
