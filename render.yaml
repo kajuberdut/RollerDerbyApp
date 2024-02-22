@@ -17,6 +17,8 @@ services:
     numInstances: 1
     envVars:
       - key: SECRET_KEY
-        generateValue: true # will generate a base64-encoded 256-bit secret
+        fromService: 
+          generateValue: true # will generate a base64-encoded 256-bit secret
       - key: FILE_STORAGE_PATH
-        value: ../static
+        fromService: 
+          value: ../static
