@@ -15,10 +15,10 @@ services:
     rootDir: webdis
     dockerCommand: ./webdis.sh
     numInstances: 1
-    envVars:
-      - key: SECRET_KEY
-        fromService: 
-          generateValue: true # will generate a base64-encoded 256-bit secret
-      - key: FILE_STORAGE_PATH
-        fromService: 
-          value: ../static
+    # envVars:
+    #   - key: SECRET_KEY
+    #     fromService: 
+    #       generateValue: true # will generate a base64-encoded 256-bit secret
+    #   - key: FILE_STORAGE_PATH
+    #     fromService: 
+    #       value: ../static
