@@ -1,0 +1,23 @@
+services:
+  # A Docker web service
+  - type: web
+    name: blockparty
+    runtime: docker
+    repo: https://github.com/kicamSM/Capstone2
+    region: oregon
+    plan: standard # optional (defaults to starter instance type)
+    branch: master
+    buildCommand: <<EOF
+      # Build API 
+      docker build -t blockparty-api-image . -f api/Dockerfile
+      # Build frontend 
+      docker build -t blockparty-frontend-image -f frontend/Dockerfile .
+    EOF
+    rootDir: webdis
+    dockerCommand: ./webdis.sh
+    numInstances: 1
+    envVars:
+    - key: SECRET_KEY
+      generateValue: true # will generate a base64-encoded 256-bit secret
+    - key: FILE_STORAGE_PATH
+      value: ../static
