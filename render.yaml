@@ -11,7 +11,7 @@ services:
       docker build -t blockparty-api-image . -f api/Dockerfile
       # Build frontend 
       docker build -t blockparty-frontend-image -f frontend/Dockerfile .
-    EOF
+      EOF
     rootDir: webdis
     dockerCommand: ./webdis.sh
     numInstances: 1
