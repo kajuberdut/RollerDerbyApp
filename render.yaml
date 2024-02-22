@@ -5,7 +5,7 @@ services:
     runtime: docker
     repo: https://github.com/kicamSM/Capstone2
     region: oregon
-    plan: standard # optional (defaults to starter instance type)
+    plan: free # optional (defaults to starter instance type)
     branch: master
     buildCommand: <<EOF
       # Build API 
