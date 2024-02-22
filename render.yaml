@@ -7,7 +7,7 @@ services:
     plan: free # optional (defaults to starter instance type)
     branch: master
     buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
-     <<EOF
+    #  <<EOF
     # Build API 
     # docker build -t blockparty-api-image . -f "api/Dockerfile"
     # Build frontend 
@@ -15,7 +15,7 @@ services:
     # EOF
     rootDir: webdis
     # dockerCommand: ./webdis.sh
-    # dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
+    dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
     numInstances: 1
     envVars:
       - key: SECRET_KEY
