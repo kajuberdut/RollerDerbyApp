@@ -25,7 +25,7 @@ services:
         fromService: 
           value: ../static
 
-     - type: web
+  - type: web
     name: blockparty-frontend
     runtime: docker
     repo: https://github.com/kicamSM/Capstone2
