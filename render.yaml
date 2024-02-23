@@ -21,8 +21,7 @@ services:
       - key: SECRET_KEY 
         generateValue: true # will generate a base64-encoded 256-bit secret
       - key: FILE_STORAGE_PATH
-        fromService: 
-          value: ../static
+        value: ../static
 
   - type: web
     name: blockparty-frontend
