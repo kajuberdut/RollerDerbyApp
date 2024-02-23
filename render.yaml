@@ -31,7 +31,7 @@ services:
     region: oregon
     plan: free # optional (defaults to starter instance type)
     branch: master
-    # buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
+    buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
     rootDir: webdis
     dockerCommand: npm start 
     numInstances: 1
