@@ -9,7 +9,7 @@ from ..crud.insurance_crud import *
 import xlsxwriter
 
 FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
-
+ROOT_HOST = os.environ.get("ROOT_HOST")
 
 router = APIRouter(
     prefix="/teams",
@@ -124,6 +124,6 @@ def get_team_form_by_admin_id_team_id(admin_id: int, group_id: int,  db: Session
     
     workbook.close()
     
-    file_url = f"http://localhost:8000/static/{file_name}"
+    file_url = f"http://{ROOT_HOST}:8000/static/{file_name}"
     
     return {"url": file_url}

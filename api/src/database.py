@@ -14,10 +14,10 @@ POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
 DB_URL = os.environ.get("DB_URL")
 
 # * starting engine inside of docker 
-# engine = create_engine(DB_URL, pool_size=10, max_overflow=0)
+engine = create_engine(DB_URL, pool_size=10, max_overflow=0)
 
 # *correct engine below for starting it outside of docker 
-engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/roller_derby_db', pool_size=10, max_overflow=0)
+# engine = create_engine(f'{POSTGRES_HOST}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/roller_derby_db', pool_size=10, max_overflow=0)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

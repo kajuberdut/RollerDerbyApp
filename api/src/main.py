@@ -89,19 +89,18 @@ api_app.include_router(team_invite_router.router)
 api_app.include_router(user_router.router)
 api_app.include_router(websocket_router.router)
 
-# Works for production environment but not for deployment environment 
-# FILE_STORAGE_PATH = os.environ.get("FILE_STORAGE_PATH")
-# api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
+
+ROOT_HOST = os.environ.get("ROOT_HOST")
+
 
 FILE_STORAGE_PATH = os.path.join(os.path.dirname(__file__), "static")
 api_app.mount("/static", StaticFiles(directory=FILE_STORAGE_PATH), name="static")
 
 
 origins = [
-    "http://localhost/3000",
-    "http://localhost",
-    "http://localhost:8000"
-    
+    f"http://{ROOT_HOST}/3000",
+    f"http://{ROOT_HOST}",
+    f"http://{ROOT_HOST}:8000"   
 ]
 
 api_app.add_middleware(
