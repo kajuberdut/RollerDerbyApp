@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://${process.env.ROOT_HOST}:8000`;
+const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}`
+
+
+// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://${process.env.ROOT_HOST}:8000`;
 
 
 
