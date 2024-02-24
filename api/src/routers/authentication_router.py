@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status 
 from typing import Annotated
-from ..dependencies import get_db, get_and_validate_current_user, authenticate_user, create_access_token, create_refresh_token
+from ..dependencies import get_db, get_and_validate_current_user, authenticate_user, create_access_token
 
 from fastapi.security import OAuth2PasswordRequestForm
 

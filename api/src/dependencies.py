@@ -17,7 +17,7 @@ load_dotenv()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
 EXPIRE_MINS= os.environ.get("EXPIRE_MINS")
-REFRESH_EXPIRE_MINS= os.environ.get("REFRESH_EXPIRE_MINS")
+# REFRESH_EXPIRE_MINS= os.environ.get("REFRESH_EXPIRE_MINS")
 
 
 
@@ -56,22 +56,23 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
 
     expire = datetime.utcnow() + timedelta(minutes=int(EXPIRE_MINS))
+    # expire = datetime.utcnow() + timedelta(minutes=int("1440"))
 
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     
     return encoded_jwt
 
-def create_refresh_token(user_id: int, expires_delta: timedelta | None = None):
-    """Creates a refresh access token when a user logs in with the user_id inside of it."""
-    data = {
-        "sub": user_id,
-        "token_type": "refresh_token",
-        "exp": datetime.utcnow() + timedelta(minutes=int(REFRESH_EXPIRE_MINS))
-    }
-    refresh_encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+# def create_refresh_token(user_id: int, expires_delta: timedelta | None = None):
+#     """Creates a refresh access token when a user logs in with the user_id inside of it."""
+#     data = {
+#         "sub": user_id,
+#         "token_type": "refresh_token",
+#         "exp": datetime.utcnow() + timedelta(minutes=int(REFRESH_EXPIRE_MINS))
+#     }
+#     refresh_encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     
-    return refresh_encoded_jwt
+#     return refresh_encoded_jwt
 
 
 async def get_and_validate_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):

@@ -13,9 +13,6 @@ import FastApi from "../Api";
     const pathname = window.location.pathname;
     const teamId = useParams(); 
 
-    console.log("indUser:", indUser)
-    console.log("getPendingInvites:", getPendingInvites)
-
     /** Retrieve user from local storage*/
   
     const user = JSON.parse(localStorage.getItem('user'));

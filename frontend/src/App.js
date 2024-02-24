@@ -52,7 +52,6 @@ function App() {
 
   useEffect(() => {
     if(token) {
-
       let { exp } = jwtDecode(token);
       let expiration = exp * 1000;
       let currentTime = Date.now();
