@@ -1,12 +1,13 @@
 services:
   - type: web
-    name: blockparty-api
+    name: blockparty_api
     runtime: docker
     repo: https://github.com/kicamSM/Capstone2
     region: oregon
     plan: free # optional (defaults to starter instance type)
     branch: master
-    buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
+    dockerfilePath: ./api/Dockerfile
+    # buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
     #  <<EOF
     # Build API 
     # docker build -t blockparty-api-image . -f "api/Dockerfile"
@@ -24,13 +25,14 @@ services:
         value: ../static
 
   - type: web
-    name: blockparty-frontend
+    name: blockparty_frontend
     runtime: docker
     repo: https://github.com/kicamSM/Capstone2
     region: oregon
     plan: free # optional (defaults to starter instance type)
     branch: master
-    buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
+    # buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
+    dockerfilePath: ./frontend/Dockerfile
     # rootDir: webdis
     dockerCommand: npm start 
     numInstances: 1
