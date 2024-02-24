@@ -13,9 +13,8 @@ services:
     # Build frontend 
     # docker build -t blockparty-frontend-image . -f "frontend/Dockerfile"
     # EOF
-    rootDir: webdis
+    # rootDir: webdis
     # dockerCommand: ./webdis.sh
-    # dockerCommand: ["uvicorn", "src.main:api_app", "--host", "0.0.0.0", "--port", "8000"] 
     dockerCommand: uvicorn src.main:api_app --host 0.0.0.0 --port 8000
     numInstances: 1
     envVars:
@@ -32,6 +31,6 @@ services:
     plan: free # optional (defaults to starter instance type)
     branch: master
     buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
-    rootDir: webdis
+    # rootDir: webdis
     dockerCommand: npm start 
     numInstances: 1
