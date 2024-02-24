@@ -7,6 +7,7 @@ services:
     plan: free # optional (defaults to starter instance type)
     branch: master
     dockerfilePath: ./api/Dockerfile
+    dockerContext: ./api
     # buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
     #  <<EOF
     # Build API 
@@ -33,6 +34,7 @@ services:
     branch: master
     # buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
     dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
     # rootDir: webdis
     dockerCommand: npm start 
     numInstances: 1

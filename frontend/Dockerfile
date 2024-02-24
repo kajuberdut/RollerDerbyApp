@@ -1,6 +1,6 @@
 FROM node:21
 
-COPY package.json package-lock.json /app/
+COPY ./package.json ./package-lock.json /app/
 
 WORKDIR /app
 
