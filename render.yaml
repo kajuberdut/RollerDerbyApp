@@ -9,14 +9,6 @@ services:
     dockerfilePath: ./api/Dockerfile
     dockerContext: ./api
     # buildCommand: docker build -t blockparty-api-image . -f api/Dockerfile
-    #  <<EOF
-    # Build API 
-    # docker build -t blockparty-api-image . -f "api/Dockerfile"
-    # Build frontend 
-    # docker build -t blockparty-frontend-image . -f "frontend/Dockerfile"
-    # EOF
-    # rootDir: webdis
-    # dockerCommand: ./webdis.sh
     dockerCommand: uvicorn src.main:api_app --host 0.0.0.0 --port 8000
     numInstances: 1
     envVars:
@@ -35,6 +27,5 @@ services:
     # buildCommand: docker build -t blockparty-frontend-image . -f ./frontend/Dockerfile
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
-    # rootDir: webdis
     dockerCommand: npm start 
     numInstances: 1

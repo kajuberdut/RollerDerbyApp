@@ -76,7 +76,7 @@ class FastApi {
   static connectSocket(userId) {
     if (!FastApi.socket || FastApi.socket.readyState !== WebSocket.OPEN) {
       try {
-        FastApi.socket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+        FastApi.socket = new WebSocket(`ws://${REACT_APP_BASE_URL}/ws/${userId}`|| `ws://localhost:8000/ws/${userId}`);
 
         /** Wait until websocket is open initially before sending first message */
         FastApi.socket.addEventListener('open', () => {
