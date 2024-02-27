@@ -15,10 +15,8 @@ function Profile({displayChatList}) {
     const [isLoading, setIsLoading] = useState(true);
     const [rulesets, setRulesets] = useState();
     const [positions, setPositions] = useState();
-    const [insurances, setInsurances] = useState();
     const [city, setCity] = useState();
     const [state, setState] = useState();
-    const [phoneNumber, setPhoneNumber] = useState();
     const [image, setImage] = useState();
     const [userState, setUserState] = useState({});
     const [isMounted, setIsMounted] = useState(false);
@@ -45,7 +43,6 @@ function Profile({displayChatList}) {
             if(imageData.image) {
               setImage(imageData.image)
             }
-            // setIsLoading(false)
           } catch (errors) {
             console.error("Get image failed", errors);
             return { success: false, errors };
@@ -74,13 +71,6 @@ function Profile({displayChatList}) {
   
           if (userState.locationId) {
             getUserLocation();
-          }
-          if (userState.insurance) {
-            getUserInsurance();
-          }
-
-          if(userState.phoneNumber){
-            formatPhoneNumber();
           }
         }
   
@@ -115,19 +105,19 @@ function Profile({displayChatList}) {
   /** Fetch user insurance from api  */
   
     // todo update this so it renders when you edit the profile page
-  async function getUserInsurance() {
-    let insArr = []
-    for(let ins of userState.insurance) {
-      let insurance = await FastApi.getInsurance(ins.insuranceId);
-      insArr.push(insurance.type + ":")
-      insArr.push(ins.insuranceNumber)
-    }
-    if(insArr.length > 2){
-      insArr[1] += ","
-    }    
-    let userInsurances = insArr.join(" ")
-    setInsurances(userInsurances)
-  }
+  // async function getUserInsurance() {
+  //   let insArr = []
+  //   for(let ins of userState.insurance) {
+  //     let insurance = await FastApi.getInsurance(ins.insuranceId);
+  //     insArr.push(insurance.type + ":")
+  //     insArr.push(ins.insuranceNumber)
+  //   }
+  //   if(insArr.length > 2){
+  //     insArr[1] += ","
+  //   }    
+  //   let userInsurances = insArr.join(" ")
+  //   setInsurances(userInsurances)
+  // }
 
   /** Fetch user location from api  */
 
@@ -139,10 +129,10 @@ function Profile({displayChatList}) {
 
   /** Format phone number  */
     // todo update this so it renders when you edit the profile page
-  async function formatPhoneNumber() {
-    let formPhoneNum = userState.phoneNumber.slice(0, 3) + '-' + userState.phoneNumber.slice(3, 6) + '-' + userState.phoneNumber.slice(6);
-    setPhoneNumber(formPhoneNum)
-  }
+  // async function formatPhoneNumber() {
+  //   let formPhoneNum = userState.phoneNumber.slice(0, 3) + '-' + userState.phoneNumber.slice(3, 6) + '-' + userState.phoneNumber.slice(6);
+  //   setPhoneNumber(formPhoneNum)
+  // }
 
   if (isLoading) {
     return (

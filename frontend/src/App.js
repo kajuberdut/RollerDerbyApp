@@ -61,7 +61,7 @@ function App() {
       }
 
     }
-  }, []);
+  }, [logout, token]);
 
   /** Retreive current user by token set user in storage */
 

@@ -18,7 +18,7 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
 
   async function getChats() {
 
-    let chats = await getAllChats();
+    await getAllChats();
 
     setIsLoading(false); 
   }
@@ -28,7 +28,7 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
   useEffect(() => {
 
       getChats();
-  }, []);
+  }, [getChats]);
 
 
 /** Display loading if API call is has not returned */

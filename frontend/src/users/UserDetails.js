@@ -20,7 +20,6 @@ function UserDetails({ handleMessages, displayChatList }) {
     const params = useParams(); 
     const [isLoading, setIsLoading] = useState(true);
     const [derbyUser, setDerbyUser] = useState("");
-    const [userId, setUserId] = useState("");
     const [rulesets, setRulesets] = useState("");
     const [positions, setPositions] = useState("");
     const [location, setLocation] = useState("");
@@ -33,7 +32,6 @@ function UserDetails({ handleMessages, displayChatList }) {
       try {
 
         let indUser = await FastApi.getOtherUser(params.userId);
-        setUserId(indUser.userId)
 
         let imageData = await FastApi.getImage(params.userId);
  
@@ -46,7 +44,6 @@ function UserDetails({ handleMessages, displayChatList }) {
           for(const rule in indUser.ruleset) {
             
           let rulesets = await FastApi.getRuleset(indUser.ruleset[rule].rulesetId)
-          console.log("rulesets:", rulesets)
          
           if (rulesets.name === "WFTDA") {
             rs.push("WFTDA");
@@ -105,7 +102,7 @@ function UserDetails({ handleMessages, displayChatList }) {
 
        useEffect(() => {
         getUser();
-    }, []);
+    }, [getUser]);
 
         /** Display isLoading if API call is has not returned */
 

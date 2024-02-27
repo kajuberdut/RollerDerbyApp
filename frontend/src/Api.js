@@ -1,10 +1,20 @@
 import axios from "axios";
 
-const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}`
+
+// this one was working in render
+// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}`
 
 
+// note will need to change this back to localhost 8000 for when you use on your machine 
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://${process.env.ROOT_HOST}:8000`;
+// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
 
+
+// const BASE_URL = `https://${process.env.ROOT_URL}`
+const BASE_URL = `http://localhost:8000`
+
+
+console.log("api base_url:", BASE_URL)
 
 
 /** API Class.

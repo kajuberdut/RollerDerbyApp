@@ -6,6 +6,21 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+    deploy: 
+      resources:
+        limits: 
+          # this is my memory allocated for render which is not enough to run off of the free instance 
+          # memory: 500M
+          # paid vrsion on think is twice amount of memory which works
+          # memory: 1000M
+          # memory: 650M
+          # 650M is enough memory.
+          # 610M is too little memory
+          # memory: 610M
+          memory: 615M
+          # memory: 600M
+          # memory: 590M
+
     ports:
         - 3000:3000
     working_dir: /app

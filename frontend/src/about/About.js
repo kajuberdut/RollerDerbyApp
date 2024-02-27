@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import "./About.css"
 import { CardGroup, Card, CardBody, CardTitle } from "reactstrap";
-import Star from "../navBar/Star"
 
 /**  
  * Display about page

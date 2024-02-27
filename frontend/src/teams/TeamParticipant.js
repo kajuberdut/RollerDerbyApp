@@ -3,9 +3,8 @@ import "./TeamComponent.css";
 import FastApi from "../Api";
 import Loading from "../multiUse/loading/Loading";
 import { useParams } from "react-router-dom";
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBTypography } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
-// import './TeamDetails.css'
 
 // todo: ENSURE THIS ROUTE IS UNACCESSIBLE UNLESS THE USER IS A TEAM ADMIN
   
@@ -17,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
     /** Get user from context, set button, and disable in state, and determine if dealing with bout or mixer*/
 
-    const [team, setTeam] = useState();
+    // const [team, setTeam] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [participant, setParticipant] = useState([]);
     const user = JSON.parse(localStorage.getItem('user'));
@@ -32,17 +31,11 @@ import { useNavigate } from "react-router-dom";
     async function getTeam() {
 
         try {
-            console.log("teamParams!!!!!!!", teamParams.groupId) 
-            console.log("teamParams!!!!!!! typeof", typeof teamParams.groupId)
               let teamDet = await FastApi.getGroup(Number(teamParams.groupId));
-            // let teamDet = await FastApi.getGroup(1);
-            console.log("team!!!!!!!", team)
             if(teamDet.admin !== user.userId) {
                 navigate('/')
           }
-            setTeam(teamDet)
-            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            // console.log("teamParams.participant", teamParams.participant)
+            // setTeam(teamDet)
             getParticipant();
 
         } catch (errors) {
@@ -68,7 +61,7 @@ import { useNavigate } from "react-router-dom";
 
     useEffect(() => {
         getTeam();
-    }, []);
+    }, [getTeam]);
 
 
 

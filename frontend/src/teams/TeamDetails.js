@@ -5,7 +5,7 @@ import Loading from "../multiUse/loading/Loading";
 import { NavLink, useParams} from "react-router-dom";
 import SearchComponentUsers from "../multiUse/searchComponent/SearchComponentUsers";
 import UserComponent from "../users/UserComponent";
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText } from 'mdb-react-ui-kit';
 import './TeamDetails.css'
 
   
@@ -37,7 +37,7 @@ import './TeamDetails.css'
 
         try {
           let teamDet = await FastApi.getGroup(groupId.id);
-          console.log("teamDet", teamDet)
+
           setTeam(teamDet);
           setIsLoading(false);
   
@@ -75,7 +75,7 @@ import './TeamDetails.css'
     useEffect(() => {
         getTeam();
         getPendingInvites();
-    }, []);
+    }, [getTeam, getPendingInvites]);
 
     /** Display isLoading if API call is has not returned */
 

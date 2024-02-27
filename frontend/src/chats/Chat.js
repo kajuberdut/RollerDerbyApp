@@ -19,7 +19,7 @@ function Chat({handleMessages, handleChat, chatId }) {
  
     const messagesEndRef = useRef(null); 
 
-    const [chatParticipants, setChatParticipants] = useState([]);
+    // const [chatParticipants, setChatParticipants] = useState([]);
     const [chatParticipantIds, setChatParticipantIds] = useState([]);
     const [groupName, setGroupName] = useState(); 
 
@@ -121,20 +121,20 @@ function Chat({handleMessages, handleChat, chatId }) {
   
               /** Get chat partipants by username */
       
-              try {
+              // try {
       
-                  let chatParticipants =  await FastApi.getChatParticipants(chatId);
-                  const filteredParticipants = chatParticipants.filter(
-                  (participant) => participant !== username
-                  );
-                  const formatParticipants = filteredParticipants.join(", ");
-                  setChatParticipants(formatParticipants);
+              //     let chatParticipants =  await FastApi.getChatParticipants(chatId);
+              //     const filteredParticipants = chatParticipants.filter(
+              //     (participant) => participant !== username
+              //     );
+              //     const formatParticipants = filteredParticipants.join(", ");
+              //     setChatParticipants(formatParticipants);
       
-              } catch (errors) {
+              // } catch (errors) {
       
-                  console.error("Get chat particiapant failed", errors);
-                  return { success: false, errors };
-              }
+              //     console.error("Get chat particiapant failed", errors);
+              //     return { success: false, errors };
+              // }
       
               /** Get chat group name by chat id */
       
