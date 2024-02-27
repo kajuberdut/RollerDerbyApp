@@ -10,7 +10,7 @@ import axios from "axios";
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
 
 
-const BASE_URL = `https://${process.env.ROOT_URL}`
+const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
 // const BASE_URL = `http://localhost:8000`
 
 
@@ -89,7 +89,7 @@ class FastApi {
   static connectSocket(userId) {
     if (!FastApi.socket || FastApi.socket.readyState !== WebSocket.OPEN) {
       try {
-        FastApi.socket = new WebSocket(`wss://${process.env.Root_URL}/ws/${userId}`|| `wss://localhost:8000/ws/${userId}`);
+        FastApi.socket = new WebSocket(`wss://${process.env.REACT_APP_Root_URL}/ws/${userId}`|| `wss://localhost:8000/ws/${userId}`);
 
         /** Wait until websocket is open initially before sending first message */
         FastApi.socket.addEventListener('open', () => {
