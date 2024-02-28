@@ -82,6 +82,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                             autoComplete="username"
                             required
                             maxLength={35}
+                            minLength={2}
                         />
 
                         <Label htmlFor="password">Password: </Label>

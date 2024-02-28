@@ -110,6 +110,7 @@ const SignupForm = ({signup, setIsSignupVis}) => {
                             autoComplete="new-password"
                             required
                             maxLength={128}
+                            minLength={8}
                         />
                     </FormGroup>
                     <Button >Create Profile</Button>
