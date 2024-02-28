@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
 
 /** 
  * Display login form page
@@ -18,6 +22,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
 
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errorMessage, setErrorMessage] = useState();
+  const [passVis, setPassVis] = useState(false);
   const navigate = useNavigate();
 
   /** When login page is mounted setIsloginVis to true - false when unmounted */
@@ -57,6 +62,13 @@ const LoginForm = ({ login, setIsLoginVis }) => {
     
   };
 
+    /** Toggle password visibility */
+
+  const togglePassVis = () => {
+    setPassVis(!passVis);
+  };
+
+
   /** render form */
 
   return (
@@ -86,17 +98,22 @@ const LoginForm = ({ login, setIsLoginVis }) => {
                         />
 
                         <Label htmlFor="password">Password: </Label>
-                        <Input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Password"
-                            autoComplete="current-password"
-                            required
-                            maxLength={128}
-                        />
+                        <div style={{display: "flex"}}>
+                          <Input
+                              type={passVis ? "text" : "password"}
+                              id="password"
+                              name="password"
+                              value={formData.password}
+                              onChange={handleChange}
+                              placeholder="Password"
+                              autoComplete="current-password"
+                              required
+                              maxLength={128}
+                          />
+                          <div className='EyeIcon' role="EyeIcon" onClick={togglePassVis} style={{paddingLeft: '10px'}}>
+                            <FontAwesomeIcon icon={passVis ? faEye : faEyeSlash} className='EyeIcon-Icon'/>
+                          </div>
+                        </div>
 
                     </FormGroup>
   

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupForm.css"
 import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 /** 
  * Display signup form 
@@ -20,6 +23,8 @@ const SignupForm = ({signup, setIsSignupVis}) => {
   /** Sets formData in initial state */
 
   const [formData, setFormData] = useState(INITIAL_STATE);
+  const [passVis, setPassVis] = useState(false);
+
 
   /** When login page is mounted setIsloginVis to true - false when unmounted */
 
@@ -59,6 +64,13 @@ const SignupForm = ({signup, setIsSignupVis}) => {
     }));
 
   };
+
+  /** Toggle password visibility */
+
+  const togglePassVis = () => {
+    setPassVis(!passVis);
+  };
+
 
   /** render signup form form */
 
@@ -100,18 +112,25 @@ const SignupForm = ({signup, setIsSignupVis}) => {
                         />
 
                         <Label htmlFor="password">Password: </Label>
-                        <Input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Password"
-                            id="password"
-                            autoComplete="new-password"
-                            required
-                            maxLength={128}
-                            minLength={8}
-                        />
+                      <div style={{display: "flex"}}>
+                        
+                          <Input
+                              type={passVis ? "text" : "password"}
+                              name="password"
+                              value={formData.password}
+                              onChange={handleChange}
+                              placeholder="Password"
+                              id="password"
+                              autoComplete="new-password"
+                              required
+                              maxLength={128}
+                              minLength={8}
+                              style={{ width: "85%" }}
+                          />
+                          <div className='EyeIcon' role="EyeIcon" onClick={togglePassVis} style={{paddingLeft: '10px'}}>
+                            <FontAwesomeIcon icon={passVis ? faEye : faEyeSlash} className='EyeIcon-Icon'/>
+                          </div>
+                        </div>
                     </FormGroup>
                     <Button >Create Profile</Button>
                 </Form>
