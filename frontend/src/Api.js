@@ -7,8 +7,8 @@ import axios from "axios";
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
 
 // note that environmental var for react need to have REACT_APP
-// const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
-const BASE_URL = `http://localhost:8000`
+const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
+// const BASE_URL = `http://localhost:8000`
 
 
 /** API Class.
