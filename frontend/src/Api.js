@@ -1,20 +1,14 @@
 import axios from "axios";
 
 
-// this one was working in render
-// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}`
-
-
 // note will need to change this back to localhost 8000 for when you use on your machine 
+
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://${process.env.ROOT_HOST}:8000`;
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
 
-// note that environmental var
+// note that environmental var for react need to have REACT_APP
 const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
 // const BASE_URL = `http://localhost:8000`
-
-
-console.log("api base_url:", BASE_URL)
 
 
 /** API Class.
@@ -46,7 +40,7 @@ class FastApi {
 
 
         } catch (err) {
-          console.log("err", err)
+          // console.log("err", err)
         //   let message = err.response.data.error.message;
         // let message = err.response.message;
         if(err.response) {
