@@ -11,7 +11,7 @@ function useLocalStorage(key, firstValue = null) {
 
   // * Note I used this in clear local storage when I was getting a bunch of errors regarding 
     // const user = JSON.parse(localStorage.getItem('user'));
-  localStorage.clear();
+  // localStorage.clear();
   // console.log("hitting local storage")
 
 
