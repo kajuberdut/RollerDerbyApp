@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import FastApi from "../Api";
+import FastApi from "../../../frontend/src/Api";
 import { useParams} from "react-router-dom";
 // import skateImg from "../public/logo512.png"
 // import defaultImg from "./images/skater_02"
-import Loading from "../multiUse/loading/Loading";
+import Loading from "../../../frontend/src/multiUse/loading/Loading";
 
 // todo YOU NEED TO FIND A WAY TO GET THE USER ID OF THE USERDETAILS PAGE AND PASS IT TO THE MESSAGES SO THAT YOU CAN CREATE A ROOM FOR A CHAT 
 
@@ -59,7 +59,7 @@ function UserDetails({ handleMessages }) {
 
       try {
         let indUser = await FastApi.getUser(username.username);
-        console.log("indUser!!!!!!!!!:", indUser)
+        // console.log("indUser!!!!!!!!!:", indUser)
         setUserId(indUser.userId)
         let rs = [];
         if(indUser.ruleset){

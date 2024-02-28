@@ -31,7 +31,6 @@ console.log("user !!! in SetupTesting form", user)
 
 const handleSubmit = async evt => {
   evt.preventDefault();   
-  console.log("handleSubmit is running")
   // console.log("FormData in SetupTesting.js", formData)
   // setFormData(INITIAL_STATE);
 }

@@ -62,7 +62,6 @@ function SetupProfileForm({ getUser }) {
     setFormData(INITIAL_STATE);
    
     let formattedData = format(formData);
-    console.log("profile details form", formattedData)
     try{
       let updateProfile = await FastApi.updateUserProfile(user.userId, formattedData);
     

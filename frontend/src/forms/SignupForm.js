@@ -43,7 +43,6 @@ const SignupForm = ({signup, setIsSignupVis}) => {
     setFormData(INITIAL_STATE);
 
     let result = await signup(formData);
-    console.log("result", result)
 
     if(result.success) {
         navigate('/login')
@@ -55,7 +54,6 @@ const SignupForm = ({signup, setIsSignupVis}) => {
   /** Update local state with current state of input element */
 
   const handleChange = evt => {
-    console.log('handleChange is running')
     const { name, value }= evt.target;
 
     setFormData(fData => ({

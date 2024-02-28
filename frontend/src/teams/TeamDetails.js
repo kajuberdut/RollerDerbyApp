@@ -53,12 +53,10 @@ import './TeamDetails.css'
         try {
           let inviteUsernames = [];
           let inviteDets = await FastApi.getPendingInvites(groupId.id);
-          console.log("inviteDets", inviteDets)
       
           for(const invite of inviteDets) {
 
             let user = await FastApi.getUsernameById(invite.recipientId);
-            console.log("user", user)
             inviteUsernames.push(user.username)
           }
 

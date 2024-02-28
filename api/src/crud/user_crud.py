@@ -191,7 +191,7 @@ def crud_update_private_user(db: Session, user: UserUpdatePrivateDetails, user_i
     db.commit()
     return user 
 
-# def crud_delete_user(db: Session, user: UserDelete, user_id): 
+
 def crud_delete_user(db: Session, user_id: int): 
     """Deletes user by user_id."""
 

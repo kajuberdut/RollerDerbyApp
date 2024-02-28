@@ -30,7 +30,6 @@ function SetupPrivateDetailsForm({ update, getUser }) {
   /** Formats form data */
 
   function format(formData) {
-    console.log("formData.secIns", formData.secIns)
     let type1 = formData.primIns
     let val1 = formData.primInsNum
     let type2 = formData.secIns
@@ -53,12 +52,10 @@ function SetupPrivateDetailsForm({ update, getUser }) {
 
     if(type1 && val1) {
       primaryInsurance = {type: type1, insuranceNumber: val1, insuranceId: 0 }
-      console.log("primaryInsurance:", primaryInsurance )
     }
 
     if(type2 && val2) {
       secondaryInsurance = {type: type2, insuranceNumber: val2, insuranceId: 0 }
-      console.log("secondaryInsurance:", secondaryInsurance)
     }
 
     let ins = []
@@ -112,7 +109,6 @@ function SetupPrivateDetailsForm({ update, getUser }) {
   /** Update local state with current state of input element */
 
   const handleChange = evt => {
-    console.log('handleChange is running')
     const { name, value }= evt.target;
 
       setFormData(fData => ({

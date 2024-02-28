@@ -295,7 +295,7 @@ def get_user_details(username: str, db: Session = Depends(get_db)):
 # * delete /users/{user_id} 
 # * deletes an existing user 
 
-# # @router.delete("/{user_id}", response_model=UserDelete)
+# @router.delete("/{user_id}", response_model=UserDelete)
 # @router.delete("/{user_id}")
 # # def delete_user(user: UserDelete, user_id: int, db: Session = Depends(get_db)):
 # def delete_user(user_id: int, db: Session = Depends(get_db)):

@@ -141,7 +141,6 @@ function Chat({handleMessages, handleChat, chatId }) {
               try {
       
                   let groupName = await FastApi.getGroupNameByChatId(chatId);
-                  console.log("groupName:", groupName)
                   let frmGrpNm = formatGrpNm(groupName)
                   setGroupName(frmGrpNm);
               } catch (errors) {
@@ -219,7 +218,6 @@ function Chat({handleMessages, handleChat, chatId }) {
         } 
      
         if(!chatId) {
-            console.log("hitting chatId == 0")
             messageData = {
               "messageId": 0,
               "chatId": 0,
