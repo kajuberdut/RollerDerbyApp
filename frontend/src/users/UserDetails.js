@@ -98,11 +98,11 @@ function UserDetails({ handleMessages, displayChatList }) {
       }
     }
 
-       /** Reloading indUser when it changes request for jobs */
+       /** Reloading indUser when it changes request for user */
 
        useEffect(() => {
         getUser();
-    }, [getUser]);
+    }, []);
 
         /** Display isLoading if API call is has not returned */
 
