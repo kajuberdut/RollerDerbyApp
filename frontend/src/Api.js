@@ -61,7 +61,6 @@ class FastApi {
       
     data["user_id"] = 0
     let res = await this.request('users', data, "post");
-    console.log("result signup", res)
     return res;
   }
 

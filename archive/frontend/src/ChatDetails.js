@@ -30,11 +30,9 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
 
       const user = JSON.parse(localStorage.getItem('user'));
       setUserId(user.userId)
-      console.log("userId in chatDetails!!!!!:", userId)
       setUsername(user.username)
 
       if(handleMessages) {
-        console.log("handleMessages is running ")
         const pathname = window.location.pathname;
         let formOtherUserId = Number(pathname.split('/')[2]);
         setOtherUserId(formOtherUserId)
@@ -57,7 +55,7 @@ function ChatDetails({handleMessages, handleChat, chatId }) {
 
 
     if(chatId) {
-      console.log("if chat is running ")
+      // console.log("if chat is running ")
       getChat();
     }
  

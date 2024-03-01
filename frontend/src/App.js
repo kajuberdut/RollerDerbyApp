@@ -29,6 +29,13 @@ function App() {
   const [isHomeVis, setIsHomeVis] = useState(false);
   const [isAboutVis, setIsAboutVis] = useState(false);
 
+  /** Clear local storage on startup*/
+
+  // useEffect(() => {
+  //   // so I think this is working not 100% sure will continue to monitor as I deploy. Doesn't work because if you reload page it clears localStorage
+  //   localStorage.clear();
+  // }, []);
+
   /** If login page, signup page, or home is visibile set page to non scrolling */
 
   useEffect(() => {
@@ -46,6 +53,7 @@ function App() {
 
     };
   }, [isLoginVis, isHomeVis, isSignupVis]);
+
 
   /** Logout user if token is expired. Note that this only works if user refreshes*/
   

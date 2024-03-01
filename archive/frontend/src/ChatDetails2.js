@@ -31,7 +31,7 @@ function ChatDetails({handleChat, chatId }) {
 
       const user = JSON.parse(localStorage.getItem('user'));
       setUserId(user.userId)
-      console.log("userD in chatDetails!!!!!:", userId)
+      // console.log("userD in chatDetails!!!!!:", userId)
       setUsername(user.username)
     }, []);
 

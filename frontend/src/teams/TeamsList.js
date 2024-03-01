@@ -41,7 +41,7 @@ function TeamsList({ getPendingInvites }) {
 
   useEffect(() => {
       getTeams();
-  }, [getTeams]);
+  }, []);
 
   /** Display loading if API call is has not returned */
 

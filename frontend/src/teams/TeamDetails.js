@@ -73,7 +73,7 @@ import './TeamDetails.css'
     useEffect(() => {
         getTeam();
         getPendingInvites();
-    }, [getTeam, getPendingInvites]);
+    }, []);
 
     /** Display isLoading if API call is has not returned */
 

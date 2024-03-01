@@ -72,12 +72,60 @@ def delete_user_from_user_group(username, db_url):
 
     except Exception as e:
         print(f"Error deleting user from user_group: {e}")
+        
+def delete_user_from_user_position(username, db_url):
+    """
+    Args:
+     username: The username of the user to delete.
+    """
+    try:
+    # Connect to the ElephantSQL database
+        
+        # ! Note: "user" needs to be in double quotes and username needs to be in single quotes 
+
+        sql_command = f"""
+            DELETE FROM user_position
+            WHERE user_id = (SELECT user_id FROM "user" WHERE username = '{username}');
+        """
+        
+        connect_and_execute(db_url, sql_command)
+
+
+    except Exception as e:
+        print(f"Error deleting user from user_position: {e}")
+
+
+def delete_user_from_user_ruleset(username, db_url):
+    """
+    Args:
+     username: The username of the user to delete.
+    """
+    try:
+    # Connect to the ElephantSQL database
+        
+        # ! Note: "user" needs to be in double quotes and username needs to be in single quotes 
+
+        sql_command = f"""
+            DELETE FROM user_ruleset
+            WHERE user_id = (SELECT user_id FROM "user" WHERE username = '{username}');
+        """
+        
+        connect_and_execute(db_url, sql_command)
+
+
+    except Exception as e:
+        print(f"Error deleting user from user_position: {e}")
 
 
 # Run commands to delete specific user 
 
-delete_user_from_user_group("", DATABASE_URL_SCRIPTS)
-delete_user("", DATABASE_URL_SCRIPTS)
+username = "testuser"
+
+delete_user_from_user_group(f"{username}", DATABASE_URL_SCRIPTS)
+delete_user_from_user_position(f"{username}", DATABASE_URL_SCRIPTS)
+delete_user_from_user_ruleset(f"{username}", DATABASE_URL_SCRIPTS)
+delete_user(f"{username}", DATABASE_URL_SCRIPTS)
+
 
 
 

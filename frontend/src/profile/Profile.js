@@ -53,7 +53,7 @@ function Profile({displayChatList}) {
       }
       setIsMounted(true);
 
-    }, [image, userState, isMounted]); 
+    }, [userState, isMounted]); 
 
     /** Fetch data from ids from user state and call function to get data  */
     // todo update this so it renders when you edit the profile page

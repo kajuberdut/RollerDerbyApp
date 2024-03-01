@@ -28,7 +28,7 @@ const ChatList = ({ handleChatList, handleChat, getAllChats, chats }) => {
   useEffect(() => {
 
       getChats();
-  }, [getChats]);
+  }, []);
 
 
 /** Display loading if API call is has not returned */

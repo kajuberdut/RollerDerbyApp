@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Annotated
 from ..dependencies import get_and_validate_current_user, get_db, hash_password
+# from .. import settings
+from ..settings import debug
 
 from ..schemas.user_schema import *
 from ..schemas.location_schema import *
@@ -154,14 +156,89 @@ def update_user(user: UserUpdate, ruleset: list[Ruleset], position: list[Positio
 
 # * put /users/profile/{user_id} 
 # * updates public details on profile by user_id 
+# todo: positions and known rulesets are not updating when you put in less than you had originally ie. if I have blocker, pivot, jammer, I cant switch it back to just jammer.
+
+# @router.put("/profile/{user_id}", response_model=UserUpdateProfile)
+# def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[Position], location: Location, user_id: int, db: Session = Depends(get_db)):
+#     print("/users/profile/{user_id} is running in user_router.py")
+#     # ! location_id is 0 here 
+    
+    
+#     print("**** ruleset ****:", ruleset)
+    
+#     existing_location = crud_get_location(db=db, location=location)
+    
+#     if existing_location: 
+#         location_id = existing_location.location_id 
+#     else: 
+#         location_id = crud_create_location(db=db, location=location)
+#         print("**************** location_id in main.py***********", location_id)
+    
+#     user.location_id = location_id
+    
+#     for pos in position:
+#         existing_position = crud_get_position(db=db, position=pos)
+    
+#         if existing_position: 
+#             position_id = existing_position.position_id 
+#         else: 
+#             position_id = crud_create_position(db=db, position=pos)
+    
+#         existing_user_position = crud_get_user_position_by_id(db, user_id=user_id, position_id=position_id)
+#         print("does existing_user_position exist?", existing_user_position)
+#         if not existing_user_position:
+#             print("crud existing_user_position does NOT exist")
+#             new_e_u_p = crud_create_user_position(db, user_id=user_id, position_id=position_id)
+#             # print("new existing user position:", new_e_u_p)
+    
+#     # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
+#     for rs in ruleset: 
+#         existing_ruleset = crud_get_ruleset(db=db, ruleset=rs) 
+    
+#         if existing_ruleset: 
+#             ruleset_id = existing_ruleset.ruleset_id
+#         else: 
+#             ruleset_id = crud_create_ruleset(db=db, ruleset=rs)
+
+#         existing_user_ruleset = crud_get_user_ruleset_by_id(db, user_id=user_id, ruleset_id=ruleset_id)
+#         print("does existing_user_ruleset exist?", existing_user_ruleset)
+#         if not existing_user_ruleset:
+#             print("crud existing_user_ruleset does NOT exist")
+#             new_e_u_r = crud_create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
+#             # print("new existing user ruleset:", new_e_u_r)
+            
+#     # for ins in insurance: 
+
+#     #     existing_insurance = crud_get_insurance(db=db, insurance=ins)
+      
+#     #     if existing_insurance: 
+#     #         insurance_id = existing_insurance.insurance_id
+
+#     #     else: 
+#     #         insurance_id = crud_create_insurance(db=db, insurance=ins)
+ 
+#     #     existing_user_insurance = crud_get_user_insurance_by_id(db, user_id=user_id, insurance_id=insurance_id)
+     
+#     #     if not existing_user_insurance:
+#     #         new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
+  
+#     print('user in /users/{user_id}', user)
+    
+#     db_user = crud_get_user_by_id(db, user_id=user_id)    
+    
+#     if not db_user:
+#         raise HTTPException(status_code=400, detail=f"User with id {user_id} doesn't exist.")
+    
+#     return crud_update_profile_user(db=db, user=user, user_id=user_id)
 
 @router.put("/profile/{user_id}", response_model=UserUpdateProfile)
 def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[Position], location: Location, user_id: int, db: Session = Depends(get_db)):
-    print("/users/profile/{user_id} is running in user_router.py")
+    if debug:
+        print("/users/profile/{user_id} is running in user_router.py")
     # ! location_id is 0 here 
     
-    
-    print("**** ruleset ****:", ruleset)
+    if debug:
+        print("**** ruleset ****:", ruleset)
     
     existing_location = crud_get_location(db=db, location=location)
     
@@ -169,7 +246,8 @@ def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[
         location_id = existing_location.location_id 
     else: 
         location_id = crud_create_location(db=db, location=location)
-        print("**************** location_id in main.py***********", location_id)
+        if debug:
+            print("**************** location_id in main.py***********", location_id)
     
     user.location_id = location_id
     
@@ -182,12 +260,12 @@ def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[
             position_id = crud_create_position(db=db, position=pos)
     
         existing_user_position = crud_get_user_position_by_id(db, user_id=user_id, position_id=position_id)
-        print("does existing_user_position exist?", existing_user_position)
+        if debug:
+            print("does existing_user_position exist?", existing_user_position)
         if not existing_user_position:
             print("crud existing_user_position does NOT exist")
             new_e_u_p = crud_create_user_position(db, user_id=user_id, position_id=position_id)
             # print("new existing user position:", new_e_u_p)
- 
     
     # !now we have a list of rulesets instead of a singlular ruleset so.... we need to loop through the list and get each ruleset
     for rs in ruleset: 
@@ -199,7 +277,8 @@ def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[
             ruleset_id = crud_create_ruleset(db=db, ruleset=rs)
 
         existing_user_ruleset = crud_get_user_ruleset_by_id(db, user_id=user_id, ruleset_id=ruleset_id)
-        print("does existing_user_ruleset exist?", existing_user_ruleset)
+        if debug:
+            print("does existing_user_ruleset exist?", existing_user_ruleset)
         if not existing_user_ruleset:
             print("crud existing_user_ruleset does NOT exist")
             new_e_u_r = crud_create_user_ruleset(db, user_id=user_id, ruleset_id=ruleset_id)
@@ -219,8 +298,8 @@ def update_user(user: UserUpdateProfile, ruleset: list[Ruleset], position: list[
      
     #     if not existing_user_insurance:
     #         new_e_u_i = crud_create_user_insurance(db, user_id=user_id, insurance_id=insurance_id, insurance_number=ins.insurance_number) 
-  
-    print('user in /users/{user_id}', user)
+    # if settings.debug:
+    #     print('user in /users/{user_id}', user)
     
     db_user = crud_get_user_by_id(db, user_id=user_id)    
     

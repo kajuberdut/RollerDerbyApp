@@ -43,6 +43,7 @@ const LoginForm = ({ login, setIsLoginVis }) => {
     let result = await login(formData); 
     
     if(result.success) {
+      console.log("result is success")
         navigate('/');
     } else {
       setErrorMessage(result.err);

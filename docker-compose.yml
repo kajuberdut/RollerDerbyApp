@@ -17,7 +17,8 @@ services:
           # 650M is enough memory.
           # 610M is too little memory
           # memory: 610M
-          memory: 615M
+          # memory: 615M
+          memory: 620M
           # memory: 600M
           # memory: 590M
 

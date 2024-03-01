@@ -54,7 +54,7 @@ function EventList() {
 
     useEffect(() => {
         getAllEvents();
-    }, [event, getAllEvents]);
+    }, [event]);
 
 
   /** Display loading if API call is has not returned */
