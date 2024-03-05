@@ -24,6 +24,10 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
     /** API get request for a specific address */ 
 
     async function getAddress() {
+      if(debug){
+        console.log("getAddress is running")
+      }
+
       
       try {
         let address = await FastApi.getAddress(info.addressId)

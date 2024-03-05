@@ -1,16 +1,7 @@
 import axios from "axios";
 
+const BASE_URL = `${process.env.REACT_APP_ROOT_URL}`
 
-// note will need to change this back to localhost 8000 for when you use on your machine 
-
-// Can use this later but will have to change the env var in production to full https...
-// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
-
-// note that environmental var for react need to have REACT_APP
-// const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
-// const BASE_URL = `http://localhost:8000`
-
-const BASE_URL = `${process.env.REACT_APP_ROOT_URL}` || `http://localhost:8000`
 const debug = process.env.REACT_APP_DEBUG || false;
 
 /** API Class.
@@ -48,9 +39,9 @@ class FastApi {
 
 
         } catch (err) {
-          if (debug) {
-            console.log("err", err);
-          }
+          // if (debug) {
+          //   console.log("err", err);
+          // }
         // let message = err.response.data.error.message;
         // let message = err.response.message;
         if(err.response) {
@@ -94,7 +85,7 @@ class FastApi {
       try {
         // FastApi.socket = new WebSocket(`wss://${process.env.REACT_APP_ROOT_URL}/ws/${userId}`|| `wss://localhost:8000/ws/${userId}`);
 
-        FastApi.socket = new WebSocket(`wss://${process.env.REACT_APP_ROOT_URL}/ws/${userId}`)
+        FastApi.socket = new WebSocket(`wss://${process.env.REACT_APP_PARTIAL_ROOT_URL}/ws/${userId}`)
 
         /** Wait until websocket is open initially before sending first message */
         FastApi.socket.addEventListener('open', () => {
@@ -296,7 +287,7 @@ class FastApi {
     }
     let res = await this.request(`address/${addressId}`);
     if (debug) {
-      console.log("res in api.js", res);
+      console.log("res getAddress api.js", res);
     }
     return res
   }
