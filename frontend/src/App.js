@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode"
 import ChatIcon from "./chats/ChatIcon"
 import ChatList from './chats/ChatList';
 import Chat from './chats/Chat';
+import Maintenance from './maintenance/Maintenance';
 
 export const TOKEN_STORAGE_ID = "api-token";
 
@@ -28,13 +29,14 @@ function App() {
   const [isSignupVis, setIsSignupVis] = useState(false);
   const [isHomeVis, setIsHomeVis] = useState(false);
   const [isAboutVis, setIsAboutVis] = useState(false);
+  const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
 
-  /** Clear local storage on startup*/
+  /** If maintenance mode then return maintenance page */
 
-  // useEffect(() => {
-  //   // so I think this is working not 100% sure will continue to monitor as I deploy. Doesn't work because if you reload page it clears localStorage
-  //   localStorage.clear();
-  // }, []);
+  useEffect(() => {
+    const maintenanceMode = process.env.REACT_APP_MAINTENANCE_MODE === 'true';
+    setIsMaintenanceMode(maintenanceMode);
+  }, []);
 
   /** If login page, signup page, or home is visibile set page to non scrolling */
 
@@ -193,6 +195,12 @@ function App() {
       )
     }
 
+    /** If in maintenance mode, display the maintenance page */
+
+    if (isMaintenanceMode) {
+      return <Maintenance />;
+    }
+
   return (
     <>
 
@@ -208,6 +216,7 @@ function App() {
         <Fragment>
           <NavBar logout={logout}/>
           <main>
+      
             <AllRoutes setIsAboutVis={setIsAboutVis} getUser={getUser} handleMessages={handleMessages} signup={signup} login={login} update={updateUser} getAllChats={getAllChats} chats={chats} setChats={setChats} displayChatList={displayChatList} setIsLoginVis={setIsLoginVis} setIsSignupVis={setIsSignupVis} setIsHomeVis={setIsHomeVis} />
   
             { user && displayMessages &&  <Chat handleMessages={handleMessages} /> }

@@ -324,7 +324,7 @@ function SetupProfileForm({ getUser }) {
                             maxLength={200}
                         />
 
-                        <Label htmlFor="rulesets">Positions: </Label>
+                        <Label htmlFor="positions">Positions: </Label>
                         <Input
                             type="select"
                             name="positions"

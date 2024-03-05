@@ -35,7 +35,8 @@ def connect_and_execute(db_url, sql_command):
             conn.close()
             print("Database connection closed.")
 
-def delete_user(username, db_url):
+
+def delete_invites(team_id, db_url):
     """
     Args:
      username: The username of the user to delete.
@@ -44,15 +45,19 @@ def delete_user(username, db_url):
     # Connect to the ElephantSQL database
         
         # ! Note: "user" needs to be in double quotes and username needs to be in single quotes 
-        sql_command = f"""DELETE FROM "user" WHERE username = '{username}';"""
+
+        sql_command = f"""
+            DELETE FROM team_invite
+            WHERE team_id = '{team_id}';
+        """
         
         connect_and_execute(db_url, sql_command)
 
 
     except Exception as e:
-        print(f"Error deleting user: {e}")
-
-def delete_user_from_user_group(username, db_url):
+        print(f"Error deleting invites from team_invites: {e}")
+        
+def delete_users_from_user_group(group_id, db_url):
     """
     Args:
      username: The username of the user to delete.
@@ -64,16 +69,16 @@ def delete_user_from_user_group(username, db_url):
 
         sql_command = f"""
             DELETE FROM user_group
-            WHERE user_id = (SELECT user_id FROM "user" WHERE username = '{username}');
+            WHERE group_id = '{group_id}';
         """
         
         connect_and_execute(db_url, sql_command)
 
 
     except Exception as e:
-        print(f"Error deleting user from user_group: {e}")
-        
-def delete_user_from_user_position(username, db_url):
+        print(f"Error deleting users from user_group: {e}")
+
+def delete_group(group_id, db_url):
     """
     Args:
      username: The username of the user to delete.
@@ -82,54 +87,27 @@ def delete_user_from_user_position(username, db_url):
     # Connect to the ElephantSQL database
         
         # ! Note: "user" needs to be in double quotes and username needs to be in single quotes 
-
-        sql_command = f"""
-            DELETE FROM user_position
-            WHERE user_id = (SELECT user_id FROM "user" WHERE username = '{username}');
-        """
+        sql_command = f"""DELETE FROM "group" WHERE group_id = '{group_id}';"""
         
         connect_and_execute(db_url, sql_command)
 
 
     except Exception as e:
-        print(f"Error deleting user from user_position: {e}")
-
-
-def delete_user_from_user_ruleset(username, db_url):
-    """
-    Args:
-     username: The username of the user to delete.
-    """
-    try:
-    # Connect to the ElephantSQL database
-        
-        # ! Note: "user" needs to be in double quotes and username needs to be in single quotes 
-
-        sql_command = f"""
-            DELETE FROM user_ruleset
-            WHERE user_id = (SELECT user_id FROM "user" WHERE username = '{username}');
-        """
-        
-        connect_and_execute(db_url, sql_command)
-
-
-    except Exception as e:
-        print(f"Error deleting user from user_position: {e}")
+        print(f"Error deleting group: {e}")      
 
 
 # Run commands to delete specific user 
 
-username = ""
+group_id = 
 
-delete_user_from_user_group(f"{username}", DATABASE_URL_SCRIPTS)
-delete_user_from_user_position(f"{username}", DATABASE_URL_SCRIPTS)
-delete_user_from_user_ruleset(f"{username}", DATABASE_URL_SCRIPTS)
-delete_user(f"{username}", DATABASE_URL_SCRIPTS)
-
+delete_users_from_user_group(f"{group_id}", DATABASE_URL_SCRIPTS)
+delete_invites(f"{group_id}", DATABASE_URL_SCRIPTS)
+delete_group(f"{group_id}", DATABASE_URL_SCRIPTS)
 
 
 
-# Open your terminal or command prompt.
+
+# Open your terminal or command prompt go into scrips and run following.
 # Run the following command
 
 # python your_script_name.py

@@ -10,6 +10,7 @@ class UserPosition(BaseModel):
     class ConfigDict:
         from_attributes = True
 
+# ! note add to positions Ref and NSO when you change the database.
 
 class Position(BaseModel): 
     """Pydantic class for positions."""

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import FastApi from "../../Api";
 import "./CardComponent.css";
-import Loading from "../loading/Loading"
 import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
   /**  
@@ -15,6 +14,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 
     const [address, setAddress ] = useState([]); 
     const [isLoading, setIsLoading] = useState(true);
+    const debug = process.env.REACT_APP_DEBUG === 'true' || false;
 
     let info = bout !== undefined ? bout : mixer;
     let type = bout !== undefined ? "bouts" : "mixers";
@@ -27,6 +27,9 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
       
       try {
         let address = await FastApi.getAddress(info.addressId)
+        if (debug) {
+          console.log("address in CardComponent.js:", address);
+        }
         setAddress(address);
         setIsLoading(false);
       } catch(errors) {

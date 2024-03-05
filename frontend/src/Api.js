@@ -3,13 +3,15 @@ import axios from "axios";
 
 // note will need to change this back to localhost 8000 for when you use on your machine 
 
-// const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://${process.env.ROOT_HOST}:8000`;
+// Can use this later but will have to change the env var in production to full https...
 // const BASE_URL = `https://${process.env.REACT_APP_BASE_URL}` || `http://localhost:8000`;
 
 // note that environmental var for react need to have REACT_APP
-const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
+// const BASE_URL = `https://${process.env.REACT_APP_ROOT_URL}`
 // const BASE_URL = `http://localhost:8000`
 
+const BASE_URL = `${process.env.REACT_APP_ROOT_URL}` || `http://localhost:8000`
+const debug = process.env.REACT_APP_DEBUG || false;
 
 /** API Class.
  *
@@ -35,13 +37,21 @@ class FastApi {
             : {};
     
         try {
+          if (debug) {
+            console.log("url", url);
+            console.log("method", method);
+            console.log("data", data);
+            console.log("params", params);
+          }
           
           return (await axios({ url, method, data, params, headers })).data;
 
 
         } catch (err) {
-          // console.log("err", err)
-        //   let message = err.response.data.error.message;
+          if (debug) {
+            console.log("err", err);
+          }
+        // let message = err.response.data.error.message;
         // let message = err.response.message;
         if(err.response) {
 
@@ -275,7 +285,13 @@ class FastApi {
   /** Get a specific address by ID*/
 
   static async getAddress(addressId) {
+    if (debug) {
+      console.log("addressId in api.js", addressId);
+    }
     let res = await this.request(`address/${addressId}`);
+    if (debug) {
+      console.log("res in api.js", res);
+    }
     return res
   }
 
@@ -311,6 +327,8 @@ class FastApi {
   /** Get specific positions by city, state, zip code, start date and end date */
 
   static async getEvents(type, data) {
+    console.log("type:", type)
+    console.log("data:", data)
     let res = await this.request(`events/${type}`, data, "get");
     return res
   }
