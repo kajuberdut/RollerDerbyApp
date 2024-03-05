@@ -6,6 +6,8 @@ import "./EventList.css";
 import SearchComponent from "../multiUse/searchComponent/SearchComponent";
 import { useParams} from "react-router-dom";
 
+const debug = process.env.REACT_APP_DEBUG || false;
+
 /**
  * Display event list page
  */
@@ -21,12 +23,18 @@ function EventList() {
   /** API get request for events */
 
   async function getAllEvents() {
+    if(debug) {
+      console.log("getAllEvents is running")
+    }
 
       if(event.type === 'bouts') {
 
         try {
 
           let events =  await FastApi.getBouts();
+          if(debug) {
+            console.log("events bouts:", events)
+          }
           setEvents(events);
           setIsLoading(false);
  
@@ -39,6 +47,9 @@ function EventList() {
           try {
 
             let events =  await FastApi.getMixers();
+            if(debug) {
+              console.log("events mixers:", events)
+            }
             setEvents(events);
             setIsLoading(false);
   

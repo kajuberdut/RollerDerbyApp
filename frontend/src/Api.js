@@ -205,6 +205,9 @@ class FastApi {
 
   static async getBouts() {
     let res = await this.request(`events/all/bouts`);
+    if(debug) {
+      console.log("api res bouts", res)
+    }
     return res
   }
 
@@ -246,6 +249,9 @@ class FastApi {
 
   static async getMixers() {
     let res = await this.request(`events/all/mixers`);
+    if(debug) {
+      console.log("api res mixers", res)
+    }
     return res
   }
 
